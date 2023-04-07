@@ -2,10 +2,13 @@
 // #ID = 20617
 // first script, decided mid way through to try out rascript so had some ids and badges in the progression as they were in unoffical
 
-
+//Misc bits
+Timer = float(0x00b891d0)
+PlaygroundBoxesDestroyed= byte(dword(0x00a33b24) + 0xFFFFD550)
 
 // Chapter data
 ChapterId = word(0xA1DC40)
+CurrentScreen = byte(0x01ff83c0)
 
 ChapterNames = [
 "BnL Tune-Up",
@@ -148,6 +151,15 @@ AccordionArtifactFound = byte(0x00a1d970)
 PaddleBallArtifactFound = byte(0x00a1d971)
 BeachBallArtifactFound = byte(0x00a1d972)
 SkiGogglesArtifactFound = byte(0x00a1d973)
+
+//Unlocked cheats
+CheatIntergalacticUnlocked = byte(0x00bad445)
+CheatSoapbubblesUnlocked = byte(0x00bad505)
+CheatRatjukeboxUnlocked = byte(0x00bad575)
+CheatIncrejukeboxUnlocked = byte(0x00bad5e5)
+CheatBagpackUnlocked = byte(0x00bb4935)
+CheatSkateboarderUnlocked = byte(0x00bb49a5)
+CheatHeavyweaponUnlocked = byte(0x00bb4a15)
 
 // Cheat protection
 CheatActivatedIntergalactic = byte(0xBAD4A0)
@@ -312,3 +324,52 @@ ArtifactFound("Ping Pong", "Unlock the paddle ball artifact", PaddleBallArtifact
 ArtifactFound("Play Us a Song You're the Acordion Man", "Unlock the acordion artifact", AccordionArtifactFound, FixingEve)
 ArtifactFound("It's Time to Ski", "Unlock the ski goggles artifact", SkiGogglesArtifactFound, HoloDetectorDash)
 ArtifactFound("Beachball Anyone?", "Unlock the beach ball artifact", BeachBallArtifactFound, HoloDetectorDash)
+
+// ===================================
+// CHEAT UNLOCK ACHIEVEMENTS
+// ===================================
+
+function CheatUnlocked(achTitle, achDesc, cheat)
+{
+    achievement(
+        title = achTitle,
+        description = achDesc,
+        points = 3,
+        trigger = (
+            CurrentScreen == 0x4b &&
+            cheat == 0x01 &&
+            prev(cheat) == 0x00
+        )
+    )
+}
+
+CheatUnlocked("Out of This World", "Unlock the intergalatic cheat", CheatIntergalacticUnlocked)
+CheatUnlocked("A Soapy Unlock", "Unlock the soapbubbles cheat", CheatSoapbubblesUnlocked)
+CheatUnlocked("Little Chef", "Unlock the ratjukebox cheat", CheatRatjukeboxUnlocked)
+CheatUnlocked("An Incredible Song", "Unlock the increjukebox cheat", CheatIncrejukeboxUnlocked)
+CheatUnlocked("The Claw", "Unlock the bagpack cheat", CheatBagpackUnlocked)
+CheatUnlocked("Basically Tony Hawk", "Unlock the skateboarder cheat", CheatSkateboarderUnlocked)
+CheatUnlocked("Fully Charged Laser", "Unlock the heavyweapon cheat", CheatHeavyweaponUnlocked)
+
+// ===================================
+// SPEEDRUN ACHIEVEMENTS
+// ===================================
+
+function PlaygroundSpeedrun(achTitle, achDesc, levelId, timerSecs)
+{
+    achievement(
+    title = achTitle,
+    description = achDesc,
+    points = 10,
+    trigger = (
+        ChapterId == levelId &&
+        Timer >= timerSecs &&
+        PlaygroundBoxesDestroyed == 0x0a &&
+        prev(PlaygroundBoxesDestroyed) == 0x09
+        )
+    )
+}
+
+PlaygroundSpeedrun("Tanker Playground Speedrunner", "Beat the Tanker Playground box destroying challenge with 60 seconds or more on the clock", TankerPlayground, 60)
+PlaygroundSpeedrun("Repair-Ward Playground Speedrunner", "Beat the Repair-Ward Playground box destroying challenge with 45 seconds or more on the clock", RepairWardPlayground, 45)
+
