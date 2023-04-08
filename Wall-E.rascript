@@ -5,10 +5,10 @@
 //Misc bits
 Timer = float(0x00b891d0)
 PlaygroundBoxesDestroyed= byte(dword(0x00a33b24) + 0xFFFFD550)
+CurrentScreen = byte(0x00e24000)
 
 // Chapter data
 ChapterId = word(0xA1DC40)
-CurrentScreen = byte(0x01ff83c0)
 
 ChapterNames = [
 "BnL Tune-Up",
@@ -160,6 +160,17 @@ CheatIncrejukeboxUnlocked = byte(0x00bad5e5)
 CheatBagpackUnlocked = byte(0x00bb4935)
 CheatSkateboarderUnlocked = byte(0x00bb49a5)
 CheatHeavyweaponUnlocked = byte(0x00bb4a15)
+
+//Total unlocked extra materials
+TotalUnlockedMats = 
+byte(0x00bac5f5) + byte(0x00bac665) + byte(0x00bac6d5) + byte(0x00bac755) + byte(0x00bac7c5) +
+byte(0x00bac835) + byte(0x00bac8a5) + byte(0x00bac915) + byte(0x00bac985) + byte(0x00bac9f5) +
+byte(0x00baca65) + byte(0x00bacb05) + byte(0x00bacb75) + byte(0x00bacbe5) + byte(0x00bacc55) +
+byte(0x00baccc5) + byte(0x00bacd35) + byte(0x00bacda5) + byte(0x00bace15) + byte(0x00baced5) +
+byte(0x00bacf45) + byte(0x00bacfb5) + byte(0x00bb4f35) + byte(0x00bb8a65) + byte(0x00bb8ad5) +
+byte(0x00bb8b45) + byte(0x00bb8bb5) + byte(0x00bb8c25) + byte(0x00bb8c95) + byte(0x00bb8d05) +
+byte(0x00bb8d75) + byte(0x00bb8de5) + byte(0x00bb8e55) + byte(0x00bb8ec5) + byte(0x00bb8f35) +
+byte(0x00bb8fa5) + byte(0x00bb9115) + byte(0x00bb9185) + byte(0x00bb91f5) + byte(0x00bb9265)
 
 // Cheat protection
 CheatActivatedIntergalactic = byte(0xBAD4A0)
@@ -336,7 +347,7 @@ function CheatUnlocked(achTitle, achDesc, cheat)
         description = achDesc,
         points = 3,
         trigger = (
-            CurrentScreen == 0x4b &&
+            CurrentScreen == 0x4d &&
             cheat == 0x01 &&
             prev(cheat) == 0x00
         )
@@ -350,6 +361,27 @@ CheatUnlocked("An Incredible Song", "Unlock the increjukebox cheat", CheatIncrej
 CheatUnlocked("The Claw", "Unlock the bagpack cheat", CheatBagpackUnlocked)
 CheatUnlocked("Basically Tony Hawk", "Unlock the skateboarder cheat", CheatSkateboarderUnlocked)
 CheatUnlocked("Fully Charged Laser", "Unlock the heavyweapon cheat", CheatHeavyweaponUnlocked)
+
+
+// ===================================
+// EXTRA MATERIAL UNLOCK ACHIEVEMENTS
+// ===================================
+
+function ExtraMatUnlocked(achTitle, achDesc, points, amount, prevAmount){
+    achievement(
+    title = achTitle,
+    description = achDesc,
+    points = points,
+    trigger = (
+        CurrentScreen == 0x31 &&
+        TotalUnlockedMats == amount &&
+        prev(TotalUnlockedMats) == prevAmount
+        )
+    )
+}
+
+ExtraMatUnlocked("Image Enthusiast", "Unlock half of the extra materials", 10, 0x14, 0x13)
+ExtraMatUnlocked("Art Connoisseur", "Unlock all of the extra matertials", 25, 0x27, 0x28)
 
 // ===================================
 // SPEEDRUN ACHIEVEMENTS
