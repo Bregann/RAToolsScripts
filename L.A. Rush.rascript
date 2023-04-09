@@ -3,6 +3,8 @@
 
 //Races
 CurrentRace = byte(0x003ffee4)
+RacePosition = byte(0x01f17f83)
+function RaceComplete() => byte(0x01f17f84) == 0xfe && (prev(byte(0x01f17f84)) == 0x01 || prev(byte(0x01f17f84)) == 0x00)
 
 RaceDict = {
     0x69: "Hollywood Race 1",
@@ -119,23 +121,114 @@ MidwayConcept18Unlocked = byte(0x003fc4b4)
 MidwayConcept19Unlocked = byte(0x003fc4b8)
 MidwayConcept20Unlocked = byte(0x003fc4bc)
 
+HollywoodAcquire1 = 0x1e
+HollywoodAcquire2 = 0x1f
+HollywoodAcquire3 = 0x20
+HollywoodAcquire4 = 0x21
+SantaMonicaAcquire1 = 0x22
+SantaMonicaAcquire2 = 0x23
+SantaMonicaAcquire3 = 0x24
+SantaMonicaAcquire4 = 0x25
+SantaMonicaAcquire5 = 0x26
+SouthCentralAcquire1 = 0x27
+SouthCentralAcquire2 = 0x28
+SouthCentralAcquire3 = 0x2a
+SouthCentralAcquire4 = 0x2b
+SouthCentralAcquire5 = 0x2c
+SouthCentralAcquire6 = 0x2d
+SouthBayAcquire1 = 0x2e
+SouthBayAcquire2 = 0x2f
+SouthBayAcquire3 = 0x30
+SouthBayAcquire4 = 0x31
+SouthBayAcquire5 = 0x32
+SouthBayAcquire6 = 0x33
+SouthBayAcquire7 = 0x34
+DowntownAcquire1 = 0x35
+DowntownAcquire2 = 0x36
+DowntownAcquire3 = 0x37
+DowntownAcquire4 = 0x38
+DowntownAcquire5 = 0x39
+DowntownAcquire6 = 0x3a
+DowntownAcquire7 = 0x3b
+DowntownAcquire8 = 0x3c
+
+//Retribution
+RetributionSignsDestroyed = byte(0x00447884)
+HollywoodRetribution = 0x29
+SantaMonicaRetribution = 0x3d
+SouthCentralRetribution = 0x3e
+SouthBayRetribution = 0x3f
+DowntownRetribution = 0x40
 // ===================================
 // RACE WIN ACHIEVEMENTS
 // ===================================
 
-function CreateRaceWinAchievement(raceId, raceName)
+function CreateRaceWinAchievement(raceId, raceName, points)
 {
     achievement(
         title = raceName + " Winner",
         description = "Come 1st place on " + raceName,
-        points = 5,
+        points = points,
         trigger = (
-            raceId == CurrentRace //todo: the logic
+            raceId == CurrentRace &&
+            RaceComplete() &&
+            RacePosition == 0x01
         )
     )
 }
 
 for key in RaceDict{
-    CreateRaceWinAchievement(key, RaceDict[key])
+    if(key == 0x6b ||
+    key == 0x6c ||
+    key == 0x6e
+    )
+    {
+        CreateRaceWinAchievement(key, RaceDict[key], 10)
+    }
+    else
+    {
+        CreateRaceWinAchievement(key, RaceDict[key], 5)
+    }
 }
 
+// ===================================
+// CAR UNLOCK ACHIEVEMENTS
+// ===================================
+
+function AcquireUnlocks(carName, raceId, carUnlock)
+{
+    achievement(
+        title = carName + " Acquired",
+        description = "Unlock the " + carName + " from the acquire mission",
+        points = 5,
+        trigger = (
+            raceId == CurrentRace &&
+            carUnlock == 0x02 &&
+            prev(carUnlock) == 0x01
+        )
+    )
+}
+
+AcquireUnlocks("Chevrolet Impala SS 84", HollywoodAcquire1, Chevrolet84ImpalaSSUnlocked)
+AcquireUnlocks("Chevrolet Impala SS 00", HollywoodAcquire2, Chevrolet00ImpalaSSUnlocked)
+AcquireUnlocks("Nissan Frontier", HollywoodAcquire3, NissanFrontierUnlocked)
+
+
+// ===================================
+// RETRIBUTION ACHIEVEMENTS
+// ===================================
+function RetributionCompleted(achName, achDesc, raceId)
+{
+    achievement(
+        title = achName,
+        description = achDesc,
+        points = 5,
+        trigger = (
+            raceId == CurrentRace &&
+            RetributionSignsDestroyed == 0x05 &&
+            prev(RetributionSignsDestroyed) == 0x04
+        )
+    )
+}
+
+RetributionCompleted("Taking Back Hollywood", "Complete the Hollywood retribution mission", HollywoodRetribution)
