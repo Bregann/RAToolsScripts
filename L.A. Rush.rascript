@@ -1,6 +1,9 @@
 // L.A. Rush
 // #ID = 20732
 
+
+//achievement for under 10% damage
+
 //Races
 CurrentRace = byte(0x003ffee4)
 RacePosition = byte(0x01f17f83)
@@ -154,11 +157,11 @@ DowntownAcquire8 = 0x3c
 
 //Retribution
 RetributionSignsDestroyed = byte(0x00447884)
-HollywoodRetribution = 0x29
-SantaMonicaRetribution = 0x3d
-SouthCentralRetribution = 0x3e
-SouthBayRetribution = 0x3f
-DowntownRetribution = 0x40
+HollywoodRetributionId = 0x29
+SantaMonicaRetributionId = 0x3d
+SouthCentralRetributionId = 0x3e
+SouthBayRetributionId = 0x3f
+DowntownRetributionId = 0x40
 // ===================================
 // RACE WIN ACHIEVEMENTS
 // ===================================
@@ -180,13 +183,21 @@ function CreateRaceWinAchievement(raceId, raceName, points)
 for key in RaceDict{
     if(key == 0x6b ||
     key == 0x6c ||
-    key == 0x6e
+    key == 0x6e ||
+    key == 0x6f ||
+    key == 0x73 ||
+    key == 0x75 ||
+    key == 0x76 ||
+    key == 0x77
     )
     {
         CreateRaceWinAchievement(key, RaceDict[key], 10)
     }
-    else
+    else if(key == 0x9c)
     {
+        CreateRaceWinAchievement(key, RaceDict[key], 25)
+    }
+    else{
         CreateRaceWinAchievement(key, RaceDict[key], 5)
     }
 }
@@ -212,7 +223,10 @@ function AcquireUnlocks(carName, raceId, carUnlock)
 AcquireUnlocks("Chevrolet Impala SS 84", HollywoodAcquire1, Chevrolet84ImpalaSSUnlocked)
 AcquireUnlocks("Chevrolet Impala SS 00", HollywoodAcquire2, Chevrolet00ImpalaSSUnlocked)
 AcquireUnlocks("Nissan Frontier", HollywoodAcquire3, NissanFrontierUnlocked)
-
+AcquireUnlocks("Nissan Titan", HollywoodAcquire4, NissanTitanUnlocked)
+AcquireUnlocks("Chevrolet Monte Carlo", SantaMonicaAcquire1, ChevroletMonteCarloUnlocked)
+AcquireUnlocks("Chevrolet Camaro", SantaMonicaAcquire2, ChevroletCamaroUnlocked)
+AcquireUnlocks("Dodge Ram Rumble Bee", SantaMonicaAcquire3, DodgeRamRumbleBeeUnlocked)
 
 // ===================================
 // RETRIBUTION ACHIEVEMENTS
@@ -225,10 +239,9 @@ function RetributionCompleted(achName, achDesc, raceId)
         points = 5,
         trigger = (
             raceId == CurrentRace &&
-            RetributionSignsDestroyed == 0x05 &&
-            prev(RetributionSignsDestroyed) == 0x04
+            
         )
     )
 }
 
-RetributionCompleted("Taking Back Hollywood", "Complete the Hollywood retribution mission", HollywoodRetribution)
+RetributionCompleted("Taking Back Hollywood", "Complete the Hollywood retribution mission", HollywoodRetributionId)
