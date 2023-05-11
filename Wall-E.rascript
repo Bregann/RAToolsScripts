@@ -348,8 +348,8 @@ function CheatUnlocked(achTitle, achDesc, cheat)
         points = 3,
         trigger = (
             CurrentScreen == 0x4d &&
-            cheat == 0x01 &&
-            prev(cheat) == 0x00
+            cheat == 0x00 &&
+            prev(cheat) == 0x01
         )
     )
 }
@@ -380,8 +380,8 @@ function ExtraMatUnlocked(achTitle, achDesc, points, amount, prevAmount){
     )
 }
 
-ExtraMatUnlocked("Image Enthusiast", "Unlock half of the extra materials", 10, 0x14, 0x13)
-ExtraMatUnlocked("Art Connoisseur", "Unlock all of the extra matertials", 25, 0x27, 0x28)
+ExtraMatUnlocked("Image Enthusiast", "Unlock half of the extra materials", 10, 0x14, 0x15)
+ExtraMatUnlocked("Art Connoisseur", "Unlock all of the extra matertials", 25, 0x00, 0x01)
 
 // ===================================
 // SPEEDRUN ACHIEVEMENTS
