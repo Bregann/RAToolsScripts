@@ -6,9 +6,11 @@
 Timer = float(0x00b891d0)
 PlaygroundBoxesDestroyed= byte(dword(0x00a33b24) + 0xFFFFD550)
 CurrentScreen = byte(0x00e24000)
+PuzzleAmountSolved = byte(dword(0x01fff910) + 0x3C0)
 
 // Chapter data
 ChapterId = word(0xA1DC40)
+MusicId = byte(0x00a1dc3d)
 
 ChapterNames = [
 "BnL Tune-Up",
@@ -405,3 +407,22 @@ function PlaygroundSpeedrun(achTitle, achDesc, levelId, timerSecs)
 PlaygroundSpeedrun("Tanker Playground Speedrunner", "Beat the Tanker Playground box destroying challenge with 60 seconds or more on the clock", TankerPlayground, 60)
 PlaygroundSpeedrun("Repair-Ward Playground Speedrunner", "Beat the Repair-Ward Playground box destroying challenge with 45 seconds or more on the clock", RepairWardPlayground, 45)
 
+function PuzzleSpeedrun(achTitle, achDesc, musicId, timerSecs, puzzleAmount, prevPuzzleAmount)
+{
+    achievement(
+    title = achTitle,
+    description = achDesc,
+    points = 10,
+    trigger = (
+        Timer < timerSecs &&
+        tally(1, PuzzleAmountSolved == puzzleAmount) &&
+        tally(1, prev(PuzzleAmountSolved) == prevPuzzleAmount) &&
+        never(MusicId != musicId)
+        )
+    )
+}
+
+PuzzleSpeedrun("Pattern Puzzle Speedrunner", "Complete the pattern puzzle in championship mode in under 24 seconds", 0xB7, 24, 0x04, 0x03)
+PuzzleSpeedrun("Switch Puzzle Speedrunner", "Complete the switch puzzle in championship mode in under 10 seconds", 0xB9, 10, 0x06, 0x05)
+PuzzleSpeedrun("Memory Puzzle Speedrunner", "Complete the memory puzzle in championship mode in under 19 seconds", 0xBB, 19, 0x03, 0x02)
+PuzzleSpeedrun("Colour Match Puzzle Speedrunner", "Complete the colour match puzzle in championship mode in under 17 seconds", 0xBD, 17, 0x06, 0x05)
