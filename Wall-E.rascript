@@ -5,8 +5,10 @@
 //Misc bits
 Timer = float(0x00b891d0)
 PlaygroundBoxesDestroyed= byte(dword(0x00a33b24) + 0xFFFFD550)
-CurrentScreen = byte(0x00e24000)
+CurrentScreen = byte(0x01ff85dc)
 PuzzleAmountSolved = byte(dword(0x01fff910) + 0x3C0)
+BonusPoints = dword(0x00a1d9a0)
+GamePaused = byte(0x008e7780)
 
 // Chapter data
 ChapterId = word(0xA1DC40)
@@ -349,7 +351,7 @@ function CheatUnlocked(achTitle, achDesc, cheat)
         description = achDesc,
         points = 3,
         trigger = (
-            CurrentScreen == 0x4d &&
+            BonusPoints < prev(BonusPoints) &&
             cheat == 0x00 &&
             prev(cheat) == 0x01
         )
@@ -375,7 +377,7 @@ function ExtraMatUnlocked(achTitle, achDesc, points, amount, prevAmount){
     description = achDesc,
     points = points,
     trigger = (
-        CurrentScreen == 0x31 &&
+        BonusPoints < prev(BonusPoints) &&
         TotalUnlockedMats == amount &&
         prev(TotalUnlockedMats) == prevAmount
         )
@@ -399,45 +401,46 @@ function PlaygroundSpeedrun(achTitle, achDesc, levelId, timerSecs)
         ChapterId == levelId &&
         Timer >= timerSecs &&
         PlaygroundBoxesDestroyed == 0x0a &&
-        prev(PlaygroundBoxesDestroyed) == 0x09
+        prior(PlaygroundBoxesDestroyed) == 0x09
         )
     )
 }
 
-PlaygroundSpeedrun("Tanker Playground Speedrunner", "Beat the Tanker Playground box destroying challenge with 60 seconds or more on the clock", TankerPlayground, 60)
-PlaygroundSpeedrun("Repair-Ward Playground Speedrunner", "Beat the Repair-Ward Playground box destroying challenge with 45 seconds or more on the clock", RepairWardPlayground, 45)
+PlaygroundSpeedrun("Tanker Playground Speedrunner", "Beat the Tanker Playground box destroying challenge with 60 seconds or more on the clock", TankerPlayground, 60.0)
+PlaygroundSpeedrun("Repair-Ward Playground Speedrunner", "Beat the Repair-Ward Playground box destroying challenge with 45 seconds or more on the clock", RepairWardPlayground, 45.0)
 
-function PuzzleSpeedrun(achTitle, achDesc, musicId, timerSecs, puzzleAmount, prevPuzzleAmount)
+function PuzzleSpeedrun(achTitle, achDesc, musicId, timerSecs, timerFloat)
 {
     achievement(
     title = achTitle,
     description = achDesc,
     points = 10,
     trigger = (
-        Timer < timerSecs &&
-        tally(1, PuzzleAmountSolved == puzzleAmount) &&
-        tally(1, prev(PuzzleAmountSolved) == prevPuzzleAmount) &&
-        never(MusicId != musicId)
+        timerFloat < timerSecs &&
+        timerFloat > 0.0 &&
+        (prev(timerFloat) < 0.0 || prev(timerFloat) > timerSecs) &&
+        MusicId == musicId
         )
     )
 }
 
-PuzzleSpeedrun("Pattern Puzzle Speedrunner", "Complete the pattern puzzle in championship mode in under 24 seconds", 0xB7, 24, 0x04, 0x03)
-PuzzleSpeedrun("Switch Puzzle Speedrunner", "Complete the switch puzzle in championship mode in under 10 seconds", 0xB9, 10, 0x06, 0x05)
-PuzzleSpeedrun("Memory Puzzle Speedrunner", "Complete the memory puzzle in championship mode in under 19 seconds", 0xBB, 19, 0x03, 0x02)
-PuzzleSpeedrun("Colour Match Puzzle Speedrunner", "Complete the colour match puzzle in championship mode in under 17 seconds", 0xBD, 17, 0x06, 0x05)
+PuzzleSpeedrun("Pattern Puzzle Speedrunner", "Complete the pattern puzzle in championship mode in under 24 seconds", 0xB7, 24.0, float(0x00b9e330))
+PuzzleSpeedrun("Switch Puzzle Speedrunner", "Complete the switch puzzle in championship mode in under 10 seconds", 0xB9, 10.0, float(0x00b9f9a0))
+PuzzleSpeedrun("Memory Puzzle Speedrunner", "Complete the memory puzzle in championship mode in under 19 seconds", 0xBB, 19.0, float(0x00ba0b10))
+PuzzleSpeedrun("Colour Match Puzzle Speedrunner", "Complete the colour match puzzle in championship mode in under 17 seconds", 0xBD, 17.0, float(0x00ba0760))
 
 // ===================================
 // PUZZLE LEADERBOARDS
 // ===================================
-function PuzzleLb(lbTitle, lbDesc, musicId, puzzleAmount)
+function PuzzleLb(lbTitle, lbDesc, musicId, floatTimer)
 {
     leaderboard(
         title = lbTitle,
         description = lbDesc,
         start = (
             MusicId == musicId &&
-            ChapterId == 0x00
+            ChapterId == 0x00 &&
+            GamePaused == 0x00
         ),
         cancel = (
             MusicId != musicId &&
@@ -445,15 +448,16 @@ function PuzzleLb(lbTitle, lbDesc, musicId, puzzleAmount)
         ),
         submit = (
             MusicId == musicId &&
-            PuzzleAmountSolved == puzzleAmount
+            GamePaused == 0x01 &&
+            floatTimer > 0.0
         ),
-        value = (Timer),
+        value = (floatTimer),
         format = "SECS",
         lower_is_better = true
     )
 }
 
-PuzzleLb("Pattern Puzzle", "Get the lowest time on the pattern puzzle in championship mode", 0xB7, 0x04)
-PuzzleLb("Switch Puzzle ", "Get the lowest time on the switch puzzle in championship mode", 0xB9, 0x06)
-PuzzleLb("Memory Puzzle", "Get the lowest time on the memory puzzle in championship mode", 0xBB, 0x03)
-PuzzleLb("Colour Match Puzzle ", "Get the lowest time on the colour match puzzle in championship mode", 0xBD, 0x06)
+PuzzleLb("Pattern Puzzle", "Get the lowest time on the pattern puzzle in championship mode", 0xB7, float(0x00b9e330))
+PuzzleLb("Switch Puzzle ", "Get the lowest time on the switch puzzle in championship mode", 0xB9, float(0x00b9f9a0))
+PuzzleLb("Memory Puzzle", "Get the lowest time on the memory puzzle in championship mode", 0xBB, float(0x00ba0b10))
+PuzzleLb("Colour Match Puzzle ", "Get the lowest time on the colour match puzzle in championship mode", 0xBD, float(0x00ba0760))
