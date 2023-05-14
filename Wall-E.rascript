@@ -426,3 +426,34 @@ PuzzleSpeedrun("Pattern Puzzle Speedrunner", "Complete the pattern puzzle in cha
 PuzzleSpeedrun("Switch Puzzle Speedrunner", "Complete the switch puzzle in championship mode in under 10 seconds", 0xB9, 10, 0x06, 0x05)
 PuzzleSpeedrun("Memory Puzzle Speedrunner", "Complete the memory puzzle in championship mode in under 19 seconds", 0xBB, 19, 0x03, 0x02)
 PuzzleSpeedrun("Colour Match Puzzle Speedrunner", "Complete the colour match puzzle in championship mode in under 17 seconds", 0xBD, 17, 0x06, 0x05)
+
+// ===================================
+// PUZZLE LEADERBOARDS
+// ===================================
+function PuzzleLb(lbTitle, lbDesc, musicId, puzzleAmount)
+{
+    leaderboard(
+        title = lbTitle,
+        description = lbDesc,
+        start = (
+            MusicId == musicId &&
+            ChapterId == 0x00
+        ),
+        cancel = (
+            MusicId != musicId &&
+            ChapterId == 0x00
+        ),
+        submit = (
+            MusicId == musicId &&
+            PuzzleAmountSolved == puzzleAmount
+        ),
+        value = (Timer),
+        format = "SECS",
+        lower_is_better = true
+    )
+}
+
+PuzzleLb("Pattern Puzzle", "Get the lowest time on the pattern puzzle in championship mode", 0xB7, 0x04)
+PuzzleLb("Switch Puzzle ", "Get the lowest time on the switch puzzle in championship mode", 0xB9, 0x06)
+PuzzleLb("Memory Puzzle", "Get the lowest time on the memory puzzle in championship mode", 0xBB, 0x03)
+PuzzleLb("Colour Match Puzzle ", "Get the lowest time on the colour match puzzle in championship mode", 0xBD, 0x06)
