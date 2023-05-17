@@ -399,7 +399,7 @@ function PlaygroundSpeedrun(achTitle, achDesc, levelId, timerSecs)
     points = 10,
     trigger = (
         ChapterId == levelId &&
-        Timer >= timerSecs &&
+        prev(Timer) >= timerSecs &&
         PlaygroundBoxesDestroyed == 0x0a &&
         prior(PlaygroundBoxesDestroyed) == 0x09
         )
