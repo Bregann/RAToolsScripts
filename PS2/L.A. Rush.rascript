@@ -225,10 +225,25 @@ AcquireUnlocks("Dodge Ram Rumble Bee", SantaMonicaAcquire3, DodgeRamRumbleBeeUnl
 AcquireUnlocks("Nissan SentraSE- R Spec V", SouthCentralAcquire1, NissanSentraSERSpecVUnlocked)
 AcquireUnlocks("Infiniti FX 45", SouthCentralAcquire2, InfinitiFX45Unlocked)
 AcquireUnlocks("Pontiac Solstice", SouthCentralAcquire3, PontiacSolsticeUnlocked)
-
-
-
+AcquireUnlocks("Chevrolet Chevelle SS-454 LS6", SouthCentralAcquire4, ChevroletChevelleSS454LS6Unlocked)
+AcquireUnlocks("Mitsubishi Eclipse Spyder", SouthCentralAcquire5, MitsubishiEclipseSpyderUnlocked)
+AcquireUnlocks("Dodge Hemi Charger R/T", SouthCentralAcquire6, DodgeHemiChargerRTUnlocked)
 AcquireUnlocks("Dodge Magnum RT", SouthBayAcquire1, DodgeMagnumRTUnlocked)
+AcquireUnlocks("Buick GNX", SouthBayAcquire2, BuickGNXUnlocked)
+AcquireUnlocks("Dodge Neon SRT-4", SouthBayAcquire3, DodgeNeonSRT4Unlocked)
+AcquireUnlocks("Lotus Elise 111", SouthBayAcquire4, LotusElise111Unlocked)
+AcquireUnlocks("Dodge Charger", SouthBayAcquire5, DodgeChargerUnlocked)
+AcquireUnlocks("Chevrolet Corvette Stingray", SouthBayAcquire6, ChevroletCorvetteStingrayUnlocked)
+AcquireUnlocks("Nissan Skyline GTR R34", SouthBayAcquire7, NissanSkylineGTRR34Unlocked)
+AcquireUnlocks("Nissan 350Z", DowntownAcquire1, Nissan350ZUnlocked)
+AcquireUnlocks("Pontiac 05 GTO", DowntownAcquire2, Pontiac05GTOUnlocked)
+AcquireUnlocks("Subaru Impreza WRX STI", DowntownAcquire3, SubaruImprezaWRXSTIUnlocked)
+AcquireUnlocks("Lotus Exige", DowntownAcquire4, LotusExigeUnlocked)
+AcquireUnlocks("Mitsubishi Lancer EVO 8", DowntownAcquire5, MitsubishiLancerEVO8Unlocked)
+AcquireUnlocks("Chevrolet Corvette Z06", DowntownAcquire6, ChevroletCorvetteZ06Unlocked)
+AcquireUnlocks("Dodge Viper SRT-10", DowntownAcquire7, DodgeViperSRT10Unlocked)
+AcquireUnlocks("Saleen S7", DowntownAcquire8, SaleenS7Unlocked)
+
 // ===================================
 // RETRIBUTION ACHIEVEMENTS
 // ===================================
