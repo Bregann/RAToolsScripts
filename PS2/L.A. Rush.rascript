@@ -183,8 +183,7 @@ function CreateRaceWinAchievement(raceId, raceName, points)
 for key in RaceDict{
     if(key == 0x69 || key == 0x6a || key == 0x6d || key == 0x71 || key == 0x72 ||
         key == 0x74 || key == 0x7a || key == 0x7b || key == 0x7d || key == 0x84 ||
-        key == 0x85 || key == 0x87 || key == 0x8f || key == 0x90 || key == 0x92
-    )
+        key == 0x85 || key == 0x87 || key == 0x8f || key == 0x90 || key == 0x92)
     {
         CreateRaceWinAchievement(key, RaceDict[key], 5)
     }
@@ -222,7 +221,7 @@ AcquireUnlocks("Nissan Titan", HollywoodAcquire4, NissanTitanUnlocked)
 AcquireUnlocks("Chevrolet Monte Carlo", SantaMonicaAcquire1, ChevroletMonteCarloUnlocked)
 AcquireUnlocks("Chevrolet Camaro", SantaMonicaAcquire2, ChevroletCamaroUnlocked)
 AcquireUnlocks("Dodge Ram Rumble Bee", SantaMonicaAcquire3, DodgeRamRumbleBeeUnlocked)
-AcquireUnlocks("Nissan SentraSE- R Spec V", SouthCentralAcquire1, NissanSentraSERSpecVUnlocked)
+AcquireUnlocks("Nissan Sentra SE-R Spec V", SouthCentralAcquire1, NissanSentraSERSpecVUnlocked)
 AcquireUnlocks("Infiniti FX 45", SouthCentralAcquire2, InfinitiFX45Unlocked)
 AcquireUnlocks("Pontiac Solstice", SouthCentralAcquire3, PontiacSolsticeUnlocked)
 AcquireUnlocks("Chevrolet Chevelle SS-454 LS6", SouthCentralAcquire4, ChevroletChevelleSS454LS6Unlocked)
