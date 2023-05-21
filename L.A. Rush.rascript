@@ -181,24 +181,19 @@ function CreateRaceWinAchievement(raceId, raceName, points)
 }
 
 for key in RaceDict{
-    if(key == 0x6b ||
-    key == 0x6c ||
-    key == 0x6e ||
-    key == 0x6f ||
-    key == 0x73 ||
-    key == 0x75 ||
-    key == 0x76 ||
-    key == 0x77
+    if(key == 0x69 || key == 0x6a || key == 0x6d || key == 0x71 || key == 0x72 ||
+        key == 0x74 || key == 0x7a || key == 0x7b || key == 0x7d || key == 0x84 ||
+        key == 0x85 || key == 0x87 || key == 0x8f || key == 0x90 || key == 0x92
     )
     {
-        CreateRaceWinAchievement(key, RaceDict[key], 10)
+        CreateRaceWinAchievement(key, RaceDict[key], 5)
     }
     else if(key == 0x9c)
     {
         CreateRaceWinAchievement(key, RaceDict[key], 25)
     }
     else{
-        CreateRaceWinAchievement(key, RaceDict[key], 5)
+        CreateRaceWinAchievement(key, RaceDict[key], 10)
     }
 }
 
@@ -227,11 +222,17 @@ AcquireUnlocks("Nissan Titan", HollywoodAcquire4, NissanTitanUnlocked)
 AcquireUnlocks("Chevrolet Monte Carlo", SantaMonicaAcquire1, ChevroletMonteCarloUnlocked)
 AcquireUnlocks("Chevrolet Camaro", SantaMonicaAcquire2, ChevroletCamaroUnlocked)
 AcquireUnlocks("Dodge Ram Rumble Bee", SantaMonicaAcquire3, DodgeRamRumbleBeeUnlocked)
+AcquireUnlocks("Nissan SentraSE- R Spec V", SouthCentralAcquire1, NissanSentraSERSpecVUnlocked)
+AcquireUnlocks("Infiniti FX 45", SouthCentralAcquire2, InfinitiFX45Unlocked)
+AcquireUnlocks("Pontiac Solstice", SouthCentralAcquire3, PontiacSolsticeUnlocked)
 
+
+
+AcquireUnlocks("Dodge Magnum RT", SouthBayAcquire1, DodgeMagnumRTUnlocked)
 // ===================================
 // RETRIBUTION ACHIEVEMENTS
 // ===================================
-function RetributionCompleted(achName, achDesc, raceId)
+function RetributionCompleted(achName, achDesc, raceId, missionMem)
 {
     achievement(
         title = achName,
@@ -239,9 +240,14 @@ function RetributionCompleted(achName, achDesc, raceId)
         points = 5,
         trigger = (
             raceId == CurrentRace &&
-            
+            missionMem == 0x05 &&
+            prev(missionMem) == 0x02
         )
     )
 }
 
-RetributionCompleted("Taking Back Hollywood", "Complete the Hollywood retribution mission", HollywoodRetributionId)
+RetributionCompleted("Taking Back Hollywood", "Complete the Hollywood retribution mission", HollywoodRetributionId, byte(0x003fc1b8))
+RetributionCompleted("Taking Back Santa Monica", "Complete the Santa Monica retribution mission", SantaMonicaRetributionId, byte(0x003fc208))
+RetributionCompleted("Taking Back South Central", "Complete the South Central retribution mission", SouthCentralRetributionId, byte(0x003fc20c))
+RetributionCompleted("Taking Back South Bay", "Complete the South Bay retribution mission", SouthBayRetributionId, byte(0x003fc210))
+RetributionCompleted("Taking Back Downtown", "Complete the Downtown retribution mission", DowntownRetributionId, byte(0x003fc210))
