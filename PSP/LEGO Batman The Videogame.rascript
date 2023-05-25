@@ -48,36 +48,36 @@ function IsVillainEp() => CurrentLevel == VillainEP1 || CurrentLevel == VillainE
 //Freeplay unlocked
 // 0x00 = locked
 // 0x01 = unlocked
-HeroEP1FreeplayUnlocked = byte(0xd639ef)
-HeroEP2FreeplayUnlocked = byte(0xd639fb)
-HeroEP3FreeplayUnlocked = byte(0xd63a07)
-HeroEP4FreeplayUnlocked = byte(0xd63a13)
-HeroEP5FreeplayUnlocked = byte(0xd63a1f)
-HeroEP6FreeplayUnlocked = byte(0xd63a43)
-HeroEP7FreeplayUnlocked = byte(0xd63a4f)
-HeroEP8FreeplayUnlocked = byte(0xd63a5b)
-HeroEP9FreeplayUnlocked = byte(0xd63a67)
-HeroEP10FreeplayUnlocked = byte(0xd63a73)
-HeroEP11FreeplayUnlocked = byte(0xd63a97)
-HeroEP12FreeplayUnlocked = byte(0xd63aa3)
-HeroEP13FreeplayUnlocked = byte(0xd63aaf)
-HeroEP14FreeplayUnlocked = byte(0xd63abb)
-HeroEP15FreeplayUnlocked = byte(0xd63ac7)
-VillainEP1FreeplayUnlocked = byte(0xd63adf)
-VillainEP2FreeplayUnlocked = byte(0xd63aeb)
-VillainEP3FreeplayUnlocked = byte(0xd63af7)
-VillainEP4FreeplayUnlocked = byte(0xd63b03)
-VillainEP5FreeplayUnlocked = byte(0xd63b0f)
-VillainEP6FreeplayUnlocked = byte(0xd63b1b)
-VillainEP7FreeplayUnlocked = byte(0xd63b27)
-VillainEP8FreeplayUnlocked = byte(0xd63b33)
-VillainEP9FreeplayUnlocked = byte(0xd63b3f)
-VillainEP10FreeplayUnlocked = byte(0xd63b4b)
-VillainEP11FreeplayUnlocked = byte(0xd63b57)
-VillainEP12FreeplayUnlocked = byte(0xd63b63)
-VillainEP13FreeplayUnlocked = byte(0xd63b6f)
-VillainEP14FreeplayUnlocked = byte(0xd63b7b)
-VillainEP15FreeplayUnlocked = byte(0xd63b87)
+function HeroEP1FreeplayUnlocked() => byte(0xd639ef) == 0x01 && prev(byte(0xd639ef)) == 0x00
+function HeroEP2FreeplayUnlocked() => byte(0xd639fb) == 0x01 && prev(byte(0xd639fb)) == 0x00
+function HeroEP3FreeplayUnlocked() => byte(0xd63a07) == 0x01 && prev(byte(0xd63a07)) == 0x00
+function HeroEP4FreeplayUnlocked() => byte(0xd63a13) == 0x01 && prev(byte(0xd63a13)) == 0x00
+function HeroEP5FreeplayUnlocked() => byte(0xd63a1f) == 0x01 && prev(byte(0xd63a1f)) == 0x00
+function HeroEP6FreeplayUnlocked() => byte(0xd63a43) == 0x01 && prev(byte(0xd63a43)) == 0x00
+function HeroEP7FreeplayUnlocked() => byte(0xd63a4f) == 0x01 && prev(byte(0xd63a4f)) == 0x00
+function HeroEP8FreeplayUnlocked() => byte(0xd63a5b) == 0x01 && prev(byte(0xd63a5b)) == 0x00
+function HeroEP9FreeplayUnlocked() => byte(0xd63a67) == 0x01 && prev(byte(0xd63a67)) == 0x00
+function HeroEP10FreeplayUnlocked() => byte(0xd63a73) == 0x01 && prev(byte(0xd63a73)) == 0x00
+function HeroEP11FreeplayUnlocked() => byte(0xd63a97) == 0x01 && prev(byte(0xd63a97)) == 0x00
+function HeroEP12FreeplayUnlocked() => byte(0xd63aa3) == 0x01 && prev(byte(0xd63aa3)) == 0x00
+function HeroEP13FreeplayUnlocked() => byte(0xd63aaf) == 0x01 && prev(byte(0xd63aaf)) == 0x00
+function HeroEP14FreeplayUnlocked() => byte(0xd63abb) == 0x01 && prev(byte(0xd63abb)) == 0x00
+function HeroEP15FreeplayUnlocked() => byte(0xd63ac7) == 0x01 && prev(byte(0xd63ac7)) == 0x00
+function VillainEP1FreeplayUnlocked() => byte(0xd63adf) == 0x01 && prev(byte(0xd63adf)) == 0x00
+function VillainEP2FreeplayUnlocked() => byte(0xd63aeb) == 0x01 && prev(byte(0xd63aeb)) == 0x00
+function VillainEP3FreeplayUnlocked() => byte(0xd63af7) == 0x01 && prev(byte(0xd63af7)) == 0x00
+function VillainEP4FreeplayUnlocked() => byte(0xd63b03) == 0x01 && prev(byte(0xd63b03)) == 0x00
+function VillainEP5FreeplayUnlocked() => byte(0xd63b0f) == 0x01 && prev(byte(0xd63b0f)) == 0x00
+function VillainEP6FreeplayUnlocked() => byte(0xd63b1b) == 0x01 && prev(byte(0xd63b1b)) == 0x00
+function VillainEP7FreeplayUnlocked() => byte(0xd63b27) == 0x01 && prev(byte(0xd63b27)) == 0x00
+function VillainEP8FreeplayUnlocked() => byte(0xd63b33) == 0x01 && prev(byte(0xd63b33)) == 0x00
+function VillainEP9FreeplayUnlocked() => byte(0xd63b3f) == 0x01 && prev(byte(0xd63b3f)) == 0x00
+function VillainEP10FreeplayUnlocked() => byte(0xd63b4b) == 0x01 && prev(byte(0xd63b4b)) == 0x00
+function VillainEP11FreeplayUnlocked() => byte(0xd63b57) == 0x01 && prev(byte(0xd63b57)) == 0x00
+function VillainEP12FreeplayUnlocked() => byte(0xd63b63) == 0x01 && prev(byte(0xd63b63)) == 0x00
+function VillainEP13FreeplayUnlocked() => byte(0xd63b6f) == 0x01 && prev(byte(0xd63b6f)) == 0x00
+function VillainEP14FreeplayUnlocked() => byte(0xd63b7b) == 0x01 && prev(byte(0xd63b7b)) == 0x00
+function VillainEP15FreeplayUnlocked() => byte(0xd63b87) == 0x01 && prev(byte(0xd63b87)) == 0x00
 
 //Minikits
 HeroMinikitsUnlocked = 
@@ -143,10 +143,50 @@ bitcount(0x00d63d98) + bit0(0x00d63d99) + bit1(0x00d63d99) + bit2(0x00d63d99) +
 bit3(0x00d63d99) + bit4(0x00d63d99) + bit5(0x00d63d99) + bit6(0x00d63d99)
 
 
+// ================================
+// Level completions
+// ================================
 
+function LevelComplete(levelName, level, freePlayUnlocked)
+{
+    achievement(
+        title = levelName,
+        description = "Complete " + levelName + " on story mode",
+        points = 3,
+        trigger = (
+            freePlayUnlocked &&
+            CurrentLevel == level
+        )
+    )
+}
 
-
-
-
-
-
+LevelComplete("You Can Bank On Batman", HeroEP1, HeroEP1FreeplayUnlocked())
+LevelComplete("An Icy Reception", HeroEP2, HeroEP2FreeplayUnlocked())
+LevelComplete("Two-Face Chase", HeroEP3, HeroEP3FreeplayUnlocked())
+LevelComplete("A Poisonous Appointment", HeroEP4, HeroEP4FreeplayUnlocked())
+LevelComplete("The Riddler's Revenge", HeroEP5, HeroEP5FreeplayUnlocked())
+LevelComplete("There She Goes Again", HeroEP6, HeroEP6FreeplayUnlocked())
+LevelComplete("Batboat Battle", HeroEP7, HeroEP7FreeplayUnlocked())
+LevelComplete("Under the City", HeroEP8, HeroEP8FreeplayUnlocked())
+LevelComplete("Zoo's Company", HeroEP9, HeroEP9FreeplayUnlocked())
+LevelComplete("Penguin's Lair", HeroEP10, HeroEP10FreeplayUnlocked())
+LevelComplete("Joker's Home Turf", HeroEP11, HeroEP11FreeplayUnlocked())
+LevelComplete("Little Fun at the Big Top", HeroEP12, HeroEP12FreeplayUnlocked())
+LevelComplete("Flight of the Bat", HeroEP13, HeroEP13FreeplayUnlocked())
+LevelComplete("In the Dark Night", HeroEP14, HeroEP14FreeplayUnlocked())
+LevelComplete("To the Top of the Tower", HeroEP15, HeroEP15FreeplayUnlocked())
+LevelComplete("The Riddler Makes a Withdrawal", VillainEP1, VillainEP1FreeplayUnlocked())
+LevelComplete("On the Rocks", VillainEP2, VillainEP2FreeplayUnlocked())
+LevelComplete("Green Fingers", VillainEP3, VillainEP3FreeplayUnlocked())
+LevelComplete("An Enterprising Theft", VillainEP4, VillainEP4FreeplayUnlocked())
+LevelComplete("Breaking Blocks", VillainEP5, VillainEP5FreeplayUnlocked())
+LevelComplete("Rockin' the Docks", VillainEP6, VillainEP6FreeplayUnlocked())
+LevelComplete("Stealing the Show", VillainEP7, VillainEP7FreeplayUnlocked())
+LevelComplete("Harbouring a Grudge", VillainEP8, VillainEP8FreeplayUnlocked())
+LevelComplete("A Daring Rescue", VillainEP9, VillainEP9FreeplayUnlocked())
+LevelComplete("Arctic World", VillainEP10, VillainEP10FreeplayUnlocked())
+LevelComplete("A Surprise for the Commissioner", VillainEP11, VillainEP11FreeplayUnlocked())
+LevelComplete("Biplane Blast", VillainEP12, VillainEP12FreeplayUnlocked())
+LevelComplete("The Joker's Masterpiece", VillainEP13, VillainEP13FreeplayUnlocked())
+LevelComplete("The Lure of the Night", VillainEP14, VillainEP14FreeplayUnlocked())
+LevelComplete("Dying of Laughter", VillainEP15, VillainEP15FreeplayUnlocked())
