@@ -8,6 +8,7 @@
 CurrentRace = byte(0x003ffee4)
 RacePosition = byte(0x01f17f83)
 function RaceComplete() => byte(0x01f17f84) == 0xfe && (prev(byte(0x01f17f84)) == 0x01 || prev(byte(0x01f17f84)) == 0x00)
+RaceTimer = float(0x00418c0c)
 
 RaceDict = {
     0x69: "Hollywood Race 1",
@@ -63,6 +64,8 @@ RaceDict = {
     0x9b: "Downtown Race 13",
     0x9c: "Hollywood Endurance Race",
 }
+
+
 
 //Car unlocks
 //0x01 = no
@@ -185,14 +188,14 @@ for key in RaceDict{
         key == 0x74 || key == 0x7a || key == 0x7b || key == 0x7d || key == 0x84 ||
         key == 0x85 || key == 0x87 || key == 0x8f || key == 0x90 || key == 0x92)
     {
-        CreateRaceWinAchievement(key, RaceDict[key], 5)
+        CreateRaceWinAchievement(key, RaceDict[key], 3)
     }
     else if(key == 0x9c)
     {
-        CreateRaceWinAchievement(key, RaceDict[key], 25)
+        CreateRaceWinAchievement(key, RaceDict[key], 10)
     }
     else{
-        CreateRaceWinAchievement(key, RaceDict[key], 10)
+        CreateRaceWinAchievement(key, RaceDict[key], 5)
     }
 }
 
@@ -265,3 +268,8 @@ RetributionCompleted("Taking Back Santa Monica", "Complete the Santa Monica retr
 RetributionCompleted("Taking Back South Central", "Complete the South Central retribution mission", SouthCentralRetributionId, byte(0x003fc20c))
 RetributionCompleted("Taking Back South Bay", "Complete the South Bay retribution mission", SouthBayRetributionId, byte(0x003fc210))
 RetributionCompleted("Taking Back Downtown", "Complete the Downtown retribution mission", DowntownRetributionId, byte(0x003fc210))
+
+// ===================================
+// SPEEDRUN ACHIEVEMENTS
+// ===================================
+
