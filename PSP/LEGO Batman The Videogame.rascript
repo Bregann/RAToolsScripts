@@ -35,15 +35,15 @@ VillainEP13 = 0x23
 VillainEP14 = 0x24
 VillainEP15 = 0x25
 
-function IsHeroEp() => CurrentLevel == HeroEP1 || CurrentLevel == HeroEP2  || CurrentLevel == HeroEP3  || CurrentLevel == HeroEP4  
+function IsHeroEp() => __ornext(CurrentLevel == HeroEP1 || CurrentLevel == HeroEP2  || CurrentLevel == HeroEP3  || CurrentLevel == HeroEP4  
 || CurrentLevel == HeroEP5  || CurrentLevel == HeroEP6  || CurrentLevel == HeroEP7  || CurrentLevel == HeroEP8 || CurrentLevel == HeroEP9 
 || CurrentLevel == HeroEP10  || CurrentLevel == HeroEP11  || CurrentLevel == HeroEP12  || CurrentLevel == HeroEP13  || CurrentLevel == HeroEP14
-|| CurrentLevel == HeroEP15
+|| CurrentLevel == HeroEP15)
 
-function IsVillainEp() => CurrentLevel == VillainEP1 || CurrentLevel == VillainEP2  || CurrentLevel == VillainEP3  || CurrentLevel == VillainEP4  
+function IsVillainEp() => __ornext(CurrentLevel == VillainEP1 || CurrentLevel == VillainEP2  || CurrentLevel == VillainEP3  || CurrentLevel == VillainEP4  
 || CurrentLevel == VillainEP5  || CurrentLevel == VillainEP6  || CurrentLevel == VillainEP7  || CurrentLevel == VillainEP8 || CurrentLevel == VillainEP9 
 || CurrentLevel == VillainEP10  || CurrentLevel == VillainEP11  || CurrentLevel == VillainEP12  || CurrentLevel == VillainEP13  || CurrentLevel == VillainEP14
-|| CurrentLevel == VillainEP15
+|| CurrentLevel == VillainEP15)
 
 //Freeplay unlocked
 // 0x00 = locked
@@ -101,6 +101,13 @@ byte(0x00d63add) + byte(0x00d63ae9) + byte(0x00d63af5) + byte(0x00d63b01) + byte
 byte(0x00d63b19) + byte(0x00d63b25) + byte(0x00d63b31) + byte(0x00d63b3d) + byte(0x00d63b49) + 
 byte(0x00d63b55) + byte(0x00d63b61) + byte(0x00d63b6d) + byte(0x00d63b79) + byte(0x00d63b85)
 
+//Hostages saved
+HeroHostagesSaved = 
+bitcount(0x00d64000) + bit0(0x00d64001) + bit1(0x00d64001) + bit2(0x00d64001) + bit3(0x00d64001)
+
+VillianHostagesSaved = 
+bit4(0x00d64001) + bit5(0x00d64001) + bit6(0x00d64001) + bit7(0x00d64001) + 
+bitcount(0x00d64002) + bit0(0x00d64003)
 
 //Red Bricks collected
 RedBricksCollected =
@@ -111,13 +118,8 @@ byte(0x00d63ae3) + byte(0x00d63aef) + byte(0x00d63afb) + byte(0x00d63b07) + byte
 byte(0x00d63b1f) + byte(0x00d63b2b) + byte(0x00d63b37) + byte(0x00d63b43) + byte(0x00d63b4f) + 
 byte(0x00d63b5b) + byte(0x00d63b67) + byte(0x00d63b73) + byte(0x00d63b7f) + byte(0x00d63b8b)
 
-//Hostages saved
-HeroHostagesSaved = 
-bitcount(0x00d64000) + bit0(0x00d64001) + bit1(0x00d64001) + bit2(0x00d64001) + bit3(0x00d64001)
-
-VillianHostagesSaved = 
-bit4(0x00d64001) + bit5(0x00d64001) + bit6(0x00d64001) + bit7(0x00d64001) + 
-bitcount(0x00d64002) + bit0(0x00d64003)
+//Stud count
+StudCount = dword(0x00d63dc0)
 
 //Characters purchased
 CharactersPurchased = 
@@ -144,7 +146,7 @@ bit3(0x00d63d99) + bit4(0x00d63d99) + bit5(0x00d63d99) + bit6(0x00d63d99)
 
 
 // ================================
-// Level completions
+// Level Completions
 // ================================
 
 function LevelComplete(levelName, level, freePlayUnlocked)
@@ -190,3 +192,80 @@ LevelComplete("Biplane Blast", VillainEP12, VillainEP12FreeplayUnlocked())
 LevelComplete("The Joker's Masterpiece", VillainEP13, VillainEP13FreeplayUnlocked())
 LevelComplete("The Lure of the Night", VillainEP14, VillainEP14FreeplayUnlocked())
 LevelComplete("Dying of Laughter", VillainEP15, VillainEP15FreeplayUnlocked())
+
+// ================================
+// Minikit/true batman completions
+// ================================
+
+function HeroVillianSplitAchievements(achName, achDesc, typeOfUnlock, amount, prevAmount, heroOrVillian)
+{
+achievement (
+    title = achName,
+    description = achDesc,
+    points = 25,
+    trigger = (
+        typeOfUnlock == amount &&
+        prev(typeOfUnlock) == prevAmount &&
+        heroOrVillian
+        )
+    )
+}
+
+HeroVillianSplitAchievements("Minikit Master", "Collect all 150 minikits in the hero levels", HeroMinikitsUnlocked, 0x96, 0x95, IsHeroEp())
+HeroVillianSplitAchievements("Minikit Mastermind", "Collect all 150 minikits in the villian levels", VillianMinikitsUnlocked, 0x96, 0x95, IsVillainEp())
+HeroVillianSplitAchievements("I'm Batman", "Reach true batman in the hero levels", HeroTrueBatmans, 0x0f, 0x0e, IsHeroEp())
+HeroVillianSplitAchievements("The Dark Knight Rises", "Reach true batman in the villian levels", VillianTrueBatmans, 0x0f, 0x0e, IsVillainEp())
+HeroVillianSplitAchievements("The Hero of Gotham", "Save every hostage in the hero levels", HeroHostagesSaved, 0x19, 0x18, IsHeroEp())
+HeroVillianSplitAchievements("The Evil Hero of Gotham", "Save every hostage in the villian levels", VillianHostagesSaved, 0x19, 0x18, IsVillainEp())
+
+// ================================
+// Red brick collected completions
+// ================================
+
+achievement(
+    title = "Master of the Red Bricks",
+    description = "Collect every red brick from all hero and villian levels",
+    points = 25,
+    trigger = (
+        RedBricksCollected == 0x1e &&
+        prev(RedBricksCollected) == 0x1d &&
+        CurrentLevel != 0x01
+     )
+)
+
+// ================================
+// Shop purchases
+// ================================
+
+function ShopPurchaseAchievements(achName, achDesc, points, typeOfUnlock, amount, prevAmount)
+{
+achievement(
+    title = achName,
+    description = achDesc,
+    points = points,
+    trigger = (
+        typeOfUnlock == amount &&
+        prev(typeOfUnlock) == prevAmount &&
+        CurrentLevel == 0x01
+        )
+    )
+}
+
+ShopPurchaseAchievements("True Data Hoarder", "Purchase all the data from the shop", 25, DataPurchased, 0x33, 0x32)
+ShopPurchaseAchievements("Extra Extra", "Purchase all the extra from the shop", 10, ExtrasPurchased, 0x14, 0x13)
+ShopPurchaseAchievements("Characters", "Characters", 25, CharactersPurchased, 0x35, 0x34)
+ShopPurchaseAchievements("Suited Up", "Suited Up", 25, SuitUpgradesPurchased, 0x0f, 0x0e)
+
+// ================================
+// Misc
+// ================================
+achievement(
+    title = "Stud Millionaire",
+    description = "Reach 10 million studs",
+    points = 5,
+    trigger = (
+        StudCount >= 0x989680 &&
+        prev(StudCount) <= 0x989680 &&
+        CurrentLevel != 0x00
+     )
+)
