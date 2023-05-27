@@ -34,16 +34,18 @@ VillainEP12 = 0x22
 VillainEP13 = 0x23
 VillainEP14 = 0x24
 VillainEP15 = 0x25
+WayneManor = 0x26
+ArkhamAsylum = 0x27
 
-function IsHeroEp() => __ornext(CurrentLevel == HeroEP1 || CurrentLevel == HeroEP2  || CurrentLevel == HeroEP3  || CurrentLevel == HeroEP4  
+function IsHeroEp() => CurrentLevel == HeroEP1 || CurrentLevel == HeroEP2  || CurrentLevel == HeroEP3  || CurrentLevel == HeroEP4  
 || CurrentLevel == HeroEP5  || CurrentLevel == HeroEP6  || CurrentLevel == HeroEP7  || CurrentLevel == HeroEP8 || CurrentLevel == HeroEP9 
 || CurrentLevel == HeroEP10  || CurrentLevel == HeroEP11  || CurrentLevel == HeroEP12  || CurrentLevel == HeroEP13  || CurrentLevel == HeroEP14
-|| CurrentLevel == HeroEP15)
+|| CurrentLevel == HeroEP15
 
-function IsVillainEp() => __ornext(CurrentLevel == VillainEP1 || CurrentLevel == VillainEP2  || CurrentLevel == VillainEP3  || CurrentLevel == VillainEP4  
+function IsVillainEp() => CurrentLevel == VillainEP1 || CurrentLevel == VillainEP2  || CurrentLevel == VillainEP3  || CurrentLevel == VillainEP4  
 || CurrentLevel == VillainEP5  || CurrentLevel == VillainEP6  || CurrentLevel == VillainEP7  || CurrentLevel == VillainEP8 || CurrentLevel == VillainEP9 
 || CurrentLevel == VillainEP10  || CurrentLevel == VillainEP11  || CurrentLevel == VillainEP12  || CurrentLevel == VillainEP13  || CurrentLevel == VillainEP14
-|| CurrentLevel == VillainEP15)
+|| CurrentLevel == VillainEP15
 
 //Freeplay unlocked
 // 0x00 = locked
@@ -88,7 +90,7 @@ byte(0x00d63a99) + byte(0x00d63aa5) + byte(0x00d63ab1) + byte(0x00d63abd) + byte
 VillianMinikitsUnlocked = 
 byte(0x00d63ae1) + byte(0x00d63aed) + byte(0x00d63af9) + byte(0x00d63b05) + byte(0x00d63b11) + 
 byte(0x00d63b1d) + byte(0x00d63b29) + byte(0x00d63b35) + byte(0x00d63b41) + byte(0x00d63b4d) + 
-byte(0x00d63b59) + byte(0x00d63b65) + byte(0x00d63b71) + byte(0x00d63b7d) + byte(0x00d63b7d)
+byte(0x00d63b59) + byte(0x00d63b65) + byte(0x00d63b71) + byte(0x00d63b7d) + byte(0x00d63b89)
 
 //True batman
 HeroTrueBatmans = 
@@ -102,8 +104,7 @@ byte(0x00d63b19) + byte(0x00d63b25) + byte(0x00d63b31) + byte(0x00d63b3d) + byte
 byte(0x00d63b55) + byte(0x00d63b61) + byte(0x00d63b6d) + byte(0x00d63b79) + byte(0x00d63b85)
 
 //Hostages saved
-HeroHostagesSaved = 
-bitcount(0x00d64000) + bit0(0x00d64001) + bit1(0x00d64001) + bit2(0x00d64001) + bit3(0x00d64001)
+HeroHostagesSaved = bitcount(0x00d64000) + bit0(0x00d64001) + bit1(0x00d64001) + bit2(0x00d64001) + bit3(0x00d64001)
 
 VillianHostagesSaved = 
 bit4(0x00d64001) + bit5(0x00d64001) + bit6(0x00d64001) + bit7(0x00d64001) + 
@@ -120,6 +121,7 @@ byte(0x00d63b5b) + byte(0x00d63b67) + byte(0x00d63b73) + byte(0x00d63b7f) + byte
 
 //Stud count
 StudCount = dword(0x00d63dc0)
+BonusStudCount = dword(0x00b65904)
 
 //Characters purchased
 CharactersPurchased = 
@@ -144,7 +146,12 @@ SuitUpgradesPurchased =
 bitcount(0x00d63d98) + bit0(0x00d63d99) + bit1(0x00d63d99) + bit2(0x00d63d99) +
 bit3(0x00d63d99) + bit4(0x00d63d99) + bit5(0x00d63d99) + bit6(0x00d63d99)
 
-
+//Extras enabled
+ExtrasEnabled = byte(0xb35ef8) +
+byte(0xb35cc8) + byte(0xb35ce4) + byte(0xb35d00) + byte(0xb35d1c) + byte(0xb35d38) +
+byte(0xb35d54) + byte(0xb35d70) + byte(0xb35d8c) + byte(0xb35da8) + byte(0xb35dc4) +
+byte(0xb35de0) + byte(0xb35dfc) + byte(0xb35e18) + byte(0xb35e34) + byte(0xb35e50) +
+byte(0xb35e6c) + byte(0xb35e88) + byte(0xb35ea4) + byte(0xb35ec0) + byte(0xb35edc)
 // ================================
 // Level Completions
 // ================================
@@ -194,29 +201,50 @@ LevelComplete("The Lure of the Night", VillainEP14, VillainEP14FreeplayUnlocked(
 LevelComplete("Dying of Laughter", VillainEP15, VillainEP15FreeplayUnlocked())
 
 // ================================
+// Bonus Level Completions
+// ================================
+
+function BonusLevelComplete(achName, achDesc, level)
+{
+    achievement(
+        title = achName,
+        description = achDesc,
+        points = 5,
+        trigger = (
+            CurrentLevel == level &&
+            BonusStudCount == 0xf4240 &&
+            prev(BonusStudCount) < 0xf4240
+        )
+    )
+}
+
+BonusLevelComplete("Wayne Manor", "Complete the hero bonus level", WayneManor)
+BonusLevelComplete("Arkham Asylum", "Complete the villain bonus level", ArkhamAsylum)
+
+// ================================
 // Minikit/true batman completions
 // ================================
 
 function HeroVillianSplitAchievements(achName, achDesc, typeOfUnlock, amount, prevAmount, heroOrVillian)
 {
-achievement (
-    title = achName,
-    description = achDesc,
-    points = 25,
-    trigger = (
-        typeOfUnlock == amount &&
-        prev(typeOfUnlock) == prevAmount &&
-        heroOrVillian
+    achievement (
+        title = achName,
+        description = achDesc,
+        points = 25,
+        trigger = (
+            typeOfUnlock == amount &&
+            prev(typeOfUnlock) == prevAmount &&
+            heroOrVillian
+            )
         )
-    )
 }
 
 HeroVillianSplitAchievements("Minikit Master", "Collect all 150 minikits in the hero levels", HeroMinikitsUnlocked, 0x96, 0x95, IsHeroEp())
 HeroVillianSplitAchievements("Minikit Mastermind", "Collect all 150 minikits in the villian levels", VillianMinikitsUnlocked, 0x96, 0x95, IsVillainEp())
 HeroVillianSplitAchievements("I'm Batman", "Reach true batman in the hero levels", HeroTrueBatmans, 0x0f, 0x0e, IsHeroEp())
 HeroVillianSplitAchievements("The Dark Knight Rises", "Reach true batman in the villian levels", VillianTrueBatmans, 0x0f, 0x0e, IsVillainEp())
-HeroVillianSplitAchievements("The Hero of Gotham", "Save every hostage in the hero levels", HeroHostagesSaved, 0x19, 0x18, IsHeroEp())
-HeroVillianSplitAchievements("The Evil Hero of Gotham", "Save every hostage in the villian levels", VillianHostagesSaved, 0x19, 0x18, IsVillainEp())
+HeroVillianSplitAchievements("The Hero of Gotham", "Save every hostage in the hero levels", HeroHostagesSaved, 0x0c, 0x0b, IsHeroEp())
+HeroVillianSplitAchievements("The Evil Hero of Gotham", "Save every hostage in the villian levels", VillianHostagesSaved, 0x0d, 0x0c, IsVillainEp())
 
 // ================================
 // Red brick collected completions
@@ -239,29 +267,29 @@ achievement(
 
 function ShopPurchaseAchievements(achName, achDesc, points, typeOfUnlock, amount, prevAmount)
 {
-achievement(
-    title = achName,
-    description = achDesc,
-    points = points,
-    trigger = (
-        typeOfUnlock == amount &&
-        prev(typeOfUnlock) == prevAmount &&
-        CurrentLevel == 0x01
+    achievement(
+        title = achName,
+        description = achDesc,
+        points = points,
+        trigger = (
+            typeOfUnlock == amount &&
+            prev(typeOfUnlock) == prevAmount &&
+            CurrentLevel == 0x01
+            )
         )
-    )
 }
 
 ShopPurchaseAchievements("True Data Hoarder", "Purchase all the data from the shop", 25, DataPurchased, 0x33, 0x32)
-ShopPurchaseAchievements("Extra Extra", "Purchase all the extra from the shop", 10, ExtrasPurchased, 0x14, 0x13)
-ShopPurchaseAchievements("Characters", "Characters", 25, CharactersPurchased, 0x35, 0x34)
+ShopPurchaseAchievements("Red Brick Domination", "Purchase all the extra from the shop", 10, ExtrasPurchased, 0x14, 0x13)
+ShopPurchaseAchievements("Gotham's Finest", "Characters", 25, CharactersPurchased, 0x35, 0x34)
 ShopPurchaseAchievements("Suited Up", "Suited Up", 25, SuitUpgradesPurchased, 0x0f, 0x0e)
 
 // ================================
 // Misc
 // ================================
 achievement(
-    title = "Stud Millionaire",
-    description = "Reach 10 million studs",
+    title = "Now I Can Buy My Own Batcave!",
+    description = "Reach 1 billion studs",
     points = 5,
     trigger = (
         StudCount >= 0x989680 &&
@@ -269,3 +297,15 @@ achievement(
         CurrentLevel != 0x00
      )
 )
+
+achievement(
+    title = "Ultimate Chaos!",
+    description = "Enable every red brick cheat at once",
+    points = 5,
+    trigger = (
+        CurrentLevel != 0x00 &&
+        ExtrasEnabled == 0x15 &&
+        prev(ExtrasEnabled) == 0x14
+    )
+)
+
