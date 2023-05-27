@@ -281,8 +281,8 @@ function ShopPurchaseAchievements(achName, achDesc, points, typeOfUnlock, amount
 
 ShopPurchaseAchievements("True Data Hoarder", "Purchase all the data from the shop", 25, DataPurchased, 0x33, 0x32)
 ShopPurchaseAchievements("Red Brick Domination", "Purchase all the extra from the shop", 10, ExtrasPurchased, 0x14, 0x13)
-ShopPurchaseAchievements("Gotham's Finest", "Characters", 25, CharactersPurchased, 0x35, 0x34)
-ShopPurchaseAchievements("Suited Up", "Suited Up", 25, SuitUpgradesPurchased, 0x0f, 0x0e)
+ShopPurchaseAchievements("Gotham's Finest", "Unlock every available character from the shop", 25, CharactersPurchased, 0x35, 0x34)
+ShopPurchaseAchievements("Suited Up", "Unlock every suit upgrade from the shop", 25, SuitUpgradesPurchased, 0x0f, 0x0e)
 
 // ================================
 // Misc
@@ -292,8 +292,8 @@ achievement(
     description = "Reach 1 billion studs",
     points = 5,
     trigger = (
-        StudCount >= 0x989680 &&
-        prev(StudCount) <= 0x989680 &&
+        StudCount >= 0x3b9aca00 &&
+        (prev(StudCount) <= 0x3b9aca00 && prev(StudCount) != 0x00) &&
         CurrentLevel != 0x00
      )
 )
@@ -308,4 +308,3 @@ achievement(
         prev(ExtrasEnabled) == 0x14
     )
 )
-
