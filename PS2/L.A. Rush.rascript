@@ -9,6 +9,10 @@ CurrentRace = byte(0x003ffee4)
 RacePosition = byte(0x01f17f83)
 function RaceComplete() => byte(0x01f17f84) == 0xfe && (prev(byte(0x01f17f84)) == 0x01 || prev(byte(0x01f17f84)) == 0x00)
 RaceTimer = float(0x00418c0c)
+IngameTimer = float(0x00417e14)
+function NoCheats() => byte(0x0037b2a4) == 0x00 && byte(0x0037b35c) == 0x00 && byte(0x004000dd) == 0x00
+GameDiff = byte(0x003fff40)
+function InStunt() => dword(0x003dffed) != 0x00
 
 RaceDict = {
     0x69: "Hollywood Race 1",
@@ -64,8 +68,6 @@ RaceDict = {
     0x9b: "Downtown Race 13",
     0x9c: "Hollywood Endurance Race",
 }
-
-
 
 //Car unlocks
 //0x01 = no
@@ -173,12 +175,14 @@ function CreateRaceWinAchievement(raceId, raceName, points)
 {
     achievement(
         title = raceName + " Winner",
-        description = "Come 1st place on " + raceName,
+        description = "Come 1st place on " + raceName + " on normal difficulty or higher",
         points = points,
         trigger = (
             raceId == CurrentRace &&
             RaceComplete() &&
-            RacePosition == 0x01
+            NoCheats() &&
+            GameDiff >= 0x01 &&
+            RacePosition == 0x01 
         )
     )
 }
@@ -198,6 +202,63 @@ for key in RaceDict{
         CreateRaceWinAchievement(key, RaceDict[key], 5)
     }
 }
+
+
+// ===================================
+// SPEEDRUN ACHIEVEMENTS
+// ===================================
+function RaceSpeedrun(raceId, raceName, points, timerFloat, timerDesc)
+{
+    achievement(
+        title = raceName + " Speedrunner",
+        description = "Reach a time of " + timerDesc + " or lower on " + raceName,
+        points = points,
+        trigger = (
+            raceId == CurrentRace &&
+            RaceComplete() &&
+            NoCheats() &&
+            RaceTimer <= timerFloat
+        )
+    )
+}
+
+RaceSpeedrun(0x6b, "Hollywood Race 3", 5, 82.0, "1:22:00")
+RaceSpeedrun(0x6c, "Hollywood Race 4", 5, 87.0, "1:27:00")
+RaceSpeedrun(0x6e, "Hollywood Race 6", 5, 112.0, "1:52:00")
+RaceSpeedrun(0x6f, "Hollywood Race 7", 10, 120.0, "2:00:00")
+RaceSpeedrun(0x70, "Hollywood Race 8", 10, 195.0, "3:15:00")
+RaceSpeedrun(0x73, "Santa Monica Race 3", 5, 163.0, "2:43:00")
+RaceSpeedrun(0x75, "Santa Monica Race 5", 5, 141.0, "2:21:00")
+RaceSpeedrun(0x76, "Santa Monica Race 6", 5, 121.0, "2:01:00")
+RaceSpeedrun(0x77, "Santa Monica Race 7", 10, 180.0, "3:00:00")
+RaceSpeedrun(0x78, "Santa Monica Race 8", 5, 198.0, "3:18:00")
+RaceSpeedrun(0x79, "Santa Monica Race 9", 5, 148.0, "2:28:00")
+RaceSpeedrun(0x7c, "South Central Race 3", 5, 142.0, "2:22:00")
+RaceSpeedrun(0x7e, "South Central Race 5", 5, 126.0, "2:06:00")
+RaceSpeedrun(0x7f, "South Central Race 6", 5, 160.0, "2:40:00")
+RaceSpeedrun(0x80, "South Central Race 7", 5, 162.0, "2:42:00")
+RaceSpeedrun(0x81, "South Central Race 8", 10, 241.0, "4:01:00")
+RaceSpeedrun(0x82, "South Central Race 9", 5, 161.0, "2:41:00")
+RaceSpeedrun(0x83, "South Central Race 10", 5, 120.0, "2:00:00")
+RaceSpeedrun(0x86, "South Bay Race 3", 5, 156.0, "2:36:00")
+RaceSpeedrun(0x88, "South Bay Race 5", 5, 99.0, "1:39:00")
+RaceSpeedrun(0x89, "South Bay Race 6", 5, 147.0, "2:27:00")
+RaceSpeedrun(0x8a, "South Bay Race 7", 5, 166.0, "2:46:00")
+RaceSpeedrun(0x8b, "South Bay Race 8", 10, 260.0, "4:20:00")
+RaceSpeedrun(0x8c, "South Bay Race 9", 10, 200.0, "3:20:00")
+RaceSpeedrun(0x8d, "South Bay Race 10", 10, 188.0, "3:08:00")
+RaceSpeedrun(0x8e, "South Bay Race 11", 5, 134.0, "2:14:00")
+RaceSpeedrun(0x91, "Downtown Race 3", 5, 135.0, "2:15:00")
+RaceSpeedrun(0x93, "Downtown Race 5", 5, 177.0, "2:57:00")
+RaceSpeedrun(0x94, "Downtown Race 6", 5, 150.0, "2:30:00")
+RaceSpeedrun(0x95, "Downtown Race 7", 5, 161.0, "2:41:00")
+RaceSpeedrun(0x96, "Downtown Race 8", 5, 158.0, "2:38:00")
+RaceSpeedrun(0x97, "Downtown Race 9", 10, 190.0, "3:10:00")
+RaceSpeedrun(0x98, "Downtown Race 10", 10, 208.0, "3:28:00")
+RaceSpeedrun(0x99, "Downtown Race 11", 10, 213.0, "3:33:00")
+RaceSpeedrun(0x9a, "Downtown Race 12", 10, 190.0, "3:10:00")
+RaceSpeedrun(0x9b, "Downtown Race 13", 25, 315.0, "5:15:00")
+RaceSpeedrun(0x9c, "Hollywood Endurance Race", 25, 575.0,"9:35:00")
 
 // ===================================
 // CAR UNLOCK ACHIEVEMENTS
@@ -270,6 +331,46 @@ RetributionCompleted("Taking Back South Bay", "Complete the South Bay retributio
 RetributionCompleted("Taking Back Downtown", "Complete the Downtown retribution mission", DowntownRetributionId, byte(0x003fc210))
 
 // ===================================
-// SPEEDRUN ACHIEVEMENTS
+// MISC
 // ===================================
 
+achievement(
+    title = "Chaos Mode Activated",
+    description = "Enable the fast cars cheat by pausing the game and entering Up, Down, Left, Right, Square, Right, Circle, Left",
+    points = 1,
+    trigger = (
+        CurrentRace == 0x00 &&
+        byte(0x0037b2a4) == 0x01 &&
+        prev(byte(0x0037b2a4)) == 0x00
+    )
+)
+
+// ===================================
+// LEADERBOARDS
+// ===================================
+function RaceLeaderboard(raceName, raceId)
+{
+    leaderboard(
+        title = raceName,
+        description = "Get the fastest time on race " + raceName,
+        start = (
+            CurrentRace == raceId &&
+            IngameTimer != 0.0
+        ),
+        cancel = (
+            IngameTimer == 0.0 &&
+            CurrentRace == raceId
+        ),
+        submit = (
+            RaceTimer != -1.0 &&
+            RaceComplete()
+        ),
+        value = (RaceTimer),
+        format = "SECS",
+        lower_is_better = true
+    )
+}
+
+for key in RaceDict{
+RaceLeaderboard(RaceDict[key], key)
+}
