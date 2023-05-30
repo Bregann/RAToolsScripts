@@ -85,15 +85,41 @@ bit3(0x9e2a55) + bit4(0x9e2a55) + bit5(0x9e2a55) + bit6(0x9e2a55)
 
 //Shop items
 //Hints (x1)
-//Characters (x1)
-//Red bricks (x1)
-
 HintsPurchased = 
 bitcount(0x9e29e8) + bitcount(0x9e29e9) + bitcount(0x9e29ea) + bitcount(0x9e29eb) + 
 bitcount(0x9e29ec) + bitcount(0x9e29ed) + bitcount(0x9e29ee) + bitcount(0x9e29ef) + 
 bit0(0x9e29f0) + bit1(0x9e29f0) + bit2(0x9e29f0) + bit3(0x9e29f0)
 
-//Characters
+//Characters (x1)
+CharactersPurchased = 
+bit1(0x9e29f6) + bit3(0x9e29f6) + bit5(0x9e29f6) + bit7(0x9e29f6) + bit1(0x9e29f7) + 
+bit3(0x9e29f7) + bit5(0x9e29f7) + bit7(0x9e29f7) + bit1(0x9e29f8) + bit3(0x9e29f8) + 
+bit5(0x9e29f8) + bit7(0x9e29f8) + bit1(0x9e29f9) + bit3(0x9e29f9) + bit5(0x9e29f9) + 
+bit7(0x9e29f9) + bit1(0x9e29fa) + bit3(0x9e29fa) + bit5(0x9e29fa) + bit7(0x9e29fa) + 
+bit1(0x9e29fb) + bit3(0x9e29fb) + bit5(0x9e29fb) + bit7(0x9e29fb) + bit1(0x9e29fc) + 
+bit3(0x9e29fc) + bit5(0x9e29fc) + bit7(0x9e29fc) + bit1(0x9e29fd) + bit3(0x9e29fd) + 
+bit5(0x9e29fd) + bit7(0x9e29fd) + bit1(0x9e29fe) + bit3(0x9e29fe) + bit5(0x9e29fe) + 
+bit7(0x9e29fe) + bit1(0x9e29ff) + bit3(0x9e29ff) + bit7(0x9e29ff) + bit1(0x9e2a00) + 
+bit5(0x9e2a00) + bit7(0x9e2a00) + bit1(0x9e2a01) + bit3(0x9e2a01) + bit5(0x9e2a01) + 
+bit7(0x9e2a01) + bit1(0x9e2a02) + bit3(0x9e2a02) + bit7(0x9e2a02) + bit1(0x9e2a03) + 
+bit3(0x9e2a03) + bit5(0x9e2a03) + bit7(0x9e2a03) + bit1(0x9e2a04) + bit3(0x9e2a04) + 
+bit5(0x9e2a04) + bit7(0x9e2a04) + bit1(0x9e2a05) + bit3(0x9e2a05) + bit5(0x9e2a05) + 
+bit7(0x9e2a05) + bit3(0x9e2a06) + bit5(0x9e2a06) + bit7(0x9e2a06) + bit1(0x9e2a07) + 
+bit3(0x9e2a07) + bit5(0x9e2a07) + bit7(0x9e2a07) + bit1(0x9e2a08) + bit3(0x9e2a08) + 
+bit5(0x9e2a08) + bit1(0x9e2a09) + bit3(0x9e2a09) + bit5(0x9e2a09) + bit7(0x9e2a09) + 
+bit1(0x9e2a0a) + bit5(0x9e2a0a) + bit7(0x9e2a0a) + bit1(0x9e2a0b) + bit3(0x9e2a0b) + 
+bit5(0x9e2a0b) + bit7(0x9e2a0b) + bit1(0x9e2a0c) + bit3(0x9e2a0c) + bit5(0x9e2a0c) + 
+bit7(0x9e2a0c) + bit1(0x9e2a0d) + bit3(0x9e2a0d) + bit5(0x9e2a0d) + bit7(0x9e2a0d) + 
+bit1(0x9e2a0e) + bit3(0x9e2a0e) + bit5(0x9e2a0e) + bit7(0x9e2a0e) + bit1(0x9e2a0f) + 
+bit3(0x9e2a0f) + bit5(0x9e2a0f) + bit7(0x9e2a0f) + bit1(0x9e2a10) + bit3(0x9e2a10) + 
+bit1(0x9e2a11) + bit5(0x9e2a11) + bit7(0x9e2a11) + bit1(0x9e2a12) + bit3(0x9e2a12) + 
+bit5(0x9e2a12) + bit7(0x9e2a12) + bit1(0x9e2a13)
+
+//Red bricks (x1)
+RedbricksPurchased = 
+bitcount(0x9e2a56) + bit0(0x9e2a57) + bit1(0x9e2a57) + bit2(0x9e2a57) +
+bit3(0x9e2a57) + bit4(0x9e2a57) + bit5(0x9e2a57) + bit6(0x9e2a57)
+
 
 // ================================
 // Level Completions
@@ -169,4 +195,24 @@ LevelCompleteAchievement("Unlocking the Secret of the Egg", "The Prefects Bathro
 LevelCompleteAchievement("An Underwater Adventure", "The Second Task", TheSecondTask, 3, 0x9e2a3b, 1)
 LevelCompleteAchievement("The Maze to the Cup", "The Third Task", TheThirdTask, 3, 0x9e2a3b, 5)
 
+// ================================
+// Level Bonus stuff (wizard cards, true wizard, redbricks)
+// ================================
+
+function LevelCollectibles(achName, achDesc, points, collectible, collectibleAmount, prevCollectibleAmount)
+{
+    achievement(
+        title = achName,
+        description = achDesc,
+        points = points,
+        trigger = (
+            LevelID != 0x00 &&
+            collectible == collectibleAmount &&
+            prev(collectible) == prevCollectibleAmount
+        )
+    )
+}
+
+LevelCollectibles("True Wizard 1", "Reach true wizard in half of the levels", 10, TrueWizardInLevels, 0x16, 0x15)
+LevelCollectibles("True Wizard 2", "Reach true wizard in all of the levels", 10, TrueWizardInLevels, 0x2b, 0x2a)
 
