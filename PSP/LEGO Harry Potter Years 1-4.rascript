@@ -49,42 +49,42 @@ ThePrefectsBathroom=0x42
 TheSecondTask=0x43
 TheThirdTask=0x44
 
-//True Wizard (x2)
+//True Wizard
 TrueWizardInLevels = 
 bit3(0x9e2a1a) + bit7(0x9e2a1b) + bit3(0x9e2a1c) + bit7(0x9e2a1c) + 
-bit3(0x9e2a1e) + bit7(0x9e2a1e) + bit3(0x9e2a1f) + bit7(0x9e2a1f) + 
-bit3(0x9e2a20) + bit7(0x9e2a20) + bit3(0x9e2a21) + bit7(0x9e2a21) + 
-bit7(0x9e2a22) + bit3(0x9e2a23) + bit3(0x9e2a24) + bit3(0x9e2a25) + 
-bit7(0x9e2a25) + bit3(0x9e2a26) + bit7(0x9e2a27) + bit7(0x9e2a29) + 
-bit3(0x9e2a2a) + bit3(0x9e2a2c) + bit7(0x9e2a2c) + bit3(0x9e2a2d) + 
-bit7(0x9e2a2d) + bit3(0x9e2a2e) + bit7(0x9e2a2e) + bit7(0x9e2a30) + 
-bit7(0x9e2a31) + bit3(0x9e2a32) + bit7(0x9e2a32) + bit3(0x9e2a34) + 
-bit7(0x9e2a34) + bit3(0x9e2a35) + bit7(0x9e2a35) + bit7(0x9e2a37) + 
-bit3(0x9e2a38) + bit7(0x9e2a38) + bit3(0x9e2a39) + bit7(0x9e2a39) + 
-bit7(0x9e2a3a) + bit3(0x9e2a3b) + bit7(0x9e2a3b)
+bit3(0x9e2a1d) + bit3(0x9e2a1e) + bit7(0x9e2a1e) + bit3(0x9e2a1f) + 
+bit7(0x9e2a1f) + bit3(0x9e2a20) + bit7(0x9e2a20) + bit3(0x9e2a21) + 
+bit7(0x9e2a21) + bit7(0x9e2a22) + bit3(0x9e2a23) + bit3(0x9e2a24) + 
+bit3(0x9e2a25) + bit7(0x9e2a25) + bit3(0x9e2a26) + bit7(0x9e2a27) + 
+bit7(0x9e2a29) + bit3(0x9e2a2a) + bit3(0x9e2a2c) + bit7(0x9e2a2c) + 
+bit3(0x9e2a2d) + bit7(0x9e2a2d) + bit3(0x9e2a2e) + bit7(0x9e2a2e) + 
+bit7(0x9e2a30) + bit7(0x9e2a31) + bit3(0x9e2a32) + bit7(0x9e2a32) + 
+bit3(0x9e2a34) + bit7(0x9e2a34) + bit3(0x9e2a35) + bit7(0x9e2a35) + 
+bit7(0x9e2a37) + bit3(0x9e2a38) + bit7(0x9e2a38) + bit3(0x9e2a39) + 
+bit7(0x9e2a39) + bit7(0x9e2a3a) + bit3(0x9e2a3b) + bit7(0x9e2a3b)
 
-//Wizard Hats (x2)
+//Wizard Hats
 WizardHatsUnlocked = 
 bitcount(0x9e2a3c) + bitcount(0x9e2a3d) + bitcount(0x9e2a3e) + bitcount(0x9e2a3f) + 
 bitcount(0x9e2a40) + bitcount(0x9e2a41) + bitcount(0x9e2a42) + bitcount(0x9e2a43) + 
 bitcount(0x9e2a44) + bitcount(0x9e2a45) + bitcount(0x9e2a46) + bitcount(0x9e2a47) + 
-bitcount(0x9e2a48) + bitcount(0x9e2a48) + bitcount(0x9e2a49) + bitcount(0x9e2a4a) + 
-bitcount(0x9e2a4b) + bitcount(0x9e2a4c) + bitcount(0x9e2a4d) + bitcount(0x9e2a4e) + 
-bitcount(0x9e2a4f) + bitcount(0x9e2a50) + bitcount(0x9e2a51)
+bitcount(0x9e2a48) + bitcount(0x9e2a49) + bitcount(0x9e2a4a) + bitcount(0x9e2a4b) + 
+bitcount(0x9e2a4c) + bitcount(0x9e2a4d) + bitcount(0x9e2a4e) + bitcount(0x9e2a4f) + 
+bitcount(0x9e2a50) + bitcount(0x9e2a51) + TrueWizardInLevels
 
-//Wizard Cards (x2)
+//Wizard Cards
 WizardCardsUnlocked = 
 bitcount(0x9e2a58) + bitcount(0x9e2a59) + bitcount(0x9e2a5a) + bitcount(0x9e2a5b) +
 bitcount(0x9e2a5c) + bitcount(0x9e2a5d) + bitcount(0x9e2a5e) + bitcount(0x9e2a5f) +
 bitcount(0x9e2a60) + bitcount(0x9e2a61) + bitcount(0x9e2a62)
 
-//Redbricks found(x1)
+//Redbricks found
 RedbricksFound = 
 bitcount(0x9e2a54) + bit0(0x9e2a55) + bit1(0x9e2a55) + bit2(0x9e2a55) +
 bit3(0x9e2a55) + bit4(0x9e2a55) + bit5(0x9e2a55) + bit6(0x9e2a55)
 
 //Shop items
-//Hints (x1)
+//Hints
 HintsPurchased = 
 bitcount(0x9e29e8) + bitcount(0x9e29e9) + bitcount(0x9e29ea) + bitcount(0x9e29eb) + 
 bitcount(0x9e29ec) + bitcount(0x9e29ed) + bitcount(0x9e29ee) + bitcount(0x9e29ef) + 
@@ -214,5 +214,29 @@ function LevelCollectibles(achName, achDesc, points, collectible, collectibleAmo
 }
 
 LevelCollectibles("True Wizard 1", "Reach true wizard in half of the levels", 10, TrueWizardInLevels, 0x16, 0x15)
-LevelCollectibles("True Wizard 2", "Reach true wizard in all of the levels", 10, TrueWizardInLevels, 0x2b, 0x2a)
+LevelCollectibles("True Wizard 2", "Reach true wizard in all of the levels", 10, TrueWizardInLevels, 0x2c, 0x2b)
+LevelCollectibles("Wizard Hats 1", "Collect half of the wizard hats in the game", 10, WizardHatsUnlocked, 0x71, 0x70)
+LevelCollectibles("Wizard Hats 2", "Collect all of the wizard hats in the game", 10, WizardHatsUnlocked, 0xE1, 0xE0)
+LevelCollectibles("Wizard Cards 1", "Collect all of the wizard hats in the game", 10, WizardHatsUnlocked, 0x2C, 0x2B)
+LevelCollectibles("Wizard Cards 2", "Collect all of the wizard cards in the game", 10, WizardCardsUnlocked, 0x58, 0x57)
+LevelCollectibles("Accio Red brick", "Collect all of the red bricks in the game", 25, RedbricksFound, 0x0f, 0x0e)
 
+// ================================
+// Shop stuff
+// ================================
+
+function ShopPurchases(achName, achDesc, points, purchaseItem, purchaseAmount, prevPurchaseAmount)
+{
+    achievement(
+        title = achName,
+        description = achDesc,
+        points = points,
+        trigger = (
+            LevelID == 0x00 &&
+            purchaseItem == purchaseAmount &&
+            prev(purchaseItem) == prevPurchaseAmount
+        )
+    )
+}
+
+ShopPurchases("Ready For My O.W.Ls", "Purchase all the hints from the shop", 10, HintsPurchased, 0x44, 0x43)
