@@ -331,6 +331,52 @@ RetributionCompleted("Taking Back South Bay", "Complete the South Bay retributio
 RetributionCompleted("Taking Back Downtown", "Complete the Downtown retribution mission", DowntownRetributionId, byte(0x003fc210))
 
 // ===================================
+// STUNT ACHIEVEMENTS
+// ===================================
+function StuntCompleted(stuntId) => stuntId == 0x06 && prev(stuntId) == 0x03
+
+function StuntCompletedAch(unlockedItem, stuntId)
+{
+    achievement(
+        title = unlockedItem + " Unlocked",
+        description = "Unlock " + unlockedItem + " from hidden stunts",
+        points = 10,
+        trigger = (
+            dword(0x003dffed) != 0x00 &&
+            StuntCompleted(stuntId) &&
+            NoCheats()
+        )
+    )
+}
+
+StuntCompletedAch("Lowrider High Bounce", dword(0x3fc218))
+StuntCompletedAch("Lowrider Standing Tall", dword(0x3fc21c))
+StuntCompletedAch("H2 Hummer", dword(0x3fc220))
+StuntCompletedAch("59 Chevrolet Impala", dword(0x3fc224))
+StuntCompletedAch("Oldsmobile Cutlass Supreme", dword(0x3fc228))
+StuntCompletedAch("Cadillac Eldorado", dword(0x3fc22c))
+StuntCompletedAch("Cadillac Escalade", dword(0x3fc230))
+StuntCompletedAch("Midway Concept 6", dword(0x3fc268))
+StuntCompletedAch("Midway Concept 7", dword(0x3fc26c))
+StuntCompletedAch("Midway Concept 8", dword(0x3fc270))
+StuntCompletedAch("Midway Concept 9", dword(0x3fc274))
+StuntCompletedAch("Midway Concept 10", dword(0x3fc278))
+StuntCompletedAch("Midway Concept 11", dword(0x3fc234))
+StuntCompletedAch("Midway Concept 12", dword(0x3fc238))
+StuntCompletedAch("Midway Concept 13", dword(0x3fc23c))
+StuntCompletedAch("Midway Concept 14", dword(0x3fc240))
+StuntCompletedAch("Midway Concept 15", dword(0x3fc244))
+StuntCompletedAch("Midway Concept 16", dword(0x3fc248))
+StuntCompletedAch("Midway Concept 17", dword(0x3fc24c))
+StuntCompletedAch("Midway Concept 18", dword(0x3fc250))
+StuntCompletedAch("Midway Concept 19", dword(0x3fc254))
+StuntCompletedAch("Midway Concept 20", dword(0x3fc258))
+StuntCompletedAch("Money", dword(0x3fc25c))
+StuntCompletedAch("Money Money", dword(0x3fc260))
+StuntCompletedAch("Money Money Money", dword(0x3fc264))
+
+
+// ===================================
 // MISC
 // ===================================
 
@@ -371,6 +417,6 @@ function RaceLeaderboard(raceName, raceId)
     )
 }
 
-for key in RaceDict{
+for key in RaceDict {
 RaceLeaderboard(RaceDict[key], key)
 }
