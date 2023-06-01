@@ -13,6 +13,8 @@ IngameTimer = float(0x00417e14)
 function NoCheats() => byte(0x0037b2a4) == 0x00 && byte(0x0037b35c) == 0x00 && byte(0x004000dd) == 0x00
 GameDiff = byte(0x003fff40)
 function InStunt() => dword(0x003dffed) != 0x00
+NitroBoosts = byte(0x01f181bc)
+
 
 RaceDict = {
     0x69: "Hollywood Race 1",
@@ -371,9 +373,9 @@ StuntCompletedAch("Midway Concept 17", dword(0x3fc24c))
 StuntCompletedAch("Midway Concept 18", dword(0x3fc250))
 StuntCompletedAch("Midway Concept 19", dword(0x3fc254))
 StuntCompletedAch("Midway Concept 20", dword(0x3fc258))
-StuntCompletedAch("Money", dword(0x3fc25c))
-StuntCompletedAch("Money Money", dword(0x3fc260))
-StuntCompletedAch("Money Money Money", dword(0x3fc264))
+StuntCompletedAch("Money 1", dword(0x3fc25c))
+StuntCompletedAch("Money 2", dword(0x3fc260))
+StuntCompletedAch("Money 3", dword(0x3fc264))
 
 
 // ===================================
@@ -388,6 +390,31 @@ achievement(
         CurrentRace == 0x00 &&
         byte(0x0037b2a4) == 0x01 &&
         prev(byte(0x0037b2a4)) == 0x00
+    )
+)
+
+achievement(
+    title = "No Boosts Needed",
+    description = "Win a race on normal difficulty or higher ",
+    points = 5,
+    trigger = (
+        once(IngameTimer <= 1.00 && IngameTimer != 0.00) &&
+        never(NitroBoosts < prev(NitroBoosts) || IngameTimer == 0.00) &&
+        trigger_when(RaceComplete() &&
+        RacePosition == 0x01) &&
+        NoCheats() &&
+        GameDiff >= 0x01 
+    )
+)
+
+achievement(
+    title = "Sound of the Police",
+    description = "Reach 5 stars police in freeroam",
+    points = 2,
+    trigger = (
+        CurrentRace == 0x00 &&
+        byte(0x01fa56c1) == 0x05 &&
+        prev(byte(0x01fa56c1)) == 0x04
     )
 )
 
