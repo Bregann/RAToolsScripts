@@ -6,7 +6,8 @@
 
 //Races
 CurrentRace = byte(0x003ffee4)
-RacePosition = byte(0x01f17f83)
+RacePositionSM = byte(0x01f17f83)
+RacePositionFP = byte(0x01f68d74)
 function RaceComplete() => byte(0x01f17f84) == 0xfe && (prev(byte(0x01f17f84)) == 0x01 || prev(byte(0x01f17f84)) == 0x00)
 RaceTimer = float(0x00418c0c)
 IngameTimer = float(0x00417e14)
@@ -184,7 +185,7 @@ function CreateRaceWinAchievement(raceId, raceName, points)
             RaceComplete() &&
             NoCheats() &&
             GameDiff >= 0x01 &&
-            RacePosition == 0x01 
+            (RacePositionSM == 0x01 || RacePositionFP == 0x01)
         )
     )
 }
@@ -401,7 +402,7 @@ achievement(
         once(IngameTimer <= 1.00 && IngameTimer != 0.00) &&
         never(NitroBoosts < prev(NitroBoosts) || IngameTimer == 0.00) &&
         trigger_when(RaceComplete() &&
-        RacePosition == 0x01) &&
+        (RacePositionSM == 0x01 || RacePositionFP == 0x01)) &&
         NoCheats() &&
         GameDiff >= 0x01 
     )
@@ -428,11 +429,12 @@ function RaceLeaderboard(raceName, raceId)
         description = "Get the fastest time on race " + raceName,
         start = (
             CurrentRace == raceId &&
-            IngameTimer != 0.0
+            IngameTimer != 0.0 &&
+            prev(IngameTimer) == 0.00
         ),
         cancel = (
             IngameTimer == 0.0 &&
-            CurrentRace == raceId
+            CurrentRace != 0x00
         ),
         submit = (
             RaceTimer != -1.0 &&
