@@ -1,21 +1,19 @@
 // L.A. Rush
 // #ID = 20732
 
-
-//achievement for under 10% damage
-
 //Races
 CurrentRace = byte(0x003ffee4)
 RacePositionSM = byte(0x01f17f83)
 RacePositionFP = byte(0x01f68d74)
-function RaceComplete() => byte(0x01f17f84) == 0xfe && (prev(byte(0x01f17f84)) == 0x01 || prev(byte(0x01f17f84)) == 0x00)
+function RaceComplete() => byte(0x01f17f90) == 0x72 && prev(byte(0x01f17f90)) == 0x70 || byte(0x01f17cc0) == 0x72 && prev(byte(0x01f17cc0)) == 0x70
 RaceTimer = float(0x00418c0c)
 IngameTimer = float(0x00417e14)
 function NoCheats() => byte(0x0037b2a4) == 0x00 && byte(0x0037b35c) == 0x00 && byte(0x004000dd) == 0x00
 GameDiff = byte(0x003fff40)
 function InStunt() => dword(0x003dffed) != 0x00
 NitroBoosts = byte(0x01f181bc)
-
+PoliceStars = byte(dword(0x003e71b4) + 0x408)
+function RaceWon() => RacePositionSM == 0x01 || RacePositionFP == 0x01
 
 RaceDict = {
     0x69: "Hollywood Race 1",
@@ -185,7 +183,7 @@ function CreateRaceWinAchievement(raceId, raceName, points)
             RaceComplete() &&
             NoCheats() &&
             GameDiff >= 0x01 &&
-            (RacePositionSM == 0x01 || RacePositionFP == 0x01)
+            RaceWon()
         )
     )
 }
@@ -401,10 +399,10 @@ achievement(
     trigger = (
         once(IngameTimer <= 1.00 && IngameTimer != 0.00) &&
         never(NitroBoosts < prev(NitroBoosts) || IngameTimer == 0.00 || CurrentRace == 0x00) &&
-        trigger_when(RaceComplete() &&
-        (RacePositionSM == 0x01 || RacePositionFP == 0x01)) &&
+        RaceComplete() && 
+        RaceWon() &&
         NoCheats() &&
-        GameDiff >= 0x01 
+        GameDiff >= 0x01
     )
 )
 
@@ -414,8 +412,9 @@ achievement(
     points = 2,
     trigger = (
         CurrentRace == 0x00 &&
-        byte(0x01fa56c1) == 0x05 &&
-        prev(byte(0x01fa56c1)) <= 0x04
+        byte(0x00370fa8) == 0x02 &&
+        PoliceStars >= 0x05 &&
+        prev(PoliceStars) <= 0x04
     )
 )
 
