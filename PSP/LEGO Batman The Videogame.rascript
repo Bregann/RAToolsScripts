@@ -152,6 +152,7 @@ byte(0xb35cc8) + byte(0xb35ce4) + byte(0xb35d00) + byte(0xb35d1c) + byte(0xb35d3
 byte(0xb35d54) + byte(0xb35d70) + byte(0xb35d8c) + byte(0xb35da8) + byte(0xb35dc4) +
 byte(0xb35de0) + byte(0xb35dfc) + byte(0xb35e18) + byte(0xb35e34) + byte(0xb35e50) +
 byte(0xb35e6c) + byte(0xb35e88) + byte(0xb35ea4) + byte(0xb35ec0) + byte(0xb35edc)
+
 // ================================
 // Level Completions
 // ================================
@@ -233,7 +234,7 @@ function HeroVillianSplitAchievements(achName, achDesc, typeOfUnlock, amount, pr
         points = 25,
         trigger = (
             typeOfUnlock == amount &&
-            prev(typeOfUnlock) == prevAmount &&
+            prev(typeOfUnlock) <= prevAmount &&
             heroOrVillian
             )
         )

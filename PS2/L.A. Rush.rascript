@@ -400,7 +400,7 @@ achievement(
     points = 5,
     trigger = (
         once(IngameTimer <= 1.00 && IngameTimer != 0.00) &&
-        never(NitroBoosts < prev(NitroBoosts) || IngameTimer == 0.00) &&
+        never(NitroBoosts < prev(NitroBoosts) || IngameTimer == 0.00 || CurrentRace == 0x00) &&
         trigger_when(RaceComplete() &&
         (RacePositionSM == 0x01 || RacePositionFP == 0x01)) &&
         NoCheats() &&
@@ -415,7 +415,7 @@ achievement(
     trigger = (
         CurrentRace == 0x00 &&
         byte(0x01fa56c1) == 0x05 &&
-        prev(byte(0x01fa56c1)) == 0x04
+        prev(byte(0x01fa56c1)) <= 0x04
     )
 )
 
