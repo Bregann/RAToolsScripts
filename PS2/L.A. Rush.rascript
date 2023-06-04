@@ -1,19 +1,20 @@
 // L.A. Rush
 // #ID = 20732
 
+//Pointers
+PoliceStars = byte(dword(0x003e71b4) + 0x408)
+RacePosition = byte(dword(0x004bfde4) + 0x33)
+RaceCompleted = byte(dword(0x004bfde4) + 0x40)
+
 //Races
 CurrentRace = byte(0x003ffee4)
-RacePositionSM = byte(0x01f17f83)
-RacePositionFP = byte(0x01f68d74)
-function RaceComplete() => byte(0x01f17f90) == 0x72 && prev(byte(0x01f17f90)) == 0x70 || byte(0x01f17cc0) == 0x72 && prev(byte(0x01f17cc0)) == 0x70
+function RaceComplete() => RaceCompleted == 0x72 && prev(RaceCompleted) == 0x70
 RaceTimer = float(0x00418c0c)
 IngameTimer = float(0x00417e14)
 function NoCheats() => byte(0x0037b2a4) == 0x00 && byte(0x0037b35c) == 0x00 && byte(0x004000dd) == 0x00
 GameDiff = byte(0x003fff40)
 function InStunt() => dword(0x003dffed) != 0x00
 NitroBoosts = byte(0x01f181bc)
-PoliceStars = byte(dword(0x003e71b4) + 0x408)
-function RaceWon() => RacePositionSM == 0x01 || RacePositionFP == 0x01
 
 RaceDict = {
     0x69: "Hollywood Race 1",
@@ -183,7 +184,7 @@ function CreateRaceWinAchievement(raceId, raceName, points)
             RaceComplete() &&
             NoCheats() &&
             GameDiff >= 0x01 &&
-            RaceWon()
+            RacePosition == 0x01
         )
     )
 }
@@ -334,7 +335,7 @@ RetributionCompleted("Taking Back Downtown", "Complete the Downtown retribution 
 // ===================================
 // STUNT ACHIEVEMENTS
 // ===================================
-function StuntCompleted(stuntId) => stuntId == 0x06 && prev(stuntId) == 0x03
+function StuntCompleted(stuntId) => stuntId == 0x06 && prev(stuntId) <= 0x03
 
 function StuntCompletedAch(unlockedItem, stuntId)
 {
@@ -400,7 +401,7 @@ achievement(
         once(IngameTimer <= 1.00 && IngameTimer != 0.00) &&
         never(NitroBoosts < prev(NitroBoosts) || IngameTimer == 0.00 || CurrentRace == 0x00) &&
         RaceComplete() && 
-        RaceWon() &&
+        RacePosition == 0x01 &&
         NoCheats() &&
         GameDiff >= 0x01
     )
