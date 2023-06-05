@@ -161,7 +161,7 @@ function WinTourneyCharacter(achTitle, charName, charId)
 {
     achievement(
         title = achTitle,
-        description = "Win tourament mode with the most points playing as " + charName + " (cannot be a tie)",
+        description = "Win tournament mode with the most points playing as " + charName + " (cannot be a tie)",
         points = 10,
         trigger = (
             CurrentTrack == 0x0b &&
