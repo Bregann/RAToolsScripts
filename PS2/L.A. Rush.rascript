@@ -4,6 +4,7 @@
 //Pointers
 PoliceStars = byte(dword(0x003e71b4) + 0x408)
 RacePosition = byte(dword(0x004bfde4) + 0x33)
+CurrentLap = byte(dword(0x004bfde4) + 0x34)
 RaceCompleted = byte(dword(0x004bfde4) + 0x40)
 
 //Races
@@ -189,6 +190,23 @@ function CreateRaceWinAchievement(raceId, raceName, points)
     )
 }
 
+function CreateRaceKOWinAchievement(raceId, raceName, points)
+{
+    achievement(
+        title = raceName + " Winner",
+        description = "Come 1st place on " + raceName + " on normal difficulty or higher",
+        points = points,
+        trigger = (
+            raceId == CurrentRace &&
+            RaceComplete() &&
+            NoCheats() &&
+            GameDiff >= 0x01 &&
+            RacePosition == 0x01 &&
+            prior(CurrentLap) == 0x02
+        )
+    )
+}
+
 for key in RaceDict{
     if(key == 0x69 || key == 0x6a || key == 0x6d || key == 0x71 || key == 0x72 ||
         key == 0x74 || key == 0x7a || key == 0x7b || key == 0x7d || key == 0x84 ||
@@ -200,7 +218,12 @@ for key in RaceDict{
     {
         CreateRaceWinAchievement(key, RaceDict[key], 10)
     }
-    else{
+    else if(key == 0x70 || key == 0x78 || key == 0x81 || key == 0x8b || key == 0x96)
+    {
+        CreateRaceKOWinAchievement(key, RaceDict[key], 5)
+    }
+    else
+    {
         CreateRaceWinAchievement(key, RaceDict[key], 5)
     }
 }
@@ -224,29 +247,45 @@ function RaceSpeedrun(raceId, raceName, points, timerFloat, timerDesc)
     )
 }
 
+function RaceSpeedrunKO(raceId, raceName, points, timerFloat, timerDesc)
+{
+    achievement(
+        title = raceName + " Speedrunner",
+        description = "Reach a time of " + timerDesc + " or lower on " + raceName,
+        points = points,
+        trigger = (
+            raceId == CurrentRace &&
+            RaceComplete() &&
+            NoCheats() &&
+            RaceTimer <= timerFloat &&
+            prior(CurrentLap) == 0x02
+        )
+    )
+}
+
 RaceSpeedrun(0x6b, "Hollywood Race 3", 5, 82.0, "1:22:00")
 RaceSpeedrun(0x6c, "Hollywood Race 4", 5, 87.0, "1:27:00")
 RaceSpeedrun(0x6e, "Hollywood Race 6", 5, 112.0, "1:52:00")
 RaceSpeedrun(0x6f, "Hollywood Race 7", 10, 120.0, "2:00:00")
-RaceSpeedrun(0x70, "Hollywood Race 8", 10, 195.0, "3:15:00")
+RaceSpeedrunKO(0x70, "Hollywood Race 8", 10, 195.0, "3:15:00")
 RaceSpeedrun(0x73, "Santa Monica Race 3", 5, 163.0, "2:43:00")
 RaceSpeedrun(0x75, "Santa Monica Race 5", 5, 141.0, "2:21:00")
 RaceSpeedrun(0x76, "Santa Monica Race 6", 5, 121.0, "2:01:00")
 RaceSpeedrun(0x77, "Santa Monica Race 7", 10, 180.0, "3:00:00")
-RaceSpeedrun(0x78, "Santa Monica Race 8", 5, 198.0, "3:18:00")
+RaceSpeedrunKO(0x78, "Santa Monica Race 8", 5, 198.0, "3:18:00")
 RaceSpeedrun(0x79, "Santa Monica Race 9", 5, 148.0, "2:28:00")
 RaceSpeedrun(0x7c, "South Central Race 3", 5, 142.0, "2:22:00")
 RaceSpeedrun(0x7e, "South Central Race 5", 5, 126.0, "2:06:00")
 RaceSpeedrun(0x7f, "South Central Race 6", 5, 160.0, "2:40:00")
 RaceSpeedrun(0x80, "South Central Race 7", 5, 162.0, "2:42:00")
-RaceSpeedrun(0x81, "South Central Race 8", 10, 241.0, "4:01:00")
+RaceSpeedrunKO(0x81, "South Central Race 8", 10, 241.0, "4:01:00")
 RaceSpeedrun(0x82, "South Central Race 9", 5, 161.0, "2:41:00")
 RaceSpeedrun(0x83, "South Central Race 10", 5, 120.0, "2:00:00")
 RaceSpeedrun(0x86, "South Bay Race 3", 5, 156.0, "2:36:00")
 RaceSpeedrun(0x88, "South Bay Race 5", 5, 99.0, "1:39:00")
 RaceSpeedrun(0x89, "South Bay Race 6", 5, 147.0, "2:27:00")
 RaceSpeedrun(0x8a, "South Bay Race 7", 5, 166.0, "2:46:00")
-RaceSpeedrun(0x8b, "South Bay Race 8", 10, 260.0, "4:20:00")
+RaceSpeedrunKO(0x8b, "South Bay Race 8", 10, 260.0, "4:20:00")
 RaceSpeedrun(0x8c, "South Bay Race 9", 10, 200.0, "3:20:00")
 RaceSpeedrun(0x8d, "South Bay Race 10", 10, 188.0, "3:08:00")
 RaceSpeedrun(0x8e, "South Bay Race 11", 5, 134.0, "2:14:00")
@@ -254,7 +293,7 @@ RaceSpeedrun(0x91, "Downtown Race 3", 5, 135.0, "2:15:00")
 RaceSpeedrun(0x93, "Downtown Race 5", 5, 177.0, "2:57:00")
 RaceSpeedrun(0x94, "Downtown Race 6", 5, 150.0, "2:30:00")
 RaceSpeedrun(0x95, "Downtown Race 7", 5, 161.0, "2:41:00")
-RaceSpeedrun(0x96, "Downtown Race 8", 5, 158.0, "2:38:00")
+RaceSpeedrunKO(0x96, "Downtown Race 8", 5, 158.0, "2:38:00")
 RaceSpeedrun(0x97, "Downtown Race 9", 10, 190.0, "3:10:00")
 RaceSpeedrun(0x98, "Downtown Race 10", 10, 208.0, "3:28:00")
 RaceSpeedrun(0x99, "Downtown Race 11", 10, 213.0, "3:33:00")
@@ -330,7 +369,7 @@ RetributionCompleted("Taking Back Hollywood", "Complete the Hollywood retributio
 RetributionCompleted("Taking Back Santa Monica", "Complete the Santa Monica retribution mission", SantaMonicaRetributionId, byte(0x003fc208))
 RetributionCompleted("Taking Back South Central", "Complete the South Central retribution mission", SouthCentralRetributionId, byte(0x003fc20c))
 RetributionCompleted("Taking Back South Bay", "Complete the South Bay retribution mission", SouthBayRetributionId, byte(0x003fc210))
-RetributionCompleted("Taking Back Downtown", "Complete the Downtown retribution mission", DowntownRetributionId, byte(0x003fc210))
+RetributionCompleted("Taking Back Downtown", "Complete the Downtown retribution mission", DowntownRetributionId, byte(0x003fc214))
 
 // ===================================
 // STUNT ACHIEVEMENTS
