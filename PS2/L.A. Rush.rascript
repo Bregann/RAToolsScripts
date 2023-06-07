@@ -485,6 +485,36 @@ function RaceLeaderboard(raceName, raceId)
     )
 }
 
+function RaceKoLeaderboard(raceName, raceId)
+{
+    leaderboard(
+        title = raceName,
+        description = "Get the fastest time on race " + raceName,
+        start = (
+            CurrentRace == raceId &&
+            IngameTimer != 0.0 &&
+            prev(IngameTimer) == 0.00
+        ),
+        cancel = (
+            IngameTimer == 0.0 &&
+            CurrentRace != 0x00
+        ),
+        submit = (
+            RaceTimer != -1.0 &&
+            RaceComplete() &&
+            prior(CurrentLap) == 0x02
+        ),
+        value = (RaceTimer),
+        format = "SECS",
+        lower_is_better = true
+    )
+}
+
 for key in RaceDict {
+if(key == 0x70 || key == 0x78 || key == 0x81 || key == 0x8b || key == 0x96)
+{
+    RaceKoLeaderboard(RaceDict[key], key)
+}
+
 RaceLeaderboard(RaceDict[key], key)
 }
