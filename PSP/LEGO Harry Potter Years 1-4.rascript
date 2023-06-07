@@ -90,7 +90,7 @@ bitcount(0x9e29e8) + bitcount(0x9e29e9) + bitcount(0x9e29ea) + bitcount(0x9e29eb
 bitcount(0x9e29ec) + bitcount(0x9e29ed) + bitcount(0x9e29ee) + bitcount(0x9e29ef) + 
 bit0(0x9e29f0) + bit1(0x9e29f0) + bit2(0x9e29f0) + bit3(0x9e29f0)
 
-//Characters (x1)
+//Characters
 CharactersPurchased = 
 bit1(0x9e29f6) + bit3(0x9e29f6) + bit5(0x9e29f6) + bit7(0x9e29f6) + bit1(0x9e29f7) + 
 bit3(0x9e29f7) + bit5(0x9e29f7) + bit7(0x9e29f7) + bit1(0x9e29f8) + bit3(0x9e29f8) + 
@@ -115,7 +115,7 @@ bit3(0x9e2a0f) + bit5(0x9e2a0f) + bit7(0x9e2a0f) + bit1(0x9e2a10) + bit3(0x9e2a1
 bit1(0x9e2a11) + bit5(0x9e2a11) + bit7(0x9e2a11) + bit1(0x9e2a12) + bit3(0x9e2a12) + 
 bit5(0x9e2a12) + bit7(0x9e2a12) + bit1(0x9e2a13)
 
-//Red bricks (x1)
+//Red bricks
 RedbricksPurchased = 
 bitcount(0x9e2a56) + bit0(0x9e2a57) + bit1(0x9e2a57) + bit2(0x9e2a57) +
 bit3(0x9e2a57) + bit4(0x9e2a57) + bit5(0x9e2a57) + bit6(0x9e2a57)
@@ -162,7 +162,7 @@ LevelCompleteAchievement("The Troll in the Bathroom", "The Mountain Troll", TheM
 LevelCompleteAchievement("Burn Baby Burn", "Incendio", Incendio, 2, 0x9e2a20, 1)
 LevelCompleteAchievement("It's Brewing Time", "Potions Class", PotionsClass, 2, 0x9e2a20, 5)
 LevelCompleteAchievement("A Malfunctioning Broom", "The Quidditch Match", TheQuidditchMatch, 3, 0x9e2a21, 1)
-LevelCompleteAchievement("A Top Secret Area", "The Resstricted Section", TheResstrictedSection, 3, 0x9e2a21, 5)
+LevelCompleteAchievement("A Top Secret Area", "The Restricted Section", TheResstrictedSection, 3, 0x9e2a21, 5)
 LevelCompleteAchievement("Now I Can See!", "The Lumos Charm", TheLumosCharm, 2, 0x9e2a22, 5)
 LevelCompleteAchievement("The Forbidden Forest", "The Forbidden Forest", TheForbiddenForest, 3, 0x9e2a23, 1)
 LevelCompleteAchievement("The Home of Fluffy", "The Forbidden Corridor", TheForbiddenCorridor, 3, 0x9e2a24, 1)
@@ -208,18 +208,18 @@ function LevelCollectibles(achName, achDesc, points, collectible, collectibleAmo
         trigger = (
             LevelID != 0x00 &&
             collectible == collectibleAmount &&
-            prev(collectible) == prevCollectibleAmount
+            prev(collectible) <= prevCollectibleAmount
         )
     )
 }
 
-LevelCollectibles("True Wizard 1", "Reach true wizard in half of the levels", 10, TrueWizardInLevels, 0x16, 0x15)
-LevelCollectibles("True Wizard 2", "Reach true wizard in all of the levels", 10, TrueWizardInLevels, 0x2c, 0x2b)
-LevelCollectibles("Wizard Hats 1", "Collect half of the wizard hats in the game", 10, WizardHatsUnlocked, 0x71, 0x70)
-LevelCollectibles("Wizard Hats 2", "Collect all of the wizard hats in the game", 10, WizardHatsUnlocked, 0xE1, 0xE0)
-LevelCollectibles("Wizard Cards 1", "Collect all of the wizard hats in the game", 10, WizardHatsUnlocked, 0x2C, 0x2B)
-LevelCollectibles("Wizard Cards 2", "Collect all of the wizard cards in the game", 10, WizardCardsUnlocked, 0x58, 0x57)
-LevelCollectibles("Accio Red brick", "Collect all of the red bricks in the game", 25, RedbricksFound, 0x0f, 0x0e)
+LevelCollectibles("Stud Collector", "Reach true wizard in half of the levels", 10, TrueWizardInLevels, 0x16, 0x15)
+LevelCollectibles("Full Gringotts Vault", "Reach true wizard in all of the levels", 25, TrueWizardInLevels, 0x2c, 0x2b)
+LevelCollectibles("Wizard Hat Fanatic", "Collect half of the wizard hats in the game", 10, WizardHatsUnlocked, 0x71, 0x70)
+LevelCollectibles("The Master of Hats", "Collect all of the wizard hats in the game", 25, WizardHatsUnlocked, 0xE1, 0xE0)
+LevelCollectibles("Wizard Card Whiz", "Collect half of the wizard cards in the game", 10, WizardHatsUnlocked, 0x2C, 0x2B)
+LevelCollectibles("Ultimate Card Collector", "Collect all of the wizard cards in the game", 25, WizardCardsUnlocked, 0x58, 0x57)
+LevelCollectibles("Accio Red Brick", "Collect all of the red bricks in the game", 25, RedbricksFound, 0x0f, 0x0e)
 
 // ================================
 // Shop stuff
@@ -240,3 +240,5 @@ function ShopPurchases(achName, achDesc, points, purchaseItem, purchaseAmount, p
 }
 
 ShopPurchases("Ready For My O.W.Ls", "Purchase all the hints from the shop", 10, HintsPurchased, 0x44, 0x43)
+ShopPurchases("The Great Red Brick Magician", "Purchase all the red bricks from the shop", 10, RedbricksPurchased, 0x0f, 0x0e)
+ShopPurchases("Dumbledores Army", "Purchase all the characters shop", 25, CharactersPurchased, 0x6c, 0x6b)
