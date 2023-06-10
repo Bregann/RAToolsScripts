@@ -17,27 +17,27 @@ static void BitExtractor()
             continue;
         }
 
-        if (line.StartsWith("bit1"))
+        if (line.StartsWith("bit0"))
         {
-            Console.Write($"bit1({hex}) + ");
+            Console.Write($"bit0({hex}) + ");
             continue;
         }
 
-        if (line.StartsWith("bit3"))
+        if (line.StartsWith("bit2"))
         {
-            Console.Write($"bit3({hex}) + ");
+            Console.Write($"bit2({hex}) + ");
             continue;
         }
 
-        if (line.StartsWith("bit5"))
+        if (line.StartsWith("bit4"))
         {
-            Console.Write($"bit5({hex}) + ");
+            Console.Write($"bit4({hex}) + ");
             continue;
         }
 
-        if (line.StartsWith("bit7"))
+        if (line.StartsWith("bit6"))
         {
-            Console.Write($"bit7({hex}) + ");
+            Console.Write($"bit6({hex}) + ");
             continue;
         }
     }

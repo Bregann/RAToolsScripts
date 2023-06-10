@@ -288,7 +288,7 @@ RaceSpeedrun(0x8a, "South Bay Race 7", 5, 166.0, "2:46:00")
 RaceSpeedrunKO(0x8b, "South Bay Race 8", 10, 260.0, "4:20:00")
 RaceSpeedrun(0x8c, "South Bay Race 9", 10, 200.0, "3:20:00")
 RaceSpeedrun(0x8d, "South Bay Race 10", 10, 188.0, "3:08:00")
-RaceSpeedrun(0x8e, "South Bay Race 11", 5, 134.0, "2:14:00")
+RaceSpeedrun(0x8e, "South Bay Race 11", 10, 140.0, "2:20:00")
 RaceSpeedrun(0x91, "Downtown Race 3", 5, 135.0, "2:15:00")
 RaceSpeedrun(0x93, "Downtown Race 5", 5, 177.0, "2:57:00")
 RaceSpeedrun(0x94, "Downtown Race 6", 5, 150.0, "2:30:00")
@@ -426,7 +426,7 @@ achievement(
     description = "Enable the fast cars cheat by pausing the game and entering Up, Down, Left, Right, Square, Right, Circle, Left",
     points = 1,
     trigger = (
-        CurrentRace == 0x00 &&
+        (byte(0x00370fa8) == 0x02 || byte(0x00370fa8) == 0x03) &&
         byte(0x0037b2a4) == 0x01 &&
         prev(byte(0x0037b2a4)) == 0x00
     )
