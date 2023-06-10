@@ -215,8 +215,8 @@ function LevelCollectibles(achName, achDesc, points, collectible, collectibleAmo
 
 LevelCollectibles("Stud Collector", "Reach true wizard in half of the levels", 10, TrueWizardInLevels, 0x16, 0x15)
 LevelCollectibles("Full Gringotts Vault", "Reach true wizard in all of the levels", 25, TrueWizardInLevels, 0x2c, 0x2b)
-LevelCollectibles("Wizard Hat Fanatic", "Collect half of the wizard hats in the game", 10, WizardHatsUnlocked, 0x71, 0x70)
-LevelCollectibles("The Master of Hats", "Collect all of the wizard hats in the game", 25, WizardHatsUnlocked, 0xE1, 0xE0)
+LevelCollectibles("Wizard Hat Fanatic", "Collect half of the wizard hats in the game", 10, WizardHatsUnlocked, 0x6e, 0x6d)
+LevelCollectibles("The Master of Hats", "Collect all of the wizard hats in the game", 25, WizardHatsUnlocked, 0xdc, 0xdb)
 LevelCollectibles("Wizard Card Whiz", "Collect half of the wizard cards in the game", 10, WizardHatsUnlocked, 0x2C, 0x2B)
 LevelCollectibles("Ultimate Card Collector", "Collect all of the wizard cards in the game", 25, WizardCardsUnlocked, 0x58, 0x57)
 LevelCollectibles("Accio Red Brick", "Collect all of the red bricks in the game", 25, RedbricksFound, 0x0f, 0x0e)
@@ -241,4 +241,4 @@ function ShopPurchases(achName, achDesc, points, purchaseItem, purchaseAmount, p
 
 ShopPurchases("Ready For My O.W.Ls", "Purchase all the hints from the shop", 10, HintsPurchased, 0x44, 0x43)
 ShopPurchases("The Great Red Brick Magician", "Purchase all the red bricks from the shop", 10, RedbricksPurchased, 0x0f, 0x0e)
-ShopPurchases("Dumbledores Army", "Purchase all the characters shop", 25, CharactersPurchased, 0x6c, 0x6b)
+ShopPurchases("Dumbledores Army", "Purchase all the characters shop", 25, CharactersPurchased, 0x6b, 0x6a)
