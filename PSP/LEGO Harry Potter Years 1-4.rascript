@@ -207,7 +207,7 @@ function LevelCollectibles(achName, achDesc, points, collectible, collectibleAmo
         points = points,
         trigger = (
             LevelID != 0x00 &&
-            collectible == collectibleAmount &&
+            collectible >= collectibleAmount &&
             prev(collectible) <= prevCollectibleAmount
         )
     )
@@ -217,7 +217,7 @@ LevelCollectibles("Stud Collector", "Reach true wizard in half of the levels", 1
 LevelCollectibles("Full Gringotts Vault", "Reach true wizard in all of the levels", 25, TrueWizardInLevels, 0x2c, 0x2b)
 LevelCollectibles("Wizard Hat Fanatic", "Collect half of the wizard hats in the game", 10, WizardHatsUnlocked, 0x6e, 0x6d)
 LevelCollectibles("The Master of Hats", "Collect all of the wizard hats in the game", 25, WizardHatsUnlocked, 0xdc, 0xdb)
-LevelCollectibles("Wizard Card Whiz", "Collect half of the wizard cards in the game", 10, WizardHatsUnlocked, 0x2C, 0x2B)
+LevelCollectibles("Wizard Card Whiz", "Collect half of the wizard cards in the game", 10, WizardCardsUnlocked, 0x2C, 0x2B)
 LevelCollectibles("Ultimate Card Collector", "Collect all of the wizard cards in the game", 25, WizardCardsUnlocked, 0x58, 0x57)
 LevelCollectibles("Accio Red Brick", "Collect all of the red bricks in the game", 25, RedbricksFound, 0x0f, 0x0e)
 
