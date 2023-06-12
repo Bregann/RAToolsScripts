@@ -268,7 +268,7 @@ function BoxesDestroyed(achId, achBadge, levelName, levelId, boxDestroyedFlag)
         badge = achBadge,
         title = levelName + " Box Destroyer",
         description = "Destroy all the boxes in " + levelName,
-        points = 10,
+        points = 5,
         trigger = (
             ChapterId == levelId &&
             boxDestroyedFlag == 1 &&
@@ -308,7 +308,7 @@ function ArtifactFound(achTitle, achDesc, artifactFlag, levelId)
     achievement(
         title = achTitle,
         description = achDesc,
-        points = 5,
+        points = 3,
         trigger = (
             ChapterId == levelId &&
             artifactFlag == 1 &&
