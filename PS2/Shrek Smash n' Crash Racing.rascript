@@ -56,7 +56,7 @@ TrackNameArr = [
     "Mirror Mode: Dragon's Lair"
 ]
 
-TimeTrialArr = [
+BestTimeArr = [
     float(0x4bf120),
     float(0x4bf134),
     float(0x4bf148),
@@ -84,30 +84,33 @@ TimeTrialArr = [
 ]
 
 TimeTrialTimeArr = [
-    0.00,
-    0.01,
-    0.02,
-    0.03,
-    0.04,
-    0.05,
-    0.06,
-    0.07,
-    0.08,
-    0.09,
-    0.00,
-    22.00,
-    22.00,
-    22.00,
-    22.00,
-    22.00,
-    0.10,
-    0.11,
-    0.12,
-    0.13,
-    0.14,
-    0.15,
-    0.16,
-    0.17
+    131.00,
+    104.00,
+    113.00,
+    133.00,
+    140.00,
+    137.00,
+    182.00,
+    163.00,
+    149.00,
+    244.00,
+    238.00,
+    254.00
+]
+
+TimeTrial2TimeArr = [
+    "2:11:00",
+    "1:44:00",
+    "1:53:00",
+    "2:13:00",
+    "2:20:00",
+    "2:17:00",
+    "3:02:00",
+    "2:43:00",
+    "2:29:00",
+    "4:04:00",
+    "3:58:00",
+    "4:14:00"
 ]
 
 CurrentTrack = byte(0x01be0c74)
@@ -137,7 +140,7 @@ function CharacterUnlocks(achName, achDesc, trackId, RacerUnlocked)
     achievement(
         title = achName,
         description = achDesc,
-        points = 5,
+        points = 3,
         trigger = (
             CurrentTrack == trackId &&
             RacerUnlocked
@@ -172,7 +175,7 @@ function WinTourneyCharacter(achTitle, charName, charId)
             WonTourney()
         )
     )
-} //
+}
 
 WinTourneyCharacter("The Champion of the Swamp", "Shrek", 0x00)
 WinTourneyCharacter("Flying to Victory", "Donkey", 0x02)
@@ -186,24 +189,73 @@ WinTourneyCharacter("A Ham-tastic Win", "Three Little Pigs", 0x09)
 WinTourneyCharacter("A Bearilliant Victory", "Goldilocks", 0x0a)
 WinTourneyCharacter("Executed The Competition", "Thelonious", 0x0b)
 
+achievement(
+    title = "A Confusing Race",
+    description = "Win mirrored tournament mode with the most points (cannot be a tie)",
+    points = 5,
+    trigger = (
+        CurrentTrack == 0x17 &&
+        CurrentMode == 0x00 &&
+        PlayerTourneyPoints > prev(PlayerTourneyPoints) &&
+        PlayerCupPoints != 0x00 &&
+        WonTourney()
+    )
+)
+
 // ===================================
 // Time trials
 // ===================================
-function TimeTrialAchievements(trackName, trackId, speedrunTimer, timeToBeat)
+function TimeTrialAchievements(trackName, trackId, speedrunTimer, timeToBeat, descTimeToBeat)
 {
     achievement(
         title = trackName + " Speedrunner",
-        description = "bb",
+        description = "Beat " + trackName + " in " + descTimeToBeat + " or lower in time trial mode",
         points = 10,
         trigger = (
             CurrentTrack == trackId &&
+            CurrentMode == 0x03 &&
             (prev(speedrunTimer) == 0.00 || prev(speedrunTimer) > timeToBeat) &&
-            speedrunTimer < timeToBeat
+            speedrunTimer < timeToBeat &&
+            speedrunTimer != 0.00
         )
+    )
+}
+
+for i in range(0, 11)
+{
+    TimeTrialAchievements(TrackNameArr[i], TrackIdArr[i], BestTimeArr[i], TimeTrialTimeArr[i], TimeTrial2TimeArr[i])
+}
+
+
+
+
+// ===================================
+// Leaderboards
+// ===================================
+function RaceLeaderboard(trackName, trackId, bestTime)
+{
+    leaderboard(
+        title = trackName,
+        description = "Get the fastest time on " + trackName + " (submits the 1st place record on save file)",
+        start = (
+            CurrentTrack == trackId &&
+            byte(0x01b4143f) == 0x00 &&
+            (float(0x01be0d40) <= 1.00 && float(0x01be0d40) != 0.00)
+        ),
+        cancel = (
+            CurrentTrack != trackId
+        ),
+        submit = (
+            bestTime != 0.00 &&
+            byte(0x01b4143f) == 0x01
+        ),
+        value = bestTime,
+        format = "SECS",
+        lower_is_better = true
     )
 }
 
 for i in range(0, 23)
 {
-    TimeTrialAchievements(TrackNameArr[i], TrackIdArr[i], TimeTrialArr[i], TimeTrialTimeArr[i])
+    RaceLeaderboard(TrackNameArr[i], TrackIdArr[i], BestTimeArr[i])
 }
