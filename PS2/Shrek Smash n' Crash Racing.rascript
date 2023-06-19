@@ -178,7 +178,8 @@ function WinTourneyCharacter(achTitle, charName, charId)
 }
 
 WinTourneyCharacter("The Champion of the Swamp", "Shrek", 0x00)
-WinTourneyCharacter("Flying to Victory", "Donkey", 0x02)
+WinTourneyCharacter("Flying to Victory", "Donkey", 0x01)
+WinTourneyCharacter("Chariot Champion", "Princess Fiona", 0x02)
 WinTourneyCharacter("Sweet Victory", "Gingy", 0x03)
 WinTourneyCharacter("Paws on the Podium", "Puss in Boots", 0x04)
 WinTourneyCharacter("A Noble Victory", "Prince Charming", 0x05)
