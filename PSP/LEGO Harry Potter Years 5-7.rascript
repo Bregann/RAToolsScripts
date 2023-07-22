@@ -2,6 +2,7 @@
 // #ID = 3038
 
 LevelID = byte(0xae35ee)
+DuelSelected = byte(0xae3074)
 
 //True Wizard
 TrueWizardInLevels = 
@@ -161,8 +162,8 @@ function LevelCompleteAchievement(achName, levelName, levelAddr, bitNum)
 {
     achievement (
         title = achName,
-        description = "Complete level " + levelName,
-        points = 3,
+        description = "Complete " + levelName + " in story mode",
+        points = 4,
         trigger = (
             LevelID != 0x00 &&
             IsLevelCompleted(levelAddr, bitNum)
@@ -170,7 +171,20 @@ function LevelCompleteAchievement(achName, levelName, levelAddr, bitNum)
     )
 }
 
-//TODO: achievements
+LevelCompleteAchievement("Little Whinging Park", "year 5 chapter 1", 0xaebe67, 1)
+LevelCompleteAchievement("A Trip To Hogsmeade", "year 5 chapter 2", 0xaebe6a, 7)
+LevelCompleteAchievement("12 Grimmauld Place", "year 5 chapter 3", 0xaebe73, 1)
+LevelCompleteAchievement("The Hall of Prophecy", "year 5 chapter 4", 0xaebe7b, 3)
+LevelCompleteAchievement("Draught of Living Death", "year 6 chapter 1", 0xaebe82, 7)
+LevelCompleteAchievement("The Three Broomsticks", "year 6 chapter 2", 0xaebe86, 5)
+LevelCompleteAchievement("The Burrow", "year 6 chapter 3", 0xaebe8b, 1)
+LevelCompleteAchievement("The Cave", "year 6 chapter 4", 0xaebe90, 3)
+LevelCompleteAchievement("Godric's Hollow", "year 7 chapter 1", 0xaebe96, 3)
+LevelCompleteAchievement("Malfoy Manor", "year 7 chapter 2", 0xaebe9a, 7)
+LevelCompleteAchievement("Gringotts Break-in", "year 8 chapter 1", 0xaebe9e, 5)
+LevelCompleteAchievement("The Lost Diadem", "year 8 chapter 2", 0xaebea2, 3)
+LevelCompleteAchievement("Hogwarts Battle", "year 8 chapter 3", 0xaebea6, 1)
+LevelCompleteAchievement("Harry vs Voldemort", "year 8 chapter 4", 0xaebea9, 7)
 
 // ================================
 // Level Bonus stuff (wizard cards, true wizard, redbricks)
@@ -184,19 +198,19 @@ function LevelCollectibles(achName, achDesc, points, collectible, collectibleAmo
         points = points,
         trigger = (
             LevelID != 0x00 &&
-            collectible == collectibleAmount &&
+            collectible >= collectibleAmount &&
             prev(collectible) <= prevCollectibleAmount
         )
     )
 }
 
-LevelCollectibles("tw1", "Reach true wizard in half of the levels", 10, TrueWizardInLevels, 0x07, 0x06)
-LevelCollectibles("tw2", "Reach true wizard in all of the levels", 25, TrueWizardInLevels, 0x0e, 0x0d)
-LevelCollectibles("wh1", "Collect half of the wizard hats in the game", 10, WizardHatsCollected, 0x25, 0x24)
-LevelCollectibles("wh2", "Collect all of the wizard hats in the game", 25, WizardHatsCollected, 0x49, 0x48)
-LevelCollectibles("wc1", "Collect half of the wizard cards in the game", 10, CharactersUnlocked, 0x55, 0x54)
-LevelCollectibles("wc2", "Collect all of the wizard cards in the game", 25, CharactersUnlocked, 0xa9, 0xa8)
-LevelCollectibles("redbrick", "Collect all of the red bricks in the game", 25, RedBricksFound, 0x0e, 0x0d)
+LevelCollectibles("Accio Studs", "Reach true wizard in half of the levels", 10, TrueWizardInLevels, 0x07, 0x06)
+LevelCollectibles("Richest Wizard Around", "Reach true wizard in all of the levels", 10, TrueWizardInLevels, 0x0e, 0x0d)
+LevelCollectibles("The Hat Collector", "Collect half of the wizard hats in the game", 10, WizardHatsCollected, 0x25, 0x24)
+LevelCollectibles("A Hat-tastic Collection", "Collect all of the wizard hats in the game", 25, WizardHatsCollected, 0x49, 0x48)
+LevelCollectibles("Fantastic Finds", "Unlock half of the characters available in the game in levels", 10, CharactersUnlocked, 0x55, 0x54)
+LevelCollectibles("Ultimate Witch and Wizard Collector", "Unlock all of the characters available in the game in levels", 25, CharactersUnlocked, 0xa9, 0xa8)
+LevelCollectibles("Secrets Unveiled", "Collect all of the red bricks in the game", 25, RedBricksFound, 0x0e, 0x0d)
 
 // ================================
 // Shop Purchases
@@ -216,7 +230,30 @@ function ShopPurchases(achName, achDesc, points, purchaseItem, purchaseAmount, p
     )
 }
 
-ShopPurchases("hints", "Purchase every hint in the game", 5, HintsPurchased, 0x0e, 0x0d)
-ShopPurchases("red bricks", "Purchase every red brick in the game", 10, RedBricksPurchased, 0x0e, 0x0d)
-ShopPurchases("characters 1", "Purchase half of the characters in the game", 5, CharactersPurchased, 0x55, 0x54)
-ShopPurchases("characters 2", "Purchase all of the characters in the game", 10, CharactersPurchased, 0xa9, 0xa8)
+ShopPurchases("Wizarding Insights", "Purchase every hint in the game", 5, HintsPurchased, 0x0e, 0x0d)
+ShopPurchases("Wizarding Upgrades", "Purchase every red brick in the game", 10, RedBricksPurchased, 0x0e, 0x0d)
+ShopPurchases("Magical Shopper", "Purchase half of the characters in the game", 10, CharactersPurchased, 0x55, 0x54)
+ShopPurchases("Mystical Recruits", "Purchase all of the characters in the game", 10, CharactersPurchased, 0xa9, 0xa8)
+
+// ================================
+// Duels Complete
+// ================================
+
+function DuelsComplete(achName, achDesc, points, duelType, duel, duelAmountComplete, prevDuelAmountComplete)
+{
+    achievement(
+        title = achName,
+        description = achDesc,
+        points = points,
+        trigger = (
+            DuelSelected == duelType &&
+            duel == duelAmountComplete &&
+            prev(duel) == prevDuelAmountComplete
+        )
+    )
+}
+
+DuelsComplete("The Student Dueller", "Win all the duels in the 'students' category", 5, 0x00, StudentDuelsWon, 0x09, 0x08)
+DuelsComplete("Wand Wielder", "Win all the duels in the 'open category' category", 5, 0x01, OpenCategoryDuelsWon, 0x06, 0x05)
+DuelsComplete("Beating The Army", "Win all the duels in the 'Dumbledore's army' category", 10, 0x02, DumbledoresArmyDuelsWon, 0x12, 0x11)
+DuelsComplete("Hope I Don't Get Expelled!", "Win all the duels in the 'Hogwarts staff' category", 5, 0x03, HogwartsStaffDuelsWon, 0x09, 0x08)
