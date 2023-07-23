@@ -179,12 +179,12 @@ LevelCompleteAchievement("Draught of Living Death", "year 6 chapter 1", 0xaebe82
 LevelCompleteAchievement("The Three Broomsticks", "year 6 chapter 2", 0xaebe86, 5)
 LevelCompleteAchievement("The Burrow", "year 6 chapter 3", 0xaebe8b, 1)
 LevelCompleteAchievement("The Cave", "year 6 chapter 4", 0xaebe90, 3)
-LevelCompleteAchievement("Godric's Hollow", "year 7 chapter 1", 0xaebe96, 3)
-LevelCompleteAchievement("Malfoy Manor", "year 7 chapter 2", 0xaebe9a, 7)
-LevelCompleteAchievement("Gringotts Break-in", "year 8 chapter 1", 0xaebe9e, 5)
-LevelCompleteAchievement("The Lost Diadem", "year 8 chapter 2", 0xaebea2, 3)
-LevelCompleteAchievement("Hogwarts Battle", "year 8 chapter 3", 0xaebea6, 1)
-LevelCompleteAchievement("Harry vs Voldemort", "year 8 chapter 4", 0xaebea9, 7)
+LevelCompleteAchievement("Godric's Hollow", "year 7 part 1 chapter 1", 0xaebe96, 3)
+LevelCompleteAchievement("Malfoy Manor", "year 7 part 1 chapter 2", 0xaebe9a, 7)
+LevelCompleteAchievement("Gringotts Break-in", "year 7 part 2 chapter 1", 0xaebe9e, 5)
+LevelCompleteAchievement("The C", "year 7 part 2 chapter 2", 0xaebea2, 3)
+LevelCompleteAchievement("Hogwarts Battle", "year 7 part 2 chapter 3", 0xaebea6, 1)
+LevelCompleteAchievement("Harry vs Voldemort", "year 7 part 2 chapter 4", 0xaebea9, 7)
 
 // ================================
 // Level Bonus stuff (wizard cards, true wizard, redbricks)
