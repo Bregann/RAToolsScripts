@@ -182,7 +182,7 @@ LevelCompleteAchievement("The Cave", "year 6 chapter 4", 0xaebe90, 3)
 LevelCompleteAchievement("Godric's Hollow", "year 7 part 1 chapter 1", 0xaebe96, 3)
 LevelCompleteAchievement("Malfoy Manor", "year 7 part 1 chapter 2", 0xaebe9a, 7)
 LevelCompleteAchievement("Gringotts Break-in", "year 7 part 2 chapter 1", 0xaebe9e, 5)
-LevelCompleteAchievement("The C", "year 7 part 2 chapter 2", 0xaebea2, 3)
+LevelCompleteAchievement("The Chamber of Secrets", "year 7 part 2 chapter 2", 0xaebea2, 3)
 LevelCompleteAchievement("Hogwarts Battle", "year 7 part 2 chapter 3", 0xaebea6, 1)
 LevelCompleteAchievement("Harry vs Voldemort", "year 7 part 2 chapter 4", 0xaebea9, 7)
 
@@ -204,12 +204,25 @@ function LevelCollectibles(achName, achDesc, points, collectible, collectibleAmo
     )
 }
 
+function AllCharacters(achName, achDesc, points, collectible, collectibleAmount, prevCollectibleAmount)
+{
+    achievement(
+        title = achName,
+        description = achDesc,
+        points = points,
+        trigger = (
+            collectible >= collectibleAmount &&
+            (prev(collectible) >= prevCollectibleAmount - 10 && prev(collectible) != collectibleAmount)
+        )
+    )
+}
+
 LevelCollectibles("Accio Studs", "Reach true wizard in half of the levels", 10, TrueWizardInLevels, 0x07, 0x06)
 LevelCollectibles("Richest Wizard Around", "Reach true wizard in all of the levels", 10, TrueWizardInLevels, 0x0e, 0x0d)
 LevelCollectibles("The Hat Collector", "Collect half of the wizard hats in the game", 10, WizardHatsCollected, 0x25, 0x24)
 LevelCollectibles("A Hat-tastic Collection", "Collect all of the wizard hats in the game", 25, WizardHatsCollected, 0x49, 0x48)
 LevelCollectibles("Fantastic Finds", "Unlock half of the characters available in the game in levels", 10, CharactersUnlocked, 0x55, 0x54)
-LevelCollectibles("Ultimate Witch and Wizard Collector", "Unlock all of the characters available in the game in levels", 25, CharactersUnlocked, 0xa9, 0xa8)
+AllCharacters("Ultimate Witch and Wizard Collector", "Unlock all of the characters available in the game in levels", 25, CharactersUnlocked, 0xa9, 0xa8)
 LevelCollectibles("Secrets Unveiled", "Collect all of the red bricks in the game", 25, RedBricksFound, 0x0e, 0x0d)
 
 // ================================
