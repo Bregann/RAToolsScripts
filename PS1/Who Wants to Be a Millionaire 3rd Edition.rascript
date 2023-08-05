@@ -2,7 +2,7 @@
 // #ID = 2912
 
 CurrentQuestion = byte(0x1ffe6c)
-Timer = word_be(tbyte(0x1fffc0) + 0x1D)
+LifelinesAvailable = byte(0x1ffecc) + byte(0x1ffecd) + byte(0x1ffece)
 
 function IsSinglePlayer() => byte(0x1ffe79) == 1
 function AllLifelinesAvailable() => byte(0x1ffecc) + byte(0x1ffecd) + byte(0x1ffece) == 3
@@ -11,6 +11,10 @@ function NoLifelinesAvailable() => byte(0x1ffecc) + byte(0x1ffecd) + byte(0x1ffe
 function Q1000Answered() => byte(0x1ffe6c) == 0x05 && prev(byte(0x1ffe6c)) == 0x04
 function Q32000Answered() => byte(0x1ffe6c) == 0x0a && prev(byte(0x1ffe6c)) == 0x09
 function Q1mAnswered() => byte(0x1ffe6c) == 0x0f && prev(byte(0x1ffe6c)) == 0x0e
+
+function Q1000AnsweredTrigger() => trigger_when(byte(0x1ffe6c) == 0x05) && prev(byte(0x1ffe6c)) == 0x04
+function Q32000AnsweredTrigger() => trigger_when(byte(0x1ffe6c) == 0x0a) && prev(byte(0x1ffe6c)) == 0x09
+function Q1mAnsweredTrigger() => trigger_when(byte(0x1ffe6c) == 0x0f) && prev(byte(0x1ffe6c)) == 0x0e
 
 // ================================
 // Questions
@@ -45,14 +49,15 @@ function QuestionAnsweredNoFails(achTitle, achDesc, points, question)
 }
 
 
-QuestionAnswered("q1000", "Answer the $1,000 question correctly", 2, Q1000Answered())
-QuestionAnsweredNoFails("q1000 no lifelynes", "Answer the $1,000 question correctly with all lifelines available", 2, Q1000Answered())
-QuestionAnswered("q32000", "Answer the $32,000 question correctly", 3, Q32000Answered())
-QuestionAnsweredNoFails("q32000 no lifelynes", "Answer the $32,000 question correctly with all lifelines available", 3, Q1mAnswered())
-QuestionAnswered("q1m", "Answer the $1,000,000 question correctly", 5, Q32000Answered())
-QuestionAnsweredNoFails("q1m no lifelynes", "Answer the $1,000,000 question correctly with all lifelines available", 5, Q1mAnswered())
+QuestionAnswered("The First Checkpoint", "Answer the $1,000 question correctly", 2, Q1000Answered())
+QuestionAnsweredNoFails("Flawless Foundation", "Answer the $1,000 question correctly with all lifelines available", 2, Q1000AnsweredTrigger())
 
-//use all 3 lifelines on the million dollar question
+QuestionAnswered("Building Up Money", "Answer the $32,000 question correctly", 3, Q32000Answered())
+QuestionAnsweredNoFails("Quiz Genius", "Answer the $32,000 question correctly with all lifelines available", 3, Q32000AnsweredTrigger())
+
+QuestionAnswered("The Million Dollar Question", "Answer the $1,000,000 question correctly", 5, Q1mAnswered())
+QuestionAnsweredNoFails("Millionaire Mastermind", "Answer the $1,000,000 question correctly with all lifelines available", 5, Q1mAnsweredTrigger())
+
 achievement (
     title = "Better Safe Than Sorry!",
     description = "Use all 3 lifelines on the $1,000,000 question and answer it correctly",
@@ -79,6 +84,18 @@ achievement (
         byte(0x1ffeac) == 0x4C &&
         byte(0x1ffead) == 0x45 &&
         byte(0x1ffeae) == 0x53 &&
-        trigger_when(Q1mAnswered())
+        Q1mAnsweredTrigger()
+    )
+)
+
+achievement (
+    title = "Not a Great Start",
+    description = "Use all 3 lifelines on the $100 question",
+    points = 1,
+    trigger = (
+        IsSinglePlayer() &&
+        LifelinesAvailable == 0 &&
+        prev(LifelinesAvailable) == 1 &&
+        CurrentQuestion == 0x00
     )
 )
