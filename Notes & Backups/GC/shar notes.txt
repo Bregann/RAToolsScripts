@@ -1,0 +1,8 @@
+0x006a0170 - DUFF TRUCK UNLOCKED (8 bit)
+0x0069d83c - COINS 32 BE
+0x006a01e8 - SURVIANCE VAN UNLOCKED (8BIT)
+0x007f5c77 - GAME STATE
+0x0069c7bc - start of mission data bitflags (bit0)
+
+0x0069de54 - could be level 1 boxes, broke 2 in neighbours, bitflag?
+all the FF's are coins, boxes, vending machines and wasps 
