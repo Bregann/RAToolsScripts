@@ -36,6 +36,10 @@ MissionCompleteAchievement("The Woo-Rabbit", "Lady were-rabbit success", 3, 0x01
 MissionCompleteAchievement("Were-Rabbit Spotted", "Wallace is the Were-Rabbit!", 3, 0x0116e65a)
 MissionCompleteAchievement("Device Destroyer", "first diabolical device destroyed", 2, 0x0116e4c3)
 MissionCompleteAchievement("Take Me to Church", "Mrs Windfall safely reached the church", 3, 0x0116e6b2)
+MissionCompleteAchievement("Bank Bodyguard", "the bank is safe", 2, 0x0116e6a7)
+MissionCompleteAchievement("Pitch Invaders Defeated", "rex is safe", 2, 0x0116e62e)
+MissionCompleteAchievement("Defender of Vegetables", "Mrs Windfall's veg is safe", 2, 0x0116e4e4)
+MissionCompleteAchievement("Cracking Football Player!", "bullseye!", 3, 0x0116e573)
 
 //Challenges
 function SpeedrunAchievement(achTitle, achDesc, points, cardAddr, timerSecsLeft) {
@@ -54,6 +58,7 @@ function SpeedrunAchievement(achTitle, achDesc, points, cardAddr, timerSecsLeft)
 SpeedrunAchievement("West Wallaby Street Rabbit Speedrunner [m]", "Clear all the rabbits in the \"West Wallaby St rabbits removed\" mission with 6 minutes or more left on the timer", 5, 0x0116e60d, 360.0)
 SpeedrunAchievement("They See Me Rolling Speedrunner [m]", "Unlock card \"barrels delivered to the customers\" with 1 minute 26 seconds or more left on the timer", 5, 0x0116e602, 86.0)
 SpeedrunAchievement("Town Hall Rabbit Speedrunner [m]", "Clear all the rabbits in the \"town hall cleared\" mission with 5 minutes or more left on the timer", 5, 0x0116e4ce, 300.0)
+SpeedrunAchievement("Mrs Windfall Veg Speedrunner [m]", "Clear all the rabbits in the \"Mrs Windfall's veg is safe\" mission with 3 minutes 40 seconds or more left on the timer", 5, 0x0116e4e4, 220.0)
 
 function HealthAchievement(achTitle, achDesc, points, cardAddr, healthLeft) {
     achievement(
@@ -63,10 +68,12 @@ function HealthAchievement(achTitle, achDesc, points, cardAddr, healthLeft) {
         trigger = (
             InGame() &&
             once(NPCHealthTask >= healthLeft) &&
-            never((NPCHealthTask < healthLeft && NPCHealthTask > 0x00) || byte(0x008b160c) == 0x04 || byte(cardAddr) != 0x03) &&
+            never((NPCHealthTask < healthLeft && NPCHealthTask > 0x00) || byte(0x008b160c) == 0x04 || byte(cardAddr) == 0x01) &&
             MissionCompleteTrigger(cardAddr)
         )
     )
 }
 
-HealthAchievement("Church Protector [m]", "Keep Mr's Windfalls health at 75 or above when escorting her to Church", 10, 0x0116e6b2, 75)
+HealthAchievement("Church Protector [m]", "Keep Mrs Windfall's health at 75 or above when escorting her to Church", 10, 0x0116e6b2, 75)
+HealthAchievement("Most Secure Bank in Town [m]", "Keep Mr Windfall's health at 85 or above when protecting the bank", 10, 0x0116e6a7, 85)
+HealthAchievement("Ultimate Rex Guardian [m]", "Keep Rex Leaching's health at 90 or above when protecting him at the park", 10, 0x0116e62e, 90)
