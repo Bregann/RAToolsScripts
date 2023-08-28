@@ -5,6 +5,7 @@ function InGame() => byte(0x008b160c) != 0x04
 function MissionComplete(cardAddr) => byte(cardAddr) == 0x05 && (prev(byte(cardAddr)) == 0x03 || prev(byte(cardAddr)) == 0x04)
 function MissionCompleteTrigger(cardAddr) => trigger_when(byte(cardAddr) == 0x05) && (prev(byte(cardAddr)) == 0x03 || prev(byte(cardAddr)) == 0x04)
 Timer = float(dword(dword(0x00553020) + 0x6c) + 0x58)
+NPCHealthTask = word(dword(dword(dword(0x00553020) + 0x70) + 0x58) + 0x5f4)
 
 // Progression achievements
 function MissionCompleteAchievement(achTitle, cardName, points, cardAddr){
@@ -30,9 +31,14 @@ MissionCompleteAchievement("They See Me Rolling", "barrels delivered to the cust
 MissionCompleteAchievement("A Back Garden Pest Problem", "the back gardens - 100 pests collected", 5, 0x0116e481)
 MissionCompleteAchievement("Rabbit Free Town Hall", "town hall cleared", 2, 0x0116e4ce)
 MissionCompleteAchievement("Rex Racer", "beat Rex Leaching", 2, 0x0116e4d9)
+MissionCompleteAchievement("Master Mechanic", "Winnie's van fixed", 2, 0x0116e70a)
+MissionCompleteAchievement("The Woo-Rabbit", "Lady were-rabbit success", 3, 0x0116e455)
+MissionCompleteAchievement("Were-Rabbit Spotted", "Wallace is the Were-Rabbit!", 3, 0x0116e65a)
+MissionCompleteAchievement("Device Destroyer", "first diabolical device destroyed", 2, 0x0116e4c3)
+MissionCompleteAchievement("Take Me to Church", "Mrs Windfall safely reached the church", 3, 0x0116e6b2)
 
 //Challenges
-function SpeedrunAchievement(achTitle, achDesc, points, cardAddr, timerSecsLeft){
+function SpeedrunAchievement(achTitle, achDesc, points, cardAddr, timerSecsLeft) {
     achievement(
         title = achTitle,
         description = achDesc,
@@ -48,3 +54,19 @@ function SpeedrunAchievement(achTitle, achDesc, points, cardAddr, timerSecsLeft)
 SpeedrunAchievement("West Wallaby Street Rabbit Speedrunner [m]", "Clear all the rabbits in the \"West Wallaby St rabbits removed\" mission with 6 minutes or more left on the timer", 5, 0x0116e60d, 360.0)
 SpeedrunAchievement("They See Me Rolling Speedrunner [m]", "Unlock card \"barrels delivered to the customers\" with 1 minute 26 seconds or more left on the timer", 5, 0x0116e602, 86.0)
 SpeedrunAchievement("Town Hall Rabbit Speedrunner [m]", "Clear all the rabbits in the \"town hall cleared\" mission with 5 minutes or more left on the timer", 5, 0x0116e4ce, 300.0)
+
+function HealthAchievement(achTitle, achDesc, points, cardAddr, healthLeft) {
+    achievement(
+        title = achTitle,
+        description = achDesc,
+        points = points,
+        trigger = (
+            InGame() &&
+            once(NPCHealthTask >= healthLeft) &&
+            never((NPCHealthTask < healthLeft && NPCHealthTask > 0x00) || byte(0x008b160c) == 0x04 || byte(cardAddr) != 0x03) &&
+            MissionCompleteTrigger(cardAddr)
+        )
+    )
+}
+
+HealthAchievement("Church Protector [m]", "Keep Mr's Windfalls health at 75 or above when escorting her to Church", 10, 0x0116e6b2, 75)
