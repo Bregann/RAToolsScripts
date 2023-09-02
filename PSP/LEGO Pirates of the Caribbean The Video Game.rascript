@@ -1,6 +1,7 @@
 // LEGO Pirates of the Caribbean: The Video Game
 // #ID = 3040
 LevelID = byte(0x00a17ac4)
+function SaveProtection() => byte(0x00a213aa) == prev(byte(0x00a213aa)) && byte(0x00a213aa) != 0xff
 
 //True Pirate
 TruePirateInStoryLevels = 
@@ -155,7 +156,7 @@ LevelCompleteAchievement("Davy Jones' Key", "Davy Jones' Key", 3, 0x00a2136b, 7)
 LevelCompleteAchievement("Isla Cruces", "Isla Cruces", 3, 0x00a2136d, 3)
 LevelCompleteAchievement("The Kraken", "The Kraken", 3, 0x00a2136f, 5)
 
-LevelCompleteAchievement("The Kraken", "The Kraken", 3, 0x00a21370, 3)
+LevelCompleteAchievement("Singapore", "Singapore", 3, 0x00a21370, 3)
 LevelCompleteAchievement("Escape the Dutchman", "Escape the Dutchman", 3, 0x00a21371, 7)
 LevelCompleteAchievement("Shipwreck Cove", "Shipwreck Cove", 3, 0x00a21372, 5)
 LevelCompleteAchievement("The Maelstrom", "The Maelstrom", 3, 0x00a21373, 3)
@@ -183,6 +184,15 @@ function LevelCollectibles(achName, achDesc, points, collectible, collectibleAmo
     )
 }
 
+LevelCollectibles("minikit L1", "Unlock all minikits in the xxx levels", 10, MinikitsL1, 40)
+LevelCollectibles("minikit L2", "Unlock all minikits in the xxx levels", 10, MinikitsL2, 40)
+LevelCollectibles("minikit L3", "Unlock all minikits in the xxx levels", 10, MinikitsL3, 40)
+LevelCollectibles("minikit L4", "Unlock all minikits in the xxx levels", 10, MinikitsL4, 40)
+LevelCollectibles("true pirate", "Reach 'true pirate' on every level in story mode", 25, TruePirateInStoryLevels, 16)
+LevelCollectibles("true pirate free play", "Reach 'true pirate' on every level in free play mode", 25, TruePirateInFreeplayLevels, 16)
+LevelCollectibles("redbrick", "Find every red brick in the game", 25, RedbricksFound, 16)
+LevelCollectibles("characters 1", "Unlock half of the characters in the game from levels", 10, CharactersUnlocked, 62)
+LevelCollectibles("characters 2", "Unlock all of the characters in the game from levels", 25, CharactersUnlocked, 124)
 
 // ================================
 // Shop stuff
@@ -195,9 +205,14 @@ function ShopPurchases(achName, achDesc, points, purchaseItem, purchaseAmount)
         description = achDesc,
         points = points,
         trigger = (
-            LevelID == 0x00 &&
-            purchaseItem == purchaseAmount &&
-            prev(purchaseItem) == purchaseAmount - 1
+            SaveProtection() &&
+            purchaseItem >= purchaseAmount &&
+            prev(purchaseItem) <= purchaseAmount - 1
         )
     )
 }
+
+ShopPurchases("purchase char 1", "Purchase half of the characters in the game from levels", 5, CharactersPurchased, 62)
+ShopPurchases("purchase char 2", "Purchase all of the characters in the game from levels", 10, CharactersPurchased, 124)
+ShopPurchases("A Hint Towards the Treasure", "Purchase all the hints from the shop", 5, HintsPurchased, 14)
+ShopPurchases("xx", "Purchase all the red bricks from the shop", 10, RedbricksPurchased, 16)
