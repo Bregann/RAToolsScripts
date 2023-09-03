@@ -40,7 +40,6 @@ bitcount(0xa21389) + bitcount(0xa2138a) + bitcount(0xa2138b) + bitcount(0xa2138c
 //Redbricks found
 RedbricksFound = bitcount(0x00a21391) + bitcount(0x00a21392)
 
-
 //Shop items
 //Hints
 HintsPurchased = 
@@ -146,7 +145,7 @@ function LevelCompleteAchievement(achName, levelName, points, levelAddr, bitNum)
     )
 }
 
-LevelCompleteAchievement("Port Royal", "Port Royal", 3, 0x00a213fd, 1)
+LevelCompleteAchievement("Port Royal", "Port Royal", 3, 0x00a21362, 1)
 LevelCompleteAchievement("Tortuga", "Tortuga", 3, 0x00a21365, 1)
 LevelCompleteAchievement("Battle at Sea", "Battle at Sea", 3, 0x00a21366, 5)
 LevelCompleteAchievement("Isla de Muerta", "Isla de Muerta", 3, 0x00a21368, 1)
@@ -184,15 +183,15 @@ function LevelCollectibles(achName, achDesc, points, collectible, collectibleAmo
     )
 }
 
-LevelCollectibles("minikit L1", "Unlock all minikits in the xxx levels", 10, MinikitsL1, 40)
-LevelCollectibles("minikit L2", "Unlock all minikits in the xxx levels", 10, MinikitsL2, 40)
-LevelCollectibles("minikit L3", "Unlock all minikits in the xxx levels", 10, MinikitsL3, 40)
-LevelCollectibles("minikit L4", "Unlock all minikits in the xxx levels", 10, MinikitsL4, 40)
-LevelCollectibles("true pirate", "Reach 'true pirate' on every level in story mode", 25, TruePirateInStoryLevels, 16)
-LevelCollectibles("true pirate free play", "Reach 'true pirate' on every level in free play mode", 25, TruePirateInFreeplayLevels, 16)
-LevelCollectibles("redbrick", "Find every red brick in the game", 25, RedbricksFound, 16)
-LevelCollectibles("characters 1", "Unlock half of the characters in the game from levels", 10, CharactersUnlocked, 62)
-LevelCollectibles("characters 2", "Unlock all of the characters in the game from levels", 25, CharactersUnlocked, 124)
+LevelCollectibles("Breaking the Curse", "Unlock all 40 minikits in the The Curse of the Black Pearl levels", 10, MinikitsL1, 40)
+LevelCollectibles("Dead Man's Minikits", "Unlock all 40 minikits in the Dead Man's Chest levels", 10, MinikitsL2, 40)
+LevelCollectibles("At Minikit's End", "Unlock all 40 minikits in the At World's End levels", 10, MinikitsL3, 40)
+LevelCollectibles("Minikit Looter", "Unlock all 40 minikits in the On Stranger Tides levels", 10, MinikitsL4, 40)
+LevelCollectibles("The Stud Plunderer", "Reach 'true pirate' on every level in story mode", 25, TruePirateInStoryLevels, 16)
+LevelCollectibles("The Rich Pirate", "Reach 'true pirate' on every level in free play mode", 25, TruePirateInFreeplayLevels, 16)
+LevelCollectibles("Plundering Bricks", "Find every red brick in the game", 25, RedbricksFound, 16)
+LevelCollectibles("Discovering the Pirates", "Unlock half of the characters in the game from levels", 10, CharactersUnlocked, 62)
+LevelCollectibles("Preparing to Plunder", "Unlock all of the characters in the game from levels", 25, CharactersUnlocked, 124)
 
 // ================================
 // Shop stuff
@@ -212,7 +211,21 @@ function ShopPurchases(achName, achDesc, points, purchaseItem, purchaseAmount)
     )
 }
 
-ShopPurchases("purchase char 1", "Purchase half of the characters in the game from levels", 5, CharactersPurchased, 62)
-ShopPurchases("purchase char 2", "Purchase all of the characters in the game from levels", 10, CharactersPurchased, 124)
+ShopPurchases("Recruting The Crew", "Purchase half of the characters in the game from the shop", 5, CharactersPurchased, 62)
+ShopPurchases("A Ship Worthy Crew", "Purchase all of the characters in the game from the shop", 10, CharactersPurchased, 124)
 ShopPurchases("A Hint Towards the Treasure", "Purchase all the hints from the shop", 5, HintsPurchased, 14)
-ShopPurchases("xx", "Purchase all the red bricks from the shop", 10, RedbricksPurchased, 16)
+ShopPurchases("A Fine Brick Collection", "Purchase all the red bricks from the shop", 10, RedbricksPurchased, 16)
+
+// ================================
+// Misc
+// ================================
+achievement(
+    title = "Big Headed Banana Wielding Ghost Pirates!",
+    description = "Enable all extras at once",
+    points = 1,
+    trigger = (
+        bitcount(0x00b57904) + bitcount(0x00b57905) == 16 &&
+        prev(bitcount(0x00b57904)) + prev(bitcount(0x00b57905)) == 15 &&
+        RedbricksFound == 16
+    )
+)
