@@ -40,6 +40,9 @@ MissionCompleteAchievement("Bank Bodyguard", "the bank is safe", 2, 0x0116e6a7)
 MissionCompleteAchievement("Pitch Invaders Defeated", "rex is safe", 2, 0x0116e62e)
 MissionCompleteAchievement("Defender of Vegetables", "Mrs Windfall's veg is safe", 2, 0x0116e4e4)
 MissionCompleteAchievement("Cracking Football Player!", "bullseye!", 3, 0x0116e573)
+MissionCompleteAchievement("Hattrick!", "3 goals scored", 2, 0x0116e57e)
+MissionCompleteAchievement("Blessed Gardens", "churchyard cleared of pests", 3, 0x0116e64f)
+MissionCompleteAchievement("Holy Water Secured", "returned the vicar's bottles", 3, 0x0116e686)
 
 //Challenges
 function SpeedrunAchievement(achTitle, achDesc, points, cardAddr, timerSecsLeft) {
