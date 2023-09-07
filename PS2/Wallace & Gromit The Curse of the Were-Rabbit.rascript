@@ -28,12 +28,14 @@ MissionCompleteAchievement("West Wallaby Street Rabbit Cleaner", "West Wallaby S
 MissionCompleteAchievement("The Bank Organiser", "bank veg sorted", 3, 0x0116e644)
 MissionCompleteAchievement("No Posters Left", "were-rabbit posters removed", 2, 0x0116e4fa)
 MissionCompleteAchievement("They See Me Rolling", "barrels delivered to the customers", 2, 0x0116e602)
-MissionCompleteAchievement("A Back Garden Pest Problem", "the back gardens - 100 pests collected", 5, 0x0116e481)
+MissionCompleteAchievement("A Back Garden Pest Problem 1", "the back gardens - 25 pests collected", 3, 0x0116e46b)
+MissionCompleteAchievement("A Back Garden Pest Problem 2", "the back gardens - 50 pests collected", 4, 0x0116e476)
+MissionCompleteAchievement("A Back Garden Pest Problem 3", "the back gardens - 100 pests collected", 5, 0x0116e481)
 MissionCompleteAchievement("Rabbit Free Town Hall", "town hall cleared", 2, 0x0116e4ce)
 MissionCompleteAchievement("Rex Racer", "beat Rex Leaching", 2, 0x0116e4d9)
 MissionCompleteAchievement("Master Mechanic", "Winnie's van fixed", 2, 0x0116e70a)
 MissionCompleteAchievement("The Woo-Rabbit", "Lady were-rabbit success", 3, 0x0116e455)
-MissionCompleteAchievement("Were-Rabbit Spotted", "Wallace is the Were-Rabbit!", 3, 0x0116e65a)
+MissionCompleteAchievement("Were-Rabbit Spotted", "Wallace is the Were-Rabbit!", 5, 0x0116e65a)
 MissionCompleteAchievement("Device Destroyer", "first diabolical device destroyed", 2, 0x0116e4c3)
 MissionCompleteAchievement("Take Me to Church", "Mrs Windfall safely reached the church", 3, 0x0116e6b2)
 MissionCompleteAchievement("Bank Bodyguard", "the bank is safe", 2, 0x0116e6a7)
@@ -43,7 +45,14 @@ MissionCompleteAchievement("Cracking Football Player!", "bullseye!", 3, 0x0116e5
 MissionCompleteAchievement("Hattrick!", "3 goals scored", 2, 0x0116e57e)
 MissionCompleteAchievement("Blessed Gardens", "churchyard cleared of pests", 3, 0x0116e64f)
 MissionCompleteAchievement("Holy Water Secured", "returned the vicar's bottles", 3, 0x0116e686)
-
+MissionCompleteAchievement("Back Garden Valve Collector 1", "1st valve collected", 3, 0x0116e497)
+MissionCompleteAchievement("Back Garden Valve Collector 2", "2nd valve collected", 4, 0x0116e4a2)
+MissionCompleteAchievement("Back Garden Valve Collector 3", "3rd valve collected", 5, 0x0116e4ad)
+MissionCompleteAchievement("Not The Pumpkins!", "Were-Rabbit chaased to Wallersey", 5, 0x0116e6ff)
+MissionCompleteAchievement("The Church Pest Problem 1","the churchyard - 25 pests collected", 3, 0x0116e74c)
+MissionCompleteAchievement("The Church Pest Problem 2","the churchyard - 50 pests collected", 4, 0x0116e757)
+MissionCompleteAchievement("The Church Pest Problem 3","the churchyard - 100 pests collected", 5, 0x0116e762)
+MissionCompleteAchievement("Rodent Remover","churchyard cleared of were-rats", 3, 0x0116e618)
 //Challenges
 function SpeedrunAchievement(achTitle, achDesc, points, cardAddr, timerSecsLeft) {
     achievement(
@@ -62,7 +71,7 @@ SpeedrunAchievement("West Wallaby Street Rabbit Speedrunner [m]", "Clear all the
 SpeedrunAchievement("They See Me Rolling Speedrunner [m]", "Unlock card \"barrels delivered to the customers\" with 1 minute 26 seconds or more left on the timer", 5, 0x0116e602, 86.0)
 SpeedrunAchievement("Town Hall Rabbit Speedrunner [m]", "Clear all the rabbits in the \"town hall cleared\" mission with 5 minutes or more left on the timer", 5, 0x0116e4ce, 300.0)
 SpeedrunAchievement("Mrs Windfall Veg Speedrunner [m]", "Clear all the rabbits in the \"Mrs Windfall's veg is safe\" mission with 3 minutes 40 seconds or more left on the timer", 5, 0x0116e4e4, 220.0)
-
+SpeedrunAchievement("Rodent Remover Speedrunner [m]", "Clear all the rats in the \"churchyard cleared of were-rats\" mission with 1 minutes 47 seconds or more left on the timer", 10, 0x0116e618, 107.0)
 function HealthAchievement(achTitle, achDesc, points, cardAddr, healthLeft) {
     achievement(
         title = achTitle,
