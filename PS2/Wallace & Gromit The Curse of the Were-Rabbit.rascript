@@ -53,6 +53,11 @@ MissionCompleteAchievement("The Church Pest Problem 1","the churchyard - 25 pest
 MissionCompleteAchievement("The Church Pest Problem 2","the churchyard - 50 pests collected", 4, 0x0116e757)
 MissionCompleteAchievement("The Church Pest Problem 3","the churchyard - 100 pests collected", 5, 0x0116e762)
 MissionCompleteAchievement("Rodent Remover","churchyard cleared of were-rats", 3, 0x0116e618)
+MissionCompleteAchievement("Buzz Off!","town square cleared of were-bees", 3, 0x0116e665)
+MissionCompleteAchievement("Look at All Those Chickens","all of growbag's chickens returned", 3, 0x0116e67b)
+MissionCompleteAchievement("Woods Cleanup","woods cleared of pests", 4, 0x0116e639)
+MissionCompleteAchievement("A Walk Through the Woods","jasminder returned home safely", 4, 0x0116e670)
+
 //Challenges
 function SpeedrunAchievement(achTitle, achDesc, points, cardAddr, timerSecsLeft) {
     achievement(
@@ -72,6 +77,7 @@ SpeedrunAchievement("They See Me Rolling Speedrunner [m]", "Unlock card \"barrel
 SpeedrunAchievement("Town Hall Rabbit Speedrunner [m]", "Clear all the rabbits in the \"town hall cleared\" mission with 5 minutes or more left on the timer", 5, 0x0116e4ce, 300.0)
 SpeedrunAchievement("Mrs Windfall Veg Speedrunner [m]", "Clear all the rabbits in the \"Mrs Windfall's veg is safe\" mission with 3 minutes 40 seconds or more left on the timer", 5, 0x0116e4e4, 220.0)
 SpeedrunAchievement("Rodent Remover Speedrunner [m]", "Clear all the rats in the \"churchyard cleared of were-rats\" mission with 1 minutes 47 seconds or more left on the timer", 10, 0x0116e618, 107.0)
+
 function HealthAchievement(achTitle, achDesc, points, cardAddr, healthLeft) {
     achievement(
         title = achTitle,
@@ -89,3 +95,4 @@ function HealthAchievement(achTitle, achDesc, points, cardAddr, healthLeft) {
 HealthAchievement("Church Protector [m]", "Keep Mrs Windfall's health at 75 or above when escorting her to Church", 10, 0x0116e6b2, 75)
 HealthAchievement("Most Secure Bank in Town [m]", "Keep Mr Windfall's health at 85 or above when protecting the bank", 10, 0x0116e6a7, 85)
 HealthAchievement("Ultimate Rex Guardian [m]", "Keep Rex Leaching's health at 90 or above when protecting him at the park", 10, 0x0116e62e, 90)
+HealthAchievement("The Wood Protector [m]", "Keep Jasminder's health at 85 or above when escorting her home", 10, 0x0116e670, 85)
