@@ -57,7 +57,16 @@ MissionCompleteAchievement("Buzz Off!","town square cleared of were-bees", 3, 0x
 MissionCompleteAchievement("Look at All Those Chickens","all of growbag's chickens returned", 3, 0x0116e67b)
 MissionCompleteAchievement("Woods Cleanup","woods cleared of pests", 4, 0x0116e639)
 MissionCompleteAchievement("A Walk Through the Woods","jasminder returned home safely", 4, 0x0116e670)
-
+MissionCompleteAchievement("Power Provider","growbag's generator restarted", 3, 0x0116e691)
+MissionCompleteAchievement("Apple Delivery","Mrs Mulch home safe", 4, 0x0116e4ef)
+MissionCompleteAchievement("Shaun the Sheep","sheep and goats all penned", 4, 0x0116e6f4)
+MissionCompleteAchievement("Wallersey Rabbit Removal","Wallersey - clear the rabbits", 3, 0x0116ea4e)
+MissionCompleteAchievement("Bunny Hopper Adventure","Dibber's ornaments returned safely", 5, 0x0116e9b4)
+MissionCompleteAchievement("Leeky Vents","nursery veg saved", 4, 0x0116e8ee)
+MissionCompleteAchievement("Wallersey Lower Towns Rabbits Cleared","Wallersey - lower town - rabbits!", 3, 0x0116ead2)
+MissionCompleteAchievement("Doll Collector","find 10 dolls", 3, 0x0116e9d5)
+MissionCompleteAchievement("Mole Masher","whack-a-mole", 4, 0x0116e95c)
+MissionCompleteAchievement("Bell Bonger","beaten Alfie Crock", 3, 0x0116e90f)
 //Challenges
 function SpeedrunAchievement(achTitle, achDesc, points, cardAddr, timerSecsLeft) {
     achievement(
