@@ -75,6 +75,22 @@ MissionCompleteAchievement("Rabbit Rabbit Pumpkin","duckshoot", 5, 0x0116e972)
 MissionCompleteAchievement("Ultimate Veg Sorter","successful veg sorting", 4, 0x0116e8f9)
 MissionCompleteAchievement("Seed Stealer","found Harriet's seeds", 3, 0x0116e993)
 MissionCompleteAchievement("Mr Dibber Escort","Mr Dibber safely reached his house", 4, 0x0116e930)
+MissionCompleteAchievement("Where's My Keys?","found Mr Dibber's keys", 3, 0x0116e9ca)
+MissionCompleteAchievement("Were-Rabbits In The Harbour","harbor opened", 4, 0x0116e93b)
+MissionCompleteAchievement("The Allotments Valve Collector 1", "1st valve collected", 3, 0x0116eb2a)
+MissionCompleteAchievement("The Allotments Valve Collector 2", "2nd valve collected", 5, 0x0116eb35)
+MissionCompleteAchievement("The Allotments Valve Collector 3", "3rd valve collected", 10, 0x0116eb40)
+MissionCompleteAchievement("Into Grimsley", "Were-Rabbit chased to Grimsley", 5, 0x0116e9bf)
+MissionCompleteAchievement("Blessed Wallersey Escort", "Vicar Safely Escorted From Wallersey", 5, 0x0116e925)
+MissionCompleteAchievement("Rabbit Ship", "pests removed from the boat", 3, 0x0116e946)
+MissionCompleteAchievement("The Vent Hopper", "hopped up the boat", 3, 0x0116e91a)
+MissionCompleteAchievement("No Messages in These Bottles", "collected all the Veg-B-Big bottles", 5, 0x0116e99e)
+MissionCompleteAchievement("Cleaned Steamer", "Rob's Steamer Is Safe", 4, 0x0116e951)
+MissionCompleteAchievement("Factory Fired Up!", "factory restarted", 5, 0x0116ebe5)
+MissionCompleteAchievement("Underground Rabbits", "rabbit warren", 3, 0x0116ecd7)
+
+
+
 //Challenges
 function SpeedrunAchievement(achTitle, achDesc, points, cardAddr, timerSecsLeft) {
     achievement(
@@ -114,3 +130,4 @@ HealthAchievement("Most Secure Bank in Town [m]", "Keep Mr Windfall's health at 
 HealthAchievement("Ultimate Rex Guardian [m]", "Keep Rex Leaching's health at 90 or above when protecting him at the park", 10, 0x0116e62e, 90)
 HealthAchievement("The Wood Protector [m]", "Keep Jasminder's health at 85 or above when escorting her home", 10, 0x0116e670, 85)
 HealthAchievement("The Ultimate Mr Dibber Protection Service [m]", "Keep Mr Dibbers's health at 85 or above when escorting him home", 10, 0x0116e930, 90)
+HealthAchievement("The Holy Escort [m]", "Keep Rev Hedges health at 90 or above when escorting him from Wallersey", 10, 0x0116e925, 90)
