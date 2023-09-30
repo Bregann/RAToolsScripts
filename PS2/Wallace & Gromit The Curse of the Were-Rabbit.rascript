@@ -88,8 +88,29 @@ MissionCompleteAchievement("No Messages in These Bottles", "collected all the Ve
 MissionCompleteAchievement("Cleaned Steamer", "Rob's Steamer Is Safe", 4, 0x0116e951)
 MissionCompleteAchievement("Factory Fired Up!", "factory restarted", 5, 0x0116ebe5)
 MissionCompleteAchievement("Underground Rabbits", "rabbit warren", 3, 0x0116ecd7)
-
-
+MissionCompleteAchievement("Factoy Hero", "saved the factory", 5, 0x0116ec06)
+MissionCompleteAchievement("A Rabbit Free Cinema", "clear the cinema", 3, 0x0116ed45)
+MissionCompleteAchievement("Devices Gone Wild", "rogue Anti-Pesto devices recovered", 5, 0x0116ebf0)
+MissionCompleteAchievement("Goat Hearder", "returned all the goats", 5, 0x0116eb6c)
+MissionCompleteAchievement("The Farm Pest Problem 1","the farm - 25 pests collected", 3, 0x0116ec32)
+MissionCompleteAchievement("The Farm Pest Problem 2","the farm - 50 pests collected", 5, 0x0116ec3d)
+MissionCompleteAchievement("The Farm Pest Problem 3","the farm - 100 pests collected", 10, 0x0116ec48)
+MissionCompleteAchievement("The Factory Pest Problem 1","the factory - 25 pests collected", 3, 0x0116ec8a)
+MissionCompleteAchievement("The Factory Pest Problem 2","the factory - 50 pests collected", 5, 0x0116ec95)
+MissionCompleteAchievement("The Factory Pest Problem 3","the factory - 100 pests collected", 10, 0x0116eca0)
+MissionCompleteAchievement("Scrapyard Cleanup","scrapyard cleared of pests", 3, 0x0116eb4b)
+MissionCompleteAchievement("Seeds in the Wind","collected Mr Growbag's seeds", 3, 0x0116eb61)
+MissionCompleteAchievement("Strange Scrapyard","cleared the scrapyard", 3, 0x0116eb56)
+MissionCompleteAchievement("Into The Factory","monorail chase", 5, 0x0116ebc4)
+MissionCompleteAchievement("The Farm Valve Collector 1", "1st valve collected", 3, 0x0116ec5e)
+MissionCompleteAchievement("The Farm Valve Collector 2", "2nd valve collected", 5, 0x0116ec69)
+MissionCompleteAchievement("The Farm Valve Collector 3", "3rd valve collected", 10, 0x0116ec74)
+MissionCompleteAchievement("The Factory Valve Collector 1", "1st valve collected", 3, 0x0116ecb6)
+MissionCompleteAchievement("The Factory Valve Collector 2", "2nd valve collected", 5, 0x0116ecc1)
+MissionCompleteAchievement("The Factory Valve Collector 3", "3rd valve collected", 10, 0x0116eccc)
+MissionCompleteAchievement("All Aboard The Rabbit Clearing Express!", "rabbit station", 3, 0x0116ed50)
+MissionCompleteAchievement("To Tottington Hall", "the Were-Rabbit chased to Tottington Hall", 5, 0x0116ebcf)
+MissionCompleteAchievement("A Dangerous Fairground", "fair cleared for the vegetable competition", 5, 0x0116ee00)
 
 //Challenges
 function SpeedrunAchievement(achTitle, achDesc, points, cardAddr, timerSecsLeft) {
@@ -110,6 +131,7 @@ SpeedrunAchievement("They See Me Rolling Speedrunner [m]", "Unlock card \"barrel
 SpeedrunAchievement("Town Hall Rabbit Speedrunner [m]", "Clear all the rabbits in the \"town hall cleared\" mission with 5 minutes or more left on the timer", 5, 0x0116e4ce, 300.0)
 SpeedrunAchievement("Mrs Windfall Veg Speedrunner [m]", "Clear all the rabbits in the \"Mrs Windfall's veg is safe\" mission with 3 minutes 40 seconds or more left on the timer", 5, 0x0116e4e4, 220.0)
 SpeedrunAchievement("Rodent Remover Speedrunner [m]", "Clear all the rats in the \"churchyard cleared of were-rats\" mission with 1 minutes 47 seconds or more left on the timer", 10, 0x0116e618, 107.0)
+SpeedrunAchievement("Ultimate Device Recoverer [m]", "Complete the \"rogue Anti-Pesto devices recovered\" mission with 4 minutes or more left on the timer", 10, 0x0116ebf0, 240.0)
 
 function HealthAchievement(achTitle, achDesc, points, cardAddr, healthLeft) {
     achievement(
