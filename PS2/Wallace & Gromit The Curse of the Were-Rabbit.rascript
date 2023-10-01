@@ -136,7 +136,13 @@ PestCompleteAchievement("The Church Valve Collector 3", "3rd valve collected", 1
 MissionCompleteAchievement("Mulch Seed Chase", "collected all Mr Mulch's seeds", 3, 0x0116e623)
 MissionCompleteAchievement("He Scores!", "football shootout", 4, 0x0116ee0b)
 MissionCompleteAchievement("Smashing Job", "crockery smash", 4, 0x0116e9e0)
-
+MissionCompleteAchievement("Hungry Pumpkin", "feed the factory pumpkin", 4, 0x0116ebda)
+MissionCompleteAchievement("Pumpkin Delivery", "giant pumpkin ready for the competition", 5, 0x0116ebfb)
+MissionCompleteAchievement("Safe Cracker", "Mr Leaching's safes cracked", 3, 0x0116ec11)
+MissionCompleteAchievement("Poster Removal", "all were-rabbit posters removed", 3, 0x0116e589)
+MissionCompleteAchievement("Notes Blown Away", "returned all PC Mac's notes", 4, 0x0116e69c)
+MissionCompleteAchievement("Balloon Rabbits", "bouncy Castle", 4, 0x0116ed9d)
+MissionCompleteAchievement("Seed Chaser", "safe collection of all the seeds", 4, 0x0116ed9d)
 MissionCompleteAchievement("The Woods Chase", "Were-Rabbit chased through the woods", 5, 0x0116edb3)
 MissionCompleteAchievement("The End", "the Were-Rabbit is safe", 25, 0x0116ee84)
 
