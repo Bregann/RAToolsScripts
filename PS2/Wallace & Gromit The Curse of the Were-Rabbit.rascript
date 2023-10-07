@@ -187,3 +187,88 @@ HealthAchievement("Ultimate Rex Guardian [m]", "Keep Rex Leaching's health at 90
 HealthAchievement("The Wood Protector [m]", "Keep Jasminder's health at 85 or above when escorting her home", 10, 0x0116e670, 85)
 HealthAchievement("The Ultimate Mr Dibber Protection Service [m]", "Keep Mr Dibbers's health at 85 or above when escorting him home", 10, 0x0116e930, 90)
 HealthAchievement("The Holy Escort [m]", "Keep Rev Hedges health at 90 or above when escorting him from Wallersey", 10, 0x0116e925, 90)
+
+//Card collections
+TotHallCards = byte(0x0116ed87) + byte(0x0116ee42) + byte(0x0116ee4d) + byte(0x0116ee58) + byte(0x0116ee63) + byte(0x0116ee79)
+ChurchCards = byte(0x0116e86a) + byte(0x0116e875) + byte(0x0116e880) + byte(0x0116e88b) + byte(0x0116e896) + byte(0x0116e8a1)
+TownCenterCards = byte(0x0116e7e6) + byte(0x0116e7f1) + byte(0x0116e7fc) + byte(0x0116e807) + byte(0x0116e812) + byte(0x0116e81d)
+ParkCards = byte(0x0116e828) + byte(0x0116e833) + byte(0x0116e83e) + byte(0x0116e849) + byte(0x0116e854) + byte(0x0116e85f)
+WoodsCards = byte(0x0116e8ac) + byte(0x0116e8b7) + byte(0x0116e8c2) + byte(0x0116e8cd) + byte(0x0116e8d8) + byte(0x0116e8e3)
+TopOfTownCards = byte(0x0116ea17) + byte(0x0116ea22) + byte(0x0116ea2d) + byte(0x0116ea38) + byte(0x0116ea43) + byte(0x0116ea4e)
+SeafrontCards = byte(0x0116ea59) + byte(0x0116ea64) + byte(0x0116ea6f) + byte(0x0116ea7a) + byte(0x0116ea90) + byte(0x0116ea9b)
+LowerTownCards = byte(0x0116eaa6) + byte(0x0116eab1) + byte(0x0116eabc) + byte(0x0116eac7) + byte(0x0116ead2) + byte(0x0116eadd)
+TownCards = byte(0x0116ece2) + byte(0x0116eced) + byte(0x0116ed03) + byte(0x0116ed19) + byte(0x0116ed3a) + byte(0x0116ed45)
+IndustrialAreaCards = byte(0x0116ecd7) + byte(0x0116ecf8) + byte(0x0116ed0e) + byte(0x0116ed24) + byte(0x0116ed2f) + byte(0x0116ed50)
+
+function AllCardsAchievement(achTitle, achDesc, cards) {
+    achievement(
+        title = achTitle,
+        description = achDesc,
+        points = 10,
+        trigger = (
+            InGame() &&
+            cards == 30 &&
+            prev(cards) != 30
+        )
+    )
+}
+
+AllCardsAchievement("100% Tottington Hall", "Collect all 6 cards in Tottington Hall", TotHallCards)
+AllCardsAchievement("100% Town Center - Church", "Collect all 6 cards in the area town center - church", ChurchCards)
+AllCardsAchievement("100% Town Center - Town Center", "Collect all 6 cards in the area town center - town center", TownCenterCards)
+AllCardsAchievement("100% Town Center - Park", "Collect all 6 cards in the area town center - park", ParkCards)
+AllCardsAchievement("100% Town Center - Woods", "Collect all 6 cards in the area town center - woods", WoodsCards)
+AllCardsAchievement("100% Wallersey - Top of Town", "Collect all 6 cards in the area Wallersey - top of town", TopOfTownCards)
+AllCardsAchievement("100% Wallersey - Seafront", "Collect all 6 cards in the area Wallersey - seafront", SeafrontCards)
+AllCardsAchievement("100% Wallersey - Lower Town", "Collect all 6 cards in the area Wallersey - lower town", LowerTownCards)
+AllCardsAchievement("100% Grimsley - Town", "Collect all 6 cards in the area Grimsley - town", TownCards)
+AllCardsAchievement("100% Grimsley - Industrial Area", "Collect all 6 cards in the area Grimsley - industrial area", IndustrialAreaCards)
+
+//Shop purchases
+function ShopAchievement(achTitle, achDesc, itemAddr, points) {
+    achievement(
+        title = achTitle,
+        description = achDesc,
+        points = points,
+        trigger = (
+            InGame() &&
+            byte(itemAddr) == 0x01 &&
+            prev(byte(itemAddr)) == 0x00
+        )
+    )
+}
+
+MusicThemesPurchased = 
+byte(0x0116f964) + byte(0x0116fa2c) + byte(0x0116faf4) + byte(0x0116fbbc) + byte(0x0116fc84) + byte(0x0116fd4c) + byte(0x0116fe14) + 
+byte(0x0116fedc) + byte(0x0116ffa4) + byte(0x0117006c) + byte(0x01170134) + byte(0x011701fc) + byte(0x011702c4) + byte(0x0117038c)
+
+function MusicAchievement(achTitle, achDesc, count) {
+    achievement(
+        title = achTitle,
+        description = achDesc,
+        points = 10,
+        trigger = (
+            InGame() &&
+            MusicThemesPurchased == count &&
+            prev(MusicThemesPurchased) == count - 1
+        )
+    )
+}
+
+ShopAchievement("Soothing Music", "Purchase the gramophone from the shop", 0x0116f89c, 5)
+ShopAchievement("Hydration Hero", "Purchase the watering can from the shop", 0x01170e7c, 5)
+ShopAchievement("It's Getting Hot in Here!", "Purchase the thermostat from the shop", 0x011717dc, 5)
+MusicAchievement("Music Collector", "Purchase half the music available in the shop", 7)
+MusicAchievement("Music Maestro", "Purchase all of the music available in the shop", 14)
+
+achievement(
+    title = "Cracking Job Lad! [m]",
+    description = "Grow the Marrow to the maximum size before starting the vegetable competition",
+    points = 25,
+    trigger = (
+        InGame() &&
+        float(0x011abe50) == 160.0 &&
+        prev(float(0x011abe50)) < 160.0 &&
+        byte(0x0116edb3) != 0x05
+    )
+)
