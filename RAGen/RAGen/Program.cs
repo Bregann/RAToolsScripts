@@ -1,6 +1,6 @@
 ﻿//HPCardGen();
-BitExtractor();
-
+//BitExtractor();
+ExtractValues();
 
 static void BitExtractor()
 {
@@ -71,5 +71,19 @@ bit6=Y4C{iiiii} card 1
 bit7=Y4C{iiiii} card 2
 ");
         Console.WriteLine("\n");
+    }
+}
+
+static void ExtractValues()
+{
+    // Read the text document.
+    var text = File.ReadAllLines("test.txt");
+
+    foreach (var line in text)
+    {
+        if (line.StartsWith("0x11"))
+        {
+            Console.Write(line + "_");
+        }
     }
 }
