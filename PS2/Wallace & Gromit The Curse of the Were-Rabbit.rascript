@@ -3,7 +3,7 @@
 
 function InGame() => byte(0x008b160c) != 0x04
 function MissionComplete(cardAddr) => byte(cardAddr) == 0x05 && (prev(byte(cardAddr)) == 0x03 || prev(byte(cardAddr)) == 0x04)
-function PestMissionComplete(cardAddr) => byte(cardAddr) == 0x05 && prev(byte(cardAddr)) == 0x02
+function PestMissionComplete(cardAddr) => byte(cardAddr) == 0x05 && prev(byte(cardAddr)) != 0x05
 function MissionCompleteTrigger(cardAddr) => trigger_when(byte(cardAddr) == 0x05) && (prev(byte(cardAddr)) == 0x03 || prev(byte(cardAddr)) == 0x04)
 Timer = float(dword(dword(0x00553020) + 0x6c) + 0x58)
 NPCHealthTask = word(dword(dword(dword(0x00553020) + 0x70) + 0x58) + 0x5f4)
