@@ -50,7 +50,7 @@ achievement(
         InGame() &&
         CurrentQuestion == 0x0e &&
         CorrectAnswerSelected() &&
-        AnswerSelected()
+        AnswerSelected() &&
     )
 )
 
@@ -62,7 +62,8 @@ achievement(
         InGame() &&
         CurrentQuestion == 0x0e &&
         CorrectAnswerSelected() &&
-        AnswerSelected()
+        AnswerSelected() && 
+        AllLifelinesAvailable()
     )
 )
 

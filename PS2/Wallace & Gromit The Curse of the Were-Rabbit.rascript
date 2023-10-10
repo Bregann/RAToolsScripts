@@ -143,8 +143,10 @@ MissionCompleteAchievement("Poster Removal", "all were-rabbit posters removed", 
 MissionCompleteAchievement("Notes Blown Away", "returned all PC Mac's notes", 4, 0x0116e69c)
 MissionCompleteAchievement("Balloon Rabbits", "bouncy Castle", 4, 0x0116ed9d)
 MissionCompleteAchievement("Seed Chaser", "safe collection of all the seeds", 4, 0x0116ed9d)
-MissionCompleteAchievement("The Woods Chase", "Were-Rabbit chased through the woods", 5, 0x0116edb3)
-MissionCompleteAchievement("The End", "the Were-Rabbit is safe", 25, 0x0116ee84)
+
+//Couldn't be bothered to make a seperate method for these 2, they behave differently but the pest method works lol
+PestCompleteAchievement("The Woods Chase", "Were-Rabbit chased through the woods", 5, 0x0116edb3)
+PestCompleteAchievement("The End", "the Were-Rabbit is safe", 25, 0x0116ee84)
 
 //Challenges
 function SpeedrunAchievement(achTitle, achDesc, points, cardAddr, timerSecsLeft) {
@@ -267,8 +269,8 @@ achievement(
     points = 25,
     trigger = (
         InGame() &&
-        float(0x011abe50) == 160.0 &&
-        prev(float(0x011abe50)) < 160.0 &&
+        float(0x011abe50) >= 159.87 &&
+        prev(float(0x011abe50)) < 159.87 &&
         byte(0x0116edb3) != 0x05
     )
 )
