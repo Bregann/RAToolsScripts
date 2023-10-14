@@ -8,7 +8,7 @@ CorrectAnswer = byte(0x003594)
 function InGame() => byte(0x000124) == 0x01
 function AllLifelinesAvailable() => bit0(0x000118) == 0x01 && bit1(0x000118) == 0x01 && bit2(0x000118) == 0x01
 function CorrectAnswerSelected() => (SelectedOption == 0x00 && CorrectAnswer == 0x00) || (SelectedOption == 0x01 && CorrectAnswer == 0x01) || (SelectedOption == 0x02 && CorrectAnswer == 0x02) || (SelectedOption == 0x03 && CorrectAnswer == 0x03) 
-function AnswerSelected() => byte(0x007eb7) == 0x08
+function AnswerSelected() => byte(0x007eb7) == 0x08 && prev(byte(0x007eb7)) == 0x00
 
 function AnswerCorrectlyAchievement(achTitle, achDesc, points, question) {
     achievement(
@@ -50,7 +50,7 @@ achievement(
         InGame() &&
         CurrentQuestion == 0x0e &&
         CorrectAnswerSelected() &&
-        AnswerSelected() &&
+        AnswerSelected()
     )
 )
 

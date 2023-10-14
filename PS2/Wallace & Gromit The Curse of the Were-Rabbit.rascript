@@ -269,8 +269,8 @@ achievement(
     points = 25,
     trigger = (
         InGame() &&
-        float(0x011abe50) >= 159.87 &&
-        prev(float(0x011abe50)) < 159.87 &&
+        float(dword(0x005566b0)) >= 159.87 &&
+        prev(float(dword(0x005566b0))) < 159.87 &&
         byte(0x0116edb3) != 0x05
     )
 )
