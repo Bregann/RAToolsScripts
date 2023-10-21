@@ -47,7 +47,7 @@ WinRound("Round 3 Hard", "Complete round 3 on hard difficulty", 4, 2, 3)
 WinRound("Round 4 Hard", "Complete round 4 on hard difficulty", 5, 2, 3)
 WinBonus("Bonus Bonus Bonus Hard", "Win the bonus round on hard difficulty", 10, 2)
 
-function SolvePuzzle(achTitle, achDesc, points, puzzleType) 
+function SolvePuzzle(achTitle, achDesc, puzzleType) 
 {
     achievement(
         title = achTitle,
