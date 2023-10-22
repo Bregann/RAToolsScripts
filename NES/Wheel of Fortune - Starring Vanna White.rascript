@@ -34,7 +34,7 @@ function WinBonus(achTitle, achDesc, points, diff)
         )
     )
 }
-
+//todo: update this to win instead of complete
 WinRound("Round 1", "Complete round 1 on any difficulty", 2, 1, 1)
 WinRound("Round 2", "Complete round 2 on any difficulty", 3, 1, 2)
 WinRound("Round 3", "Complete round 3 on any difficulty", 3, 1, 3)
@@ -67,17 +67,17 @@ function SolvePuzzle(achTitle, achDesc, puzzleType)
     )
 }
 
-SolvePuzzle("Thing", "Correctly solve a 'Thing' puzzle", 0x00)
-SolvePuzzle("Place", "Correctly solve a 'Place' puzzle", 0x01)
-SolvePuzzle("Fictional Character", "Correctly solve a 'Fictional Character' puzzle", 0x02)
-SolvePuzzle("Things", "Correctly solve a 'Things' puzzle", 0x03)
-SolvePuzzle("Phrase", "Correctly solve a 'Phrase' puzzle", 0x04)
-SolvePuzzle("Title", "Correctly solve a 'Title' puzzle", 0x05)
-SolvePuzzle("People", "Correctly solve a 'People' puzzle", 0x06)
-SolvePuzzle("Event", "Correctly solve a 'Event' puzzle", 0x07)
-SolvePuzzle("Person", "Correctly solve a 'Person' puzzle", 0x08)
-SolvePuzzle("Before and After", "Correctly solve a 'Before and After' puzzle", 0x09)
-SolvePuzzle("Same Name", "Correctly solve a 'Same Name' puzzle", 0x0a)
+SolvePuzzle("Chlorophyll", "Correctly solve a 'Thing' puzzle", 0x00)
+SolvePuzzle("Mandalay", "Correctly solve a 'Place' puzzle", 0x01)
+SolvePuzzle("Denver Pyle", "Correctly solve a 'Fictional Character' puzzle", 0x02)
+SolvePuzzle("A Litter of Puppies", "Correctly solve a 'Things' puzzle", 0x03)
+SolvePuzzle("Investment Bankers", "Correctly solve a 'Phrase' puzzle", 0x04)
+SolvePuzzle("Alexander's Ragtime Band", "Correctly solve a 'Title' puzzle", 0x05)
+SolvePuzzle("Emmy Awards Night", "Correctly solve a 'People' puzzle", 0x06)
+SolvePuzzle("A Prime Suspect", "Correctly solve a 'Event' puzzle", 0x07)
+SolvePuzzle("Martin Van Buren", "Correctly solve a 'Person' puzzle", 0x08)
+SolvePuzzle("Hot Dog Stand By Me", "Correctly solve a 'Before and After' puzzle", 0x09)
+SolvePuzzle("Nancy & Trini Lopez", "Correctly solve a 'Same Name' puzzle", 0x0a)
 
 achievement(
     title = "I Don't Need \"U\"",
