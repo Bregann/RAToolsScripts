@@ -78,3 +78,16 @@ SolvePuzzle("Event", "Correctly solve a 'Event' puzzle", 0x07)
 SolvePuzzle("Person", "Correctly solve a 'Person' puzzle", 0x08)
 SolvePuzzle("Before and After", "Correctly solve a 'Before and After' puzzle", 0x09)
 SolvePuzzle("Same Name", "Correctly solve a 'Same Name' puzzle", 0x0a)
+
+achievement(
+    title = "I Don't Need \"U\"",
+    description = "Solve a puzzle correctly without ever buying a vowel",
+    points = 5,
+    trigger = (
+        InSPGame() &&
+        trigger_when(byte(0x0128) == 0x80 && byte(0x0479) == 0x00) &&
+        prev(byte(0x0128)) != 0x00 &&
+        once(ascii_string_equals(0x0564, "  0")) &&
+        never(prev(byte(0x0128)) == 0x80 || (byte(0x0477) == 0x03 && byte(0x0479) == 0x00))
+    )
+)
