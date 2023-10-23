@@ -14,7 +14,9 @@ function WinRound(achTitle, achDesc, points, diff, round)
             InSPGame() &&
             byte(0x06aa) >= diff &&
             CurrentRound == round &&
-            prev(CurrentRound) == round - 1
+            byte(0x0479) == 0x00 &&
+            byte(0x0128) == 0x80 &&
+            prev(byte(0x0128)) != 0x80
         )
     )
 }
@@ -35,16 +37,16 @@ function WinBonus(achTitle, achDesc, points, diff)
     )
 }
 //todo: update this to win instead of complete
-WinRound("Round 1", "Complete round 1 on any difficulty", 2, 1, 1)
-WinRound("Round 2", "Complete round 2 on any difficulty", 3, 1, 2)
-WinRound("Round 3", "Complete round 3 on any difficulty", 3, 1, 3)
-WinRound("Round 4", "Complete round 4 on any difficulty", 4, 1, 3)
+WinRound("Round 1", "Correctly answer the puzzle on round 1 on any difficulty", 2, 1, 0)
+WinRound("Round 2", "Correctly answer the puzzle on round 2 on any difficulty", 3, 1, 1)
+WinRound("Round 3", "Correctly answer the puzzle on round 3 on any difficulty", 3, 1, 2)
+WinRound("Round 4", "Correctly answer the puzzle on round 4 on any difficulty", 4, 1, 3)
 WinBonus("Bonus Bonus Bonus", "Win the bonus round on any difficulty", 10, 1)
 
-WinRound("Round 1 Hard", "Complete round 1 on hard difficulty", 3, 2, 1)
-WinRound("Round 2 Hard", "Complete round 2 on hard difficulty", 4, 2, 2)
-WinRound("Round 3 Hard", "Complete round 3 on hard difficulty", 4, 2, 3)
-WinRound("Round 4 Hard", "Complete round 4 on hard difficulty", 5, 2, 3)
+WinRound("Round 1 Hard", "Correctly answer the puzzle on round 1 on hard difficulty", 3, 2, 0)
+WinRound("Round 2 Hard", "Correctly answer the puzzle on round 2 on hard difficulty", 4, 2, 1)
+WinRound("Round 3 Hard", "Correctly answer the puzzle on round 3 on hard difficulty", 4, 2, 2)
+WinRound("Round 4 Hard", "Correctly answer the puzzle on round 4 on hard difficulty", 5, 2, 3)
 WinBonus("Bonus Bonus Bonus Hard", "Win the bonus round on hard difficulty", 10, 2)
 
 function SolvePuzzle(achTitle, achDesc, puzzleType) 
@@ -58,6 +60,7 @@ function SolvePuzzle(achTitle, achDesc, puzzleType)
             byte(0x0479) == 0x00 &&
             byte(0x0128) == 0x80 &&
             prev(byte(0x0128)) != 0x00 &&
+            byte(0x0477) >= 0x03 &&
             ((CurrentRound == 0x00 && byte(0x0369) == puzzleType) || 
             (CurrentRound == 0x01 && byte(0x036a) == puzzleType) || 
             (CurrentRound == 0x02 && byte(0x036b) == puzzleType) || 
