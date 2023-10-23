@@ -28,7 +28,7 @@ function WinBonus(achTitle, achDesc, points, diff)
         description = achDesc,
         points = points,
         trigger = (
-            InSPGame() &&
+            byte(0x06a8) == 0x00 &&
             byte(0x06aa) >= diff &&
             CurrentRound == 4 &&
             byte(0x0128) == 0x80 &&
@@ -37,17 +37,17 @@ function WinBonus(achTitle, achDesc, points, diff)
     )
 }
 //todo: update this to win instead of complete
-WinRound("Round 1", "Correctly answer the puzzle on round 1 on any difficulty", 2, 1, 0)
-WinRound("Round 2", "Correctly answer the puzzle on round 2 on any difficulty", 3, 1, 1)
-WinRound("Round 3", "Correctly answer the puzzle on round 3 on any difficulty", 3, 1, 2)
-WinRound("Round 4", "Correctly answer the puzzle on round 4 on any difficulty", 4, 1, 3)
+WinRound("Round Champ", "Correctly answer the puzzle on round 1 on any difficulty", 2, 1, 0)
+WinRound("Puzzle Perfectionist", "Correctly answer the puzzle on round 2 on any difficulty", 3, 1, 1)
+WinRound("Wheel Whiz", "Correctly answer the puzzle on round 3 on any difficulty", 3, 1, 2)
+WinRound("Puzzle Prodigy", "Correctly answer the puzzle on round 4 on any difficulty", 4, 1, 3)
 WinBonus("Bonus Bonus Bonus", "Win the bonus round on any difficulty", 10, 1)
 
-WinRound("Round 1 Hard", "Correctly answer the puzzle on round 1 on hard difficulty", 3, 2, 0)
-WinRound("Round 2 Hard", "Correctly answer the puzzle on round 2 on hard difficulty", 4, 2, 1)
-WinRound("Round 3 Hard", "Correctly answer the puzzle on round 3 on hard difficulty", 4, 2, 2)
-WinRound("Round 4 Hard", "Correctly answer the puzzle on round 4 on hard difficulty", 5, 2, 3)
-WinBonus("Bonus Bonus Bonus Hard", "Win the bonus round on hard difficulty", 10, 2)
+WinRound("Riddle Master", "Correctly answer the puzzle on round 1 on hard difficulty", 3, 2, 0)
+WinRound("Puzzle Maestro", "Correctly answer the puzzle on round 2 on hard difficulty", 4, 2, 1)
+WinRound("Riddle Reveler", "Correctly answer the puzzle on round 3 on hard difficulty", 4, 2, 2)
+WinRound("Smartest Tool in the Shed", "Correctly answer the puzzle on round 4 on hard difficulty", 5, 2, 3)
+WinBonus("A Well Deserved Prize", "Win the bonus round on hard difficulty", 10, 2)
 
 function SolvePuzzle(achTitle, achDesc, puzzleType) 
 {
