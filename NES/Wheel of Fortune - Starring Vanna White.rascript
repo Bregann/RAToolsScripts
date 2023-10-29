@@ -43,24 +43,24 @@ WinRound("Wheel Whiz", "Correctly answer the puzzle on round 3 on any difficulty
 WinRound("Puzzle Prodigy", "Correctly answer the puzzle on round 4 on any difficulty", 4, 1, 3)
 WinBonus("Bonus Bonus Bonus", "Win the bonus round on any difficulty", 10, 1)
 
-WinRound("Riddle Master", "Correctly answer the puzzle on round 1 on hard difficulty", 3, 2, 0)
+WinRound("Ultimate Solver", "Correctly answer the puzzle on round 1 on hard difficulty", 3, 2, 0)
 WinRound("Puzzle Maestro", "Correctly answer the puzzle on round 2 on hard difficulty", 4, 2, 1)
-WinRound("Riddle Reveler", "Correctly answer the puzzle on round 3 on hard difficulty", 4, 2, 2)
+WinRound("Letter Revealer", "Correctly answer the puzzle on round 3 on hard difficulty", 4, 2, 2)
 WinRound("Smartest Tool in the Shed", "Correctly answer the puzzle on round 4 on hard difficulty", 5, 2, 3)
-WinBonus("A Well Deserved Prize", "Win the bonus round on hard difficulty", 10, 2)
+WinBonus("A Well Deserved Prize", "Win the bonus round on hard difficulty", 25, 2)
 
 function SolvePuzzle(achTitle, achDesc, puzzleType) 
 {
     achievement(
         title = achTitle,
         description = achDesc,
-        points = 3,
+        points = 4,
         trigger = (
             InSPGame() &&
             byte(0x0479) == 0x00 &&
             byte(0x0128) == 0x80 &&
             prev(byte(0x0128)) != 0x00 &&
-            byte(0x0477) >= 0x03 &&
+            byte(0x0477) >= 0x02 &&
             ((CurrentRound == 0x00 && byte(0x0369) == puzzleType) || 
             (CurrentRound == 0x01 && byte(0x036a) == puzzleType) || 
             (CurrentRound == 0x02 && byte(0x036b) == puzzleType) || 
