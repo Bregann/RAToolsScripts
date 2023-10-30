@@ -3,6 +3,15 @@
 
 function InSPGame() => byte(0x06a8) == 0x00 && byte(0x0698) != 0x07
 CurrentRound = byte(0x0478)
+Letters = byte(0x0331) + byte(0x0332) + byte(0x0333) + byte(0x0334) + byte(0x0335) + byte(0x0336) + 
+byte(0x0337) + byte(0x0338) + byte(0x0339) + byte(0x033a) + byte(0x033b) + byte(0x033c) + byte(0x033d) + byte(0x033e) + 
+byte(0x033f) + byte(0x0340) + byte(0x0341) + byte(0x0342) + byte(0x0343) + byte(0x0344) + byte(0x0345) + byte(0x0346) + 
+byte(0x0347) + byte(0x0348) + byte(0x0349) + byte(0x034a) + byte(0x034b) + byte(0x034c) + byte(0x034d) + byte(0x034e) + 
+byte(0x034f) + byte(0x0350) + byte(0x0351) + byte(0x0352) + byte(0x0353) + byte(0x0354) + byte(0x0355) + byte(0x0356) + 
+byte(0x0357) + byte(0x0358) + byte(0x0359) + byte(0x035a) + byte(0x035b) + byte(0x035c) + byte(0x035d) + byte(0x035e) + 
+byte(0x035f)
+
+function PuzzleRevealed() => Letters == 0x2f && prev(Letters) < 0x2f
 
 function WinRound(achTitle, achDesc, points, diff, round) 
 {
@@ -32,7 +41,8 @@ function WinBonus(achTitle, achDesc, points, diff)
             byte(0x06aa) >= diff &&
             CurrentRound == 4 &&
             byte(0x0128) == 0x80 &&
-            prev(byte(0x0128)) != 0x80
+            prev(byte(0x0128)) != 0x80 &&
+            byte(0x0479) == 0x00
         )
     )
 }
@@ -57,9 +67,8 @@ function SolvePuzzle(achTitle, achDesc, puzzleType)
         points = 4,
         trigger = (
             InSPGame() &&
+            PuzzleRevealed() &&
             byte(0x0479) == 0x00 &&
-            byte(0x0128) == 0x80 &&
-            prev(byte(0x0128)) != 0x00 &&
             byte(0x0477) >= 0x02 &&
             ((CurrentRound == 0x00 && byte(0x0369) == puzzleType) || 
             (CurrentRound == 0x01 && byte(0x036a) == puzzleType) || 

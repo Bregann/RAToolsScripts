@@ -81,9 +81,10 @@ static void ExtractValues()
 
     foreach (var line in text)
     {
-        if (line.StartsWith("0x11"))
+        if (line.StartsWith("0x03"))
         {
-            Console.Write(line + "_");
+            //Console.Write(line + "_");
+            Console.Write($"byte({line.Trim()}) + ");
         }
     }
 }
