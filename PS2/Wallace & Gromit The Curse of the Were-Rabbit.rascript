@@ -90,7 +90,7 @@ MissionCompleteAchievement("Ultimate Veg Sorter","Successful Veg Sorting", 4, 0x
 MissionCompleteAchievement("Seed Stealer","Found Harriet's Seeds", 3, 0x0116e993)
 MissionCompleteAchievement("Mr Dibber Escort","Mr Dibber Safely Reached His House", 4, 0x0116e930)
 MissionCompleteAchievement("Where's My Keys?","Found Mr Dibber's Keys", 3, 0x0116e9ca)
-MissionCompleteAchievement("Were-Rabbits In The Harbour","Garbor Opened", 4, 0x0116e93b)
+MissionCompleteAchievement("Were-Rabbits In The Harbour","Harbor Opened", 4, 0x0116e93b)
 PestCompleteAchievement("The Allotments Valve Collector 1", "1st Valve Collected", 3, 0x0116eb2a)
 PestCompleteAchievement("The Allotments Valve Collector 2", "2nd Valve Collected", 5, 0x0116eb35)
 PestCompleteAchievement("The Allotments Valve Collector 3", "3rd Valve Collected", 10, 0x0116eb40)
@@ -187,7 +187,7 @@ function HealthAchievement(achTitle, achDesc, points, cardAddr, healthLeft) {
 HealthAchievement("Church Protector [m]", "Keep Mrs Windfall's health at 75 or above when escorting her to Church", 10, 0x0116e6b2, 75)
 HealthAchievement("Most Secure Bank in Town [m]", "Keep Mr Windfall's health at 85 or above when protecting the bank", 10, 0x0116e6a7, 85)
 HealthAchievement("Ultimate Rex Guardian [m]", "Keep Rex Leaching's health at 90 or above when protecting him at the park", 10, 0x0116e62e, 90)
-HealthAchievement("The Wood Protector [m]", "Keep Jasminder's health at 85 or above when escorting her home", 10, 0x0116e670, 85)
+HealthAchievement("The Wood Protector [m]", "Keep Jasminder's health at 75 or above when escorting her home", 10, 0x0116e670, 75)
 HealthAchievement("The Ultimate Mr Dibber Protection Service [m]", "Keep Mr Dibbers's health at 85 or above when escorting him home", 10, 0x0116e930, 90)
 HealthAchievement("The Holy Escort [m]", "Keep Rev Hedges health at 90 or above when escorting him from Wallersey", 10, 0x0116e925, 90)
 
@@ -211,7 +211,7 @@ function AllCardsAchievement(achTitle, achDesc, cards) {
         trigger = (
             InGame() &&
             cards == 30 &&
-            prev(cards) != 30
+            (prev(cards) >= 20 && prev(cards) != 30)
         )
     )
 }
