@@ -2,9 +2,8 @@
 // #ID = 21933
 
 function InGame() => byte(0x008b160c) != 0x04
-function InGamePest() => byte(0x008b160c) == 0x08
 function MissionComplete(cardAddr) => byte(cardAddr) == 0x05 && (prev(byte(cardAddr)) == 0x03 || prev(byte(cardAddr)) == 0x04)
-function PestMissionComplete(cardAddr) => byte(cardAddr) == 0x05 && prev(byte(cardAddr)) != 0x05
+function PestMissionComplete(cardAddr) => byte(cardAddr) == 0x05 && (prev(byte(cardAddr)) > 0x01 && prev(byte(cardAddr)) != 0x05) 
 function MissionCompleteTrigger(cardAddr) => trigger_when(byte(cardAddr) == 0x05) && (prev(byte(cardAddr)) == 0x03 || prev(byte(cardAddr)) == 0x04)
 Timer = float(dword(dword(0x00553020) + 0x6c) + 0x58)
 NPCHealthTask = word(dword(dword(dword(0x00553020) + 0x70) + 0x58) + 0x5f4)
@@ -28,7 +27,7 @@ function PestCompleteAchievement(achTitle, cardName, points, cardAddr){
         description = "Unlock card \"" + cardName + "\"",
         points = points,
         trigger = (
-            InGamePest() &&
+            InGame() &&
             PestMissionComplete(cardAddr)
         )
     )
@@ -62,7 +61,7 @@ MissionCompleteAchievement("Holy Water Secured", "Returned The Vicar's Bottles",
 PestCompleteAchievement("Back Garden Valve Collector 1", "1st Valve Collected", 3, 0x0116e497)
 PestCompleteAchievement("Back Garden Valve Collector 2", "2nd Valve Collected", 5, 0x0116e4a2)
 PestCompleteAchievement("Back Garden Valve Collector 3", "3rd Valve Collected", 10, 0x0116e4ad)
-MissionCompleteAchievement("Not The Pumpkins!", "Were-Rabbit Chaased to Wallersey", 5, 0x0116e6ff)
+MissionCompleteAchievement("Not The Pumpkins!", "Were-Rabbit Chased to Wallersey", 5, 0x0116e6ff)
 PestCompleteAchievement("The Church Pest Problem 1","The Churchyard - 25 Pests Collected", 3, 0x0116e74c)
 PestCompleteAchievement("The Church Pest Problem 2","The Churchyard - 50 Pests Collected", 5, 0x0116e757)
 PestCompleteAchievement("The Church Pest Problem 3","The Churchyard - 100 Pests Collected", 10, 0x0116e762)
@@ -102,16 +101,16 @@ MissionCompleteAchievement("No Messages in These Bottles", "Collected All the Ve
 MissionCompleteAchievement("Cleaned Steamer", "Rob's Steamer Is Safe", 4, 0x0116e951)
 MissionCompleteAchievement("Factory Fired Up!", "Factory Restarted", 5, 0x0116ebe5)
 MissionCompleteAchievement("Underground Rabbits", "Rabbit Warren", 3, 0x0116ecd7)
-MissionCompleteAchievement("Factoy Hero", "Saved the Factory", 5, 0x0116ec06)
+MissionCompleteAchievement("Factory Hero", "Saved the Factory", 5, 0x0116ec06)
 MissionCompleteAchievement("A Rabbit Free Cinema", "Clear the Cinema", 3, 0x0116ed45)
 MissionCompleteAchievement("Devices Gone Wild", "Rogue Anti-Pesto Devices Recovered", 5, 0x0116ebf0)
-MissionCompleteAchievement("Goat Hearder", "Returned all the Goats", 5, 0x0116eb6c)
-PestCompleteAchievement("The Farm Pest Problem 1","The farm - 25 Pests Collected", 3, 0x0116ec32)
-PestCompleteAchievement("The Farm Pest Problem 2","The farm - 50 Pests Collected", 5, 0x0116ec3d)
-PestCompleteAchievement("The Farm Pest Problem 3","The farm - 100 Pests Collected", 10, 0x0116ec48)
-PestCompleteAchievement("The Factory Pest Problem 1","The factory - 25 Pests Collected", 3, 0x0116ec8a)
-PestCompleteAchievement("The Factory Pest Problem 2","The factory - 50 Pests Collected", 5, 0x0116ec95)
-PestCompleteAchievement("The Factory Pest Problem 3","The factory - 100 Pests Collected", 10, 0x0116eca0)
+MissionCompleteAchievement("Goat Herder", "Returned all the Goats", 5, 0x0116eb6c)
+PestCompleteAchievement("The Farm Pest Problem 1","The Farm - 25 Pests Collected", 3, 0x0116ec32)
+PestCompleteAchievement("The Farm Pest Problem 2","The Farm - 50 Pests Collected", 5, 0x0116ec3d)
+PestCompleteAchievement("The Farm Pest Problem 3","The Farm - 100 Pests Collected", 10, 0x0116ec48)
+PestCompleteAchievement("The Factory Pest Problem 1","The Factory - 25 Pests Collected", 3, 0x0116ec8a)
+PestCompleteAchievement("The Factory Pest Problem 2","The Factory - 50 Pests Collected", 5, 0x0116ec95)
+PestCompleteAchievement("The Factory Pest Problem 3","The Factory - 100 Pests Collected", 10, 0x0116eca0)
 MissionCompleteAchievement("Scrapyard Cleanup","Scrapyard Cleared of Pests", 3, 0x0116eb4b)
 MissionCompleteAchievement("Seeds in the Wind","Collected Mr Growbag's Seeds", 3, 0x0116eb61)
 MissionCompleteAchievement("Strange Scrapyard","Cleared the Scrapyard", 3, 0x0116eb56)
@@ -145,9 +144,9 @@ MissionCompleteAchievement("Notes Blown Away", "Returned all PC Mac's Notes", 4,
 MissionCompleteAchievement("Balloon Rabbits", "Bouncy Castle", 4, 0x0116ed9d)
 MissionCompleteAchievement("Seed Chaser", "Safe Collection of All The Seeds", 4, 0x0116ed9d)
 
-//Couldn't be bothered to make a seperate method for these 2, they behave differently but the pest method works lol
-PestCompleteAchievement("The Woods Chase", "Were-Rabbit chased through the woods", 5, 0x0116edb3)
-PestCompleteAchievement("The End", "the Were-Rabbit is safe", 25, 0x0116ee84)
+//Couldn't be bothered to make a separate method for these 2, they behave differently but the pest method works lol
+PestCompleteAchievement("The Woods Chase", "Were-Rabbit Chased Through the Woods", 5, 0x0116edb3)
+PestCompleteAchievement("The End", "the Were-Rabbit is Safe", 25, 0x0116ee84)
 
 //Challenges
 function SpeedrunAchievement(achTitle, achDesc, points, cardAddr, timerSecsLeft) {

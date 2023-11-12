@@ -145,25 +145,25 @@ function LevelCompleteAchievement(achName, levelName, points, levelAddr, bitNum)
     )
 }
 
-LevelCompleteAchievement("Port Royal", "Port Royal", 3, 0x00a21362, 1)
-LevelCompleteAchievement("Tortuga", "Tortuga", 3, 0x00a21365, 1)
-LevelCompleteAchievement("Battle at Sea", "Battle at Sea", 3, 0x00a21366, 5)
-LevelCompleteAchievement("Isla de Muerta", "Isla de Muerta", 3, 0x00a21368, 1)
+LevelCompleteAchievement("Port Royal", "Port Royal", 4, 0x00a21362, 1)
+LevelCompleteAchievement("Tortuga", "Tortuga", 4, 0x00a21365, 1)
+LevelCompleteAchievement("Battle at Sea", "Battle at Sea", 4, 0x00a21366, 5)
+LevelCompleteAchievement("Isla de Muerta", "Isla de Muerta", 4, 0x00a21368, 1)
 
-LevelCompleteAchievement("Isla de Pelegostos", "Isla de Pelegostos", 3, 0x00a21369, 5)
-LevelCompleteAchievement("Davy Jones' Key", "Davy Jones' Key", 3, 0x00a2136b, 7)
-LevelCompleteAchievement("Isla Cruces", "Isla Cruces", 3, 0x00a2136d, 3)
-LevelCompleteAchievement("The Kraken", "The Kraken", 3, 0x00a2136f, 5)
+LevelCompleteAchievement("Isla de Pelegostos", "Isla de Pelegostos", 4, 0x00a21369, 5)
+LevelCompleteAchievement("Davy Jones' Key", "Davy Jones' Key", 4, 0x00a2136b, 7)
+LevelCompleteAchievement("Isla Cruces", "Isla Cruces", 4, 0x00a2136d, 3)
+LevelCompleteAchievement("The Kraken", "The Kraken", 4, 0x00a2136f, 5)
 
-LevelCompleteAchievement("Singapore", "Singapore", 3, 0x00a21370, 3)
-LevelCompleteAchievement("Escape the Dutchman", "Escape the Dutchman", 3, 0x00a21371, 7)
-LevelCompleteAchievement("Shipwreck Cove", "Shipwreck Cove", 3, 0x00a21372, 5)
-LevelCompleteAchievement("The Maelstrom", "The Maelstrom", 3, 0x00a21373, 3)
+LevelCompleteAchievement("Singapore", "Singapore", 4, 0x00a21370, 3)
+LevelCompleteAchievement("Escape the Dutchman", "Escape the Dutchman", 4, 0x00a21371, 7)
+LevelCompleteAchievement("Shipwreck Cove", "Shipwreck Cove", 4, 0x00a21372, 5)
+LevelCompleteAchievement("The Maelstrom", "The Maelstrom", 4, 0x00a21373, 3)
 
-LevelCompleteAchievement("London", "London", 3, 0x00a21375, 5)
-LevelCompleteAchievement("Queen Anne's Revenge", "Queen Anne's Revenge", 3, 0x00a21377, 1)
-LevelCompleteAchievement("White Cap Bay", "White Cap Bay", 3, 0x00a21378, 5)
-LevelCompleteAchievement("The Fountain of Youth", "The Fountain of Youth", 3, 0x00a2137a, 1)
+LevelCompleteAchievement("London", "London", 4, 0x00a21375, 5)
+LevelCompleteAchievement("Queen Anne's Revenge", "Queen Anne's Revenge", 4, 0x00a21377, 1)
+LevelCompleteAchievement("White Cap Bay", "White Cap Bay", 4, 0x00a21378, 5)
+LevelCompleteAchievement("The Fountain of Youth", "The Fountain of Youth", 4, 0x00a2137a, 1)
 
 // ================================
 // Level Bonus stuff
@@ -185,7 +185,7 @@ function LevelCollectibles(achName, achDesc, points, collectible, collectibleAmo
 
 LevelCollectibles("Breaking the Curse", "Unlock all 40 minikits in the The Curse of the Black Pearl levels", 10, MinikitsL1, 40)
 LevelCollectibles("Dead Man's Minikits", "Unlock all 40 minikits in the Dead Man's Chest levels", 10, MinikitsL2, 40)
-LevelCollectibles("At Minikit's End", "Unlock all 40 minikits in the At World's End levels", 10, MinikitsL3, 40)
+LevelCollectibles("At Minikits End", "Unlock all 40 minikits in the At World's End levels", 10, MinikitsL3, 40)
 LevelCollectibles("Minikit Looter", "Unlock all 40 minikits in the On Stranger Tides levels", 10, MinikitsL4, 40)
 LevelCollectibles("The Stud Plunderer", "Reach 'true pirate' on every level in story mode", 25, TruePirateInStoryLevels, 16)
 LevelCollectibles("The Rich Pirate", "Reach 'true pirate' on every level in free play mode", 25, TruePirateInFreeplayLevels, 16)
@@ -211,7 +211,7 @@ function ShopPurchases(achName, achDesc, points, purchaseItem, purchaseAmount)
     )
 }
 
-ShopPurchases("Recruting The Crew", "Purchase half of the characters in the game from the shop", 5, CharactersPurchased, 62)
+ShopPurchases("Recruiting The Crew", "Purchase half of the characters in the game from the shop", 5, CharactersPurchased, 62)
 ShopPurchases("A Ship Worthy Crew", "Purchase all of the characters in the game from the shop", 10, CharactersPurchased, 124)
 ShopPurchases("A Hint Towards the Treasure", "Purchase all the hints from the shop", 5, HintsPurchased, 14)
 ShopPurchases("A Fine Brick Collection", "Purchase all the red bricks from the shop", 10, RedbricksPurchased, 16)
