@@ -124,12 +124,12 @@ PestCompleteAchievement("The Factory Valve Collector 3", "3rd Valve Collected", 
 MissionCompleteAchievement("All Aboard The Rabbit Clearing Express!", "Rabbit Station", 3, 0x0116ed50)
 MissionCompleteAchievement("To Tottington Hall", "The Were-Rabbit Chased to Tottington Hall", 5, 0x0116ebcf)
 MissionCompleteAchievement("A Dangerous Fairground", "Fair Cleared For The Vegetable Competition", 5, 0x0116ee00)
-MissionCompleteAchievement("Midnight Adventure", "Midnight Vegetable Visited", 5, 0x0116ee00)
+MissionCompleteAchievement("Midnight Adventure", "Midnight Vegetable Visited", 5, 0x0116eddf)
 MissionCompleteAchievement("Fairground Cleaned", "Fairground Cleared of Rabbits", 3, 0x0116edf5)
 MissionCompleteAchievement("Bunny Shooter", "Bag-A-Bunny", 4, 0x0116edbe)
 MissionCompleteAchievement("Patio Cleanup", "Tottington Hall Patio Cleared", 4, 0x0116edbe)
-MissionCompleteAchievement("Woody Cleanup", "Tottington Hall Woods Cleared", 5, 0x0116ee21)
-MissionCompleteAchievement("Butterfly Chase", "Caught the Butterfly", 4, 0x0116ee21)
+MissionCompleteAchievement("Woody Cleanup", "Tottington Hall Woods Cleared", 5, 0x0116ed7c)
+MissionCompleteAchievement("Butterfly Chase", "Caught the Butterfly", 4, 0x0116edd4)
 PestCompleteAchievement("The Church Valve Collector 1", "1st Valve Collected", 3, 0x0116e799)
 PestCompleteAchievement("The Church Valve Collector 2", "2nd Valve Collected", 5, 0x0116e7a4)
 PestCompleteAchievement("The Church Valve Collector 3", "3rd Valve Collected", 10, 0x0116e7af)
@@ -142,11 +142,11 @@ MissionCompleteAchievement("Safe Cracker", "Mr Leaching's Safes Cracked", 3, 0x0
 MissionCompleteAchievement("Poster Removal", "All Were-rabbit Posters Removed", 3, 0x0116e589)
 MissionCompleteAchievement("Notes Blown Away", "Returned all PC Mac's Notes", 4, 0x0116e69c)
 MissionCompleteAchievement("Balloon Rabbits", "Bouncy Castle", 4, 0x0116ed9d)
-MissionCompleteAchievement("Seed Chaser", "Safe Collection of All The Seeds", 4, 0x0116ed9d)
+MissionCompleteAchievement("Seed Chaser", "Safe Collection of All The Seeds", 4, 0x0116edea)
 
 //Couldn't be bothered to make a separate method for these 2, they behave differently but the pest method works lol
 PestCompleteAchievement("The Woods Chase", "Were-Rabbit Chased Through the Woods", 5, 0x0116edb3)
-PestCompleteAchievement("The End", "the Were-Rabbit is Safe", 25, 0x0116ee84)
+PestCompleteAchievement("The End", "The Were-Rabbit is Safe", 25, 0x0116ee84)
 
 //Challenges
 function SpeedrunAchievement(achTitle, achDesc, points, cardAddr, timerSecsLeft) {
