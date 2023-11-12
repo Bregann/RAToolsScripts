@@ -3,7 +3,8 @@
 
 function InGame() => byte(0x008b160c) != 0x04
 function MissionComplete(cardAddr) => byte(cardAddr) == 0x05 && (prev(byte(cardAddr)) == 0x03 || prev(byte(cardAddr)) == 0x04)
-function PestMissionComplete(cardAddr) => byte(cardAddr) == 0x05 && (prev(byte(cardAddr)) > 0x01 && prev(byte(cardAddr)) != 0x05) 
+function PestMissionComplete(cardAddr) => byte(cardAddr) == 0x05 && (prev(byte(cardAddr)) > 0x01 && prev(byte(cardAddr)) != 0x05)
+function FinalPartMissionComplete(cardAddr) => byte(cardAddr) == 0x05 && (prev(byte(cardAddr))) != 0x05
 function MissionCompleteTrigger(cardAddr) => trigger_when(byte(cardAddr) == 0x05) && (prev(byte(cardAddr)) == 0x03 || prev(byte(cardAddr)) == 0x04)
 Timer = float(dword(dword(0x00553020) + 0x6c) + 0x58)
 NPCHealthTask = word(dword(dword(dword(0x00553020) + 0x70) + 0x58) + 0x5f4)
@@ -29,6 +30,18 @@ function PestCompleteAchievement(achTitle, cardName, points, cardAddr){
         trigger = (
             InGame() &&
             PestMissionComplete(cardAddr)
+        )
+    )
+}
+
+function FinalPartAchievement(achTitle, cardName, points, cardAddr){
+    achievement(
+        title = achTitle,
+        description = "Unlock card \"" + cardName + "\"",
+        points = points,
+        trigger = (
+            InGame() &&
+            FinalPartMissionComplete(cardAddr)
         )
     )
 }
@@ -127,8 +140,8 @@ MissionCompleteAchievement("A Dangerous Fairground", "Fair Cleared For The Veget
 MissionCompleteAchievement("Midnight Adventure", "Midnight Vegetable Visited", 5, 0x0116eddf)
 MissionCompleteAchievement("Fairground Cleaned", "Fairground Cleared of Rabbits", 3, 0x0116edf5)
 MissionCompleteAchievement("Bunny Shooter", "Bag-A-Bunny", 4, 0x0116edbe)
-MissionCompleteAchievement("Patio Cleanup", "Tottington Hall Patio Cleared", 4, 0x0116edbe)
-MissionCompleteAchievement("Woody Cleanup", "Tottington Hall Woods Cleared", 5, 0x0116ed7c)
+MissionCompleteAchievement("Patio Cleanup", "Tottington Hall Patio Cleared", 4, 0x0116ed7c)
+MissionCompleteAchievement("Woody Cleanup", "Tottington Hall Woods Cleared", 5, 0x0116ee21)
 MissionCompleteAchievement("Butterfly Chase", "Caught the Butterfly", 4, 0x0116edd4)
 PestCompleteAchievement("The Church Valve Collector 1", "1st Valve Collected", 3, 0x0116e799)
 PestCompleteAchievement("The Church Valve Collector 2", "2nd Valve Collected", 5, 0x0116e7a4)
@@ -145,8 +158,9 @@ MissionCompleteAchievement("Balloon Rabbits", "Bouncy Castle", 4, 0x0116ed9d)
 MissionCompleteAchievement("Seed Chaser", "Safe Collection of All The Seeds", 4, 0x0116edea)
 
 //Couldn't be bothered to make a separate method for these 2, they behave differently but the pest method works lol
-PestCompleteAchievement("The Woods Chase", "Were-Rabbit Chased Through the Woods", 5, 0x0116edb3)
-PestCompleteAchievement("The End", "The Were-Rabbit is Safe", 25, 0x0116ee84)
+//turns out the comment above came to bite back and caused problems with this unlocking
+FinalPartAchievement("The Woods Chase", "Were-Rabbit Chased Through the Woods", 5, 0x0116edb3)
+FinalPartAchievement("The End", "The Were-Rabbit is Safe", 25, 0x0116ee84)
 
 //Challenges
 function SpeedrunAchievement(achTitle, achDesc, points, cardAddr, timerSecsLeft) {
