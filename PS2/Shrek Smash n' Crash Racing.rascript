@@ -154,7 +154,7 @@ CharacterUnlocks("Don't Crash into a Wall!", "Unlock Humpty Dumpty from the fact
 CharacterUnlocks("The Big Bad Wolf", "Unlock Red Riding Hood from the dragon cup", 0x0b, RedRidingHoodUnlocked())
 CharacterUnlocks("Why the Long Nose?", "Unlock Pinocchio from the mirror mode swamp cup", 0x0e, PinocchioHoodUnlocked())
 CharacterUnlocks("Piggy Power Unleashed", "Unlock Three Little Pigs from the mirror mode far far away cup", 0x11, ThreeLittlePigsUnlocked())
-CharacterUnlocks("Beary Good Teamwork", "Unlock Golilocks from the mirror mode factory cup", 0x14, GoldilocksUnlocked())
+CharacterUnlocks("Beary Good Teamwork", "Unlock Goldilocks from the mirror mode factory cup", 0x14, GoldilocksUnlocked())
 CharacterUnlocks("The Mirror Smasher", "Unlock Thelonious from the mirror mode dragon cup", 0x17, TheloniousUnlocked())
 
 // ===================================
@@ -164,7 +164,7 @@ function WinTourneyCharacter(achTitle, charName, charId)
 {
     achievement(
         title = achTitle,
-        description = "Win tournament mode with the most points playing as " + charName + " (cannot be a tie)",
+        description = "Win conventional tournament mode with the most points playing as " + charName + " (cannot be a tie)",
         points = 10,
         trigger = (
             CurrentTrack == 0x0b &&
