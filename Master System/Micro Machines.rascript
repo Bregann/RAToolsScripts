@@ -1,7 +1,7 @@
 // Micro Machines
 // #ID = 13231
 
-RaceMode = byte(0x17b4)
+RaceMode = byte(0x1c3f)
 ChallengeRaceNumber = byte(0x1bd8)
 CurrentCharacter = byte(0x1bd4)
 
@@ -16,7 +16,7 @@ function Progression(achTitle, achDesc, points, round) {
             ChallengeRaceNumber == round &&
             prev(ChallengeRaceNumber) == round - 1
         )
-    )   
+    )
 }
 
 Progression("Getting Started", "Win the qualifying race on challenge mode", 2, 1)
@@ -54,3 +54,51 @@ HeadToHeadWin("Emilio", 0x38)
 HeadToHeadWin("Jethro", 0x40)
 HeadToHeadWin("Annie", 0x48)
 HeadToHeadWin("Cherry", 0x50)
+
+//Head to head progression
+achievement (
+    title = "Head to Head Journey Begins",
+    description = "Qualify on head to head mode",
+    points = 2,
+    trigger = (
+        RaceMode == 0x01 &&
+        ChallengeRaceNumber == 1 &&
+        prev(ChallengeRaceNumber) == 0
+    )
+)
+
+function HeadToHeadProgression(achTitle, points, roundNum, roundEndCheck, diff) {
+    achievement (
+        title = achTitle,
+        description = "Complete race " + roundNum + " on head to head mode",
+        points = points,
+        trigger = (
+            RaceMode == 0x01 &&
+            ChallengeRaceNumber == roundEndCheck &&
+            prev(ChallengeRaceNumber) == roundEndCheck - diff
+        )
+    )
+}
+
+HeadToHeadProgression("Breakfast Race", 3, 1, 2, 1)
+HeadToHeadProgression("Speedy Desktop Race", 3, 2, 3, 1)
+HeadToHeadProgression("Alleyway Warriors", 4, 3, 4, 1)
+HeadToHeadProgression("A Turbo Day at the Beach", 4, 4, 5, 1)
+HeadToHeadProgression("4x4 Oatmeal", 4, 5, 6, 1)
+HeadToHeadProgression("F1 Cue-ball Race", 4, 6, 7, 1)
+HeadToHeadProgression("Handyman Warriors", 5, 7, 8, 1)
+HeadToHeadProgression("Bathtub Speedster", 5, 8, 9, 1)
+HeadToHeadProgression("Sahara Racer", 5, 9, 11, 2)
+HeadToHeadProgression("Fruit-Juice Follies", 5, 10, 12, 1)
+HeadToHeadProgression("Foamy Fjords", 5, 11, 13, 1)
+HeadToHeadProgression("Bedroom Tanks", 5, 12, 14, 1)
+HeadToHeadProgression("Pitfall Pockets", 10, 13, 15, 1)
+HeadToHeadProgression("Pencil Plateaux", 10, 14, 16, 1)
+HeadToHeadProgression("The Dare-Devil Dunes", 10, 15, 18, 2)
+HeadToHeadProgression("Perilous Pit-Stop", 10, 16, 19, 1)
+HeadToHeadProgression("Wide-Awake War-Zone", 10, 17, 20, 1)
+HeadToHeadProgression("Crayon Canyons", 10, 18, 21, 1)
+HeadToHeadProgression("Soap-Lake City!", 10, 19, 23, 2)
+HeadToHeadProgression("Chalk-Dust Chicane", 10, 20, 24, 1)
+HeadToHeadProgression("Go For It!", 25, 21, 25, 1)
+HeadToHeadProgression("Head to Head Champ", 25, 22, 26, 1)
