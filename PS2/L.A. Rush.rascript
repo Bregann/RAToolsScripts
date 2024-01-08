@@ -451,7 +451,6 @@ achievement(
     description = "Reach 5 stars police in freeroam",
     points = 2,
     trigger = (
-        CurrentRace == 0x00 &&
         byte(0x00370fa8) == 0x02 &&
         PoliceStars >= 0x05 &&
         prev(PoliceStars) <= 0x04

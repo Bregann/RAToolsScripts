@@ -6,3 +6,20 @@
 
 0x0069de54 - could be level 1 boxes, broke 2 in neighbours, bitflag?
 all the FF's are coins, boxes, vending machines and wasps 
+
+
+80940804 my name is homer
+809456b0 chicken legs
+80940818 hows it hanging
+809456c4 bit my tongue
+8094082c whats up
+809456d8 i think my tummy leaked
+809456ec ate a thumb tack
+
+0x0099e634 32-bit be - voice line? Outside only
+0x009333f8 8-bit, playing a voiceline? 0x00 = no 0x01 = yes
+0x0099e640 32-bit be - someone voiceline?
+
+
+0x00933404
+0x00933405
