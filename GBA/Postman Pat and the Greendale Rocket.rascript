@@ -5,7 +5,7 @@ ScreenId = byte(0x004438)
 LevelId = byte(0x004430)
 
 function PlatformerLevelComplete(achTitle, levelName, points, levelIdVal, screenIdVal) {
-    achievement(
+    achievement (
         title = achTitle,
         description = "Complete level " + levelName,
         points = points,
@@ -17,4 +17,18 @@ function PlatformerLevelComplete(achTitle, levelName, points, levelIdVal, screen
     )
 }
 
+function MiscLevelComplete(achTitle, levelName, points, levelIdVal, scoreAddr, score) {
+    achievement (
+        title = achTitle,
+        description = "Complete level " + levelName,
+        points = points,
+        trigger = (
+            LevelId == levelIdVal &&
+            scoreAddr == score &&
+            prev(scoreAddr) == score - 1
+        )
+    )
+}
+
 PlatformerLevelComplete("Visiting Mrs Goggins", "1-A", 3, 0x19, 0x0b)
+MiscLevelComplete("Sorting the Parcels", "1-B", 2, 0x16, byte(0x004b44), 6)
