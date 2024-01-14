@@ -18,13 +18,13 @@ function PlatformerDriveLevelComplete(achTitle, levelName, points, levelIdVal, s
     )
 }
 
-function MiscLevelComplete(achTitle, levelName, points, levelIdVal, scoreAddr, score) {
+function MiscLevelComplete(achTitle, levelName, points, screenIdVal, scoreAddr, score) {
     achievement (
         title = achTitle,
         description = "Complete level " + levelName,
         points = points,
         trigger = (
-            LevelId == levelIdVal &&
+            ScreenId == screenIdVal &&
             scoreAddr == score &&
             prev(scoreAddr) == score - 1
         )
@@ -45,23 +45,23 @@ function CollectiblePlatformerLevels(achTitle, levelName, screenIdVal, collectib
 }
 
 PlatformerDriveLevelComplete("Visiting Mrs Goggins", "1-A", 3, 0x19, 0x0b)
-MiscLevelComplete("Sorting the Parcels", "1-B", 3, 0x16, byte(0x004b44), 6)
+MiscLevelComplete("Sorting the Parcels", "1-B", 3, 0x0c, byte(0x004b44), 6)
 PlatformerDriveLevelComplete("Driving to Ajay", "1-C", 2, 0x13, 0x0d)
 
 PlatformerDriveLevelComplete("On A Charlie Pringle Adventure", "2-A", 3, 0x1a, 0x0e)
-MiscLevelComplete("High as a Kite", "2-B", 3, 0x17, byte(0x016480), 10)
+MiscLevelComplete("High as a Kite", "2-B", 3, 0x0f, byte(0x016480), 10)
 PlatformerDriveLevelComplete("The Kite Chaser", "2-C", 2, 0x14, 0x10)
 
-PlatformerDriveLevelComplete("Leather-Bound Bible", "3-A", 3, 0x19, 0x11)
-MiscLevelComplete("Raining Holy Water!", "3-B", 3, 0x18, byte(0x014c20), 50)
-PlatformerDriveLevelComplete("Police Hunter", "3-C", 2, 0x15, 0x0d)
+PlatformerDriveLevelComplete("Leather-Bound Bible", "3-A", 3, 0x1b, 0x11)
+MiscLevelComplete("Raining Holy Water!", "3-B", 3, 0x12, byte(0x014c20), 50)
+PlatformerDriveLevelComplete("Police Hunter", "3-C", 2, 0x15, 0x13)
 
 PlatformerDriveLevelComplete("Double Trouble", "4-A", 3, 0x19, 0x14)
-MiscLevelComplete("Ooh Butterflies!", "4-B", 3, 0x1a, byte(0x00dc24), 80)
+MiscLevelComplete("Ooh Butterflies!", "4-B", 3, 0x15, byte(0x00dc24), 80)
 PlatformerDriveLevelComplete("Ted Traveler", "4-C", 2, 0x13, 0x16)
 
-PlatformerDriveLevelComplete("A Second Mrs Goggins Adventure", "5-A", 3, 0x19, 0x0b)
-MiscLevelComplete("Stamp of Approval", "5-B", 3, 0x16, byte(0x014c20), 99)
+PlatformerDriveLevelComplete("A Second Mrs Goggins Adventure", "5-A", 3, 0x1b, 0x17)
+MiscLevelComplete("Stamp of Approval", "5-B", 3, 0x18, byte(0x014c20), 99)
 PlatformerDriveLevelComplete("The Rocket Has Been Found!", "5-C", 5, 0x14, 0x19)
 
 CollectiblePlatformerLevels("Stocking Up Mrs Goggins Shop", "1-A", 0x0b, 90)
