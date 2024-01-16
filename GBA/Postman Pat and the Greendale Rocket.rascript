@@ -11,7 +11,7 @@ function PlatformerDriveLevelComplete(achTitle, levelName, points, levelIdVal, s
         description = "Complete level " + levelName,
         points = points,
         trigger = (
-            prev(LevelId) == levelIdVal &&
+            (prev(LevelId) == levelIdVal || prev(LevelId) == 0xff) &&
             LevelId == 0x0a &&
             ScreenId == screenIdVal
         )
@@ -64,7 +64,7 @@ PlatformerDriveLevelComplete("A Second Mrs Goggins Adventure", "5-A", 3, 0x1b, 0
 MiscLevelComplete("Stamp of Approval", "5-B", 3, 0x18, byte(0x014c20), 99)
 PlatformerDriveLevelComplete("The Rocket Has Been Found!", "5-C", 5, 0x14, 0x19)
 
-CollectiblePlatformerLevels("Stocking Up Mrs Goggins Shop", "1-A", 0x0b, 90)
+CollectiblePlatformerLevels("Stocking Up Mrs Goggins' Shop", "1-A", 0x0b, 90)
 CollectiblePlatformerLevels("Pat the Postal Pro", "2-A", 0x0e, 135)
 CollectiblePlatformerLevels("Blessed Parcel Collection", "3-A", 0x11, 125)
 CollectiblePlatformerLevels("Postal Perfection", "4-A", 0x14, 150)
