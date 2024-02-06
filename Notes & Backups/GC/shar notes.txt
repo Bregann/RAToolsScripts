@@ -23,3 +23,6 @@ all the FF's are coins, boxes, vending machines and wasps
 
 0x00933404
 0x00933405
+monkey see monkey doh under x time
+starting at x door, ring all the doorbells in the game in under x minutes x seconds
+- resetnextif for the starting point and a resetif state == ingame
