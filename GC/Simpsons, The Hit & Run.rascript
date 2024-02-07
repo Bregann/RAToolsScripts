@@ -12,12 +12,12 @@ function InGame(levelId) => GameState >= 0x09 && levelId == LevelID
 
 // ========= Progression =========
 Level1MissionsComplete = byte(0x69c7dc) + byte(0x69c7fc) + byte(0x69c81c) + byte(0x69c83c) + byte(0x69c85c) + byte(0x69c87c) + byte(0x69c89c)
-Leve21MissionsComplete = byte(0x69ca28) + byte(0x69ca48) + byte(0x69ca68) + byte(0x69ca88) + byte(0x69caa8) + byte(0x69cac8) + byte(0x69cae8)
-Leve31MissionsComplete = byte(0x69cc94) + byte(0x69ccb4) + byte(0x69ccd4) + byte(0x69ccf4) + byte(0x69cd14) + byte(0x69cd34) + byte(0x69cd54)
-Leve41MissionsComplete = byte(0x69cf00) + byte(0x69cf20) + byte(0x69cf40) + byte(0x69cf60) + byte(0x69cf80) + byte(0x69cfa0) + byte()
-Leve51MissionsComplete = byte(0x69d16c) + byte(0x69d18c) + byte(0x69d1ac) + byte(0x69d1cc) + byte(0x69d1ec) + byte(0x69d20c) + byte(0x69d22c)
-Leve61MissionsComplete = byte(0x69d3d8) + byte(0x69d3f8) + byte(0x69d418) + byte(0x69d438) + byte(0x69d458) + byte(0x69d478) + byte(0x69d498)
-Leve71MissionsComplete = byte(0x69d644) + byte(0x69d664) + byte(0x69d684) + byte(0x69d6a4) + byte(0x69d6c4) + byte(0x69d6e4) + byte(0x69d704)
+Level21MissionsComplete = byte(0x69ca28) + byte(0x69ca48) + byte(0x69ca68) + byte(0x69ca88) + byte(0x69caa8) + byte(0x69cac8) + byte(0x69cae8)
+Level31MissionsComplete = byte(0x69cc94) + byte(0x69ccb4) + byte(0x69ccd4) + byte(0x69ccf4) + byte(0x69cd14) + byte(0x69cd34) + byte(0x69cd54)
+Level41MissionsComplete = byte(0x69cf00) + byte(0x69cf20) + byte(0x69cf40) + byte(0x69cf60) + byte(0x69cf80) + byte(0x69cfa0) + byte(0x69cfc0)
+Level51MissionsComplete = byte(0x69d16c) + byte(0x69d18c) + byte(0x69d1ac) + byte(0x69d1cc) + byte(0x69d1ec) + byte(0x69d20c) + byte(0x69d22c)
+Level61MissionsComplete = byte(0x69d3d8) + byte(0x69d3f8) + byte(0x69d418) + byte(0x69d438) + byte(0x69d458) + byte(0x69d478) + byte(0x69d498)
+Level71MissionsComplete = byte(0x69d644) + byte(0x69d664) + byte(0x69d684) + byte(0x69d6a4) + byte(0x69d6c4) + byte(0x69d6e4) + byte(0x69d704)
 
 achievement (
     title = "A Simple Task",
@@ -86,5 +86,7 @@ Level7RacesComplete = byte(0x69d744) + byte(0x69d764) + byte(0x69d784)
 
 function RaceComplete(achName, achDesc, points, raceMissions, levelId)
 {
-    
+    achievement (
+        title = achName
+    )
 }
