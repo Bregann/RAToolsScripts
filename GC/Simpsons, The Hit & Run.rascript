@@ -7,9 +7,14 @@
 LevelID = byte(0x69d82b)
 MissionNum = byte(0x69d82f)
 GameState = byte(0x7f5c77)
+HitAndRunMeter = float_be(0x006bce2c)
 CheatsActive = bit0(0x00476605) + bit2(0x00476605) + bit3(0x00476605) + bit4(0x00476605) + 
 bit5(0x00476605) + bit6(0x00476605) + bit7(0x00476605) + bit0(0x00476606) + 
 bit1(0x00476606) +  bit3(0x00476606) + bit5(0x00476607) + bit7 (0x00476607)
+
+CheatsActiveNo100CarCheat = bit0(0x00476605) + bit2(0x00476605) + bit3(0x00476605) + bit4(0x00476605) + 
+bit5(0x00476605) + bit6(0x00476605) + bit7(0x00476605) + bit0(0x00476606) + 
+bit1(0x00476606) +  bit3(0x00476606) + bit7 (0x00476607)
 
 function InGame(levelId) => GameState >= 0x09 && levelId == LevelID
 function CheatCheck() => CheatsActive == 0x00
@@ -256,3 +261,44 @@ Collectible("A Secret in the Mansion", 0x03, "Activate every gag on level", 15, 
 Collectible("A Flaming Moe", 0x04, "Activate every gag on level", 6,  byte(0x0069d31f))
 Collectible("Kamp Krusty", 0x05, "Activate every gag on level", 11,  byte(0x0069d58b))
 Collectible("The Spook-E-Mart", 0x06, "Activate every gag on level", 15,  byte(0x0069d7f7))
+
+//todo: the wager race
+
+// ========= Challenges =========
+MissionState = dword_be(0x006b0f88)
+
+
+function PhoneboxCarSelected(carName) => ascii_string_equals(0x003c8c20, carName)
+CurrentCar = byte(0x006bce87)
+
+// Dunno how to name these, Loaded is started the mission
+// SelectedLevel is for checking if they cancelled the mission and it's just sitting as the active mission but free roam
+function IsInFatAndFuriousLoaded() => ascii_string_equals(0x006b0fa0, "el01\\m7l")
+function IsInFatAndFuriousSelectedLevel() => ascii_string_equals(0x006b0fa0, "el01\\m7s")
+
+function IsCelloutsLoaded() => ascii_string_equals(0x006b0fa0, "el02\\m7l")
+function IsCelloutsSelectedLevel() => ascii_string_equals(0x006b0fa0, "el02\\m7s")
+
+achievement(
+    title = "Plow King Round 2",
+    description = "Complete The Fat and Furious with the Plow King",
+    points = 5,
+    trigger = (
+        CheatCheck() &&
+        once(MissionState == 0x02 && IsInFatAndFuriousLoaded()) &&
+        never(IsInFatAndFuriousSelectedLevel() || !PhoneboxCarSelected("plowk_v") || CurrentCar != 0x3a) &&
+        trigger_when(LevelID == 0x01 && prev(LevelID) == 0x00)
+    )
+)
+
+achievement(
+    title = "Delicate Destruction",
+    description = "Complete cellouts without the hit and run meter reaching higher than 12% (the first section) (cancel mission to retry)",
+    points = 10,
+    trigger = (
+        CheatCheck() &&
+        once(MissionState == 0x02 && IsCelloutsLoaded()) &&
+        never(IsCelloutsSelectedLevel() || HitAndRunMeter > 12.0) &&
+        trigger_when(LevelID == 0x02 && prev(LevelID) == 0x01)
+    )
+)
