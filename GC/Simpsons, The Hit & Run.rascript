@@ -279,6 +279,9 @@ function IsInFatAndFuriousSelectedLevel() => ascii_string_equals(0x006b0fa0, "el
 function IsCelloutsLoaded() => ascii_string_equals(0x006b0fa0, "el02\\m7l")
 function IsCelloutsSelectedLevel() => ascii_string_equals(0x006b0fa0, "el02\\m7s")
 
+function IsFromOuterSpaceLoaded() => ascii_string_equals(0x006b0fa0, "el04\\m7l")
+function IsFromOuterSpaceSelectedLevel() => ascii_string_equals(0x006b0fa0, "el04\\m7s")
+
 achievement(
     title = "Plow King Round 2",
     description = "Complete The Fat and Furious with the Plow King",
@@ -300,5 +303,17 @@ achievement(
         once(MissionState == 0x02 && IsCelloutsLoaded()) &&
         never(IsCelloutsSelectedLevel() || HitAndRunMeter > 12.0) &&
         trigger_when(LevelID == 0x02 && prev(LevelID) == 0x01)
+    )
+)
+
+achievement(
+    title = "Grandpa Taking Down Aliens!"
+    description = "Complete From Outer Space using the WWII Vehicle",
+    points = 5,
+    trigger = (
+        CheatCheck() &&
+        once(MissionState == 0x02 && IsFromOuterSpaceLoaded()) &&
+        never(IsFromOuterSpaceSelectedLevel() || !PhoneboxCarSelected("gramp_v") || CurrentCar != 0x05) &&
+        trigger_when(LevelID == 0x03 && prev(LevelID) == 0x04)
     )
 )
