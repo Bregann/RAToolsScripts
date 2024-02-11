@@ -33,9 +33,9 @@ achievement (
 function LevelComplete(achName, achDesc, points, levelMissions, levelId)
 {
     achievement (
-        title = "A Simple Task",
-        description = "Complete Cola Caper",
-        points = 2,
+        title = achName,
+        description = achDesc,
+        points = points,
         trigger = (
             InGame(levelId) &&
             measured(levelMissions == 0x07) &&
@@ -43,6 +43,14 @@ function LevelComplete(achName, achDesc, points, levelMissions, levelId)
         )
     )
 }
+
+LevelComplete("The Truth of Mr Burns", "Complete all main missions in level 1", 10, Level1MissionsComplete, 0x00)
+LevelComplete("Abducted", "Complete all main missions in level 2", 10, Level2MissionsComplete, 0x01)
+LevelComplete("Lisa on the Hunt", "Complete all main missions in level 3", 10, Level3MissionsComplete, 0x02)
+LevelComplete("Crop Circles!", "Complete all main missions in level 4", 10, Level4MissionsComplete, 0x03)
+LevelComplete("Apu Adventure", "Complete all main missions in level 5", 10, Level5MissionsComplete, 0x04)
+LevelComplete("Springfield is Doomed!", "Complete all main missions in level 6", 10, Level6MissionsComplete, 0x05)
+LevelComplete("I Smell Toast", "Complete all main missions in level 7", 25, Level7MissionsComplete, 0x06)
 
 // ========= Bonus Missions =========
 function MissionComplete(achName, missionName, missionCompleteValue, levelId)
@@ -98,8 +106,8 @@ RaceComplete("Funny Pink Car Master", "Win all 3 street races in level 1 before 
 RaceComplete("Rolling Around in the Roller", "Win all 3 street races in level 2 before reaching level 3", 10, Level2RacesComplete, 0x01, LevelEndMissionCompleteOrSkipped(0x0069cae8, 0x0069caf0))
 RaceComplete("Doll Car Dash", "Win all 3 street races in level 3 before reaching level 4", 10, Level3RacesComplete, 0x02, LevelEndMissionCompleteOrSkipped(0x0069cd54, 0x0069cd5c))
 RaceComplete("Look at the Canyonero Go!", "Win all 3 street races in level 4 before reaching level 5", 10, Level4RacesComplete, 0x03, LevelEndMissionCompleteOrSkipped(0x0069cfc0, 0x0069cfc8))
-RaceComplete("", "Win all 3 street races in level 5 before reaching level 6", 10, Level5RacesComplete, 0x04, LevelEndMissionCompleteOrSkipped(0x0069d22c, 0x0069d234))
-RaceComplete("", "Win all 3 street races in level 6 before reaching level 7", 25, Level6RacesComplete, 0x05, LevelEndMissionCompleteOrSkipped(0x0069d498, 0x0069d4a0))
+RaceComplete("Apu Approved", "Win all 3 street races in level 5 before reaching level 6", 10, Level5RacesComplete, 0x04, LevelEndMissionCompleteOrSkipped(0x0069d22c, 0x0069d234))
+RaceComplete("Ferrari Speedster", "Win all 3 street races in level 6 before reaching level 7", 25, Level6RacesComplete, 0x05, LevelEndMissionCompleteOrSkipped(0x0069d498, 0x0069d4a0))
 
 achievement (
     title = "Dead Close",
@@ -128,31 +136,89 @@ function Collectible(achTitle, levelId, achDesc, collectibleAmount, collectibleA
 }
 
 //Wasps
-Collectible("", 0x00, "Destroy every wasp in level", 20, byte(0x0069c95b))
-Collectible("", 0x01, "Destroy every wasp in level", 20, byte(0x0069cbc7))
-Collectible("", 0x02, "Destroy every wasp in level", 20, byte(0x0069ce33))
-Collectible("", 0x03, "Destroy every wasp in level", 20, byte(0x0069d09f))
-Collectible("", 0x04, "Destroy every wasp in level", 20, byte(0x0069d30b))
-Collectible("", 0x05, "Destroy every wasp in level", 20, byte(0x0069d577))
+Collectible("Destroying the Footage", 0x00, "Destroy every wasp in level", 20, byte(0x0069c95b))
+Collectible("Bart the Vandal", 0x01, "Destroy every wasp in level", 20, byte(0x0069cbc7))
+Collectible("Seaside Wasp Killer", 0x02, "Destroy every wasp in level", 20, byte(0x0069ce33))
+Collectible("Marge the Real Wasp Murderer", 0x03, "Destroy every wasp in level", 20, byte(0x0069d09f))
+Collectible("Downtown Destroyer", 0x04, "Destroy every wasp in level", 20, byte(0x0069d30b))
+Collectible("Night Time Wasp Wrecker", 0x05, "Destroy every wasp in level", 20, byte(0x0069d577))
 Collectible("Undead Wasp Killer", 0x06, "Destroy every wasp in level", 20, byte(0x0069d7e3))
 
+//Cola crates & vending machines
+Level1ColaStuff = bit0(0x0069ddf4) + bit1(0x0069ddf4) + bit0(0x0069de04) + bit1(0x0069de04) +
+bit0(0x0069de24) + bit1(0x0069de24) + bit0(0x0069de35) + bit0(0x0069de44) + bit1(0x0069de44) +
+bit2(0x0069de44) + bit3(0x0069de44) + bit4(0x0069de44) + bit0(0x0069de54) + bit1(0x0069de54) +
+bit2(0x0069de54) + bit3(0x0069de54) + bit4(0x0069de54) + bit5(0x0069de54) + bit0(0x0069de64) +
+bit3(0x0069de64) + bit4(0x0069de64) + bit5(0x0069de64) + bit0(0x0069de74) + bit1(0x0069de74) +
+bit2(0x0069de74) + bit3(0x0069de74) + bit4(0x0069de74) + bit1(0x0069de94) + bit2(0x0069de94) +
+bit0(0x0069dea4)
+
+Level2ColaStuff = bit0(0x0069deb4) + bit1(0x0069deb4) + bit0(0x0069dec4) + bit1(0x0069dec4) +
+bit0(0x0069dee4) + bit1(0x0069dee4) + bit1(0x0069def4) + bit2(0x0069def4) + bit3(0x0069def4) + 
+bit4(0x0069def4) + bit5(0x0069def4) + bit7(0x0069def4) + bit2(0x0069df04) + bit3(0x0069df04) +
+bit4(0x0069df04) + bit5(0x0069df04) + bit0(0x0069df14) + bit2(0x0069df14) + bit1(0x0069df25) + 
+bit2(0x0069df25) + bit3(0x0069df25) + bit4(0x0069df25) + bit5(0x0069df25)
+
+Level3ColaStuff = bit2(0x0069df34) + bit0(0x0069df54) + bit1(0x0069df54) + bit2(0x0069df54) +
+bit0(0x0069df74) + bit0(0x0069df84) + bit1(0x0069df84) + bit2(0x0069df84) + bit3(0x0069df84) +
+bit0(0x0069df94) + bit3(0x0069dfa4) + bit4(0x0069dfa4) + bit4(0x0069dfb4) + bit5(0x0069dfb4) +
+bit6(0x0069dfb4) + bit7(0x0069dfb4) + bit0(0x0069dfb5) + bit1(0x0069dfb5) + bit2(0x0069dfb5) +
+bit3(0x0069dfb5) + bit4(0x0069dfb5) + bit5(0x0069dfb5) + bit0(0x0069dfc4) + bit1(0x0069dfc4) +
+bit2(0x0069dfc4)
+
+Level4ColaStuff = bit0(0x0069dfe4) + bit1(0x0069dfe4) + bit0(0x0069dff4) + bit1(0x0069dff4) +
+bit2(0x0069dff4) + bit3(0x0069dff4) + bit0(0x0069e014) + bit0(0x0069e024) + bit2(0x0069e034) +
+bit3(0x0069e034) + bit4(0x0069e034) + bit0(0x0069e044) + bit1(0x0069e044) + bit2(0x0069e044) +
+bit3(0x0069e044) + bit4(0x0069e044) + bit5(0x0069e044) + bit0(0x0069e054) + bit1(0x0069e054) +
+bit2(0x0069e054) + bit3(0x0069e054) + bit0(0x0069e064) + bit1(0x0069e064) + bit2(0x0069e064) +
+bit3(0x0069e064) + bit4(0x0069e064) + bit1(0x0069e084) + bit2(0x0069e084)
+
+Level5ColaStuff = bit0(0x0069e0a4) + bit1(0x0069e0a4) + bit0(0x0069e0b4) + bit1(0x0069e0b4) +
+bit0(0x0069e0d4) + bit1(0x0069e0d4) + bit0(0x0069e0e4) + bit1(0x0069e0e4) + bit2(0x0069e0e4) +
+bit3(0x0069e0e4) + bit4(0x0069e0e4) + bit5(0x0069e0e4) + bit6(0x0069e0e4) + bit3(0x0069e0f4) +
+bit4(0x0069e0f4) + bit5(0x0069e0f4) + bit6(0x0069e0f4) + bit0(0x0069e104) + bit6(0x0069e104) + 
+bit0(0x0069e114) + bit1(0x0069e114) + bit2(0x0069e114) + bit3(0x0069e114) + bit4(0x0069e114) +
+bit5(0x0069e114)
+
+Level6ColaStuff = bit2(0x0069e124) + bit0(0x0069e134) + bit1(0x0069e134) + bit1(0x0069e144) +
+bit2(0x0069e144) + bit3(0x0069e144) + bit0(0x0069e164) + bit0(0x0069e174) + bit1(0x0069e174) +
+bit2(0x0069e174) + bit3(0x0069e174) + bit0(0x0069e194) + bit1(0x0069e194) + bit0(0x0069e1a4) +
+bit1(0x0069e1a4) + bit2(0x0069e1a4) + bit7(0x0069e1a4) + bit0(0x0069e1a5) + bit1(0x0069e1a5) +
+bit2(0x0069e1a5) + bit3(0x0069e1a5) + bit4(0x0069e1a5) + bit5(0x0069e1a5) + bit0(0x0069e1b4) +
+bit1(0x0069e1b4) + bit2(0x0069e1b4)
+
+Level7ColaStuff = bit0(0x0069e1d4) + bit1(0x0069e1d4) + bit4(0x0069e224) + bit5(0x0069e224) +
+bit0(0x0069e225) + bit0(0x0069e234) + bit1(0x0069e234) + bit2(0x0069e234) + bit3(0x0069e234) +
+bit4(0x0069e234) + bit5(0x0069e234) + bit2(0x0069e244) + bit3(0x0069e244) + bit4(0x0069e244) +
+bit7(0x0069e244) + bit0(0x0069e245) + bit1(0x0069e245) + bit0(0x0069e254) + bit1(0x0069e254) +
+bit2(0x0069e254) + bit3(0x0069e254) + bit6(0x0069e254) + bit0(0x0069e274) + bit1(0x0069e274) +
+bit2(0x0069e274) + bit3(0x0069e274) + bit4(0x0069e274) + bit5(0x0069e274)
+
+Collectible("Homer's Box Destroying Day", 0x00, "Destroy every cola crate and vending machine on level", 30, Level1ColaStuff)
+Collectible("No Box Left Destroyed", 0x01, "Destroy every cola crate and vending machine on level", 23,  Level2ColaStuff)
+Collectible("Lisa the Breaker of Vending Machine", 0x02, "Destroy every cola crate and vending machine on level", 25,  Level3ColaStuff)
+Collectible("Marge Destroying Evil Cola", 0x03, "Destroy every cola crate and vending machine on level", 28,  Level4ColaStuff)
+Collectible("Breaking the Kwik-E-Mart Stock", 0x04, "Destroy every cola crate and vending machine on level", 25,  Level5ColaStuff)
+Collectible("Attempting to Stop the Cola", 0x05, "Destroy every cola crate and vending machine on level", 26,  Level6ColaStuff)
+Collectible("Spooky Vending Machines", 0x06, "Destroy every cola crate and vending machine on level", 28,  Level7ColaStuff)
+
 //Cards
-Collectible("", 0x00, "Collect every collector card on level", 7, byte(0x0069c65b))
-Collectible("", 0x01, "Collect every collector card on level", 7,  byte(0x0069c67b))
-Collectible("", 0x02, "Collect every collector card on level", 7,  byte(0x0069c69b))
-Collectible("", 0x03, "Collect every collector card on level", 7,  byte(0x0069c6bb))
-Collectible("", 0x04, "Collect every collector card on level", 7,  byte(0x0069c6db))
-Collectible("", 0x05, "Collect every collector card on level", 7,  byte(0x0069c6fb))
-Collectible("", 0x06, "Collect every collector card on level", 7,  byte(0x0069c71b))
+Collectible("Homer the Great", 0x00, "Collect every collector card on level", 7, byte(0x0069c65b))
+Collectible("The Telltale Head", 0x01, "Collect every collector card on level", 7,  byte(0x0069c67b))
+Collectible("I Love Lisa", 0x02, "Collect every collector card on level", 7,  byte(0x0069c69b))
+Collectible("The Springfield Connection", 0x03, "Collect every collector card on level", 7,  byte(0x0069c6bb))
+Collectible("Homer and Apu", 0x04, "Collect every collector card on level", 7,  byte(0x0069c6db))
+Collectible("Itchy and Scratchy Land", 0x05, "Collect every collector card on level", 7,  byte(0x0069c6fb))
+Collectible("Hungry are the Damned", 0x06, "Collect every collector card on level", 7,  byte(0x0069c71b))
 
 //Clothing
-Collectible("", 0x00, "Purchase every outfit on level", 3, byte(0x0069c957))
-Collectible("", 0x01, "Purchase every outfit on level", 3, byte(0x0069cbc3))
-Collectible("", 0x02, "Purchase every outfit on level", 3, byte(0x0069ce2f))
-Collectible("", 0x03, "Purchase every outfit on level", 3, byte(0x0069d09b))
-Collectible("", 0x04, "Purchase every outfit on level", 3, byte(0x0069d307))
-Collectible("", 0x05, "Purchase every outfit on level", 3, byte(0x0069d573))
-Collectible("", 0x06, "Purchase every outfit on level", 3, byte(0x0069d7df))
+Collectible("Casual Homer Chilling", 0x00, "Purchase every outfit on level", 3, byte(0x0069c957))
+Collectible("Sneaky Ninja Bart", 0x01, "Purchase every outfit on level", 3, byte(0x0069cbc3))
+Collectible("Floreda", 0x02, "Purchase every outfit on level", 3, byte(0x0069ce2f))
+Collectible("You're Under Arrest!", 0x03, "Purchase every outfit on level", 3, byte(0x0069d09b))
+Collectible("Apu the Singer", 0x04, "Purchase every outfit on level", 3, byte(0x0069d307))
+Collectible("Bart's Brother!", 0x05, "Purchase every outfit on level", 3, byte(0x0069d573))
+Collectible("Donut Homer Blocking the View!", 0x06, "Purchase every outfit on level", 3, byte(0x0069d7df))
 
 //Vehicles
 Level1Vehicles = Level1RacesComplete + byte(0x69c91c) + byte(0x0069c953)
@@ -163,19 +229,19 @@ Level5Vehicles = Level5RacesComplete + byte(0x69d2cc) + byte(0x0069d303)
 Level6Vehicles = Level6RacesComplete + byte(0x69d538) + byte(0x0069d56f)
 Level7Vehicles = Level7RacesComplete + byte(0x69d7a4) + byte(0x0069d7db)
 
-Collectible("", 0x00, "Unlock every vehicle on level", 5, Level1Vehicles)
-Collectible("", 0x01, "Unlock every vehicle on level", 5, Level2Vehicles)
-Collectible("", 0x02, "Unlock every vehicle on level", 5, Level3Vehicles)
-Collectible("", 0x03, "Unlock every vehicle on level", 5, Level4Vehicles)
-Collectible("", 0x04, "Unlock every vehicle on level", 5, Level5Vehicles)
-Collectible("", 0x05, "Unlock every vehicle on level", 5, Level6Vehicles)
-Collectible("", 0x06, "Unlock every vehicle on level", 5, Level7Vehicles)
+Collectible("Electaurus", 0x00, "Unlock every vehicle on level", 5, Level1Vehicles)
+Collectible("Now My Story Begins in Nineteen Dickety Two", 0x01, "Unlock every vehicle on level", 5, Level2Vehicles)
+Collectible("Nerdddddd!", 0x02, "Unlock every vehicle on level", 5, Level3Vehicles)
+Collectible("Willies Tractor", 0x03, "Unlock every vehicle on level", 5, Level4Vehicles)
+Collectible("Sound of the Police", 0x04, "Unlock every vehicle on level", 5, Level5Vehicles)
+Collectible("The Ultimate Villain Car", 0x05, "Unlock every vehicle on level", 5, Level6Vehicles)
+Collectible("Brains! Brains!", 0x06, "Unlock every vehicle on level", 5, Level7Vehicles)
 
 //Gags
-Collectible("", 0x00, "Activate every gag on level", 15, byte(0x0069c96f))
-Collectible("", 0x01, "Activate every gag on level", 11,  byte(0x0069cbdb))
-Collectible("", 0x02, "Activate every gag on level", 11,  byte(0x0069ce47))
-Collectible("", 0x03, "Activate every gag on level", 15,  byte(0x0069d0b3))
-Collectible("", 0x04, "Activate every gag on level", 6,  byte(0x0069d31f))
-Collectible("", 0x05, "Activate every gag on level", 11,  byte(0x0069d58b))
-Collectible("", 0x06, "Activate every gag on level", 15,  byte(0x0069d7f7))
+Collectible("Silent Alarm Activated", 0x00, "Activate every gag on level", 15, byte(0x0069c96f))
+Collectible("Flying Cat", 0x01, "Activate every gag on level", 11,  byte(0x0069cbdb))
+Collectible("Teleporting Monkey", 0x02, "Activate every gag on level", 11,  byte(0x0069ce47))
+Collectible("A Secret in the Mansion", 0x03, "Activate every gag on level", 15,  byte(0x0069d0b3))
+Collectible("A Flaming Moe", 0x04, "Activate every gag on level", 6,  byte(0x0069d31f))
+Collectible("Kamp Krusty", 0x05, "Activate every gag on level", 11,  byte(0x0069d58b))
+Collectible("The Spook-E-Mart", 0x06, "Activate every gag on level", 15,  byte(0x0069d7f7))
