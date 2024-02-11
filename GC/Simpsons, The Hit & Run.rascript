@@ -7,23 +7,29 @@
 LevelID = byte(0x69d82b)
 MissionNum = byte(0x69d82f)
 GameState = byte(0x7f5c77)
+CheatsActive = bit0(0x00476605) + bit2(0x00476605) + bit3(0x00476605) + bit4(0x00476605) + 
+bit5(0x00476605) + bit6(0x00476605) + bit7(0x00476605) + bit0(0x00476606) + 
+bit1(0x00476606) +  bit3(0x00476606) + bit5(0x00476607) + bit7 (0x00476607)
 
 function InGame(levelId) => GameState >= 0x09 && levelId == LevelID
+function CheatCheck() => CheatsActive == 0x00
+
 
 // ========= Progression =========
 Level1MissionsComplete = byte(0x69c7dc) + byte(0x69c7fc) + byte(0x69c81c) + byte(0x69c83c) + byte(0x69c85c) + byte(0x69c87c) + byte(0x69c89c)
-Level21MissionsComplete = byte(0x69ca28) + byte(0x69ca48) + byte(0x69ca68) + byte(0x69ca88) + byte(0x69caa8) + byte(0x69cac8) + byte(0x69cae8)
-Level31MissionsComplete = byte(0x69cc94) + byte(0x69ccb4) + byte(0x69ccd4) + byte(0x69ccf4) + byte(0x69cd14) + byte(0x69cd34) + byte(0x69cd54)
-Level41MissionsComplete = byte(0x69cf00) + byte(0x69cf20) + byte(0x69cf40) + byte(0x69cf60) + byte(0x69cf80) + byte(0x69cfa0) + byte(0x69cfc0)
-Level51MissionsComplete = byte(0x69d16c) + byte(0x69d18c) + byte(0x69d1ac) + byte(0x69d1cc) + byte(0x69d1ec) + byte(0x69d20c) + byte(0x69d22c)
-Level61MissionsComplete = byte(0x69d3d8) + byte(0x69d3f8) + byte(0x69d418) + byte(0x69d438) + byte(0x69d458) + byte(0x69d478) + byte(0x69d498)
-Level71MissionsComplete = byte(0x69d644) + byte(0x69d664) + byte(0x69d684) + byte(0x69d6a4) + byte(0x69d6c4) + byte(0x69d6e4) + byte(0x69d704)
+Level2MissionsComplete = byte(0x69ca28) + byte(0x69ca48) + byte(0x69ca68) + byte(0x69ca88) + byte(0x69caa8) + byte(0x69cac8) + byte(0x69cae8)
+Level3MissionsComplete = byte(0x69cc94) + byte(0x69ccb4) + byte(0x69ccd4) + byte(0x69ccf4) + byte(0x69cd14) + byte(0x69cd34) + byte(0x69cd54)
+Level4MissionsComplete = byte(0x69cf00) + byte(0x69cf20) + byte(0x69cf40) + byte(0x69cf60) + byte(0x69cf80) + byte(0x69cfa0) + byte(0x69cfc0)
+Level5MissionsComplete = byte(0x69d16c) + byte(0x69d18c) + byte(0x69d1ac) + byte(0x69d1cc) + byte(0x69d1ec) + byte(0x69d20c) + byte(0x69d22c)
+Level6MissionsComplete = byte(0x69d3d8) + byte(0x69d3f8) + byte(0x69d418) + byte(0x69d438) + byte(0x69d458) + byte(0x69d478) + byte(0x69d498)
+Level7MissionsComplete = byte(0x69d644) + byte(0x69d664) + byte(0x69d684) + byte(0x69d6a4) + byte(0x69d6c4) + byte(0x69d6e4) + byte(0x69d704)
 
 achievement (
     title = "A Simple Task",
     description = "Complete the tutorial mission",
     points = 2,
     trigger = (
+        CheatCheck() &&
         InGame(0) &&
         byte(0x69c7bc) == 0x01 &&
         prev(byte(0x69c7bc)) == 0x00
@@ -37,6 +43,7 @@ function LevelComplete(achName, achDesc, points, levelMissions, levelId)
         description = achDesc,
         points = points,
         trigger = (
+            CheatCheck() &&
             InGame(levelId) &&
             measured(levelMissions == 0x07) &&
             prev(levelMissions) == 0x06
@@ -60,6 +67,7 @@ function MissionComplete(achName, missionName, missionCompleteValue, levelId)
         description = "Complete bonus mission " + missionName,
         points = 3,
         trigger = (
+            CheatCheck() &&
             InGame(levelId) &&
             missionCompleteValue == 0x01 &&
             prev(missionCompleteValue) == 0x00
@@ -76,7 +84,6 @@ MissionComplete("Milking the Pigs", "milking the pigs", byte(0x69d538), 5)
 MissionComplete("Flaming Tires", "flaming tires", byte(0x69d7a4), 6)
 
 // ========= Races =========
-
 Level1RacesComplete = byte(0x69c8bc) + byte(0x69c8dc) + byte(0x69c8fc)
 Level2RacesComplete = byte(0x69cb28) + byte(0x69cb48) + byte(0x69cb68)
 Level3RacesComplete = byte(0x69cd94) + byte(0x69cdb4) + byte(0x69cdd4)
@@ -94,10 +101,12 @@ function RaceComplete(achName, achDesc, points, raceMissions, levelId, endMissio
         description = achDesc,
         points = points,
         trigger = (
-            trigger_when(InGame(levelId)) &&
+            CheatCheck() &&
+            InGame(levelId) &&
+            trigger_when(
             raceMissions == 0x03 &&
             prev(raceMissions) == 0x02 &&
-            endMissionCompleted
+            endMissionCompleted)
         )
     )
 }
@@ -114,6 +123,7 @@ achievement (
     description = "Win all 3 street races in level 7",
     points = 5,
     trigger = (
+        CheatCheck() &&
         InGame(0x06) &&
         Level7RacesComplete == 0x03 &&
         prev(Level7RacesComplete) == 0x02
@@ -128,6 +138,7 @@ function Collectible(achTitle, levelId, achDesc, collectibleAmount, collectibleA
         description = achDesc + " " + levelId + 1,
         points = 10,
         trigger = (
+            CheatCheck() &&
             InGame(levelId) &&
             measured(collectibleAddr == collectibleAmount) &&
             prev(collectibleAddr) < collectibleAmount
