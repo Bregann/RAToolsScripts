@@ -276,6 +276,8 @@ CurrentCar = byte(0x006bce87)
 function IsInFatAndFuriousLoaded() => ascii_string_equals(0x006b0fa0, "el01\\m7l")
 function IsInFatAndFuriousSelectedLevel() => ascii_string_equals(0x006b0fa0, "el01\\m7s")
 
+function IsMonkeyLoaded() => ascii_string_equals(0x006b0fa0, "el02\\m6l")
+
 function IsCelloutsLoaded() => ascii_string_equals(0x006b0fa0, "el02\\m7l")
 function IsCelloutsSelectedLevel() => ascii_string_equals(0x006b0fa0, "el02\\m7s")
 
@@ -291,6 +293,29 @@ achievement(
         once(MissionState == 0x02 && IsInFatAndFuriousLoaded()) &&
         never(IsInFatAndFuriousSelectedLevel() || !PhoneboxCarSelected("plowk_v") || CurrentCar != 0x3a) &&
         trigger_when(LevelID == 0x01 && prev(LevelID) == 0x00)
+    )
+)
+
+function AllMonkeysCollected() => trigger_when(ascii_string_equals(0x00d031c1, "3") && ascii_string_equals(0x00d031c3, "0") && prev(byte(0x00d031c1)) == 0x32 && prev(byte(0x00d031c3)) == 0x39)
+
+// Checks if its 3 mins on the minutes timer or 2 mins and 50, 40, 30 or 20 secs left
+// I cannot find the actual timer in game so we use ASCII
+function BelowTimer() => ascii_string_equals(0x00cfe389, "3") || ascii_string_equals(0x00cfe389, "4") || 
+(ascii_string_equals(0x00cfe389, "2") && 
+    (ascii_string_equals(0x00cfe38d, "5") || 
+    ascii_string_equals(0x00cfe38d, "4") || 
+    ascii_string_equals(0x00cfe38d, "3") || 
+    ascii_string_equals(0x00cfe38d, "2")))
+
+achievement(
+    title = "Speedy Monkey Collector",
+    description = "Collect all 30 monkeys with 2:20 or more left on the clock in mission Monkey See Monkey D'oh",
+    points = 10,
+    trigger = (
+        CheatCheck() &&
+        IsMonkeyLoaded() &&
+        AllMonkeysCollected() &&
+        BelowTimer()
     )
 )
 
