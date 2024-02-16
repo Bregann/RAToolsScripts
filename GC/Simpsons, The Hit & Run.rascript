@@ -1,9 +1,8 @@
 // Simpsons, The: Hit & Run
 // #ID = 2199
 
-// todo: method for checking cheats
-
 // Game stuff
+FollowDmgMissionDataPointer = dword_be(0x00476878) & 0x1fffffff
 LevelID = byte(0x69d82b)
 MissionNum = byte(0x69d82f)
 GameState = byte(0x7f5c77)
@@ -262,7 +261,7 @@ Collectible("A Flaming Moe", 0x04, "Activate every gag on level", 6,  byte(0x006
 Collectible("Kamp Krusty", 0x05, "Activate every gag on level", 11,  byte(0x0069d58b))
 Collectible("The Spook-E-Mart", 0x06, "Activate every gag on level", 15,  byte(0x0069d7f7))
 
-//todo: the wager race
+//TODO: the wager race
 
 // ========= Challenges =========
 MissionState = dword_be(0x006b0f88)
@@ -273,6 +272,8 @@ CurrentCar = byte(0x006bce87)
 
 // Dunno how to name these, Loaded is started the mission
 // SelectedLevel is for checking if they cancelled the mission and it's just sitting as the active mission but free roam
+function HasAttemptedSkip() => byte(FollowDmgMissionDataPointer + 0x1C9B) == 0x02 && prev(byte(FollowDmgMissionDataPointer + 0x1C9B)) != 0x00
+
 function IsInFatAndFuriousLoaded() => ascii_string_equals(0x006b0fa0, "el01\\m7l")
 function IsInFatAndFuriousSelectedLevel() => ascii_string_equals(0x006b0fa0, "el01\\m7s")
 
@@ -284,6 +285,10 @@ function IsCelloutsSelectedLevel() => ascii_string_equals(0x006b0fa0, "el02\\m7s
 function IsFromOuterSpaceLoaded() => ascii_string_equals(0x006b0fa0, "el04\\m7l")
 function IsFromOuterSpaceSelectedLevel() => ascii_string_equals(0x006b0fa0, "el04\\m7s")
 
+function IsLabCoatCaperLoaded() => ascii_string_equals(0x006b0fa0, "el06\\m3l")
+function IsLabCoatCaperSelectedLevel() => ascii_string_equals(0x006b0fa0, "el06\\m3s")
+function IsLabCoatCaperCompleted() => ascii_string_equals(0x006b0fa0, "el06\\m4s")
+
 achievement(
     title = "Plow King Round 2",
     description = "Complete The Fat and Furious with the Plow King",
@@ -291,7 +296,7 @@ achievement(
     trigger = (
         CheatCheck() &&
         once(MissionState == 0x02 && IsInFatAndFuriousLoaded()) &&
-        never(IsInFatAndFuriousSelectedLevel() || !PhoneboxCarSelected("plowk_v") || CurrentCar != 0x3a) &&
+        never(IsInFatAndFuriousSelectedLevel() || !PhoneboxCarSelected("plowk_v") || CurrentCar != 0x3a || GameState == 0x02 || HasAttemptedSkip()) &&
         trigger_when(LevelID == 0x01 && prev(LevelID) == 0x00)
     )
 )
@@ -326,19 +331,36 @@ achievement(
     trigger = (
         CheatCheck() &&
         once(MissionState == 0x02 && IsCelloutsLoaded()) &&
-        never(IsCelloutsSelectedLevel() || HitAndRunMeter > 12.0) &&
+        never(IsCelloutsSelectedLevel() || HitAndRunMeter > 12.0 || GameState == 0x02 || HasAttemptedSkip()) &&
         trigger_when(LevelID == 0x02 && prev(LevelID) == 0x01)
     )
 )
 
 achievement(
-    title = "Grandpa Taking Down Aliens!"
+    title = "War on the Cola Trucks!",
     description = "Complete From Outer Space using the WWII Vehicle",
     points = 5,
     trigger = (
         CheatCheck() &&
         once(MissionState == 0x02 && IsFromOuterSpaceLoaded()) &&
-        never(IsFromOuterSpaceSelectedLevel() || !PhoneboxCarSelected("gramp_v") || CurrentCar != 0x05) &&
+        never(IsFromOuterSpaceSelectedLevel() || !PhoneboxCarSelected("gramp_v") || CurrentCar != 0x05 || GameState == 0x02 || HasAttemptedSkip()) &&
         trigger_when(LevelID == 0x03 && prev(LevelID) == 0x04)
+    )
+)
+
+FollowDistance = float_be(FollowDmgMissionDataPointer + 0x350)
+
+achievement(
+    title = "The Curious Curator",
+    description = "Keep the follow bar above 60% in Lab Coat caper whilst only driving the Curator",
+    points = 10,
+    trigger = (
+        CheatCheck() &&
+        once(MissionState == 0x02 && IsLabCoatCaperLoaded()) &&
+        never(
+            (IsLabCoatCaperSelectedLevel() || !PhoneboxCarSelected("cCurator") || CurrentCar != 0x29 || GameState == 0x02 || HasAttemptedSkip()) ||
+            (prev(FollowDistance) >= 0.60 && FollowDistance < 0.60)
+        ) &&
+        IsLabCoatCaperCompleted()
     )
 )
