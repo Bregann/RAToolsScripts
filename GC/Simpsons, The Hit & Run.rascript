@@ -469,6 +469,87 @@ SkinnerVoicelines = [
     0x809466a0
 ]
 
+QuimbyVoicelines = [
+    0x80945480,
+    0x80945494,
+    0x809454a8,
+    0x80945458,
+    0x8094546c
+]
+
+SocialClubVoicelines = [
+    0x809430a4,
+    0x809430b8,
+    0x809430cc,
+    0x8094307c,
+    0x80943090
+]
+
+KrustyVoicelines = [
+    0x80941434,
+    0x80941448,
+    0x8094145c,
+    0x80941470,
+    0x80941484
+]
+
+MoeVoicelines = [
+    0x809449a4,
+    0x809449b8,
+    0x80944940,
+    0x80944954,
+    0x80944968,
+    0x8094497c,
+    0x80944990
+]
+
+NelsonVoiceline = [
+    0x80944c60,
+    0x809359e0,
+    0x80944c74,
+    0x80944c88,
+    0x80944c38,
+    0x80944c4c
+]
+
+FlandersVoiceline = [
+    0x8093e84c,
+    0x8093e860,
+    0x8093e874,
+    0x8093e838
+]
+
+DrNickVoicelines = [
+    0x8093e61c,
+    0x8093e5e0,
+    0x8093e5f4,
+    0x8093e608
+]
+
+RalphVoiceLines = [
+    0x80945610,
+    0x809455e8,
+    0x809455fc
+]
+
+CletusVoiceLines = [
+    0x80939900,
+    0x80939914,
+    0x80939928,
+    0x8093993c,
+    0x80939950,
+    0x80939964,
+    0x80939978
+]
+
+WillieVoiceLines = [
+    0x80948a7c,
+    0x80948a90,
+    0x80948a40,
+    0x80948a54,
+    0x80948a68
+]
+
 CurrentVoiceline = dword_be(VoicelinePointer + 0x44) 
 
 function CheckVoicelineArray()
@@ -479,21 +560,45 @@ function CheckVoicelineArray()
     }
 }
 
-function LardLadDoorbellRang() => InGame(0x00) && any_of(LardLadVoicelines, vl => once(vl == CurrentVoiceline))
-function SkinnerDoorbellRang() => InGame(0x00) && any_of(SkinnerVoicelines, vl => once(vl == CurrentVoiceline))
-
+function LardLadDoorbellRang() => LevelID == 0x00 && any_of(LardLadVoicelines, vl => vl == CurrentVoiceline)
+function SkinnerDoorbellRang() => LevelID == 0x00 && any_of(SkinnerVoicelines, vl => vl == CurrentVoiceline)
+function QuimbyDoorbellRang(levelId) => LevelID == levelId && any_of(QuimbyVoicelines, vl => vl == CurrentVoiceline)
+function SocialClubDoorbellRang(levelId) => LevelID == levelId && any_of(SocialClubVoicelines, vl => vl == CurrentVoiceline)
+function KrustyDoorbellRang() => LevelID == 0x02 && any_of(KrustyVoicelines, vl => vl == CurrentVoiceline)
+function MoeDoorbellRang() => LevelID == 0x03 && any_of(MoeVoicelines, vl => vl == CurrentVoiceline)
+function NelsonDoorbellRang(levelId) => LevelID == levelId && any_of(NelsonVoiceline, vl => vl == CurrentVoiceline)
+function FlandersDoorbellRang() => LevelID == 0x03 && any_of(FlandersVoiceline, vl => vl == CurrentVoiceline)
+function DrNickDoorbellRang() => LevelID == 0x04 && any_of(DrNickVoicelines, vl => vl == CurrentVoiceline)
+function RalphDoorbellRang() => LevelID == 0x06 && any_of(RalphVoiceLines, vl => vl == CurrentVoiceline)
+function CletusDoorbellRang() => LevelID == 0x06 && any_of(CletusVoiceLines, vl => vl == CurrentVoiceline)
+function WillieDoorbellRang() => LevelID == 0x06 && any_of(WillieVoiceLines, vl => vl == CurrentVoiceline)
 
 achievement(
     title = "Ding Dong Ditch Speedrunner",
-    description = "Starting at Lard Lad in Level 1, ring every doorbell in under x:xx:xx",
+    description = "Starting at Lard Lad in Level 1, ring every doorbell in under xx:xx (must hear doorbell voice, exit to main menu to retry)",
     points = 25,
     trigger = (
         CheatCheck() &&
-        LardLadDoorbellRang() &&
-        trigger_when(SkinnerDoorbellRang()) &&
+        once(LardLadDoorbellRang()) &&
+        trigger_when(
+            once(SkinnerDoorbellRang()) &&
+            once(QuimbyDoorbellRang(0x00)) &&
+            once(SocialClubDoorbellRang(0x01)) &&
+            once(KrustyDoorbellRang()) &&
+            once(MoeDoorbellRang()) &&
+            once(NelsonDoorbellRang(0x03)) &&
+            once(QuimbyDoorbellRang(0x03)) &&
+            once(FlandersDoorbellRang()) &&
+            once(SocialClubDoorbellRang(0x04)) &&
+            once(DrNickDoorbellRang()) &&
+            once(NelsonDoorbellRang(0x06)) &&
+            once(RalphDoorbellRang()) &&
+            once(CletusDoorbellRang()) &&
+            once(WillieDoorbellRang())
+            ) &&
         never(GameState <= 0x07) &&
         disable_when(
-            tally(600, GameState >= 0x09 && any_of(LardLadVoicelines, vl => once(vl == CurrentVoiceline))
+            tally(600, GameState >= 0x09 && once(LardLadDoorbellRang())
             ), never(GameState == 0x02))
     )
 )
