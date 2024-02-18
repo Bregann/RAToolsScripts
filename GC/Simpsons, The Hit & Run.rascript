@@ -3,6 +3,8 @@
 
 // Game stuff
 FollowDmgMissionDataPointer = dword_be(0x00476878) & 0x1fffffff
+VoicelinePointer = dword_be(0x0093354c) & 0x1fffffff
+
 LevelID = byte(0x69d82b)
 MissionNum = byte(0x69d82f)
 GameState = byte(0x7f5c77)
@@ -32,6 +34,7 @@ achievement (
     title = "A Simple Task",
     description = "Complete the tutorial mission",
     points = 2,
+    type = "Progression",
     trigger = (
         CheatCheck() &&
         InGame(0) &&
@@ -40,12 +43,13 @@ achievement (
     )
 )
 
-function LevelComplete(achName, achDesc, points, levelMissions, levelId)
+function LevelComplete(achName, achDesc, points, levelMissions, levelId, type)
 {
     achievement (
         title = achName,
         description = achDesc,
         points = points,
+        type = type,
         trigger = (
             CheatCheck() &&
             InGame(levelId) &&
@@ -55,13 +59,13 @@ function LevelComplete(achName, achDesc, points, levelMissions, levelId)
     )
 }
 
-LevelComplete("The Truth of Mr Burns", "Complete all main missions in level 1", 10, Level1MissionsComplete, 0x00)
-LevelComplete("Abducted", "Complete all main missions in level 2", 10, Level2MissionsComplete, 0x01)
-LevelComplete("Lisa on the Hunt", "Complete all main missions in level 3", 10, Level3MissionsComplete, 0x02)
-LevelComplete("Crop Circles!", "Complete all main missions in level 4", 10, Level4MissionsComplete, 0x03)
-LevelComplete("Apu Adventure", "Complete all main missions in level 5", 10, Level5MissionsComplete, 0x04)
-LevelComplete("Springfield is Doomed!", "Complete all main missions in level 6", 10, Level6MissionsComplete, 0x05)
-LevelComplete("I Smell Toast", "Complete all main missions in level 7", 25, Level7MissionsComplete, 0x06)
+LevelComplete("The Truth of Mr Burns", "Complete all main missions in level 1", 10, Level1MissionsComplete, 0x00, "Progression")
+LevelComplete("Abducted", "Complete all main missions in level 2", 10, Level2MissionsComplete, 0x01, "Progression")
+LevelComplete("Lisa on the Hunt", "Complete all main missions in level 3", 10, Level3MissionsComplete, 0x02, "Progression")
+LevelComplete("Crop Circles!", "Complete all main missions in level 4", 10, Level4MissionsComplete, 0x03, "Progression")
+LevelComplete("Apu Adventure", "Complete all main missions in level 5", 10, Level5MissionsComplete, 0x04, "Progression")
+LevelComplete("Springfield is Doomed!", "Complete all main missions in level 6", 10, Level6MissionsComplete, 0x05, "Progression")
+LevelComplete("I Smell Toast", "Complete all main missions in level 7", 25, Level7MissionsComplete, 0x06, "Win_condition")
 
 // ========= Bonus Missions =========
 function MissionComplete(achName, missionName, missionCompleteValue, levelId)
@@ -104,6 +108,7 @@ function RaceComplete(achName, achDesc, points, raceMissions, levelId, endMissio
         title = achName,
         description = achDesc,
         points = points,
+        type = "Missable",
         trigger = (
             CheatCheck() &&
             InGame(levelId) &&
@@ -133,6 +138,65 @@ achievement (
         prev(Level7RacesComplete) == 0x02
     )
 )
+
+WagerRaceLevel1 = dword_be(0x0069c948)
+WagerRaceLevel2 = dword_be(0x0069cbb4)
+WagerRaceLevel3 = dword_be(0x0069ce20)
+WagerRaceLevel4 = dword_be(0x0069d08c)
+WagerRaceLevel5 = dword_be(0x0069d2f8)
+WagerRaceLevel6 = dword_be(0x0069d564)
+WagerRaceLevel7 = dword_be(0x0069d7d0)
+
+achievement(
+    title = "Wagering a Win",
+    description = "Beat the best time on every wager race",
+    points = 5,
+    trigger = (
+        CheatCheck() &&
+        GameState >= 0x09 &&
+        WagerRaceLevel1 < 195 &&
+        WagerRaceLevel2 < 120 &&
+        WagerRaceLevel3 < 140 &&
+        WagerRaceLevel4 < 150 &&
+        WagerRaceLevel5 < 125 &&
+        WagerRaceLevel6 < 115 &&
+        WagerRaceLevel7 < 90 &&
+        (
+            prev(WagerRaceLevel1) >= 195 ||
+            prev(WagerRaceLevel2) >= 120 ||
+            prev(WagerRaceLevel3) >= 140 ||
+            prev(WagerRaceLevel4) >= 150 ||
+            prev(WagerRaceLevel5) >= 125 ||
+            prev(WagerRaceLevel6) >= 115 ||
+            prev(WagerRaceLevel7) >= 90
+        )
+    )
+)
+
+BonusRaceLevelId = byte(0x006bcf9b)
+
+function BonusRaceAchievements(achTitle, achDesc, bonusRaceId)
+{
+    achievement(
+        title = achTitle,
+        description = achDesc,
+        points = 2,
+        trigger = (
+            CheatCheck() &&
+            GameState == 0x07 &&
+            BonusRaceLevelId == bonusRaceId &&
+            byte(0x00c59533) > prev(byte(0x00c59533))
+        )
+    )
+}
+
+BonusRaceAchievements("Bonus Race 1", "Win the Level 1 race in the bonus game mode", 0x08)
+BonusRaceAchievements("Bonus Race 2", "Win the Level 2 race in the bonus game mode", 0x09)
+BonusRaceAchievements("Bonus Race 3", "Win the Level 3 race in the bonus game mode", 0x0a)
+BonusRaceAchievements("Bonus Race 4", "Win the Level 4 race in the bonus game mode", 0x0b)
+BonusRaceAchievements("Bonus Race 5", "Win the Level 5 race in the bonus game mode", 0x0c)
+BonusRaceAchievements("Bonus Race 6", "Win the Level 6 race in the bonus game mode", 0x0d)
+BonusRaceAchievements("Bonus Race 7", "Win the Level 7 race in the bonus game mode", 0x0e)
 
 // ========= Collectibles =========
 function Collectible(achTitle, levelId, achDesc, collectibleAmount, collectibleAddr)
@@ -261,8 +325,6 @@ Collectible("A Flaming Moe", 0x04, "Activate every gag on level", 6,  byte(0x006
 Collectible("Kamp Krusty", 0x05, "Activate every gag on level", 11,  byte(0x0069d58b))
 Collectible("The Spook-E-Mart", 0x06, "Activate every gag on level", 15,  byte(0x0069d7f7))
 
-//TODO: the wager race
-
 // ========= Challenges =========
 MissionState = dword_be(0x006b0f88)
 
@@ -288,6 +350,14 @@ function IsFromOuterSpaceSelectedLevel() => ascii_string_equals(0x006b0fa0, "el0
 function IsLabCoatCaperLoaded() => ascii_string_equals(0x006b0fa0, "el06\\m3l")
 function IsLabCoatCaperSelectedLevel() => ascii_string_equals(0x006b0fa0, "el06\\m3s")
 function IsLabCoatCaperCompleted() => ascii_string_equals(0x006b0fa0, "el06\\m4s")
+
+function IsLabCoatCaperLoaded() => ascii_string_equals(0x006b0fa0, "el06\\m3l")
+function IsLabCoatCaperSelectedLevel() => ascii_string_equals(0x006b0fa0, "el06\\m3s")
+function IsLabCoatCaperCompleted() => ascii_string_equals(0x006b0fa0, "el06\\m4s")
+
+function IsAlienPart1Loaded() => ascii_string_equals(0x006b0fa0, "el07\\m5l")
+function IsAlienPart1SelectedLevel() => ascii_string_equals(0x006b0fa0, "el07\\m5s")
+function IsAlienPart1Completed() => ascii_string_equals(0x006b0fa0, "el07\\m6s")
 
 achievement(
     title = "Plow King Round 2",
@@ -326,12 +396,12 @@ achievement(
 
 achievement(
     title = "Delicate Destruction",
-    description = "Complete cellouts without the hit and run meter reaching higher than 12% (the first section) (cancel mission to retry)",
+    description = "Complete cellouts without the hit and run meter reaching higher than 5% (cancel mission to retry)",
     points = 10,
     trigger = (
         CheatCheck() &&
         once(MissionState == 0x02 && IsCelloutsLoaded()) &&
-        never(IsCelloutsSelectedLevel() || HitAndRunMeter > 12.0 || GameState == 0x02 || HasAttemptedSkip()) &&
+        never(IsCelloutsSelectedLevel() || HitAndRunMeter > 5.0 || GameState == 0x02 || HasAttemptedSkip()) &&
         trigger_when(LevelID == 0x02 && prev(LevelID) == 0x01)
     )
 )
@@ -352,7 +422,7 @@ FollowDistance = float_be(FollowDmgMissionDataPointer + 0x350)
 
 achievement(
     title = "The Curious Curator",
-    description = "Keep the follow bar above 60% in Lab Coat caper whilst only driving the Curator",
+    description = "Keep the follow bar above 60% in Lab Coat caper only driving the curator",
     points = 10,
     trigger = (
         CheatCheck() &&
@@ -361,6 +431,69 @@ achievement(
             (IsLabCoatCaperSelectedLevel() || !PhoneboxCarSelected("cCurator") || CurrentCar != 0x29 || GameState == 0x02 || HasAttemptedSkip()) ||
             (prev(FollowDistance) >= 0.60 && FollowDistance < 0.60)
         ) &&
-        IsLabCoatCaperCompleted()
+        trigger_when(IsLabCoatCaperCompleted())
+    )
+)
+
+achievement(
+    title = "Duff Delivery Service",
+    description = "Complete Alien Autotopsy Part I only driving the duff truck",
+    points = 10,
+    trigger = (
+        CheatCheck() &&
+        once(MissionState == 0x02 && IsAlienPart1Loaded()) &&
+        never(IsAlienPart1SelectedLevel() || (!PhoneboxCarSelected("cDuff") || CurrentCar != 0x41) || GameState == 0x02 || HasAttemptedSkip()) &&
+        trigger_when(IsAlienPart1Completed())
+    )
+)
+
+//The doorbells
+LardLadVoicelines = [
+    0x80948658,
+    0x8094866c,
+    0x809485a4,
+    0x809485b8,
+    0x809485cc,
+    0x809485e0,
+    0x80948608,
+    0x80948644,
+    0x80948630,
+    0x8094861c,
+    0x809485f4
+]
+
+SkinnerVoicelines = [
+    0x809466b4,
+    0x80946678,
+    0x8094668c,
+    0x809466a0
+]
+
+CurrentVoiceline = dword_be(VoicelinePointer + 0x44) 
+
+function CheckVoicelineArray()
+{
+    for voiceline in LardLadVoicelines 
+    { 
+        return once(CurrentVoiceline == voiceline)
+    }
+}
+
+function LardLadDoorbellRang() => InGame(0x00) && any_of(LardLadVoicelines, vl => once(vl == CurrentVoiceline))
+function SkinnerDoorbellRang() => InGame(0x00) && any_of(SkinnerVoicelines, vl => once(vl == CurrentVoiceline))
+
+
+achievement(
+    title = "Ding Dong Ditch Speedrunner",
+    description = "Starting at Lard Lad in Level 1, ring every doorbell in under x:xx:xx",
+    points = 25,
+    trigger = (
+        CheatCheck() &&
+        LardLadDoorbellRang() &&
+        trigger_when(SkinnerDoorbellRang()) &&
+        never(GameState <= 0x07) &&
+        disable_when(
+            tally(600, GameState >= 0x09 && any_of(LardLadVoicelines, vl => once(vl == CurrentVoiceline))
+            ), never(GameState == 0x02))
     )
 )

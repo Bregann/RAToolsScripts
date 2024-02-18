@@ -16,6 +16,84 @@ all the FF's are coins, boxes, vending machines and wasps
 809456d8 i think my tummy leaked
 809456ec ate a thumb tack
 
+0x80948658 = (L1 Lard Lad) chinese food
+0x8094866c = (L1 Lard Lad) chinese food
+0x809485a4 = (L1 Lard Lad) bribe
+0x809485b8 = (L1 Lard Lad) bribe
+0x809485cc = (L1 Lard Lad) dressed only
+0x809485e0 = (L1 Lard Lad) dressed only
+0x80948608 = (L1 Lard Lad) closing
+0x80948644 = (L1 Lard Lad) batter vat
+0x80948630 = (L1 Lard Lad) batter vat
+0x8094861c = (L1 Lard Lad) clear area
+0x809485f4 = (L1 Lard Lad) arent donuts
+
+0x809466b4 = (L1 Skinner) Shelbyville
+0x80946678 = (L1 Skinner) Class
+0x8094668c = (L1 Skinner) Leave me alone
+0x809466a0 = (L1 Skinner) Installing
+
+0x80945480 = (L1/L4 Quimby) Advised
+0x80945494 = (L1/L4 Quimby) Busy improving town
+0x809454a8 = (L1/L4 Quimby) Can't come to door
+0x80945458 = (L1/L4 Quimby) Spoiling the romance
+0x8094546c = (L1/L4 Quimby) Office
+
+0x809430a4 = (L2/L5 Social Club) Making sausages
+0x809430b8 = (L2/L5 Social Club) Greasing
+0x809430cc = (L2/L5 Social Club) Slide under door
+0x8094307c = (L2/L5 Social Club) Pick eye
+0x80943090 = (L2/L5 Social Club) Punch you
+
+0x80941434 = (L3 Krusty) Can't find clown nose
+0x80941448 = (L3 Krusty) Charging pacemaker
+0x8094145c = (L3 Krusty) Escort
+0x80941470 = (L3 Krusty) Room service
+0x80941484 = (L3 Krusty) Chocolate Syrup
+
+0x809449a4 = (L4 Moe) Keep distance
+0x809449b8 = (L4 Moe) Court order
+0x80944940 = (L4 Moe) This thing could spread
+0x80944954 = (L4 Moe) This thing could spread
+0x80944968 = (L4 Moe) Slide under door
+0x8094497c = (L4 Moe) Hungover
+0x80944990 = (L4 Moe) Hungover
+
+0x80944c60 = (L4/L7 Nelson) Already saved
+0x809359e0 = (L4/L7 Nelson) Already saved
+0x80944c74 = (L4/L7 Nelson) Papa
+0x80944c88 = (L4/L7 Nelson) Are you cop
+0x80944c38 = (L4/L7 Nelson) Aint opening it
+0x80944c4c = (L4/L7 Nelson) Get bent
+
+0x8093e84c = (L4 Flanders) Lord
+0x8093e860 = (L4 Flanders) Busy
+0x8093e874 = (L4 Flanders) Video tape
+0x8093e838 = (L4 Flanders) Gumdrop
+
+0x8093e61c = (L5 Dr Nick) Hi Everybody
+0x8093e5e0 = (L5 Dr Nick) Hope it's not
+0x8093e5f4 = (L5 Dr Nick) Go away
+0x8093e608 = (L5 Dr Nick) Nice monkey
+
+0x80945610 = (L7 Ralph) Easter bunny
+0x809455e8 = (L7 Ralph) Yay a stranger
+0x809455fc = (L7 Ralph) Door says knock knock
+
+0x80939900 = (L7 Cleetus) Hold on
+0x80939914 = (L7 Cleetus) Not now
+0x80939928 = (L7 Cleetus) What did I eat
+0x8093993c = (L7 Cleetus) Not come in here
+0x80939950 = (L7 Cleetus) I'm using
+0x80939964 = (L7 Cleetus) It's occupied
+0x80939978  = (L7 Cleetus) Hey
+
+0x80948a7c = (L7 Cleetus) Burnt me haggis
+0x80948a90 = (L7 Cleetus) Sweepstakes
+0x80948a40 = (L7 Cleetus) Willies time
+0x80948a54 = (L7 Cleetus) Isnt right
+0x80948a68 = (L7 Cleetus) Scottish lass
+
 0x0099e634 32-bit be - voice line? Outside only
 0x009333f8 8-bit, playing a voiceline? 0x00 = no 0x01 = yes
 0x0099e640 32-bit be - someone voiceline?
@@ -26,3 +104,6 @@ all the FF's are coins, boxes, vending machines and wasps
 monkey see monkey doh under x time
 starting at x door, ring all the doorbells in the game in under x minutes x seconds
 - resetnextif for the starting point and a resetif state == ingame
+
+
+0x00f14728???
