@@ -125,7 +125,7 @@ RaceComplete("Rolling Around in the Roller", "Win all 3 street races in level 2 
 RaceComplete("Doll Car Dash", "Win all 3 street races in level 3 before reaching level 4", 10, Level3RacesComplete, 0x02, LevelEndMissionCompleteOrSkipped(0x0069cd54, 0x0069cd5c))
 RaceComplete("Look at the Canyonero Go!", "Win all 3 street races in level 4 before reaching level 5", 10, Level4RacesComplete, 0x03, LevelEndMissionCompleteOrSkipped(0x0069cfc0, 0x0069cfc8))
 RaceComplete("Apu Approved", "Win all 3 street races in level 5 before reaching level 6", 10, Level5RacesComplete, 0x04, LevelEndMissionCompleteOrSkipped(0x0069d22c, 0x0069d234))
-RaceComplete("Ferrari Speedster", "Win all 3 street races in level 6 before reaching level 7", 25, Level6RacesComplete, 0x05, LevelEndMissionCompleteOrSkipped(0x0069d498, 0x0069d4a0))
+RaceComplete("Ferrari Speedster", "Win all 3 street races in level 6 before reaching level 7", 10, Level6RacesComplete, 0x05, LevelEndMissionCompleteOrSkipped(0x0069d498, 0x0069d4a0))
 
 achievement (
     title = "Dead Close",
@@ -311,7 +311,7 @@ Level7Vehicles = Level7RacesComplete + byte(0x69d7a4) + byte(0x0069d7db)
 Collectible("Electaurus", 0x00, "Unlock every vehicle on level", 5, Level1Vehicles)
 Collectible("Now My Story Begins in Nineteen Dickety Two", 0x01, "Unlock every vehicle on level", 5, Level2Vehicles)
 Collectible("Nerdddddd!", 0x02, "Unlock every vehicle on level", 5, Level3Vehicles)
-Collectible("Willies Tractor", 0x03, "Unlock every vehicle on level", 5, Level4Vehicles)
+Collectible("It's Willies Time", 0x03, "Unlock every vehicle on level", 5, Level4Vehicles)
 Collectible("Sound of the Police", 0x04, "Unlock every vehicle on level", 5, Level5Vehicles)
 Collectible("The Ultimate Villain Car", 0x05, "Unlock every vehicle on level", 5, Level6Vehicles)
 Collectible("Brains! Brains!", 0x06, "Unlock every vehicle on level", 5, Level7Vehicles)
@@ -324,6 +324,18 @@ Collectible("A Secret in the Mansion", 0x03, "Activate every gag on level", 15, 
 Collectible("A Flaming Moe", 0x04, "Activate every gag on level", 6,  byte(0x0069d31f))
 Collectible("Kamp Krusty", 0x05, "Activate every gag on level", 11,  byte(0x0069d58b))
 Collectible("The Spook-E-Mart", 0x06, "Activate every gag on level", 15,  byte(0x0069d7f7))
+
+//The movie
+achievement(
+    title = "Off to the Movies!",
+    description = "Unlock the bonus movie",
+    points = 2,
+    trigger = (
+        InGame(0x02) &&
+        byte(0x0069ce24) == 0x01 &&
+        prev(byte(0x0069ce24)) == 0x00
+    )
+)
 
 // ========= Challenges =========
 MissionState = dword_be(0x006b0f88)
@@ -575,7 +587,7 @@ function WillieDoorbellRang() => LevelID == 0x06 && any_of(WillieVoiceLines, vl 
 
 achievement(
     title = "Ding Dong Ditch Speedrunner",
-    description = "Starting at Lard Lad in Level 1, ring every doorbell in under xx:xx (must hear doorbell voice, exit to main menu to retry)",
+    description = "Starting at Lard Lad in Level 1, ring every doorbell in under xx:xx",
     points = 25,
     trigger = (
         CheatCheck() &&
