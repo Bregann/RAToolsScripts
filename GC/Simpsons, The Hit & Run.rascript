@@ -3,7 +3,7 @@
 
 // Game stuff
 FollowDmgMissionDataPointer = dword_be(0x00476878) & 0x1fffffff
-VoicelinePointer = dword_be(0x0093354c) & 0x1fffffff
+VoicelinePointer = dword_be(0x006ae6c4) & 0x1fffffff
 
 LevelID = byte(0x69d82b)
 MissionNum = byte(0x69d82f)
@@ -562,7 +562,7 @@ WillieVoiceLines = [
     0x80948a68
 ]
 
-CurrentVoiceline = dword_be(VoicelinePointer + 0x44) 
+CurrentVoiceline = dword_be(VoicelinePointer + 0x5c) 
 
 function CheckVoicelineArray()
 {
@@ -587,7 +587,7 @@ function WillieDoorbellRang() => LevelID == 0x06 && any_of(WillieVoiceLines, vl 
 
 achievement(
     title = "Ding Dong Ditch Speedrunner",
-    description = "Starting at Lard Lad in Level 1, ring every doorbell in under xx:xx",
+    description = "Starting at Lard Lad in Level 1, ring every doorbell in the game in xx:xx or under (make sure you hear the voiceline, exit to main menu to retry)",
     points = 25,
     trigger = (
         CheatCheck() &&
@@ -613,4 +613,40 @@ achievement(
             tally(600, GameState >= 0x09 && once(LardLadDoorbellRang())
             ), never(GameState == 0x02))
     )
+)
+
+leaderboard(
+    title = "Doorbell%",
+    description = "Ring all the door bells in the quickest time",
+    start = (
+        CheatCheck() &&
+        LardLadDoorbellRang()
+    ),
+    cancel = (
+        GameState == 0x02 || !CheatCheck()
+    ),
+    submit = (
+        once(SkinnerDoorbellRang()) &&
+        once(QuimbyDoorbellRang(0x00)) &&
+        once(SocialClubDoorbellRang(0x01)) &&
+        once(KrustyDoorbellRang()) &&
+        once(MoeDoorbellRang()) &&
+        once(NelsonDoorbellRang(0x03)) &&
+        once(QuimbyDoorbellRang(0x03)) &&
+        once(FlandersDoorbellRang()) &&
+        once(SocialClubDoorbellRang(0x04)) &&
+        once(DrNickDoorbellRang()) &&
+        once(NelsonDoorbellRang(0x06)) &&
+        once(RalphDoorbellRang()) &&
+        once(CletusDoorbellRang()) &&
+        once(WillieDoorbellRang()) &&
+        never(GameState == 0x02)
+    ),
+    value = (
+        GameState >= 0x09 &&
+        unless(GameState == 0x08)
+    ),
+    format = "FRAMES",
+    lower_is_better = true
+    
 )
