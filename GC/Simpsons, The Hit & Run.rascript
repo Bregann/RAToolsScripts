@@ -564,14 +564,6 @@ WillieVoiceLines = [
 
 CurrentVoiceline = dword_be(VoicelinePointer + 0x5c) 
 
-function CheckVoicelineArray()
-{
-    for voiceline in LardLadVoicelines 
-    { 
-        return once(CurrentVoiceline == voiceline)
-    }
-}
-
 function LardLadDoorbellRang() => LevelID == 0x00 && any_of(LardLadVoicelines, vl => vl == CurrentVoiceline)
 function SkinnerDoorbellRang() => LevelID == 0x00 && any_of(SkinnerVoicelines, vl => vl == CurrentVoiceline)
 function QuimbyDoorbellRang(levelId) => LevelID == levelId && any_of(QuimbyVoicelines, vl => vl == CurrentVoiceline)
@@ -587,7 +579,7 @@ function WillieDoorbellRang() => LevelID == 0x06 && any_of(WillieVoiceLines, vl 
 
 achievement(
     title = "Ding Dong Ditch Speedrunner",
-    description = "Starting at Lard Lad in Level 1, ring every doorbell in the game in xx:xx or under (make sure you hear the voiceline, exit to main menu to retry)",
+    description = "Starting at Lard Lad in Level 1, ring every doorbell in the game in 4:18 or under (make sure you hear the voiceline, exit to main menu to retry)",
     points = 25,
     trigger = (
         CheatCheck() &&
@@ -610,11 +602,13 @@ achievement(
             ) &&
         never(GameState <= 0x07) &&
         disable_when(
-            tally(600, GameState >= 0x09 && once(LardLadDoorbellRang())
-            ), never(GameState == 0x02))
+            tally(15480, GameState == 0x09 && once(LardLadDoorbellRang())
+            ), never(GameState == 0x02 || !CheatCheck()))
     )
 )
 
+
+// TODO: Figure out the resets here
 leaderboard(
     title = "Doorbell%",
     description = "Ring all the door bells in the quickest time",
@@ -644,9 +638,191 @@ leaderboard(
     ),
     value = (
         GameState >= 0x09 &&
-        unless(GameState == 0x08)
+        unless(GameState == 0x08 || GameState == 0x0a)
     ),
     format = "FRAMES",
-    lower_is_better = true
-    
+    lower_is_better = true    
+)
+
+RalphNPCVoiceLines = [
+    0x80945688,
+    0x8094569c,
+    0x809456b0,
+    0x809456c4,
+    0x809456d8,
+    0x809456ec,
+    0x80945700,
+    0x80945714,
+    0x80945728,
+    0x80945750,
+    0x8094573c,
+    0x80945764,
+    0x80945624,
+    0x80945638,
+    0x8094564c,
+    0x80945660,
+    0x80945674
+]
+
+MoeNpcVoicelines = [
+    0x80944a6c,
+    0x80944a94,
+    0x809449cc,
+    0x80944aa8,
+    0x80944a80,
+    0x80944a58,
+    0x809449e0,
+    0x80944a30,
+    0x80944a44,
+    0x809449f4,
+    0x80944a1c,
+    0x80944abc,
+    0x80944ad0,
+    0x80944a08
+]
+
+WillieNpcVoiceLines = [
+    0x80948ae0,
+    0x80948af4,
+    0x80948b08,
+    0x80948b1c,
+    0x80948b44,
+    0x80948b58,
+    0x80948ab8,
+    0x80948acc,
+    0x80948b30,
+    0x80948aa4
+]
+
+LisaNpcVoicelines = [
+    0x809426cc,
+    0x809426f4,
+    0x80942730,
+    0x80942758,
+    0x8094267c,
+    0x80942690,
+    0x809426a4,
+    0x809426e0,
+    0x80942708,
+    0x80942744,
+    0x809426b8,
+    0x8094271c
+]
+
+PattyNpcVoicelines = [
+    0x8094537c,
+    0x809453a4,
+    0x809453b8,
+    0x80945368,
+    0x80945390,
+    0x809453cc,
+    0x809453f4,
+    0x80945430,
+    0x80945444,
+    0x809453e0,
+    0x80945408,
+    0x8094541c
+]
+
+ApuNpcVoicelines = [
+    0x80936a5c,
+    0x80936a84,
+    0x80936a98,
+    0x80936b24,
+    0x80936a70,
+    0x80936aac,
+    0x80936ad4,
+    0x80936ae8,
+    0x80936b88,
+    0x80936b4c,
+    0x80936b60,
+    0x80936b74,
+    0x80936ac0,
+    0x80936afc,
+    0x80936b38,
+    0x80936b10
+]
+
+SeaCaptainNpcVoicelines = [
+    0x80945930,
+    0x80945980,
+    0x809459bc,
+    0x809459d0,
+    0x80945908,
+    0x80945944,
+    0x80945958,
+    0x809459a8,
+    0x8094596c,
+    0x80945994,
+    0x809458f4,
+    0x8094591c
+]
+
+SkinnerNpcVoicelines = [
+    0x809466f0,
+    0x80946768,
+    0x809467a4,
+    0x8094672c,
+    0x809466c8,
+    0x809466dc,
+    0x80946704,
+    0x80946740,
+    0x80946718,
+    0x80946754,
+    0x8094677c,
+    0x80946790
+]
+
+SqueakyVoiceTeenNpcVoicelines = [
+    0x80947a50,
+    0x80947988,
+    0x809479c4,
+    0x80947a8c,
+    0x80947a3c,
+    0x80947a64,
+    0x8094799c,
+    0x809479b0,
+    0x809479d8,
+    0x80947aa0,
+    0x80947a78,
+    0x80947ab4,
+    0x80947a14,
+    0x80947a28,
+    0x809479ec,
+    0x80947a00
+]
+
+function VoicelinesSaid(levelId, voicelines) => LevelID == levelId && any_of(voicelines, vl => vl == CurrentVoiceline)
+
+achievement(
+    title = "I Think My Tummy Leaked",
+    description = "Starting at Ralph in Level 1, talk to every non mission/race/vehicle purchase NPC in the game in xx:xx or under (make sure you hear the NPC voiceline, exit to main menu to retry)",
+    points = 25,
+    trigger = (
+        CheatCheck() &&
+        once(VoicelinesSaid(0x00, RalphNPCVoiceLines)) &&
+        trigger_when(
+            once(VoicelinesSaid(0x00, MoeNpcVoicelines)) &&
+            once(VoicelinesSaid(0x00, WillieNpcVoiceLines)) &&
+            once(VoicelinesSaid(0x00, LisaNpcVoicelines)) &&
+            once(VoicelinesSaid(0x00, PattyNpcVoicelines)) &&
+            once(VoicelinesSaid(0x00, ApuNpcVoicelines)) &&
+            once(VoicelinesSaid(0x01, MoeNpcVoicelines)) &&
+            once(VoicelinesSaid(0x01, PattyNpcVoicelines)) &&
+            once(VoicelinesSaid(0x02, SeaCaptainNpcVoicelines)) &&
+            once(VoicelinesSaid(0x03, SkinnerNpcVoicelines)) &&
+            once(VoicelinesSaid(0x03, RalphNPCVoiceLines)) &&
+            once(VoicelinesSaid(0x03, ApuNpcVoicelines)) &&
+            once(VoicelinesSaid(0x04, PattyNpcVoicelines)) &&
+            once(VoicelinesSaid(0x04, MoeNpcVoicelines)) &&
+            once(VoicelinesSaid(0x05, SeaCaptainNpcVoicelines)) &&
+            once(VoicelinesSaid(0x05, SqueakyVoiceTeenNpcVoicelines)) &&
+            once(VoicelinesSaid(0x06, SkinnerNpcVoicelines)) &&
+            once(VoicelinesSaid(0x06, ApuNpcVoicelines))
+        ) &&
+        never(GameState <= 0x07) &&
+        disable_when(
+            tally(15480, GameState == 0x09 && once(VoicelinesSaid(0x00, RalphNPCVoiceLines))
+            ), never(GameState == 0x02 || !CheatCheck()))
+    )
 )
