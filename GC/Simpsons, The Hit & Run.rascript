@@ -600,10 +600,10 @@ achievement(
             once(CletusDoorbellRang()) &&
             once(WillieDoorbellRang())
             ) &&
-        never(GameState <= 0x07) &&
+        never(GameState <= 0x07 || !CheatCheck()) &&
         disable_when(
             tally(15480, GameState == 0x09 && once(LardLadDoorbellRang())
-            ), never(GameState == 0x02 || !CheatCheck()))
+            ), never(GameState == 0x02))
     )
 )
 
@@ -796,7 +796,7 @@ function VoicelinesSaid(levelId, voicelines) => LevelID == levelId && any_of(voi
 
 achievement(
     title = "I Think My Tummy Leaked",
-    description = "Starting at Ralph in Level 1, talk to every non mission/race/vehicle purchase NPC in the game in xx:xx or under (make sure you hear the NPC voiceline, exit to main menu to retry)",
+    description = "Starting at Ralph in Level 1, talk to every non mission/race/vehicle purchase NPC in the game in 7:37 or under (make sure you hear the NPC voiceline, exit to main menu to retry)",
     points = 25,
     trigger = (
         CheatCheck() &&
@@ -820,9 +820,47 @@ achievement(
             once(VoicelinesSaid(0x06, SkinnerNpcVoicelines)) &&
             once(VoicelinesSaid(0x06, ApuNpcVoicelines))
         ) &&
-        never(GameState <= 0x07) &&
+        never(GameState <= 0x07 || !CheatCheck()) &&
         disable_when(
-            tally(15480, GameState == 0x09 && once(VoicelinesSaid(0x00, RalphNPCVoiceLines))
-            ), never(GameState == 0x02 || !CheatCheck()))
+            tally(27180, GameState == 0x09 && once(VoicelinesSaid(0x00, RalphNPCVoiceLines))
+            ), never(GameState == 0x02))
     )
+)
+
+leaderboard(
+    title = "All NPCs",
+    description = "Talk to all NPCs in the quickest time",
+    start = (
+        CheatCheck() &&
+        VoicelinesSaid(0x00, RalphNPCVoiceLines)
+    ),
+    cancel = (
+        GameState == 0x02 || !CheatCheck()
+    ),
+    submit = (
+        once(VoicelinesSaid(0x00, MoeNpcVoicelines)) &&
+        once(VoicelinesSaid(0x00, WillieNpcVoiceLines)) &&
+        once(VoicelinesSaid(0x00, LisaNpcVoicelines)) &&
+        once(VoicelinesSaid(0x00, PattyNpcVoicelines)) &&
+        once(VoicelinesSaid(0x00, ApuNpcVoicelines)) &&
+        once(VoicelinesSaid(0x01, MoeNpcVoicelines)) &&
+        once(VoicelinesSaid(0x01, PattyNpcVoicelines)) &&
+        once(VoicelinesSaid(0x02, SeaCaptainNpcVoicelines)) &&
+        once(VoicelinesSaid(0x03, SkinnerNpcVoicelines)) &&
+        once(VoicelinesSaid(0x03, RalphNPCVoiceLines)) &&
+        once(VoicelinesSaid(0x03, ApuNpcVoicelines)) &&
+        once(VoicelinesSaid(0x04, PattyNpcVoicelines)) &&
+        once(VoicelinesSaid(0x04, MoeNpcVoicelines)) &&
+        once(VoicelinesSaid(0x05, SeaCaptainNpcVoicelines)) &&
+        once(VoicelinesSaid(0x05, SqueakyVoiceTeenNpcVoicelines)) &&
+        once(VoicelinesSaid(0x06, SkinnerNpcVoicelines)) &&
+        once(VoicelinesSaid(0x06, ApuNpcVoicelines)) &&
+        never(GameState == 0x02)
+    ),
+    value = (
+        GameState >= 0x09 &&
+        unless(GameState == 0x08 || GameState == 0x0a)
+    ),
+    format = "FRAMES",
+    lower_is_better = true    
 )
