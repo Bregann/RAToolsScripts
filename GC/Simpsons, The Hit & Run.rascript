@@ -190,13 +190,13 @@ function BonusRaceAchievements(achTitle, achDesc, bonusRaceId)
     )
 }
 
-BonusRaceAchievements("Bonus Race 1", "Win the Level 1 race in the bonus game mode", 0x08)
-BonusRaceAchievements("Bonus Race 2", "Win the Level 2 race in the bonus game mode", 0x09)
-BonusRaceAchievements("Bonus Race 3", "Win the Level 3 race in the bonus game mode", 0x0a)
-BonusRaceAchievements("Bonus Race 4", "Win the Level 4 race in the bonus game mode", 0x0b)
-BonusRaceAchievements("Bonus Race 5", "Win the Level 5 race in the bonus game mode", 0x0c)
-BonusRaceAchievements("Bonus Race 6", "Win the Level 6 race in the bonus game mode", 0x0d)
-BonusRaceAchievements("Bonus Race 7", "Win the Level 7 race in the bonus game mode", 0x0e)
+BonusRaceAchievements("Homers Day", "Win the Level 1 race in the bonus game mode", 0x08)
+BonusRaceAchievements("Downtown Derby", "Win the Level 2 race in the bonus game mode", 0x09)
+BonusRaceAchievements("Dockyard Dash", "Win the Level 3 race in the bonus game mode", 0x0a)
+BonusRaceAchievements("Powerplant Racer", "Win the Level 4 race in the bonus game mode", 0x0b)
+BonusRaceAchievements("The Highway Sprint", "Win the Level 5 race in the bonus game mode", 0x0c)
+BonusRaceAchievements("Dam Racers", "Win the Level 6 race in the bonus game mode", 0x0d)
+BonusRaceAchievements("Spooky Speeding", "Win the Level 7 race in the bonus game mode", 0x0e)
 
 // ========= Collectibles =========
 function Collectible(achTitle, levelId, achDesc, collectibleAmount, collectibleAddr)
