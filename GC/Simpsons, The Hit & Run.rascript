@@ -59,7 +59,7 @@ function LevelComplete(achName, achDesc, points, levelMissions, levelId, type)
     )
 }
 
-LevelComplete("The Truth of Mr Burns", "Complete all main missions in level 1", 10, Level1MissionsComplete, 0x00, "Progression")
+LevelComplete("The Truth of Mr. Burns", "Complete all main missions in level 1", 10, Level1MissionsComplete, 0x00, "Progression")
 LevelComplete("Abducted", "Complete all main missions in level 2", 10, Level2MissionsComplete, 0x01, "Progression")
 LevelComplete("Lisa on the Hunt", "Complete all main missions in level 3", 10, Level3MissionsComplete, 0x02, "Progression")
 LevelComplete("Crop Circles!", "Complete all main missions in level 4", 10, Level4MissionsComplete, 0x03, "Progression")
@@ -83,13 +83,13 @@ function MissionComplete(achName, missionName, missionCompleteValue, levelId)
     )
 }
 
-MissionComplete("This Old Shanty", "this old shanty", byte(0x69c91c), 0)
-MissionComplete("Dial B For Blood", "dial b for blood", byte(0x69cb88), 1)
-MissionComplete("Princi-pal", "princi-pal", byte(0x69cdf4), 2)
-MissionComplete("Beached Love", "beached love", byte(0x69d060), 3)
-MissionComplete("Kinky Frinky", "kinky frinky", byte(0x69d2cc), 4)
-MissionComplete("Milking the Pigs", "milking the pigs", byte(0x69d538), 5)
-MissionComplete("Flaming Tires", "flaming tires", byte(0x69d7a4), 6)
+MissionComplete("This Old Shanty", "\"This Old Shanty\"", byte(0x69c91c), 0)
+MissionComplete("Dial B for Blood", "\"Dial B for Blood\"", byte(0x69cb88), 1)
+MissionComplete("Princi-Pal", "\"Princi-Pal\"", byte(0x69cdf4), 2)
+MissionComplete("Beached Love", "\"Beached Love\"", byte(0x69d060), 3)
+MissionComplete("Kinky Frinky", "\"Kinky Frinky\"", byte(0x69d2cc), 4)
+MissionComplete("Milking the Pigs", "\"Milking the Pigs\"", byte(0x69d538), 5)
+MissionComplete("Flaming Tires", "\"Flaming Tires\"", byte(0x69d7a4), 6)
 
 // ========= Races =========
 Level1RacesComplete = byte(0x69c8bc) + byte(0x69c8dc) + byte(0x69c8fc)
@@ -190,13 +190,13 @@ function BonusRaceAchievements(achTitle, achDesc, bonusRaceId)
     )
 }
 
-BonusRaceAchievements("Homers Day", "Win the Level 1 race in the bonus game mode", 0x08)
-BonusRaceAchievements("Downtown Derby", "Win the Level 2 race in the bonus game mode", 0x09)
-BonusRaceAchievements("Dockyard Dash", "Win the Level 3 race in the bonus game mode", 0x0a)
-BonusRaceAchievements("Powerplant Racer", "Win the Level 4 race in the bonus game mode", 0x0b)
-BonusRaceAchievements("The Highway Sprint", "Win the Level 5 race in the bonus game mode", 0x0c)
-BonusRaceAchievements("Dam Racers", "Win the Level 6 race in the bonus game mode", 0x0d)
-BonusRaceAchievements("Spooky Speeding", "Win the Level 7 race in the bonus game mode", 0x0e)
+BonusRaceAchievements("Homer's Day", "Win the level 1 race in the Bonus Game mode", 0x08)
+BonusRaceAchievements("Downtown Derby", "Win the level 2 race in the Bonus Game mode", 0x09)
+BonusRaceAchievements("Dockyard Dash", "Win the level 3 race in the Bonus Game mode", 0x0a)
+BonusRaceAchievements("Powerplant Racer", "Win the level 4 race in the Bonus Game mode", 0x0b)
+BonusRaceAchievements("The Highway Sprint", "Win the level 5 race in the Bonus Game mode", 0x0c)
+BonusRaceAchievements("Dam Racers", "Win the level 6 race in the Bonus Game mode", 0x0d)
+BonusRaceAchievements("Spooky Speeding", "Win the level 7 race in the Bonus Game mode", 0x0e)
 
 // ========= Collectibles =========
 function Collectible(achTitle, levelId, achDesc, collectibleAmount, collectibleAddr)
@@ -273,22 +273,22 @@ bit7(0x0069e244) + bit0(0x0069e245) + bit1(0x0069e245) + bit0(0x0069e254) + bit1
 bit2(0x0069e254) + bit3(0x0069e254) + bit6(0x0069e254) + bit0(0x0069e274) + bit1(0x0069e274) +
 bit2(0x0069e274) + bit3(0x0069e274) + bit4(0x0069e274) + bit5(0x0069e274)
 
-Collectible("Homer's Box Destroying Day", 0x00, "Destroy every cola crate and vending machine on level", 30, Level1ColaStuff)
-Collectible("No Box Left Destroyed", 0x01, "Destroy every cola crate and vending machine on level", 23,  Level2ColaStuff)
-Collectible("Lisa the Breaker of Vending Machine", 0x02, "Destroy every cola crate and vending machine on level", 25,  Level3ColaStuff)
-Collectible("Marge Destroying Evil Cola", 0x03, "Destroy every cola crate and vending machine on level", 28,  Level4ColaStuff)
-Collectible("Breaking the Kwik-E-Mart Stock", 0x04, "Destroy every cola crate and vending machine on level", 25,  Level5ColaStuff)
-Collectible("Attempting to Stop the Cola", 0x05, "Destroy every cola crate and vending machine on level", 26,  Level6ColaStuff)
-Collectible("Spooky Vending Machines", 0x06, "Destroy every cola crate and vending machine on level", 28,  Level7ColaStuff)
+Collectible("Homer's Box Destroying Day", 0x00, "Destroy every Cola crate and vending machine on level", 30, Level1ColaStuff)
+Collectible("No Box Left Destroyed", 0x01, "Destroy every Cola crate and vending machine on level", 23,  Level2ColaStuff)
+Collectible("Lisa, the Breaker of Vending Machines", 0x02, "Destroy every Cola crate and vending machine on level", 25,  Level3ColaStuff)
+Collectible("Marge Destroying Evil Cola", 0x03, "Destroy every Cola crate and vending machine on level", 28,  Level4ColaStuff)
+Collectible("Breaking the Kwik-E-Mart Stock", 0x04, "Destroy every Cola crate and vending machine on level", 25,  Level5ColaStuff)
+Collectible("Attempting to Stop the Cola", 0x05, "Destroy every Cola crate and vending machine on level", 26,  Level6ColaStuff)
+Collectible("Spooky Vending Machines", 0x06, "Destroy every Cola crate and vending machine on level", 28,  Level7ColaStuff)
 
 //Cards
-Collectible("Homer the Great", 0x00, "Collect every collector card on level", 7, byte(0x0069c65b))
-Collectible("The Telltale Head", 0x01, "Collect every collector card on level", 7,  byte(0x0069c67b))
-Collectible("I Love Lisa", 0x02, "Collect every collector card on level", 7,  byte(0x0069c69b))
-Collectible("The Springfield Connection", 0x03, "Collect every collector card on level", 7,  byte(0x0069c6bb))
-Collectible("Homer and Apu", 0x04, "Collect every collector card on level", 7,  byte(0x0069c6db))
-Collectible("Itchy and Scratchy Land", 0x05, "Collect every collector card on level", 7,  byte(0x0069c6fb))
-Collectible("Hungry are the Damned", 0x06, "Collect every collector card on level", 7,  byte(0x0069c71b))
+Collectible("Homer the Great", 0x00, "Collect every Collector Card on level", 7, byte(0x0069c65b))
+Collectible("The Telltale Head", 0x01, "Collect every Collector Card on level", 7,  byte(0x0069c67b))
+Collectible("I Love Lisa", 0x02, "Collect every Collector Card on level", 7,  byte(0x0069c69b))
+Collectible("The Springfield Connection", 0x03, "Collect every Collector Card on level", 7,  byte(0x0069c6bb))
+Collectible("Homer and Apu", 0x04, "Collect every Collector Card on level", 7,  byte(0x0069c6db))
+Collectible("Itchy and Scratchy Land", 0x05, "Collect every Collector Card on level", 7,  byte(0x0069c6fb))
+Collectible("Hungry are the Damned", 0x06, "Collect every Collector Card on level", 7,  byte(0x0069c71b))
 
 //Clothing
 Collectible("Casual Homer Chilling", 0x00, "Purchase every outfit on level", 3, byte(0x0069c957))
@@ -373,7 +373,7 @@ function IsAlienPart1Completed() => ascii_string_equals(0x006b0fa0, "el07\\m6s")
 
 achievement(
     title = "Plow King Round 2",
-    description = "Complete The Fat and Furious with the Plow King",
+    description = "Complete \"The Fat and Furious\" with the Plow King",
     points = 5,
     trigger = (
         CheatCheck() &&
@@ -396,7 +396,7 @@ function BelowTimer() => ascii_string_equals(0x00cfe389, "3") || ascii_string_eq
 
 achievement(
     title = "Speedy Monkey Collector",
-    description = "Collect all 30 monkeys with 2:20 or more left on the clock in mission Monkey See Monkey D'oh",
+    description = "Collect all 30 monkeys with 2 minutes and 20 seconds or more left on the clock in the mission \"Monkey See Monkey D'oh\"",
     points = 10,
     trigger = (
         CheatCheck() &&
@@ -408,7 +408,7 @@ achievement(
 
 achievement(
     title = "Delicate Destruction",
-    description = "Complete cellouts without the hit and run meter reaching higher than 5% (cancel mission to retry)",
+    description = "Complete \"Cell-Outs\" without the Hit and Run meter reaching higher than 5% - Cancel the mission to retry",
     points = 10,
     trigger = (
         CheatCheck() &&
@@ -420,7 +420,7 @@ achievement(
 
 achievement(
     title = "War on the Cola Trucks!",
-    description = "Complete From Outer Space using the WWII Vehicle",
+    description = "Complete \"From Outer Space\" using the WWII Vehicle",
     points = 5,
     trigger = (
         CheatCheck() &&
@@ -434,7 +434,7 @@ FollowDistance = float_be(FollowDmgMissionDataPointer + 0x350)
 
 achievement(
     title = "The Curious Curator",
-    description = "Keep the follow bar above 60% in Lab Coat caper only driving the curator",
+    description = "Keep the follow bar above 60% in \"Lab Coat Caper\" only driving the Curator",
     points = 10,
     trigger = (
         CheatCheck() &&
@@ -449,7 +449,7 @@ achievement(
 
 achievement(
     title = "Duff Delivery Service",
-    description = "Complete Alien Autotopsy Part I only driving the duff truck",
+    description = "Complete \"Alien 'Auto'topsy Part I\" only driving the Duff Truck",
     points = 10,
     trigger = (
         CheatCheck() &&
@@ -579,7 +579,7 @@ function WillieDoorbellRang() => LevelID == 0x06 && any_of(WillieVoiceLines, vl 
 
 achievement(
     title = "Ding Dong Ditch Speedrunner",
-    description = "Starting at Lard Lad in Level 1, ring every doorbell in the game in 4:18 or under (make sure you hear the voiceline, exit to main menu to retry)",
+    description = "Starting at Lard Lad in level 1, ring every doorbell in the game and hear the NPC voiceline after in under 4 minutes and 18 seconds - Exit to the main menu to retry",
     points = 25,
     trigger = (
         CheatCheck() &&
@@ -796,7 +796,7 @@ function VoicelinesSaid(levelId, voicelines) => LevelID == levelId && any_of(voi
 
 achievement(
     title = "I Think My Tummy Leaked",
-    description = "Starting at Ralph in Level 1, talk to every non mission/race/vehicle purchase NPC in the game in 7:37 or under (make sure you hear the NPC voiceline, exit to main menu to retry)",
+    description = "Starting at Ralph in level 1, talk to every non-mission/race/vehicle purchase NPC in the game and hear the voiceline after in under 7 minutes and 37 seconds - Exit to the main menu to retry",
     points = 25,
     trigger = (
         CheatCheck() &&
