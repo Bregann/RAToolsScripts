@@ -6,8 +6,8 @@ CardsCollected = bitcount(0x0cf2c4) + bitcount(0x0cf2c5) + bitcount(0x0cf2c6) +
 bitcount(0x0cf2c7) + bitcount(0x0cf2c8) + bitcount(0x0cf2c9) + bit0(0x0cf2ca) + bit1(0x0cf2ca)
 FreeformStartingCash = dword(0x0cf2a0)
 
-function InGame() => byte(0x0cf334) == 0x38 && byte(0x0cf2d0) == 0x01
-function InFreeformGame() => byte(0x0cf334) == 0x38 && 
+function InGame() => byte(0x0cf334) == 0x38
+function InFreeformGame() => byte(0x0cf334) == 0x38 && byte(0x0cf2d0) == 0x01
 function InGameOrScenarioScreen() => byte(0x0cf334) == 0x38 || byte(0x0cf334) == 0x78
 
 achievement(
@@ -70,7 +70,8 @@ function FreeformAchievement(achTitle, awardName, points, awardBit)
 {
     achievement(
         title = achTitle,
-        description = "In freeform mode start with $25,000 cash and unlock the " + "\"" + awardName + "\"" + "award"
+        description = "In freeform mode start with $25,000 cash and unlock the " + "\"" + awardName + "\"" + "award",
+        points = points,
         trigger = (
             InFreeformGame() &&
             FreeformStartingCash <= 25000 &&
@@ -84,8 +85,8 @@ FreeformAchievement("Only the Best Exhibits", "Highest Quality Exhibits (silver)
 FreeformAchievement("The Master of Exhibit Quality", "Highest Quality Exhibits (gold)", 10, bit0(0x0ebbd0))
 FreeformAchievement("A Variety of Animals", "Diverse Species (silver)", 5, bit3(0x0ebbd0))
 FreeformAchievement("Mr Worldwide", "Diverse Species (gold)", 10, bit2(0x0ebbd0))
-FreeformAchievement("The Customer is Always Right!", "Highest Customer Satisfaction", 5, bit4(0x0ebbd0))
-FreeformAchievement("Animal Kindness", "Quality Animal Care", 5, bit5(0x0ebbd0))
+FreeformAchievement("The Customer is Always Right!", "Highest Customer Satisfaction", 10, bit4(0x0ebbd0))
+FreeformAchievement("Animal Kindness", "Quality Animal Care", 10, bit5(0x0ebbd0))
 FreeformAchievement("Standing Out From the Competition", "Best Zoo (silver)", 5, bit7(0x0ebbd0))
 FreeformAchievement("The Greatest Zoo Ever!", "Best Zoo (gold)", 10, bit6(0x0ebbd0))
 
@@ -119,5 +120,5 @@ bit1(0x0fa570) + bit0(0x0fa571) + bit0(0x0fa572) + bit0(0x0fa573) + bit1(0x0fa57
 FreeformResearch("Making New Discoveries", "In freeform mode start with $15,000 cash complete half of the top research", 5, ResearchBits, 6)
 FreeformResearch("Much Needed Upgrades", "In freeform mode start with $15,000 cash complete half of the top research", 10, ResearchBits, 12)
 
-FreeformResearch("", "In freeform mode start with $15,000 cash complete half of the conservation research", 5, ConservationBits, 9)
-FreeformResearch("", "In freeform mode start with $15,000 cash complete half of the conservation research", 10, ConservationBits, 18)
+FreeformResearch("Saving the Animals", "In freeform mode start with $15,000 cash complete half of the conservation research", 5, ConservationBits, 9)
+FreeformResearch("Ready to Build the Animal Kingdom", "In freeform mode start with $15,000 cash complete half of the conservation research", 10, ConservationBits, 18)
