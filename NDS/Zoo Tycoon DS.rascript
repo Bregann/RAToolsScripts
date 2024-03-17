@@ -13,6 +13,7 @@ function InGameOrScenarioScreen() => byte(0x0cf334) == 0x38 || byte(0x0cf334) ==
 achievement(
     title = "Learning The Basics",
     description = "Complete all 3 tutorial scenarios",
+    type = "PROGRESSION",
     points = 3,
     trigger = (
         InGameOrScenarioScreen() &&
@@ -20,11 +21,12 @@ achievement(
         prev(TutorialBitflags) == 0x02
     )
 )
-function BeatScenario(achTitle, scenarioName, points, scenario){
+function BeatScenario(achTitle, scenarioName, points, scenario, achType){
     achievement(
         title = achTitle,
         description = "Beat scenario "  + scenarioName,
         points = points,
+        type = achType,
         trigger = (
             InGame() &&
             scenario == 0x01 &&
@@ -33,21 +35,21 @@ function BeatScenario(achTitle, scenarioName, points, scenario){
     )
 }
 
-BeatScenario("Starting Small", "Small Zoo", 4, bit3(0x0cf2c0))
-BeatScenario("Trip to the Sea", "Seasideville Zoo", 4, bit4(0x0cf2c0))
-BeatScenario("A Zoo of Trees", "Forest Zoo", 4, bit5(0x0cf2c0))
-BeatScenario("Badly Managed Zoo", "Revitalize Burkitsville Zoo", 4, bit6(0x0cf2c0))
-BeatScenario("The Mayor's Zoo", "Inner City Zoo", 5, bit7(0x0cf2c0))
-BeatScenario("Come Here Kitty", "Saving The Great Cats", 5, bit0(0x0cf2c1))
-BeatScenario("Saving the Animals", "Endangered Species Zoo", 5, bit1(0x0cf2c1))
-BeatScenario("Isla Nublar", "Island Zoo", 5, bit2(0x0cf2c1))
-BeatScenario("A Zoo For Kenya", "African Savannah Zoo", 10, bit3(0x0cf2c1))
-BeatScenario("Rainy Zoo", "Tropical Rainforest Zoo", 10, bit4(0x0cf2c1))
-BeatScenario("Animal Island", "Paradise Island", 10, bit5(0x0cf2c1))
-BeatScenario("Giant Pandas!", "Breeding Giant Pandas", 10, bit6(0x0cf2c1))
-BeatScenario("Rich Man Zoo", "Secret Scenario 1", 10, bit7(0x0cf2c1))
-BeatScenario("Mile High Zoo", "Secret Scenario 2", 10, bit0(0x0cf2c2))
-BeatScenario("The Ultimate Zoo", "Secret Scenario 3", 25, bit1(0x0cf2c2))
+BeatScenario("Starting Small", "Small Zoo", 4, bit3(0x0cf2c0), "PROGRESSION")
+BeatScenario("Trip to the Sea", "Seasideville Zoo", 4, bit4(0x0cf2c0), "PROGRESSION")
+BeatScenario("A Zoo of Trees", "Forest Zoo", 4, bit5(0x0cf2c0), "PROGRESSION")
+BeatScenario("Badly Managed Zoo", "Revitalize Burkitsville Zoo", 4, bit6(0x0cf2c0), "PROGRESSION")
+BeatScenario("The Mayor's Zoo", "Inner City Zoo", 5, bit7(0x0cf2c0), "PROGRESSION")
+BeatScenario("Come Here Kitty", "Saving The Great Cats", 5, bit0(0x0cf2c1), "PROGRESSION")
+BeatScenario("Saving the Animals", "Endangered Species Zoo", 5, bit1(0x0cf2c1), "PROGRESSION")
+BeatScenario("Isla Nublar", "Island Zoo", 5, bit2(0x0cf2c1), "PROGRESSION")
+BeatScenario("A Zoo For Kenya", "African Savannah Zoo", 10, bit3(0x0cf2c1), "PROGRESSION")
+BeatScenario("Rainy Zoo", "Tropical Rainforest Zoo", 10, bit4(0x0cf2c1), "PROGRESSION")
+BeatScenario("Animal Island", "Paradise Island", 10, bit5(0x0cf2c1), "PROGRESSION")
+BeatScenario("Giant Pandas!", "Breeding Giant Pandas", 10, bit6(0x0cf2c1), "PROGRESSION")
+BeatScenario("Rich Man Zoo", "Secret Scenario 1", 10, bit7(0x0cf2c1), "PROGRESSION")
+BeatScenario("Mile High Zoo", "Secret Scenario 2", 10, bit0(0x0cf2c2), "PROGRESSION")
+BeatScenario("The Ultimate Zoo", "Secret Scenario 3", 25, bit1(0x0cf2c2), "WIN_CONDITION")
 
 function CollectibleCardsUnlocked(achTitle, achDesc, points, amount)
 {
@@ -70,7 +72,7 @@ function FreeformAchievement(achTitle, awardName, points, awardBit)
 {
     achievement(
         title = achTitle,
-        description = "In freeform mode start with $25,000 cash and unlock the " + "\"" + awardName + "\"" + "award",
+        description = "In freeform mode start with $25,000 cash and unlock the " + "\"" + awardName + "\"" + " award",
         points = points,
         trigger = (
             InFreeformGame() &&
@@ -117,8 +119,8 @@ ConservationBits = bit0(0x0fa56d) + bit1(0x0fa56d) + bit2(0x0fa56d) + bit3(0x0fa
 bit0(0x0fa56e) + bit1(0x0fa56e) + bit2(0x0fa56e) + bit3(0x0fa56e) + bit0(0x0fa56f) + bit1(0x0fa56f) + bit0(0x0fa570) +
 bit1(0x0fa570) + bit0(0x0fa571) + bit0(0x0fa572) + bit0(0x0fa573) + bit1(0x0fa573)
 
-FreeformResearch("Making New Discoveries", "In freeform mode start with $15,000 cash complete half of the top research", 5, ResearchBits, 6)
-FreeformResearch("Much Needed Upgrades", "In freeform mode start with $15,000 cash complete half of the top research", 10, ResearchBits, 12)
+FreeformResearch("Making New Discoveries", "In freeform mode start with $15,000 cash complete half of the \"Research\" research", 5, ResearchBits, 6)
+FreeformResearch("Much Needed Upgrades", "In freeform mode start with $15,000 cash complete all of the \"Research\" research", 10, ResearchBits, 12)
 
-FreeformResearch("Saving the Animals", "In freeform mode start with $15,000 cash complete half of the conservation research", 5, ConservationBits, 9)
-FreeformResearch("Ready to Build the Animal Kingdom", "In freeform mode start with $15,000 cash complete half of the conservation research", 10, ConservationBits, 18)
+FreeformResearch("Saving the Animals", "In freeform mode start with $15,000 cash complete half of the \"Conservation\" research", 5, ConservationBits, 9)
+FreeformResearch("Ready to Build the Animal Kingdom", "In freeform mode start with $15,000 cash complete all of the \"Conservation\" research", 10, ConservationBits, 18)
