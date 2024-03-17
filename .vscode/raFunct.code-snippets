@@ -1,0 +1,20 @@
+{
+    "raFunct": {
+        "prefix": "raFunct",
+        "body": [
+            "function xxx(achTitle, achDesc, points, achType)",
+            "{",
+            "\tachievement(",
+            "\t\ttitle = achTitle,",
+            "\t\tdescription = achDesc,",
+            "\t\tpoints = points,",
+            "\t\ttype = achType,",
+            "\t\ttrigger = (",
+            "",
+            "\t\t)",
+            "\t)",
+            "}"
+        ],
+        "description": "Generates default function for achievements"
+    }
+}
