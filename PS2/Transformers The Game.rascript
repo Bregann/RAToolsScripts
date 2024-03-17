@@ -55,29 +55,56 @@ ChapterComplete("You're Grounded!", "Complete mission \"Unfriendly Skies\"", 5, 
 ChapterComplete("Brawling Brawl", "Complete mission \"For The Fallen\"", 5, "PROGRESSION", 0x04, byte(0x00cffba9), 3)
 ChapterComplete("Protecting The AllSpark", "Complete mission \"Keep Away\"", 5, "PROGRESSION", 0x04, byte(0x00cffba9), 4)
 
-FinalLevelComplete("", "Complete level \"The Ultimate Doom\"", 10, "PROGRESSION", 0x05)
+FinalLevelComplete("Taking Down Megatron", "Complete level \"The Ultimate Doom\"", 10, "PROGRESSION", 0x05)
 FinalLevelComplete("Decepticon Battler", "Complete level \"Cybertron: Autobot\"", 5, "", 0x11)
 
 // Decepticon missions
-ChapterComplete("", "Complete mission \"Sand Storm\"", 5, "PROGRESSION", 0x06, byte(0x00cfe249), 1)
-ChapterComplete("", "Complete mission \"Communications Breakdown\"", 5, "PROGRESSION", 0x06, byte(0x00cfe249), 2)
-ChapterComplete("", "Complete mission \"Seek and Destroy\"", 5, "PROGRESSION", 0x06, byte(0x00cfe249), 3)
-ChapterComplete("", "Complete mission \"Fire In The Sky\"", 5, "PROGRESSION", 0x06, byte(0x00cfe249), 4)
+ChapterComplete("Destroying the Airbase", "Complete mission \"Sand Storm\"", 5, "PROGRESSION", 0x06, byte(0x00cfe249), 1)
+ChapterComplete("Sabotaging the Comms", "Complete mission \"Communications Breakdown\"", 5, "PROGRESSION", 0x06, byte(0x00cfe249), 2)
+ChapterComplete("Data Downloader", "Complete mission \"Seek and Destroy\"", 5, "PROGRESSION", 0x06, byte(0x00cfe249), 3)
+ChapterComplete("Jet Takedown", "Complete mission \"Fire In The Sky\"", 5, "PROGRESSION", 0x06, byte(0x00cfe249), 4)
 
-ChapterComplete("", "Complete mission \"Rough Justice\"", 5, "PROGRESSION", 0x07, byte(0x00cfbc39), 1)
-ChapterComplete("", "Complete mission \"Race For Frenzy\"", 5, "PROGRESSION", 0x07, byte(0x00cfbc39), 2)
-ChapterComplete("", "Complete mission \"Pursuit\"", 5, "PROGRESSION", 0x07, byte(0x00cfbc39), 3)
-ChapterComplete("", "Complete mission \"Plight of the Bumblebee\"", 5, "PROGRESSION", 0x07, byte(0x00cfbc39), 4)
+ChapterComplete("Hunting for Sam Witwicky", "Complete mission \"Rough Justice\"", 5, "PROGRESSION", 0x07, byte(0x00cfbc39), 1)
+ChapterComplete("Destruction for Frenzy", "Complete mission \"Race For Frenzy\"", 5, "PROGRESSION", 0x07, byte(0x00cfbc39), 2)
+ChapterComplete("Chasing the Bee", "Complete mission \"Pursuit\"", 5, "PROGRESSION", 0x07, byte(0x00cfbc39), 3)
+ChapterComplete("Bumblebee Down", "Complete mission \"Plight of the Bumblebee\"", 5, "PROGRESSION", 0x07, byte(0x00cfbc39), 4)
 
-ChapterComplete("", "Complete mission \"Clearing The Air\"", 5, "PROGRESSION", 0x08, byte(0x00d00859), 1)
-ChapterComplete("", "Complete mission \"Sinister Savior\"", 5, "PROGRESSION", 0x08, byte(0x00d00859), 2)
-ChapterComplete("", "Complete mission \"Fireworks\"", 5, "PROGRESSION", 0x08, byte(0x00d00859), 3)
-ChapterComplete("", "Complete mission \"Warpath\"", 5, "PROGRESSION", 0x08, byte(0x00d00859), 4)
+ChapterComplete("No More Radio", "Complete mission \"Clearing The Air\"", 5, "PROGRESSION", 0x08, byte(0x00d00859), 1)
+ChapterComplete("Crushing Their Bones", "Complete mission \"Sinister Savior\"", 5, "PROGRESSION", 0x08, byte(0x00d00859), 2)
+ChapterComplete("Plane Destruction", "Complete mission \"Fireworks\"", 5, "PROGRESSION", 0x08, byte(0x00d00859), 3)
+ChapterComplete("On the Warpath", "Complete mission \"Warpath\"", 5, "PROGRESSION", 0x08, byte(0x00d00859), 4)
 
-ChapterComplete("", "Complete mission \"Nowhere To Run\"", 5, "PROGRESSION", 0x0a, byte(0x00d03b19), 1)
-ChapterComplete("", "Complete mission \"Energon Overload\"", 5, "PROGRESSION", 0x0a, byte(0x00d03b19), 2)
-ChapterComplete("", "Complete mission \"The Mighty Will Fall\"", 5, "PROGRESSION", 0x0a, byte(0x00d03b19), 3)
-ChapterComplete("", "Complete mission \"Devastation\"", 5, "PROGRESSION", 0x0a, byte(0x00d03b19), 4)
+ChapterComplete("Removing the Jazz Spark", "Complete mission \"Nowhere To Run\"", 5, "PROGRESSION", 0x0a, byte(0x00d03b19), 1)
+ChapterComplete("The Drone Army", "Complete mission \"Energon Overload\"", 5, "PROGRESSION", 0x0a, byte(0x00d03b19), 2)
+ChapterComplete("The Mighty Has Fallen", "Complete mission \"The Mighty Will Fall\"", 5, "PROGRESSION", 0x0a, byte(0x00d03b19), 3)
+ChapterComplete("Tearing Down the City", "Complete mission \"Devastation\"", 5, "PROGRESSION", 0x0a, byte(0x00d03b19), 4)
 
-FinalLevelComplete("", "Complete mission \"Day of the Machines\"", 10, "WIN_CONDITION", 0x0b)
-FinalLevelComplete("", "Complete mission \"Cybertron: Decepticon\"", 5, "", 0x12)
+FinalLevelComplete("Optimus Not So Prime", "Complete mission \"Day of the Machines\"", 10, "WIN_CONDITION", 0x0b)
+FinalLevelComplete("Autobot Battler", "Complete mission \"Cybertron: Decepticon\"", 5, "", 0x12)
+
+function ChallengesComplete(achTitle, achDesc, points, levelId, challengesComplete)
+{
+    achievement(
+        title = achTitle,
+        description = achDesc,
+        points = points,
+        trigger = (
+            CurrentLevel == levelId &&
+            challengesComplete == 8 &&
+            prev(challengesComplete) != 8 &&
+            prev(challengesComplete) != 0
+        )
+    )
+}
+
+// Autobot
+ChallengesComplete("", "", 0x00, bitcount())
+ChallengesComplete("", "", 0x01, bitcount())
+ChallengesComplete("", "", 0x02, bitcount())
+ChallengesComplete("", "", 0x04, bitcount())
+
+// Decepticon
+ChallengesComplete("", "", 0x06, bitcount())
+ChallengesComplete("", "", 0x07, bitcount())
+ChallengesComplete("", "", 0x08, bitcount())
+ChallengesComplete("", "", 0x0a, bitcount())
