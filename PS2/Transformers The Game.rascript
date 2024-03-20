@@ -3,6 +3,7 @@
 
 CurrentLevel = byte(0x00503c24)
 ChapterCompleteShowing = byte(0x00c29f9c)
+function CheatCheck() => bit0(0x0052210c) + bit2(0x0052210c) + bit3(0x0052210c) == 0x00
 
 // ============= Progression =============
 
@@ -14,6 +15,7 @@ function ChapterComplete(achTitle, achDesc, points, achType, levelId, chaptersCo
         points = points,
         type = achType,
         trigger = (
+            CheatCheck() &&
             CurrentLevel == levelId &&
             chaptersCompleteId == chaptersComplete &&
             prev(chaptersCompleteId) == chaptersComplete - 1
@@ -29,6 +31,7 @@ function FinalLevelComplete(achTitle, achDesc, points, achType, levelId)
         points = points,
         type = achType,
         trigger = (
+            CheatCheck() &&
             CurrentLevel == levelId &&
             ChapterCompleteShowing == 0x01 &&
             prev(ChapterCompleteShowing) == 0x00
@@ -91,6 +94,7 @@ function ChallengesComplete(achTitle, achDesc, points, levelId, challengesComple
         description = achDesc,
         points = points,
         trigger = (
+            CheatCheck() &&
             CurrentLevel == levelId &&
             challengesComplete == 8 &&
             prev(challengesComplete) != 8 &&
@@ -100,16 +104,16 @@ function ChallengesComplete(achTitle, achDesc, points, levelId, challengesComple
 }
 
 // Autobot
-ChallengesComplete("", "Complete all 4 challenges in \"The Suburbs\"", 0x00, bitcount(0xcfafb0))
-ChallengesComplete("", "Complete all 4 challenges in \"More Than Meets the Eye\"", 0x01, bitcount(0xd021e0))
-ChallengesComplete("", "Complete all 4 challenges in \"Inside Hoover Dam\"", 0x02, bitcount(0xd01530))
-ChallengesComplete("", "Complete all 4 challenges in \"The Last Stand\"", 0x04, bitcount(0xcffbd0))
+ChallengesComplete("Suburb Sub Mission Master", "Complete all 4 challenges in \"The Suburbs\"", 10, 0x00, bitcount(0xcfafb0))
+ChallengesComplete("More Than Meets the Sub Mission", "Complete all 4 challenges in \"More Than Meets the Eye\"", 10, 0x01, bitcount(0xd021e0))
+ChallengesComplete("Inside Sub Mission Dam", "Complete all 4 challenges in \"Inside Hoover Dam\"", 10, 0x02, bitcount(0xd01530))
+ChallengesComplete("The Last Sub Mission", "Complete all 4 challenges in \"The Last Stand\"", 10, 0x04, bitcount(0xcffbd0))
 
 // Decepticon
-ChallengesComplete("", "Complete all 4 challenges in \"SOCCENT Military Base\"", 0x06, bitcount(0xcfe270))
-ChallengesComplete("", "Complete all 4 challenges in \"The Hunt for Sam Witwicky\"", 0x07, bitcount(0xcfbc60))
-ChallengesComplete("", "Complete all 4 challenges in \"A Gathering Force\"", 0x08, bitcount(0xd00880))
-ChallengesComplete("", "Complete all 4 challenges in \"City of the Machines\"", 0x0a, bitcount(0xd03b40))
+ChallengesComplete("SOCCENT Sub Mission Military Base", "Complete all 4 challenges in \"SOCCENT Military Base\"", 10, 0x06, bitcount(0xcfe270))
+ChallengesComplete("The Hunt for the Sub Missions", "Complete all 4 challenges in \"The Hunt for Sam Witwicky\"", 10, 0x07, bitcount(0xcfbc60))
+ChallengesComplete("A Gathering Sub Mission", "Complete all 4 challenges in \"A Gathering Force\"", 10, 0x08, bitcount(0xd00880))
+ChallengesComplete("City of the Sub Missions", "Complete all 4 challenges in \"City of the Machines\"", 10, 0x0a, bitcount(0xd03b40))
 
 // ============= Collectibles =============
 AutobotMasks = bitcount(0xcfae50) + bitcount(0xcffa70) + bitcount(0xd013d0) + bitcount(0xd02080)
@@ -122,6 +126,7 @@ function TransformersSymbolsComplete(achTitle, achDesc, points, masksCollected, 
         description = achDesc,
         points = points,
         trigger = (
+            CheatCheck() &&
             CurrentLevel != 0x0f &&
             masksCollected == maskAmount &&
             prev(masksCollected) == maskAmount - 1
@@ -129,10 +134,10 @@ function TransformersSymbolsComplete(achTitle, achDesc, points, masksCollected, 
     )
 }
 
-TransformersSymbolsComplete("", "Collect half of the transformers symbols across the Autobot levels", 5, AutobotMasks, 10)
-TransformersSymbolsComplete("", "Collect all of the transformers symbols in the Autobot levels", 10, AutobotMasks, 20)
-TransformersSymbolsComplete("", "Collect half of the transformers symbols across the Decepticons levels", 5, DecepticonMasks, 10)
-TransformersSymbolsComplete("", "Collect all of the transformers symbols across the Decepticons levels", 10, DecepticonMasks, 20)
+TransformersSymbolsComplete("Unlocking Autobot Bonus Content", "Collect half of the transformers symbols across the Autobot levels", 5, AutobotMasks, 10)
+TransformersSymbolsComplete("Collector of the Autobot Symbols", "Collect all of the transformers symbols in the Autobot levels", 10, AutobotMasks, 20)
+TransformersSymbolsComplete("Evil Bonus Content Unlocked", "Collect half of the transformers symbols across the Decepticons levels", 5, DecepticonMasks, 10)
+TransformersSymbolsComplete("The Ultimate Evil Symbol Collector", "Collect all of the transformers symbols across the Decepticons levels", 10, DecepticonMasks, 20)
 
 function CubesCollected(achTitle, achDesc, points, levelId, cubeAmount)
 {
@@ -141,30 +146,31 @@ function CubesCollected(achTitle, achDesc, points, levelId, cubeAmount)
         description = achDesc,
         points = points,
         trigger = (
+            CheatCheck() &&
             CurrentLevel == levelId &&
-            byte() == cubeAmount &&
-            byte() == cubeAmount - 1
+            byte(0x00557048) == cubeAmount &&
+            byte(0x00557048) == cubeAmount - 1
         )
     )
 }
 
-CubesCollected("", "Collect half of the energon cubes in \"The Suburbs\"", 5, 50)
-CubesCollected("", "Collect all of the energon cubes in \"The Suburbs\"", 10, 100)
-CubesCollected("", "Collect half of the energon cubes in \"More Than Meets the Eye\"", 5, 50)
-CubesCollected("", "Collect all of the energon cubes in \"More Than Meets the Eye\"", 10, 100)
-CubesCollected("", "Collect half of the energon cubes in \"Inside Hoover Dam\"", 5, 50)
-CubesCollected("", "Collect all of the energon cubes in \"Inside Hoover Dam\"", 10, 100)
-CubesCollected("", "Collect half of the energon cubes in \"The Last Stand\"", 5, 50)
-CubesCollected("", "Collect all of the energon cubes in \"The Last Stand\"", 10, 100)
+CubesCollected("Suburbs Cube Hunter", "Collect half of the energon cubes in \"The Suburbs\"", 5, 0x00, 50)
+CubesCollected("Suburbs Cube Master", "Collect all of the energon cubes in \"The Suburbs\"", 10, 0x00, 100)
+CubesCollected("Cube Collector", "Collect half of the energon cubes in \"More Than Meets the Eye\"", 5, 0x01, 50)
+CubesCollected("Meeting the Cubes", "Collect all of the energon cubes in \"More Than Meets the Eye\"", 10, 0x01,100)
+CubesCollected("Dam Cube Gathering", "Collect half of the energon cubes in \"Inside Hoover Dam\"", 5, 0x02, 50)
+CubesCollected("Found the Dam Cubes!", "Collect all of the energon cubes in \"Inside Hoover Dam\"", 10, 0x02, 100)
+CubesCollected("The Last Cube Finder", "Collect half of the energon cubes in \"The Last Stand\"", 5, 0x04,50)
+CubesCollected("The Last Cube", "Collect all of the energon cubes in \"The Last Stand\"", 10, 0x04, 100)
 
-CubesCollected("", "Collect half of the energon cubes in \"SOCCENT Military Base\"", 5, 50)
-CubesCollected("", "Collect all of the energon cubes in \"SOCCENT Military Base\"", 10, 100)
-CubesCollected("", "Collect half of the energon cubes in \"The Hunt for Sam Witwicky\"", 5, 50)
-CubesCollected("", "Collect all of the energon cubes in \"The Hunt for Sam Witwicky\"", 10, 100)
-CubesCollected("", "Collect half of the energon cubes in \"A Gathering Force\"", 5, 50)
-CubesCollected("", "Collect all of the energon cubes in \"A Gathering Force\"", 10, 100)
-CubesCollected("", "Collect half of the energon cubes in \"City of the Machines\"", 5, 50)
-CubesCollected("", "Collect all of the energon cubes in \"City of the Machines\"", 10, 100)
+CubesCollected("Classified Cubes", "Collect half of the energon cubes in \"SOCCENT Military Base\"", 5, 0x06, 50)
+CubesCollected("Top Secret Cubes Collected", "Collect all of the energon cubes in \"SOCCENT Military Base\"", 10, 0x06, 100)
+CubesCollected("The Hunt for the Cubes", "Collect half of the energon cubes in \"The Hunt for Sam Witwicky\"", 5, 0x07, 50)
+CubesCollected("The Hunt for the Cubes Completed", "Collect all of the energon cubes in \"The Hunt for Sam Witwicky\"", 10, 0x07, 100)
+CubesCollected("Energon Cube Hoarder", "Collect half of the energon cubes in \"A Gathering Force\"", 5, 0x08, 50)
+CubesCollected("Gathering Cubes", "Collect all of the energon cubes in \"A Gathering Force\"", 10, 0x08, 100)
+CubesCollected("Urban Energon Collector", "Collect half of the energon cubes in \"City of the Machines\"", 5, 0x0a, 50)
+CubesCollected("A City Full of Cubes", "Collect all of the energon cubes in \"City of the Machines\"", 10, 0x0a, 100)
 
 AutobotSkills = 
 byte(0xcfadbc) + byte(0xcfadc0) + byte(0xcfadc4) + byte(0xcfadc8) + byte(0xcfadd0) + 
@@ -187,9 +193,15 @@ function SkillsComplete(achTitle, achDesc, points, skillsDone, skillsCount)
         description = achDesc,
         points = points,
         trigger = (
+            CheatCheck() &&
             CurrentLevel != 0x0f &&
-			skillsDone == skillsCount &&
-			prev(skillsDone) > skillsCount
+            measured(skillsDone == skillsCount) &&
+            prev(skillsDone) > skillsCount
         )
     )
 }
+
+SkillsComplete("A Skilled Autobot", "Complete half of the skills in the Autobot levels", 5, AutobotSkills, 13)
+SkillsComplete("Optimus Prime Skills", "Complete all of the skills in the Autobot levels", 10, AutobotSkills, 25)
+SkillsComplete("A Skilled Decepticon", "Complete half of the skills in the Decepticon levels", 5, DecepticonSkills, 11)
+SkillsComplete("Evilest Decepticon Around", "Complete all of the skills in the Decepticon levels", 10, DecepticonSkills, 21)
