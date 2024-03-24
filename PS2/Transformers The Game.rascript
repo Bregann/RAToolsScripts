@@ -2,6 +2,8 @@
 // #ID = 21166
 
 CurrentLevel = byte(0x00503c24)
+LoadedIntoChapter = byte(dword(0x004a2a50) + 0x3e8)
+LastLoadedChapterNum = byte(0x0055716c)
 ChapterCompleteShowing = byte(0x00c29f9c)
 function CheatCheck() => bit0(0x0052210c) + bit2(0x0052210c) + bit3(0x0052210c) == 0x00
 
@@ -149,7 +151,7 @@ function CubesCollected(achTitle, achDesc, points, levelId, cubeAmount)
             CheatCheck() &&
             CurrentLevel == levelId &&
             byte(0x00557048) == cubeAmount &&
-            byte(0x00557048) == cubeAmount - 1
+            prev(byte(0x00557048)) == cubeAmount - 1
         )
     )
 }
@@ -205,3 +207,175 @@ SkillsComplete("A Skilled Autobot", "Complete half of the skills in the Autobot 
 SkillsComplete("Optimus Prime Skills", "Complete all of the skills in the Autobot levels", 10, AutobotSkills, 25)
 SkillsComplete("A Skilled Decepticon", "Complete half of the skills in the Decepticon levels", 5, DecepticonSkills, 11)
 SkillsComplete("Evilest Decepticon Around", "Complete all of the skills in the Decepticon levels", 10, DecepticonSkills, 21)
+
+// ============= Challenges =============
+LightWeaponUsage = byte(dword(0x00518e80) + 0x2415)
+HeavyWeaponUsage = byte(dword(0x00518e80) + 0x2485)
+
+achievement(
+    title = "No Weapons Needed",
+    description = "Complete \"Guardian Angel\" with only using melee attacks",
+    points = 10,
+    trigger = (
+        CheatCheck() &&
+        once(
+            prev(LoadedIntoChapter) == 0x00 &&
+            LoadedIntoChapter == 0x01 &&
+            CurrentLevel == 0x00 &&
+            LastLoadedChapterNum == 0x32
+        ) 
+        &&
+        never(
+            CurrentLevel != 0x00 ||
+            LastLoadedChapterNum != 0x32 ||
+            LoadedIntoChapter == 0x00 ||
+            LightWeaponUsage != 0x14 ||
+            HeavyWeaponUsage != 0x0a
+        )
+        &&
+        trigger_when(
+            ChapterCompleteShowing == 0x01 &&
+            prev(ChapterCompleteShowing) == 0x00
+        )
+    )
+)
+
+BuildingHealth = float(0x01e12598)
+
+achievement(
+    title = "City Protector",
+    description = "Complete \"Heavy Weapon\" with the city having 70% or more health remaining",
+    points = 10,
+    trigger = (
+        CheatCheck() &&
+        once(
+            prev(LoadedIntoChapter) == 0x00 &&
+            LoadedIntoChapter == 0x01 &&
+            CurrentLevel == 0x01 &&
+            LastLoadedChapterNum == 0x34
+        )
+        &&
+        never(
+            CurrentLevel != 0x00 ||
+            LastLoadedChapterNum != 0x32 ||
+            LoadedIntoChapter == 0x00 ||
+            BuildingHealth > 112.5
+        )
+        &&
+        trigger_when(
+            ChapterCompleteShowing == 0x01 &&
+            prev(ChapterCompleteShowing) == 0x00
+        )
+    )
+)
+
+MissionTimer = float(0x00c29b0c)
+
+achievement(
+    title = "The Generator Speedster",
+    description = "Complete \"Power Drain\" with 2:12 or more left on the timer after destroying the 5th generator",
+    points = 10,
+    trigger = (
+        CheatCheck() &&
+        CurrentLevel == 0x02 &&
+        LastLoadedChapterNum == 0x33 &&
+        MissionTimer >= 133.0 &&
+        byte(0x00c29ea0) == 5
+    )
+)
+
+achievement(
+    title = "Squishing Bugs",
+    description = "Complete \"Exterminator\" only using melee attacks",
+    points = 5,
+    trigger = (
+        CheatCheck() &&
+        once(
+            prev(LoadedIntoChapter) == 0x00 &&
+            LoadedIntoChapter == 0x01 &&
+            CurrentLevel == 0x04 &&
+            LastLoadedChapterNum == 0x31
+        ) 
+        &&
+        never(
+            CurrentLevel != 0x04 ||
+            LastLoadedChapterNum != 0x31 ||
+            LoadedIntoChapter == 0x00 ||
+            LightWeaponUsage != 0xc8 ||
+            HeavyWeaponUsage != 0x0a
+        )
+        &&
+        trigger_when(
+            ChapterCompleteShowing == 0x01 &&
+            prev(ChapterCompleteShowing) == 0x00
+        )
+    )
+)
+
+achievement(
+    title = "Speedy Plane Destroyer",
+    description = "Complete \"Fire in the Sky\" with 4:00 or more left on the timer",
+    points = 10,
+    trigger = (
+        CheatCheck() &&
+        CurrentLevel == 0x06 &&
+        LastLoadedChapterNum == 0x34 &&
+        MissionTimer >= 241.0 &&
+        byte(0x00c29ea0) == 20
+    )
+)
+
+achievement(
+    title = "Sinister Puncher",
+    description = "Complete \"Sinister Saviour\" only using melee attacks",
+    points = 5,
+    trigger = (
+        CheatCheck() &&
+        once(
+            prev(LoadedIntoChapter) == 0x00 &&
+            LoadedIntoChapter == 0x01 &&
+            CurrentLevel == 0x08 &&
+            LastLoadedChapterNum == 0x32
+        ) 
+        &&
+        never(
+            CurrentLevel != 0x08 ||
+            LastLoadedChapterNum != 0x32 ||
+            LoadedIntoChapter == 0x00 ||
+            LightWeaponUsage != 0x64 ||
+            HeavyWeaponUsage != 0x0a
+        )
+        &&
+        trigger_when(
+            ChapterCompleteShowing == 0x01 &&
+            prev(ChapterCompleteShowing) == 0x00
+        )
+    )
+)
+
+achievement(
+    title = "Pest Control!",
+    description = "Complete \"Energon Overload\" without letting more than 6 Energon drones be alive at one time",
+    points = 10,
+    trigger = (
+        CheatCheck() &&
+        once(
+            prev(LoadedIntoChapter) == 0x00 &&
+            LoadedIntoChapter == 0x01 &&
+            CurrentLevel == 0x0a &&
+            LastLoadedChapterNum == 0x32
+        ) 
+        &&
+        never(
+            CurrentLevel != 0x0a ||
+            LastLoadedChapterNum != 0x32 ||
+            LoadedIntoChapter == 0x00 ||
+            (byte(0x00c29ea0) > 6 && LoadedIntoChapter == 0x01)
+        )
+        &&
+        trigger_when(
+            ChapterCompleteShowing == 0x01 &&
+            prev(ChapterCompleteShowing) == 0x00
+        )
+    )
+)
