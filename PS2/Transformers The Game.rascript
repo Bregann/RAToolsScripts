@@ -198,7 +198,7 @@ function SkillsComplete(achTitle, achDesc, points, skillsDone, skillsCount)
             CheatCheck() &&
             CurrentLevel != 0x0f &&
             measured(skillsDone == skillsCount) &&
-            prev(skillsDone) > skillsCount
+            prev(skillsDone) < skillsCount
         )
     )
 }
@@ -256,10 +256,10 @@ achievement(
         )
         &&
         never(
-            CurrentLevel != 0x00 ||
-            LastLoadedChapterNum != 0x32 ||
+            CurrentLevel != 0x01 ||
+            LastLoadedChapterNum != 0x34 ||
             LoadedIntoChapter == 0x00 ||
-            BuildingHealth > 112.5
+            (BuildingHealth < 112.5 && prev(BuildingHealth) >= 112.5)
         )
         &&
         trigger_when(
