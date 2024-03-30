@@ -2,7 +2,10 @@
 // #ID = 29057
 
 LastLoadedLevel = byte(0x00256d08)
-
+InGameTimer = float(dword(0x002f5f20) + 0x00)
+Points = dword(dword(0x002f5f2c) + 0x00)
+MessageShowing = byte(0x00257084)
+CurrentMode = byte(0x00257193)
 
 // ============= Progression =============
 function LevelCompleted(achTitle, achDesc, points, achType, levelId, levelAwardAddr)
@@ -71,3 +74,40 @@ HardLevelCompleted("Outstanding in His Field", "\"Protect the Food\"", 5, 0x0a, 
 HardLevelCompleted("A Work of Art", "\"Draw the poster\"", 5, 0x0b, byte(0x002f5e00))
 HardLevelCompleted("Voice of an Angel", "\"Sing-a-long\"", 5, 0x0c, byte(0x002f5e02))
 
+// ============= Challenges =============
+function SpeedrunAchievement(achTitle, achDesc, points, levelId, timerLeft)
+{
+    achievement(
+        title = achTitle,
+        description = achDesc,
+        points = points,
+        trigger = (
+            CurrentMode == 0x01 &&
+            LastLoadedLevel == levelId &&
+            trigger_when(MessageShowing == 0x01) &&
+            prev(MessageShowing) == 0x00 &&
+            InGameTimer >= timerLeft
+        )
+    )
+}
+
+function PointsAchievement(achTitle, achDesc, points, levelId, pointsGoal)
+{
+    achievement(
+        title = achTitle,
+        description = achDesc,
+        points = points,
+        trigger = (
+            CurrentMode == 0x05 &&
+            LastLoadedLevel == levelId &&
+            trigger_when(MessageShowing == 0x01) &&
+            prev(MessageShowing) == 0x00 &&
+            Points >= pointsGoal
+        )
+    )
+}
+
+SpeedrunAchievement("Speedy Cleaner", "Complete \"Clear the ground\" on easy mode with 55 or more seconds left on the clock", 5, 0x03, 55.0)
+SpeedrunAchievement("Quickest Dome Built", "Complete \"Build the Dome\" on easy mode with 195 or more seconds left on the clock", 5, 0x07, 195.0)
+PointsAchievement("Professional Scarecrow", "Earn 950 points on \"Protect the Food\" on hard mode", 5, 0x0a, 950)
+PointsAchievement("Best Bob the Builder Singer", "Earn 1000 points on \"Sing-a-long\" on hard mode", 10, 0x0c, 1000)
