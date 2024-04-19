@@ -16,6 +16,7 @@ function LevelCompleted(achTitle, achDesc, points, achType, levelId, levelAwardA
         points = points,
         type = achType,
         trigger = (
+            CurrentMode == 0x01 &&
             LastLoadedLevel == levelId &&
             levelAwardAddr != 0x03 &&
             prev(levelAwardAddr) == 0x03
@@ -43,6 +44,7 @@ achievement(
     description = "Achieve gold on every level on easy difficulty in story mode",
     points = 10,
     trigger = (
+        CurrentMode == 0x01 &&
         EasyLevelTrophies == 0x00 &&
         prev(EasyLevelTrophies) <= 0x03 &&
         LastLoadedLevel > 0x02
