@@ -351,6 +351,7 @@ function CheatUnlocked(achTitle, achDesc, cheat)
         description = achDesc,
         points = 3,
         trigger = (
+            byte(0x00e24000) == 0x4d &&
             BonusPoints < prev(BonusPoints) &&
             cheat == 0x00 &&
             prev(cheat) == 0x01
