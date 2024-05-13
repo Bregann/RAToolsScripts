@@ -344,28 +344,27 @@ ArtifactFound("Beachball Anyone?", "Unlock the beach ball artifact", BeachBallAr
 // CHEAT UNLOCK ACHIEVEMENTS
 // ===================================
 
-function CheatUnlocked(achTitle, achDesc, cheat)
+function CheatUnlocked(achTitle, achDesc, cheat, cheatCost)
 {
     achievement(
         title = achTitle,
         description = achDesc,
         points = 3,
         trigger = (
-            byte(0x00e24000) == 0x4d &&
-            BonusPoints < prev(BonusPoints) &&
+            BonusPoints == (prev(BonusPoints) - cheatCost) &&
             cheat == 0x00 &&
             prev(cheat) == 0x01
         )
     )
 }
 
-CheatUnlocked("Out of This World", "Unlock the intergalatic cheat", CheatIntergalacticUnlocked)
-CheatUnlocked("A Soapy Unlock", "Unlock the soapbubbles cheat", CheatSoapbubblesUnlocked)
-CheatUnlocked("Little Chef", "Unlock the ratjukebox cheat", CheatRatjukeboxUnlocked)
-CheatUnlocked("An Incredible Song", "Unlock the increjukebox cheat", CheatIncrejukeboxUnlocked)
-CheatUnlocked("The Claw", "Unlock the bagpack cheat", CheatBagpackUnlocked)
-CheatUnlocked("Basically Tony Hawk", "Unlock the skateboarder cheat", CheatSkateboarderUnlocked)
-CheatUnlocked("Fully Charged Laser", "Unlock the heavyweapon cheat", CheatHeavyweaponUnlocked)
+CheatUnlocked("Out of This World", "Unlock the intergalatic cheat", CheatIntergalacticUnlocked, 200)
+CheatUnlocked("A Soapy Unlock", "Unlock the soapbubbles cheat", CheatSoapbubblesUnlocked, 200)
+CheatUnlocked("Little Chef", "Unlock the ratjukebox cheat", CheatRatjukeboxUnlocked, 200)
+CheatUnlocked("An Incredible Song", "Unlock the increjukebox cheat", CheatIncrejukeboxUnlocked, 200)
+CheatUnlocked("The Claw", "Unlock the bagpack cheat", CheatBagpackUnlocked, 300)
+CheatUnlocked("Basically Tony Hawk", "Unlock the skateboarder cheat", CheatSkateboarderUnlocked, 300)
+CheatUnlocked("Fully Charged Laser", "Unlock the heavyweapon cheat", CheatHeavyweaponUnlocked, 800)
 
 
 // ===================================
