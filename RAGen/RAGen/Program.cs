@@ -1,6 +1,6 @@
 ﻿//HPCardGen();
-//BitExtractor();
-ExtractValues();
+BitExtractor();
+//ExtractValues();
 
 static void BitExtractor()
 {
