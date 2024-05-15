@@ -206,27 +206,27 @@ function EncyclopediaCollection(achTitle, achDesc, points, catzCollectionAddr, d
         trigger = (
             (
                 IsCatzAndInGame() && 
-                catzCollectionAddr >= collectionAmount &&
+                measured(catzCollectionAddr >= collectionAmount) &&
                 prev(catzCollectionAddr) < collectionAmount
             ) 
             ||
             (
                 IsDogzAndInGame() && 
-                dogzCollectionAddr == collectionAmount &&
+                measured(dogzCollectionAddr == collectionAmount) &&
                 prev(dogzCollectionAddr) == collectionAmount
             )
         )
     )
 }
 
-EncyclopediaCollection("Fishy Business", "Complete 50% of the fish collection (unlocks when you save)", 10, FishCollectionCatz, FishCollectionDogz)
-EncyclopediaCollection("Master Angler", "Complete 100% of the fish collection (unlocks when you save)", 10, FishCollectionCatz, FishCollectionDogz)
-EncyclopediaCollection("Insect Inspector", "Complete 50% of the insect collection (unlocks when you save)", 10, InsectCollectionCatz, InsectCollectionDogz)
-EncyclopediaCollection("Bugged Out", "Complete 100% of the insect collection (unlocks when you save)", 10, InsectCollectionCatz, InsectCollectionDogz)
-EncyclopediaCollection("Keeping Healthy", "Complete 50% of the fruit & vegetables collection (unlocks when you save)", 10, FruitVegCollectionCatz, FruitVegCollectionDogz)
-EncyclopediaCollection("A Fruity Collection", "Complete 100% of the fruit & vegetables collection (unlocks when you save)", 10, FruitVegCollectionCatz, FruitVegCollectionDogz)
-EncyclopediaCollection("Finding Flowers", "Complete 50% of the flowers collection (unlocks when you save)", 10, FlowersCollectionCatz, FlowersCollectionDogz)
-EncyclopediaCollection("Flourishing in Flowers", "Complete 100% of the flowers collection (unlocks when you save)", 10, FlowersCollectionCatz, FlowersCollectionDogz)
+EncyclopediaCollection("Fishy Business", "Complete 50% of the fish collection (unlocks when you save)", 10, FishCollectionCatz, FishCollectionDogz, 45)
+EncyclopediaCollection("Master Angler", "Complete 100% of the fish collection (unlocks when you save)", 10, FishCollectionCatz, FishCollectionDogz, 70)
+EncyclopediaCollection("Insect Inspector", "Complete 50% of the insect collection (unlocks when you save)", 10, InsectCollectionCatz, InsectCollectionDogz, 17)
+EncyclopediaCollection("Bugged Out", "Complete 100% of the insect collection (unlocks when you save)", 10, InsectCollectionCatz, InsectCollectionDogz, 35)
+EncyclopediaCollection("Keeping Healthy", "Complete 50% of the fruit & vegetables collection (unlocks when you save)", 10, FruitVegCollectionCatz, FruitVegCollectionDogz, 20)
+EncyclopediaCollection("A Fruity Collection", "Complete 100% of the fruit & vegetables collection (unlocks when you save)", 10, FruitVegCollectionCatz, FruitVegCollectionDogz, 41)
+EncyclopediaCollection("Finding Flowers", "Complete 50% of the flowers collection (unlocks when you save)", 10, FlowersCollectionCatz, FlowersCollectionDogz, 11)
+EncyclopediaCollection("Flourishing in Flowers", "Complete 100% of the flowers collection (unlocks when you save)", 10, FlowersCollectionCatz, FlowersCollectionDogz, 22)
 
 function ClothingUnlocks(achTitle, achDesc, points, catzAddr, dogzAddr, count)
 {
@@ -250,15 +250,16 @@ function ClothingUnlocks(achTitle, achDesc, points, catzAddr, dogzAddr, count)
     )
 }
 
-ClothingUnlocks("Looking Smart", "Open the secret chest in Crystal Caverns", 2, bit4(0x050049a), bit4(), 1)
-ClothingUnlocks("Ready To Put Out Fires", "Open the secret chest in Bubble Cave", 2, bit2(0x05004c1), bit2(), 1)
-ClothingUnlocks("Arrrr Me Eye", "Open the secret chest in xxx", bit5(0x0500548), 2, bit(), 1) //TODO: idk to check
-ClothingUnlocks("A Cheery Unlock", "Open the secret chest in Sky Heights", 2, bit7(0x0500761), bit7(), 1)
-ClothingUnlocks("Rocking the Ribbon", "Open the secret chest in Polar Fields", 2, bit5(0x0500768), bit5(), 1)
-ClothingUnlocks("Dressed To Impress", "Open both secret chests in Gongoro Peak", 2, bit2(0x0500695) + bit4(0x50070e), bit2() + bit4(), 2)
+ClothingUnlocks("Looking Smart", "Open the secret chest in Crystal Caverns", 2, bit4(0x050049a), bit4(0x0050061a), 1)
+ClothingUnlocks("Ready To Put Out Fires", "Open the secret chest in Bubble Cave", 2, bit2(0x05004c1), bit2(0x00500641), 1)
+ClothingUnlocks("Arrrr Me Eye", "Open the secret chest in Inferno Cave", 2, bit5(0x0500548), bit5(0x005006c8), 1)
+ClothingUnlocks("A Cheery Unlock", "Open the secret chest in Sky Heights", 2, bit7(0x0500761), bit7(0x00500921), 1)
+ClothingUnlocks("Rocking the Ribbon", "Open the secret chest in Polar Fields", 2, bit5(0x0500768), bit5(0x005008e8), 1)
+ClothingUnlocks("Dressed To Impress", "Open both secret chests in Gongoro Peak", 2, bit2(0x0500695) + bit4(0x50070e), bit2(0x00500815) + bit4(0x0050088e), 2)
 
 // Clothing for unique items from catching animals
 // https://strategywiki.org/wiki/Petz:_Dogz_2_and_Catz_2/Items
+
 
 // Clothing for playing 5 games with each animal in zoo
 ClothingUnlocks("Plundering An Accessory", "Unlock the unique accessory from the vulture in the zoo by playing their minigame 5 times", 4, bit(), bit(), 1)
@@ -272,4 +273,3 @@ ClothingUnlocks("Sombrero", "Unlock the unique accessory from the elephant in th
 ClothingUnlocks("Postman Pat", "Unlock the unique accessory from the kiwi in the zoo by playing their minigame 5 times", 4, bit(), bit(), 1)
 ClothingUnlocks("Another Cool Hat", "Unlock the unique accessory from the monkey in the zoo by playing their minigame 5 times", 4, bit(), bit(), 1)
 ClothingUnlocks("Stars in Your Eyes", "Unlock the unique accessory from the boar in the zoo by playing their minigame 5 times", 4, bit(), bit(), 1)
-
