@@ -1,8 +1,8 @@
 // Petz: Catz 2 | Petz: Dogz 2
 // #ID = 21954
 
-function IsCatzAndInGame() => ascii_string_equals(0x0048c77d, "CATZ/BAS") && (byte(dword(dword(0x004af598) + 0x628) + 0xac) != 0x00)
-function IsDogzAndInGame() => ascii_string_equals(0x0048c89d, "DOGZ/BAS") && (byte(dword(dword(0x004af718) + 0x628) + 0xac) != 0x00)
+function IsCatzAndInGame() => ascii_string_equals(0x0048c77d, "CATZ/BAS") && dword(0x004af57c) != 0x00
+function IsDogzAndInGame() => ascii_string_equals(0x0048c89d, "DOGZ/BAS") && dword(0x004af6fc) != 0x00
 
 // =============== PROGRESSION ===============
 function DiaryTaskComplete(achTitle, achDesc, points, achType, catzAddr, dogzAddr, prevValue)
@@ -81,18 +81,18 @@ DiaryTaskComplete("A Volcanic Task", "Return the lava stone to Charles", 5, "", 
 DiaryTaskComplete("Golden Fishy", "Return the golden fish to Charles", 5, "", 0x01e41868, 0x01e47e68, 0x03)
 
 // The zoo animals
-DiaryTaskComplete("Grizzly Angler Conqueror", "Catch the fish for the bear and return him to the zoo", 3, "", 0x01e4182c, 0x01e47e2c, 0x03)
-DiaryTaskComplete("Ultimate Treasure Digger", "Beat the kiwi in the treasure hunt minigame", 3, "", 0x01e47e30, 0x01e47e30, 0x03)
-DiaryTaskComplete("Boar off Back To The Zoo!", "Beat the boar in the flag race minigame", 3, "", 0x01e41834, 0x01e47e34, 0x03)
-DiaryTaskComplete("Heave Ho", "Beat the elephant in the sled pull minigame", 3, "", 0x01e41838, 0x01e47e38, 0x03)
-DiaryTaskComplete("Buffalo Slide", "Beat the buffalo in the chicken race minigame", 3, "", 0x01e4183c, 0x01e47e3c, 0x03)
-DiaryTaskComplete("Flying High", "Beat the vulture in the rodeo minigame", 3, "", 0x01e41840, 0x01e47e40, 0x03)
-DiaryTaskComplete("Monkeying Around", "Beat the monkey in the dodgeball minigame", 3, "", 0x01e41844, 0x01e47e44, 0x03)
-DiaryTaskComplete("Ring Toss Champion", "Beat the giraffe in the ring toss battle minigame", 3, "", 0x01e41848, 0x01e47e48, 0x03)
-DiaryTaskComplete("Cold Belly!", "Beat the penguin in the curling minigame", 3, "", 0x01e4184c, 0x01e47e4c, 0x03)
-DiaryTaskComplete("Skidding Around", "Beat the lion in the hockey minigame", 3, "", 0x01e41850, 0x01e47e50, 0x03)
-DiaryTaskComplete("They See Me Rolling", "Beat the panda in the barrel race minigame", 3, "", 0x01e41854, 0x01e47e54, 0x03)
-DiaryTaskComplete("Raining Bananas and Apples", "Beat the gorilla in the fruit catch minigame", 3, "", 0x01e41858, 0x01e47e58, 0x03)
+DiaryTaskComplete("Grizzly Angler Conqueror", "Catch the fish for the bear and return him to the zoo", 4, "", 0x01e4182c, 0x01e47e2c, 0x03)
+DiaryTaskComplete("Ultimate Treasure Digger", "Beat the kiwi in the treasure hunt minigame", 4, "", 0x01e47e30, 0x01e47e30, 0x03)
+DiaryTaskComplete("Boar off Back To The Zoo!", "Beat the boar in the flag race minigame", 4, "", 0x01e41834, 0x01e47e34, 0x03)
+DiaryTaskComplete("Heave Ho", "Beat the elephant in the sled pull minigame", 4, "", 0x01e41838, 0x01e47e38, 0x03)
+DiaryTaskComplete("Buffalo Slide", "Beat the buffalo in the chicken race minigame", 4, "", 0x01e4183c, 0x01e47e3c, 0x03)
+DiaryTaskComplete("Flying High", "Beat the vulture in the rodeo minigame", 4, "", 0x01e41840, 0x01e47e40, 0x03)
+DiaryTaskComplete("Monkeying Around", "Beat the monkey in the dodgeball minigame", 4, "", 0x01e41844, 0x01e47e44, 0x03)
+DiaryTaskComplete("Ring Toss Champion", "Beat the giraffe in the ring toss battle minigame", 4, "", 0x01e41848, 0x01e47e48, 0x03)
+DiaryTaskComplete("Cold Belly!", "Beat the penguin in the curling minigame", 4, "", 0x01e4184c, 0x01e47e4c, 0x03)
+DiaryTaskComplete("Skidding Around", "Beat the lion in the hockey minigame", 4, "", 0x01e41850, 0x01e47e50, 0x03)
+DiaryTaskComplete("They See Me Rolling", "Beat the panda in the barrel race minigame", 4, "", 0x01e41854, 0x01e47e54, 0x03)
+DiaryTaskComplete("Raining Bananas and Apples", "Beat the gorilla in the fruit catch minigame", 4, "", 0x01e41858, 0x01e47e58, 0x03)
 
 // =============== COLLECTIONS ===============
 FishCollectionCatz = 
@@ -220,7 +220,7 @@ function EncyclopediaCollection(achTitle, achDesc, points, catzCollectionAddr, d
 }
 
 EncyclopediaCollection("Fishy Business", "Complete 50% of the fish collection (unlocks when you save)", 10, FishCollectionCatz, FishCollectionDogz, 45)
-EncyclopediaCollection("Master Angler", "Complete 100% of the fish collection (unlocks when you save)", 10, FishCollectionCatz, FishCollectionDogz, 70)
+EncyclopediaCollection("Master Angler", "Complete 100% of the fish collection (unlocks when you save)", 25, FishCollectionCatz, FishCollectionDogz, 70)
 EncyclopediaCollection("Insect Inspector", "Complete 50% of the insect collection (unlocks when you save)", 10, InsectCollectionCatz, InsectCollectionDogz, 17)
 EncyclopediaCollection("Bugged Out", "Complete 100% of the insect collection (unlocks when you save)", 10, InsectCollectionCatz, InsectCollectionDogz, 35)
 EncyclopediaCollection("Keeping Healthy", "Complete 50% of the fruit & vegetables collection (unlocks when you save)", 10, FruitVegCollectionCatz, FruitVegCollectionDogz, 20)
@@ -253,7 +253,7 @@ function ClothingUnlocks(achTitle, achDesc, points, catzAddr, dogzAddr, count)
 ClothingUnlocks("Looking Smart", "Open the secret chest in Crystal Caverns", 2, bit4(0x050049a), bit4(0x0050061a), 1)
 ClothingUnlocks("Ready To Put Out Fires", "Open the secret chest in Bubble Cave", 2, bit2(0x05004c1), bit2(0x00500641), 1)
 ClothingUnlocks("Arrrr Me Eye", "Open the secret chest in Inferno Cave", 2, bit5(0x0500548), bit5(0x005006c8), 1)
-ClothingUnlocks("A Cheery Unlock", "Open the secret chest in Sky Heights", 2, bit7(0x0500761), bit7(0x00500921), 1)
+ClothingUnlocks("A Cheery Unlock", "Open the secret chest in Sky Heights", 2, bit7(0x0500761), bit7(0x005008e1), 1)
 ClothingUnlocks("Rocking the Ribbon", "Open the secret chest in Polar Fields", 2, bit5(0x0500768), bit5(0x005008e8), 1)
 ClothingUnlocks("Dressed To Impress", "Open both secret chests in Gongoro Peak", 2, bit2(0x0500695) + bit4(0x50070e), bit2(0x00500815) + bit4(0x0050088e), 2)
 
@@ -262,14 +262,14 @@ ClothingUnlocks("Dressed To Impress", "Open both secret chests in Gongoro Peak",
 
 
 // Clothing for playing 5 games with each animal in zoo
-ClothingUnlocks("Plundering An Accessory", "Unlock the unique accessory from the vulture in the zoo by playing their minigame 5 times", 4, bit(), bit(), 1)
-ClothingUnlocks("Where's The Beach?", "Unlock the unique accessory from the buffalo in the zoo by playing their minigame 5 times", 4, bit(), bit(), 1)
-ClothingUnlocks("Noble Accessory", "Unlock the unique accessory from the lion in the zoo by playing their minigame 5 times", 4, bit(), bit(), 1)
-ClothingUnlocks("Pretty Hat", "Unlock the unique accessory from the giraffe in the zoo by playing their minigame 5 times", 4, bit(), bit(), 1)
-ClothingUnlocks("Ready To Set Sail", "Unlock the unique accessory from the panda in the zoo by playing their minigame 5 times", 4, bit(), bit(), 1)
-ClothingUnlocks("Parrrrty!", "Unlock the unique accessory from the gorilla in the zoo by playing their minigame 5 times", 4, bit(), bit(), 1)
-ClothingUnlocks("Winging It", "Unlock the unique accessory from the penguin in the zoo by playing their minigame 5 times", 4, bit(), bit(), 1)
-ClothingUnlocks("Sombrero", "Unlock the unique accessory from the elephant in the zoo by playing their minigame 5 times", 4, bit(), bit(), 1)
-ClothingUnlocks("Postman Pat", "Unlock the unique accessory from the kiwi in the zoo by playing their minigame 5 times", 4, bit(), bit(), 1)
-ClothingUnlocks("Another Cool Hat", "Unlock the unique accessory from the monkey in the zoo by playing their minigame 5 times", 4, bit(), bit(), 1)
-ClothingUnlocks("Stars in Your Eyes", "Unlock the unique accessory from the boar in the zoo by playing their minigame 5 times", 4, bit(), bit(), 1)
+ClothingUnlocks("Plundering An Accessory", "Unlock the unique accessory from the vulture in the zoo by playing their minigame 5 times", 5, bit4(0x0050047a), bit4(0x005005fa), 1)
+ClothingUnlocks("Where's The Beach?", "Unlock the unique accessory from the buffalo in the zoo by playing their minigame 5 times", 5, bit2(0x005007b5), bit2(0x00500935), 1)
+ClothingUnlocks("Noble Accessory", "Unlock the unique accessory from the lion in the zoo by playing their minigame 5 times", 5, bit0(0x005005dc), bit0(0x0050075c), 1)
+ClothingUnlocks("Pretty Hat", "Unlock the unique accessory from the giraffe in the zoo by playing their minigame 5 times", 5, bit0(0x005004c8), bit0(0x00500648), 1)
+ClothingUnlocks("Ready To Set Sail", "Unlock the unique accessory from the panda in the zoo by playing their minigame 5 times", 5, bit2(0x00500655), bit2(0x005007d5), 1)
+ClothingUnlocks("Parrrrty!", "Unlock the unique accessory from the gorilla in the zoo by playing their minigame 5 times", 5, bit2(0x00500535), bit2(0x005006b5), 1)
+ClothingUnlocks("Winging It", "Unlock the unique accessory from the penguin in the zoo by playing their minigame 5 times", 5, bit2(0x00500735), bit2(0x005008b5), 1)
+ClothingUnlocks("Sombrero", "Unlock the unique accessory from the elephant in the zoo by playing their minigame 5 times", 5, bit7(0x0050048d), bit7(0x0050060d), 1)
+ClothingUnlocks("Postman Pat", "Unlock the unique accessory from the kiwi in the zoo by playing their minigame 5 times", 5, bit2(0x00500401), bit2(0x00500581), 1)
+ClothingUnlocks("Another Cool Hat", "Unlock the unique accessory from the monkey in the zoo by playing their minigame 5 times", 5, bit0(0x00500488), bit0(0x00500608), 1)
+ClothingUnlocks("Stars in Your Eyes", "Unlock the unique accessory from the boar in the zoo by playing their minigame 5 times", 5, bit0(0x0050053c), bit0(0x005006bc), 1)
