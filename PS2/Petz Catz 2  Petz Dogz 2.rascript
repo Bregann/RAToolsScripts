@@ -60,7 +60,7 @@ DiaryTaskComplete("Saul Saviour", "Rescue Saul in Whisker Woods", 3, "PROGRESSIO
 DiaryTaskComplete("Flower Power", "Repair the flower bed", 3, "PROGRESSION", 0x01e417a9, 0x01e47da9, 0x03)
 DiaryTaskComplete("Bling Buyer", "Repair Sheila's fashion house", 3, "PROGRESSION", 0x1e417b3, 0x01e47daf, 0x03)
 DiaryTaskComplete("Fishy Fixer", "Repair the aquarium", 3, "PROGRESSION", 0x01e417b4, 0x01e47db4, 0x34)
-DiaryTaskComplete("Stanley Speed Boost", "Help Godfrey by speeding up Stanley with a new friend", 3, "PROGRESSION", 0x01e417bb, 0x01e47dbb, 0x34)
+DiaryTaskComplete("Stanley Speed Boost", "Help Godfrey by speeding up Stanley with a new friend", 4, "PROGRESSION", 0x01e417bb, 0x01e47dbb, 0x34)
 DiaryTaskComplete("The Animal Whisperer", "Learn \"Call\" from Saul", 3, "PROGRESSION", 0x01e417bd, 0x01e47dbd, 0x34)
 DiaryTaskComplete("Icebreaker", "Melt the frozen river", 3, "PROGRESSION", 0x01e417c1, 0x01e47dc1, 0x03)
 DiaryTaskComplete("A Zoo Without Animals", "Repair the zoo", 3, "PROGRESSION", 0x01e417ca, 0x01e47dca, 0x03)
@@ -257,10 +257,6 @@ ClothingUnlocks("A Cheery Unlock", "Open the secret chest in Sky Heights", 2, bi
 ClothingUnlocks("Rocking the Ribbon", "Open the secret chest in Polar Fields", 2, bit5(0x0500768), bit5(0x005008e8), 1)
 ClothingUnlocks("Dressed To Impress", "Open both secret chests in Gongoro Peak", 2, bit2(0x0500695) + bit4(0x50070e), bit2(0x00500815) + bit4(0x0050088e), 2)
 
-// Clothing for unique items from catching animals
-// https://strategywiki.org/wiki/Petz:_Dogz_2_and_Catz_2/Items
-
-
 // Clothing for playing 5 games with each animal in zoo
 ClothingUnlocks("Plundering An Accessory", "Unlock the unique accessory from the vulture in the zoo by playing their minigame 5 times", 5, bit4(0x0050047a), bit4(0x005005fa), 1)
 ClothingUnlocks("Where's The Beach?", "Unlock the unique accessory from the buffalo in the zoo by playing their minigame 5 times", 5, bit2(0x005007b5), bit2(0x00500935), 1)
@@ -273,3 +269,40 @@ ClothingUnlocks("Sombrero", "Unlock the unique accessory from the elephant in th
 ClothingUnlocks("Postman Pat", "Unlock the unique accessory from the kiwi in the zoo by playing their minigame 5 times", 5, bit2(0x00500401), bit2(0x00500581), 1)
 ClothingUnlocks("Another Cool Hat", "Unlock the unique accessory from the monkey in the zoo by playing their minigame 5 times", 5, bit0(0x00500488), bit0(0x00500608), 1)
 ClothingUnlocks("Stars in Your Eyes", "Unlock the unique accessory from the boar in the zoo by playing their minigame 5 times", 5, bit0(0x0050053c), bit0(0x005006bc), 1)
+
+// Clothing for unique items from catching animals
+CatzAnimalItemsCaught = 
+byte(0x4dde67) + byte(0x4dde6d) + byte(0x4dde73) + byte(0x4dde8f) + byte(0x4dde95) + 
+byte(0x4ddea7) + byte(0x4ddea9) + byte(0x4ddec5) + byte(0x4ddec7) + byte(0x4dded5) + 
+byte(0x4ddf1b) + byte(0x4ddf2d) + byte(0x4ddf2f) + byte(0x4ddf67)
+
+DogzAnimalItemsCaught = 
+byte(0x4ddfe7) + byte(0x4ddfed) + byte(0x4ddff3) + byte(0x4de00f) + byte(0x4de015) + 
+byte(0x4de027) + byte(0x4de029) + byte(0x4de045) + byte(0x4de047) + byte(0x4de055) + 
+byte(0x4de09b) + byte(0x4de0ad) + byte(0x4de0af) + byte(0x4de0e7)
+
+function CatchAnimals(achTitle, points, animalAmount)
+{
+    achievement(
+        title = achTitle,
+        description = "Catch " + animalAmount + " animals and take their items to Shelia (unlocks when you save)",
+        points = points,
+        trigger = (
+            (
+                IsCatzAndInGame() && 
+                CatzAnimalItemsCaught >= animalAmount * 0x55 &&
+                prev(CatzAnimalItemsCaught) < animalAmount * 0x55
+            ) 
+            ||
+            (
+                IsDogzAndInGame() && 
+                DogzAnimalItemsCaught >= animalAmount * 0x55 &&
+                prev(DogzAnimalItemsCaught) < animalAmount * 0x55
+            )
+        )
+    )
+}
+
+CatchAnimals("Filling the Shop", 5, 5)
+CatchAnimals("Looking Snazzy", 5, 10)
+CatchAnimals("Master Animal Catcher", 10, 14)
