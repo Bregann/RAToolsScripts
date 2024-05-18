@@ -83,7 +83,7 @@ DiaryTaskComplete("Golden Fishy", "Return the golden fish to Charles", 5, "", 0x
 // The zoo animals
 DiaryTaskComplete("Grizzly Angler Conqueror", "Catch the fish for the bear and return him to the zoo", 4, "", 0x01e4182c, 0x01e47e2c, 0x03)
 DiaryTaskComplete("Ultimate Treasure Digger", "Beat the kiwi in the treasure hunt minigame", 4, "", 0x01e47e30, 0x01e47e30, 0x03)
-DiaryTaskComplete("Boar off Back To The Zoo!", "Beat the boar in the flag race minigame", 4, "", 0x01e41834, 0x01e47e34, 0x03)
+DiaryTaskComplete("Boar off Back to the Zoo!", "Beat the boar in the flag race minigame", 4, "", 0x01e41834, 0x01e47e34, 0x03)
 DiaryTaskComplete("Heave Ho", "Beat the elephant in the sled pull minigame", 4, "", 0x01e41838, 0x01e47e38, 0x03)
 DiaryTaskComplete("Buffalo Slide", "Beat the buffalo in the chicken race minigame", 4, "", 0x01e4183c, 0x01e47e3c, 0x03)
 DiaryTaskComplete("Flying High", "Beat the vulture in the rodeo minigame", 4, "", 0x01e41840, 0x01e47e40, 0x03)
@@ -251,18 +251,18 @@ function ClothingUnlocks(achTitle, achDesc, points, catzAddr, dogzAddr, count)
 }
 
 ClothingUnlocks("Looking Smart", "Open the secret chest in Crystal Caverns", 2, bit4(0x050049a), bit4(0x0050061a), 1)
-ClothingUnlocks("Ready To Put Out Fires", "Open the secret chest in Bubble Cave", 2, bit2(0x05004c1), bit2(0x00500641), 1)
+ClothingUnlocks("Ready to Put out Fires", "Open the secret chest in Bubble Cave", 2, bit2(0x05004c1), bit2(0x00500641), 1)
 ClothingUnlocks("Arrrr Me Eye", "Open the secret chest in Inferno Cave", 2, bit5(0x0500548), bit5(0x005006c8), 1)
 ClothingUnlocks("A Cheery Unlock", "Open the secret chest in Sky Heights", 2, bit7(0x0500761), bit7(0x005008e1), 1)
 ClothingUnlocks("Rocking the Ribbon", "Open the secret chest in Polar Fields", 2, bit5(0x0500768), bit5(0x005008e8), 1)
 ClothingUnlocks("Dressed To Impress", "Open both secret chests in Gongoro Peak", 2, bit2(0x0500695) + bit4(0x50070e), bit2(0x00500815) + bit4(0x0050088e), 2)
 
 // Clothing for playing 5 games with each animal in zoo
-ClothingUnlocks("Plundering An Accessory", "Unlock the unique accessory from the vulture in the zoo by playing their minigame 5 times", 5, bit4(0x0050047a), bit4(0x005005fa), 1)
+ClothingUnlocks("Plundering an Accessory", "Unlock the unique accessory from the vulture in the zoo by playing their minigame 5 times", 5, bit4(0x0050047a), bit4(0x005005fa), 1)
 ClothingUnlocks("Where's The Beach?", "Unlock the unique accessory from the buffalo in the zoo by playing their minigame 5 times", 5, bit2(0x005007b5), bit2(0x00500935), 1)
 ClothingUnlocks("Noble Accessory", "Unlock the unique accessory from the lion in the zoo by playing their minigame 5 times", 5, bit0(0x005005dc), bit0(0x0050075c), 1)
 ClothingUnlocks("Pretty Hat", "Unlock the unique accessory from the giraffe in the zoo by playing their minigame 5 times", 5, bit0(0x005004c8), bit0(0x00500648), 1)
-ClothingUnlocks("Ready To Set Sail", "Unlock the unique accessory from the panda in the zoo by playing their minigame 5 times", 5, bit2(0x00500655), bit2(0x005007d5), 1)
+ClothingUnlocks("Ready to Set Sail", "Unlock the unique accessory from the panda in the zoo by playing their minigame 5 times", 5, bit2(0x00500655), bit2(0x005007d5), 1)
 ClothingUnlocks("Parrrrty!", "Unlock the unique accessory from the gorilla in the zoo by playing their minigame 5 times", 5, bit2(0x00500535), bit2(0x005006b5), 1)
 ClothingUnlocks("Winging It", "Unlock the unique accessory from the penguin in the zoo by playing their minigame 5 times", 5, bit2(0x00500735), bit2(0x005008b5), 1)
 ClothingUnlocks("Sombrero", "Unlock the unique accessory from the elephant in the zoo by playing their minigame 5 times", 5, bit7(0x0050048d), bit7(0x0050060d), 1)
@@ -306,3 +306,64 @@ function CatchAnimals(achTitle, points, animalAmount)
 CatchAnimals("Filling the Shop", 5, 5)
 CatchAnimals("Looking Snazzy", 5, 10)
 CatchAnimals("Master Animal Catcher", 10, 14)
+
+// =============== CHALLENGES ===============
+// 280 ring toss
+// 380 fruit
+// 220 treasure hunt
+
+function MinigameTimer(achTitle, achDesc, catzAddr, dogzAddr, amount)
+{
+    achievement(
+        title = achTitle,
+        description = achDesc,
+        points = 10,
+        trigger = (
+                        (
+                IsCatzAndInGame() && 
+                catzAddr > amount &&
+                prev(catzAddr) < amount
+            ) 
+            ||
+            (
+                IsDogzAndInGame() && 
+                dogzAddr > amount &&
+                prev(dogzAddr) < amount
+            )
+        )
+    )
+}
+
+function MinigamePoints(achTitle, achDesc, catzAddr, dogzAddr, amount)
+{
+    achievement(
+        title = achTitle,
+        description = achDesc,
+        points = 10,
+        trigger = (
+                        (
+                IsCatzAndInGame() && 
+                catzAddr >= amount &&
+                prev(catzAddr) < amount
+            ) 
+            ||
+            (
+                IsDogzAndInGame() && 
+                dogzAddr >= amount &&
+                prev(dogzAddr) < amount
+            )
+        )
+    )
+}
+MinigameTimer("Flagging Away", "Beat flag race course 1 in under 31 seconds", dword(0x501318), dword(0x501498), 1860)
+MinigameTimer("Flag Speedster", "Beat flag race course 2 in under 36 seconds", dword(0x501448), dword(0x5015c4), 2160)
+MinigameTimer("Fastest Flag Catcher Around", "Beat flag race course 3 in under 50 seconds", dword(0x501570), dword(0x5016f0), 3000)
+MinigameTimer("Strong Animal", "Beat sled pull course 1 in under 25 seconds", dword(0x500e60), dword(0x500fe0), 1500)
+MinigameTimer("Terrain Crosser", "Beat sled pull course 2 in under 25 seconds", dword(0x500f8c), dword(0x50110c), 1500)
+MinigameTimer("Dodging the Rocks", "Beat sled pull course 3 in under 29 seconds", dword(0x5010b8), dword(0x501238), 1740)
+MinigameTimer("Perfect Balance", "Beat barrel ride in under 41 seconds", dword(0x501dc0), dword(0x501f40), 2460)
+MinigameTimer("Speedy Flight", "Beat rodeo in under 49 seconds", dword(0x501c90), dword(0x501e10), 2940)
+
+MinigamePoints("Ring Ring Ring", "Reach a score of 280 or more on ring toss", dword(0x501ef0), dword(0x502070), 280)
+MinigamePoints("Fruit Ninja", "Reach a score of 380 or more on fruit catch", dword(0x501900), dword(0x501a80), 380)
+MinigamePoints("Hunting for Gold", "Reach a score of 220 or more on treasure hunt", dword(0x5016a0), dword(0x501820), 220)
