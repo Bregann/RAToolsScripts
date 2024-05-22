@@ -69,16 +69,16 @@ DiaryTaskComplete("Rain Rain Go Away!", "Clear the rain from Pawville", 4, "PROG
 DiaryTaskComplete("Hero Healer", "Deliver the cough medicine to Toby & Daisy", 4, "PROGRESSION", 0x01e417dd, 0x01e47ddd, 0x03, 0x44)
 DiaryTaskComplete("Begone Bramble", "Remove the bramble from the windmill", 4, "PROGRESSION", 0x01e417e1, 0x01e47de1, 0x03, 0x44)
 DiaryTaskComplete("A Wise Wizard", "Meet Theophilus", 3, "PROGRESSION", 0x01e417e4, 0x01e47de4, 0x03, 0x44)
-DiaryTaskComplete("Lightning up the Way", "Repair the lighthouse and depart off to Monolith Isle", 4, "PROGRESSION", 0x01e417e9, 0x01e47de9, 0x03, 0x34)
+DiaryTaskComplete("Lighting up the Way", "Repair the lighthouse and depart off to Monolith Isle", 4, "PROGRESSION", 0x01e417e9, 0x01e47de9, 0x03, 0x34)
 DiaryTaskComplete("Bubble Cave Adventure", "Find the Water crystal", 5, "PROGRESSION", 0x01e417f4, 0x01e47df4, 0x03, 0x44)
 DiaryTaskComplete("A Hot Hot Hot Journey", "Find the Earth crystal", 5, "PROGRESSION", 0x01e417fd, 0x01e47dfd, 0x03, 0x44)
 DiaryTaskComplete("Polar Expedition", "Find the Ice crystal", 5, "PROGRESSION", 0x01e41805, 0x01e47e05, 0x03, 0x44)
-DiaryTaskComplete("Storm Chaser", "Clear the tornados", 4, "PROGRESSION", 0x01e41810, 0x01e47e10, 0x34, 0x44)
+DiaryTaskComplete("Storm Chaser", "Clear the tornadoes", 4, "PROGRESSION", 0x01e41810, 0x01e47e10, 0x34, 0x44)
 DiaryTaskComplete("Big Bad Wolf Down", "Defeat Ivlet", 10, "WIN_CONDITION", 0x01e41820, 0x01e47e20, 0x03, 0x44)
 
 // The bonus missions
-DiaryTaskComplete("A Volcanic Task", "Return the lava stone to Charles", 5, "", 0x01e41864, 0x01e47e64, 0x03, 0x44)
-DiaryTaskComplete("Golden Fishy", "Return the golden fish to Charles", 5, "", 0x01e41868, 0x01e47e68, 0x03, 0x44)
+DiaryTaskComplete("Aquarium Expander", "Complete Charles's first optional quest", 5, "", 0x01e41864, 0x01e47e5c, 0x03, 0x44)
+DiaryTaskComplete("Fish Hunter", "Complete Charles's second optional quest", 5, "", 0x01e41868, 0x01e47e60, 0x03, 0x44)
 
 // The zoo animals
 DiaryTaskComplete("Grizzly Angler Conqueror", "Catch the fish for the bear and return him to the zoo", 4, "", 0x01e4182c, 0x01e47e2c, 0x03, 0x44)
@@ -219,7 +219,7 @@ function EncyclopediaCollection(achTitle, achDesc, points, catzCollectionAddr, d
     )
 }
 
-EncyclopediaCollection("Fishy Business", "Complete 50% of the fish collection (unlocks when you save)", 10, FishCollectionCatz, FishCollectionDogz, 45)
+EncyclopediaCollection("Fishy Business", "Complete 50% of the fish collection (unlocks when you save)", 10, FishCollectionCatz, FishCollectionDogz, 35)
 EncyclopediaCollection("Master Angler", "Complete 100% of the fish collection (unlocks when you save)", 25, FishCollectionCatz, FishCollectionDogz, 70)
 EncyclopediaCollection("Insect Inspector", "Complete 50% of the insect collection (unlocks when you save)", 10, InsectCollectionCatz, InsectCollectionDogz, 17)
 EncyclopediaCollection("Bugged Out", "Complete 100% of the insect collection (unlocks when you save)", 10, InsectCollectionCatz, InsectCollectionDogz, 35)
@@ -285,7 +285,7 @@ function CatchAnimals(achTitle, points, animalAmount)
 {
     achievement(
         title = achTitle,
-        description = "Catch " + animalAmount + " animals and take their items to Shelia (unlocks when you save)",
+        description = "Catch " + animalAmount + " animals and take their items to Sheila (unlocks when you save)",
         points = points,
         trigger = (
             (
@@ -322,13 +322,15 @@ function MinigameTimer(achTitle, achDesc, catzAddr, dogzAddr, amount)
                         (
                 IsCatzAndInGame() && 
                 catzAddr < amount &&
-                prev(catzAddr) >= amount
+                catzAddr != 0x00 &&
+                (prev(catzAddr) >= amount || prev(catzAddr) == 0)
             ) 
             ||
             (
                 IsDogzAndInGame() && 
                 dogzAddr < amount &&
-                prev(dogzAddr) >= amount
+                dogzAddr != 0x00 &&
+                (prev(dogzAddr) >= amount || prev(dogzAddr) == 0)
             )
         )
     )
@@ -343,20 +345,22 @@ function MinigamePoints(achTitle, achDesc, catzAddr, dogzAddr, amount)
         trigger = (
                         (
                 IsCatzAndInGame() && 
-                catzAddr <= amount &&
-                prev(catzAddr) > amount
+                catzAddr >= amount &&
+                catzAddr != 0x00 &&
+                (prev(catzAddr) < amount || prev(catzAddr) == 0)
             ) 
             ||
             (
                 IsDogzAndInGame() && 
-                dogzAddr <= amount &&
-                prev(dogzAddr) > amount
+                dogzAddr >= amount &&
+                dogzAddr != 0x00 &&
+                (prev(dogzAddr) < amount || prev(dogzAddr) == 0)
             )
         )
     )
 }
 MinigameTimer("Flagging Away", "Beat flag race course 1 in under 31 seconds", dword(0x501318), dword(0x501498), 1860)
-MinigameTimer("Flag Speedster", "Beat flag race course 2 in under 36 seconds", dword(0x501448), dword(0x5015c4), 2160)
+MinigameTimer("Flag Speedster", "Beat flag race course 2 in under 36 seconds", dword(0x501444), dword(0x5015c4), 2160)
 MinigameTimer("Fastest Flag Catcher Around", "Beat flag race course 3 in under 50 seconds", dword(0x501570), dword(0x5016f0), 3000)
 MinigameTimer("Strong Animal", "Beat sled pull course 1 in under 25 seconds", dword(0x500e60), dword(0x500fe0), 1500)
 MinigameTimer("Terrain Crosser", "Beat sled pull course 2 in under 25 seconds", dword(0x500f8c), dword(0x50110c), 1500)
