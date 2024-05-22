@@ -5,7 +5,7 @@ function IsCatzAndInGame() => ascii_string_equals(0x0048c77d, "CATZ/BAS") && dwo
 function IsDogzAndInGame() => ascii_string_equals(0x0048c89d, "DOGZ/BAS") && dword(0x004af6fc) != 0x00
 
 // =============== PROGRESSION ===============
-function DiaryTaskComplete(achTitle, achDesc, points, achType, catzAddr, dogzAddr, prevValue)
+function DiaryTaskComplete(achTitle, achDesc, points, achType, catzAddr, dogzAddr, prevValue, currValue)
 {
     achievement(
         title = achTitle,
@@ -15,23 +15,23 @@ function DiaryTaskComplete(achTitle, achDesc, points, achType, catzAddr, dogzAdd
         trigger = (
             (
                 IsCatzAndInGame() && 
-                byte(catzAddr) == 0x44 &&
+                byte(catzAddr) == currValue &&
                 prev(byte(catzAddr)) == prevValue
             ) 
             ||
             (
                 IsDogzAndInGame() && 
-                byte(dogzAddr) == 0x44 &&
+                byte(dogzAddr) == currValue &&
                 prev(byte(dogzAddr)) == prevValue
             )
         )
     )
 }
 
-DiaryTaskComplete("Fun and Games!", "Complete the activities with Victor and exit Dolphin Coast", 2, "PROGRESSION", 0x01e4177c, 0x01e47d7c, 0x00)
-DiaryTaskComplete("Ivlet Has Escaped", "Visit the jail and take the hat to Ivlet", 2, "PROGRESSION", 0x01e41790, 0x01e47d90, 0x00)
-DiaryTaskComplete("Drug Store Repaired", "Repair Gertrude's drug store", 2, "PROGRESSION", 0x01e4179d, 0x01e47d9d, 0x03)
-DiaryTaskComplete("Tom Back in Business", "Hand the herb oil to Tom to help him re-open his shop", 2, "PROGRESSION", 0x01e417a1, 0x01e47da1, 0x03)
+DiaryTaskComplete("Fun and Games!", "Complete the activities with Victor and exit Dolphin Coast", 2, "PROGRESSION", 0x01e4177c, 0x01e47d7c, 0x00, 0x44)
+DiaryTaskComplete("Ivlet Has Escaped", "Visit the jail and take the hat to Ivlet", 2, "PROGRESSION", 0x01e41790, 0x01e47d90, 0x00, 0x44)
+DiaryTaskComplete("Drug Store Repaired", "Repair Gertrude's drug store", 2, "PROGRESSION", 0x01e4179d, 0x01e47d9d, 0x03, 0x44)
+DiaryTaskComplete("Tom Back in Business", "Hand the herb oil to Tom to help him re-open his shop", 2, "PROGRESSION", 0x01e417a1, 0x01e47da1, 0x03, 0x44)
 
 // Added it in here so I didn't have to re-order the achievements later lol
 achievement(
@@ -56,43 +56,43 @@ achievement(
     )
 )
 
-DiaryTaskComplete("Saul Saviour", "Rescue Saul in Whisker Woods", 3, "PROGRESSION", 0x01e417a4, 0x01e47da4, 0x34)
-DiaryTaskComplete("Flower Power", "Repair the flower bed", 3, "PROGRESSION", 0x01e417a9, 0x01e47da9, 0x03)
-DiaryTaskComplete("Bling Buyer", "Repair Sheila's fashion house", 3, "PROGRESSION", 0x1e417b3, 0x01e47daf, 0x03)
-DiaryTaskComplete("Fishy Fixer", "Repair the aquarium", 3, "PROGRESSION", 0x01e417b4, 0x01e47db4, 0x34)
-DiaryTaskComplete("Stanley Speed Boost", "Help Godfrey by speeding up Stanley with a new friend", 4, "PROGRESSION", 0x01e417bb, 0x01e47dbb, 0x34)
-DiaryTaskComplete("The Animal Whisperer", "Learn \"Call\" from Saul", 3, "PROGRESSION", 0x01e417bd, 0x01e47dbd, 0x34)
-DiaryTaskComplete("Icebreaker", "Melt the frozen river", 3, "PROGRESSION", 0x01e417c1, 0x01e47dc1, 0x03)
-DiaryTaskComplete("A Zoo Without Animals", "Repair the zoo", 3, "PROGRESSION", 0x01e417ca, 0x01e47dca, 0x03)
-DiaryTaskComplete("A Rocky Unlock", "Learn \"Pick Up and Throw\"", 2, "PROGRESSION", 0x01e417d4, 0x01e47dd4, 0x03)
-DiaryTaskComplete("Rain Rain Go Away!", "Clear the rain from Pawville", 4, "PROGRESSION", 0x01e417d8, 0x01e47dd8, 0x03)
-DiaryTaskComplete("Hero Healer", "Deliver the cough medicine to Toby & Daisy", 4, "PROGRESSION", 0x01e417dd, 0x01e47ddd, 0x03)
-DiaryTaskComplete("Begone Bramble", "Remove the bramble from the windmill", 4, "PROGRESSION", 0x01e417e1, 0x01e47de1, 0x03)
-DiaryTaskComplete("A Wise Wizard", "Meet Theophilus", 3, "PROGRESSION", 0x01e417e4, 0x01e47de4, 0x03)
-DiaryTaskComplete("Lightning up the Way", "Repair the lighthouse and depart off to Monolith Isle", 4, "PROGRESSION", 0x01e417e9, 0x01e47de9, 0x03)
-DiaryTaskComplete("Bubble Cave Adventure", "Find the Water crystal", 5, "PROGRESSION", 0x01e417f4, 0x01e47df4, 0x03)
-DiaryTaskComplete("A Hot Hot Hot Journey", "Find the Earth crystal", 5, "PROGRESSION", 0x01e417fd, 0x01e47dfd, 0x03)
-DiaryTaskComplete("Polar Expedition", "Find the Ice crystal", 5, "PROGRESSION", 0x01e41805, 0x01e47e05, 0x03)
-DiaryTaskComplete("Storm Chaser", "Clear the tornados", 4, "PROGRESSION", 0x01e41810, 0x01e47e10, 0x34)
-DiaryTaskComplete("Big Bad Wolf Down", "Defeat Ivlet", 10, "WIN_CONDITION", 0x01e41820, 0x01e47e20, 0x03)
+DiaryTaskComplete("Saul Saviour", "Rescue Saul in Whisker Woods", 3, "PROGRESSION", 0x01e417a4, 0x01e47da4, 0x34, 0x44)
+DiaryTaskComplete("Flower Power", "Repair the flower bed", 3, "PROGRESSION", 0x01e417a9, 0x01e47da9, 0x03, 0x44)
+DiaryTaskComplete("Bling Buyer", "Repair Sheila's fashion house", 3, "PROGRESSION", 0x1e417b3, 0x01e47daf, 0x03, 0x44)
+DiaryTaskComplete("Fishy Fixer", "Repair the aquarium", 3, "PROGRESSION", 0x01e417b4, 0x01e47db4, 0x34, 0x44)
+DiaryTaskComplete("Stanley Speed Boost", "Help Godfrey by speeding up Stanley with a new friend", 4, "PROGRESSION", 0x01e417bb, 0x01e47dbb, 0x34, 0x44)
+DiaryTaskComplete("The Animal Whisperer", "Learn \"Call\" from Saul", 3, "PROGRESSION", 0x01e417bd, 0x01e47dbd, 0x34, 0x44)
+DiaryTaskComplete("Icebreaker", "Melt the frozen river", 3, "PROGRESSION", 0x01e417c1, 0x01e47dc1, 0x03, 0x44)
+DiaryTaskComplete("A Zoo Without Animals", "Repair the zoo", 3, "PROGRESSION", 0x01e417ca, 0x01e47dca, 0x03, 0x44)
+DiaryTaskComplete("A Rocky Unlock", "Learn \"Pick Up and Throw\"", 2, "PROGRESSION", 0x01e417d4, 0x01e47dd4, 0x03, 0x44)
+DiaryTaskComplete("Rain Rain Go Away!", "Clear the rain from Pawville", 4, "PROGRESSION", 0x01e417d8, 0x01e47dd8, 0x03, 0x44)
+DiaryTaskComplete("Hero Healer", "Deliver the cough medicine to Toby & Daisy", 4, "PROGRESSION", 0x01e417dd, 0x01e47ddd, 0x03, 0x44)
+DiaryTaskComplete("Begone Bramble", "Remove the bramble from the windmill", 4, "PROGRESSION", 0x01e417e1, 0x01e47de1, 0x03, 0x44)
+DiaryTaskComplete("A Wise Wizard", "Meet Theophilus", 3, "PROGRESSION", 0x01e417e4, 0x01e47de4, 0x03, 0x44)
+DiaryTaskComplete("Lightning up the Way", "Repair the lighthouse and depart off to Monolith Isle", 4, "PROGRESSION", 0x01e417e9, 0x01e47de9, 0x03, 0x34)
+DiaryTaskComplete("Bubble Cave Adventure", "Find the Water crystal", 5, "PROGRESSION", 0x01e417f4, 0x01e47df4, 0x03, 0x44)
+DiaryTaskComplete("A Hot Hot Hot Journey", "Find the Earth crystal", 5, "PROGRESSION", 0x01e417fd, 0x01e47dfd, 0x03, 0x44)
+DiaryTaskComplete("Polar Expedition", "Find the Ice crystal", 5, "PROGRESSION", 0x01e41805, 0x01e47e05, 0x03, 0x44)
+DiaryTaskComplete("Storm Chaser", "Clear the tornados", 4, "PROGRESSION", 0x01e41810, 0x01e47e10, 0x34, 0x44)
+DiaryTaskComplete("Big Bad Wolf Down", "Defeat Ivlet", 10, "WIN_CONDITION", 0x01e41820, 0x01e47e20, 0x03, 0x44)
 
 // The bonus missions
-DiaryTaskComplete("A Volcanic Task", "Return the lava stone to Charles", 5, "", 0x01e41864, 0x01e47e64, 0x03)
-DiaryTaskComplete("Golden Fishy", "Return the golden fish to Charles", 5, "", 0x01e41868, 0x01e47e68, 0x03)
+DiaryTaskComplete("A Volcanic Task", "Return the lava stone to Charles", 5, "", 0x01e41864, 0x01e47e64, 0x03, 0x44)
+DiaryTaskComplete("Golden Fishy", "Return the golden fish to Charles", 5, "", 0x01e41868, 0x01e47e68, 0x03, 0x44)
 
 // The zoo animals
-DiaryTaskComplete("Grizzly Angler Conqueror", "Catch the fish for the bear and return him to the zoo", 4, "", 0x01e4182c, 0x01e47e2c, 0x03)
-DiaryTaskComplete("Ultimate Treasure Digger", "Beat the kiwi in the treasure hunt minigame", 4, "", 0x01e47e30, 0x01e47e30, 0x03)
-DiaryTaskComplete("Boar off Back to the Zoo!", "Beat the boar in the flag race minigame", 4, "", 0x01e41834, 0x01e47e34, 0x03)
-DiaryTaskComplete("Heave Ho", "Beat the elephant in the sled pull minigame", 4, "", 0x01e41838, 0x01e47e38, 0x03)
-DiaryTaskComplete("Buffalo Slide", "Beat the buffalo in the chicken race minigame", 4, "", 0x01e4183c, 0x01e47e3c, 0x03)
-DiaryTaskComplete("Flying High", "Beat the vulture in the rodeo minigame", 4, "", 0x01e41840, 0x01e47e40, 0x03)
-DiaryTaskComplete("Monkeying Around", "Beat the monkey in the dodgeball minigame", 4, "", 0x01e41844, 0x01e47e44, 0x03)
-DiaryTaskComplete("Ring Toss Champion", "Beat the giraffe in the ring toss battle minigame", 4, "", 0x01e41848, 0x01e47e48, 0x03)
-DiaryTaskComplete("Cold Belly!", "Beat the penguin in the curling minigame", 4, "", 0x01e4184c, 0x01e47e4c, 0x03)
-DiaryTaskComplete("Skidding Around", "Beat the lion in the hockey minigame", 4, "", 0x01e41850, 0x01e47e50, 0x03)
-DiaryTaskComplete("They See Me Rolling", "Beat the panda in the barrel race minigame", 4, "", 0x01e41854, 0x01e47e54, 0x03)
-DiaryTaskComplete("Raining Bananas and Apples", "Beat the gorilla in the fruit catch minigame", 4, "", 0x01e41858, 0x01e47e58, 0x03)
+DiaryTaskComplete("Grizzly Angler Conqueror", "Catch the fish for the bear and return him to the zoo", 4, "", 0x01e4182c, 0x01e47e2c, 0x03, 0x44)
+DiaryTaskComplete("Ultimate Treasure Digger", "Beat the kiwi in the treasure hunt minigame", 4, "", 0x01e41830, 0x01e47e30, 0x03, 0x44)
+DiaryTaskComplete("Boar off Back to the Zoo!", "Beat the boar in the flag race minigame", 4, "", 0x01e41834, 0x01e47e34, 0x03, 0x44)
+DiaryTaskComplete("Heave Ho", "Beat the elephant in the sled pull minigame", 4, "", 0x01e41838, 0x01e47e38, 0x03, 0x44)
+DiaryTaskComplete("Buffalo Slide", "Beat the buffalo in the chicken race minigame", 4, "", 0x01e4183c, 0x01e47e3c, 0x03, 0x44)
+DiaryTaskComplete("Flying High", "Beat the vulture in the rodeo minigame", 4, "", 0x01e41840, 0x01e47e40, 0x03, 0x44)
+DiaryTaskComplete("Monkeying Around", "Beat the monkey in the dodgeball minigame", 4, "", 0x01e41844, 0x01e47e44, 0x03, 0x44)
+DiaryTaskComplete("Ring Toss Champion", "Beat the giraffe in the ring toss battle minigame", 4, "", 0x01e41848, 0x01e47e48, 0x03, 0x44)
+DiaryTaskComplete("Cold Belly!", "Beat the penguin in the curling minigame", 4, "", 0x01e4184c, 0x01e47e4c, 0x03, 0x44)
+DiaryTaskComplete("Skidding Around", "Beat the lion in the hockey minigame", 4, "", 0x01e41850, 0x01e47e50, 0x03, 0x44)
+DiaryTaskComplete("They See Me Rolling", "Beat the panda in the barrel race minigame", 4, "", 0x01e41854, 0x01e47e54, 0x03, 0x44)
+DiaryTaskComplete("Raining Bananas and Apples", "Beat the gorilla in the fruit catch minigame", 4, "", 0x01e41858, 0x01e47e58, 0x03, 0x44)
 
 // =============== COLLECTIONS ===============
 FishCollectionCatz = 
@@ -321,14 +321,14 @@ function MinigameTimer(achTitle, achDesc, catzAddr, dogzAddr, amount)
         trigger = (
                         (
                 IsCatzAndInGame() && 
-                catzAddr > amount &&
-                prev(catzAddr) < amount
+                catzAddr < amount &&
+                prev(catzAddr) >= amount
             ) 
             ||
             (
                 IsDogzAndInGame() && 
-                dogzAddr > amount &&
-                prev(dogzAddr) < amount
+                dogzAddr < amount &&
+                prev(dogzAddr) >= amount
             )
         )
     )
@@ -343,14 +343,14 @@ function MinigamePoints(achTitle, achDesc, catzAddr, dogzAddr, amount)
         trigger = (
                         (
                 IsCatzAndInGame() && 
-                catzAddr >= amount &&
-                prev(catzAddr) < amount
+                catzAddr <= amount &&
+                prev(catzAddr) > amount
             ) 
             ||
             (
                 IsDogzAndInGame() && 
-                dogzAddr >= amount &&
-                prev(dogzAddr) < amount
+                dogzAddr <= amount &&
+                prev(dogzAddr) > amount
             )
         )
     )
