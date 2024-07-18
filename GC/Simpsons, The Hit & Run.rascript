@@ -185,7 +185,10 @@ function BonusRaceAchievements(achTitle, achDesc, bonusRaceId)
             CheatCheck() &&
             GameState == 0x07 &&
             BonusRaceLevelId == bonusRaceId &&
-            byte(0x00c59533) > prev(byte(0x00c59533))
+            (
+                byte(0x00c59533) > prev(byte(0x00c59533)) || 
+                byte(0x00c59533) == 0x01 && prev(byte(0x00c59533)) == 0xbe
+            )
         )
     )
 }
@@ -210,6 +213,21 @@ function Collectible(achTitle, levelId, achDesc, collectibleAmount, collectibleA
             InGame(levelId) &&
             measured(collectibleAddr == collectibleAmount) &&
             prev(collectibleAddr) < collectibleAmount
+        )
+    )
+}
+
+function BoxCollectible(achTitle, levelId, achDesc, collectibleAmount, collectibleAddr)
+{
+    achievement (
+        title = achTitle,
+        description = achDesc + " " + levelId + 1,
+        points = 10,
+        trigger = (
+            CheatCheck() &&
+            InGame(levelId) &&
+            collectibleAddr == 0 &&
+            (prev(collectibleAddr) < collectibleAmount && prev(collectibleAddr) > 0)
         )
     )
 }
@@ -273,13 +291,13 @@ bit7(0x0069e244) + bit0(0x0069e245) + bit1(0x0069e245) + bit0(0x0069e254) + bit1
 bit2(0x0069e254) + bit3(0x0069e254) + bit6(0x0069e254) + bit0(0x0069e274) + bit1(0x0069e274) +
 bit2(0x0069e274) + bit3(0x0069e274) + bit4(0x0069e274) + bit5(0x0069e274)
 
-Collectible("Homer's Box Destroying Day", 0x00, "Destroy every Cola crate and vending machine on level", 30, Level1ColaStuff)
-Collectible("No Box Left Destroyed", 0x01, "Destroy every Cola crate and vending machine on level", 23,  Level2ColaStuff)
-Collectible("Lisa, the Breaker of Vending Machines", 0x02, "Destroy every Cola crate and vending machine on level", 25,  Level3ColaStuff)
-Collectible("Marge Destroying Evil Cola", 0x03, "Destroy every Cola crate and vending machine on level", 28,  Level4ColaStuff)
-Collectible("Breaking the Kwik-E-Mart Stock", 0x04, "Destroy every Cola crate and vending machine on level", 25,  Level5ColaStuff)
-Collectible("Attempting to Stop the Cola", 0x05, "Destroy every Cola crate and vending machine on level", 26,  Level6ColaStuff)
-Collectible("Spooky Vending Machines", 0x06, "Destroy every Cola crate and vending machine on level", 28,  Level7ColaStuff)
+BoxCollectible("Homer's Box Destroying Day", 0x00, "Destroy every Cola crate and vending machine on level", 30, Level1ColaStuff)
+BoxCollectible("No Box Left Destroyed", 0x01, "Destroy every Cola crate and vending machine on level", 23,  Level2ColaStuff)
+BoxCollectible("Lisa, the Breaker of Vending Machines", 0x02, "Destroy every Cola crate and vending machine on level", 25,  Level3ColaStuff)
+BoxCollectible("Marge Destroying Evil Cola", 0x03, "Destroy every Cola crate and vending machine on level", 28,  Level4ColaStuff)
+BoxCollectible("Breaking the Kwik-E-Mart Stock", 0x04, "Destroy every Cola crate and vending machine on level", 25,  Level5ColaStuff)
+BoxCollectible("Attempting to Stop the Cola", 0x05, "Destroy every Cola crate and vending machine on level", 26,  Level6ColaStuff)
+BoxCollectible("Spooky Vending Machines", 0x06, "Destroy every Cola crate and vending machine on level", 28,  Level7ColaStuff)
 
 //Cards
 Collectible("Homer the Great", 0x00, "Collect every Collector Card on level", 7, byte(0x0069c65b))
@@ -308,13 +326,13 @@ Level5Vehicles = Level5RacesComplete + byte(0x69d2cc) + byte(0x0069d303)
 Level6Vehicles = Level6RacesComplete + byte(0x69d538) + byte(0x0069d56f)
 Level7Vehicles = Level7RacesComplete + byte(0x69d7a4) + byte(0x0069d7db)
 
-Collectible("Electaurus", 0x00, "Unlock every vehicle on level", 5, Level1Vehicles)
-Collectible("Now My Story Begins in Nineteen Dickety Two", 0x01, "Unlock every vehicle on level", 5, Level2Vehicles)
-Collectible("Nerdddddd!", 0x02, "Unlock every vehicle on level", 5, Level3Vehicles)
-Collectible("It's Willies Time", 0x03, "Unlock every vehicle on level", 5, Level4Vehicles)
-Collectible("Sound of the Police", 0x04, "Unlock every vehicle on level", 5, Level5Vehicles)
-Collectible("The Ultimate Villain Car", 0x05, "Unlock every vehicle on level", 5, Level6Vehicles)
-Collectible("Brains! Brains!", 0x06, "Unlock every vehicle on level", 5, Level7Vehicles)
+Collectible("Electaurus", 0x00, "Unlock every vehicle on level", 7, Level1Vehicles)
+Collectible("Now My Story Begins in Nineteen Dickety Two", 0x01, "Unlock every vehicle on level", 7, Level2Vehicles)
+Collectible("Nerdddddd!", 0x02, "Unlock every vehicle on level", 7, Level3Vehicles)
+Collectible("It's Willies Time", 0x03, "Unlock every vehicle on level", 7, Level4Vehicles)
+Collectible("Sound of the Police", 0x04, "Unlock every vehicle on level", 7, Level5Vehicles)
+Collectible("The Ultimate Villain Car", 0x05, "Unlock every vehicle on level", 7, Level6Vehicles)
+Collectible("Brains! Brains!", 0x06, "Unlock every vehicle on level", 7, Level7Vehicles)
 
 //Gags
 Collectible("Silent Alarm Activated", 0x00, "Activate every gag on level", 15, byte(0x0069c96f))
@@ -396,7 +414,7 @@ function BelowTimer() => ascii_string_equals(0x00cfe389, "3") || ascii_string_eq
 
 achievement(
     title = "Speedy Monkey Collector",
-    description = "Collect all 30 monkeys with 2 minutes and 20 seconds or more left on the clock in the mission \"Monkey See Monkey D'oh\"",
+    description = "Collect all 30 monkeys with 2 minutes and 20 seconds or more left on the clock in the mission \"Monkey See Monkey D'oh\" - Cancel the mission to retry",
     points = 10,
     trigger = (
         CheatCheck() &&
@@ -426,7 +444,7 @@ achievement(
         CheatCheck() &&
         once(MissionState == 0x02 && IsFromOuterSpaceLoaded()) &&
         never(IsFromOuterSpaceSelectedLevel() || !PhoneboxCarSelected("gramp_v") || CurrentCar != 0x05 || GameState == 0x02 || HasAttemptedSkip()) &&
-        trigger_when(LevelID == 0x03 && prev(LevelID) == 0x04)
+        trigger_when(LevelID == 0x04 && prev(LevelID) == 0x03)
     )
 )
 

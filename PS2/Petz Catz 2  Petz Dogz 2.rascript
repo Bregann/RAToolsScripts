@@ -212,8 +212,8 @@ function EncyclopediaCollection(achTitle, achDesc, points, catzCollectionAddr, d
             ||
             (
                 IsDogzAndInGame() && 
-                measured(dogzCollectionAddr == collectionAmount) &&
-                prev(dogzCollectionAddr) == collectionAmount
+                measured(dogzCollectionAddr >= collectionAmount) &&
+                prev(dogzCollectionAddr) < collectionAmount
             )
         )
     )
@@ -345,14 +345,14 @@ function MinigamePoints(achTitle, achDesc, catzAddr, dogzAddr, amount)
         trigger = (
                         (
                 IsCatzAndInGame() && 
-                catzAddr >= amount &&
+                catzAddr <= amount &&
                 catzAddr != 0x00 &&
                 (prev(catzAddr) < amount || prev(catzAddr) == 0)
             ) 
             ||
             (
                 IsDogzAndInGame() && 
-                dogzAddr >= amount &&
+                dogzAddr <= amount &&
                 dogzAddr != 0x00 &&
                 (prev(dogzAddr) < amount || prev(dogzAddr) == 0)
             )
