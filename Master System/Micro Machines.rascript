@@ -22,7 +22,7 @@ function Progression(achTitle, achDesc, points, round) {
 Progression("Getting Started", "Win the qualifying race on challenge mode", 2, 1)
 Progression("First Out", "Knock out the first person on challenge mode (win race 2)", 5, 3)
 Progression("Player Wipeout", "Knock out the 2nd person on challenge mode (win race 5)", 5, 6)
-Progression("Taking Out the Competition", "Knock out the 3rd person on challenge mode (win race 8)", 10, 8)
+Progression("Taking Out the Competition", "Knock out the 3rd person on challenge mode (win race 8)", 10, 9)
 Progression("Another One Bites the Dust", "Knock out the 4th person on challenge mode (win race 11)", 10, 13)
 Progression("Knocking Out the Racers", "Knock out the 5th person on challenge mode (win race 14)", 10, 16)
 Progression("Track Champion", "Knock out the 6th person on challenge mode (win race 17)", 10, 20)
