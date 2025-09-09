@@ -6,11 +6,12 @@ PoliceStars = byte(dword(0x003e71b4) + 0x408)
 RacePosition = byte(dword(0x004bfde4) + 0x33)
 CurrentLap = byte(dword(0x004bfde4) + 0x34)
 RaceCompleted = byte(dword(0x004bfde4) + 0x40)
+RaceTimer = float(dword(dword(dword(0x003d78dc) + 0x1c) + 0x00) + 0x14)
 
 //Races
 CurrentRace = byte(0x003ffee4)
 function RaceComplete() => RaceCompleted == 0x72 && prev(RaceCompleted) == 0x70
-RaceTimer = float(0x00418c0c)
+
 IngameTimer = float(0x00417e14)
 function NoCheats() => byte(0x0037b2a4) == 0x00 && byte(0x0037b35c) == 0x00 && byte(0x004000dd) == 0x00
 GameDiff = byte(0x003fff40)
@@ -475,7 +476,7 @@ function RaceLeaderboard(raceName, raceId)
             CurrentRace != 0x00
         ),
         submit = (
-            RaceTimer != -1.0 &&
+            RaceTimer > 0.0 &&
             RaceComplete()
         ),
         value = (RaceTimer),
