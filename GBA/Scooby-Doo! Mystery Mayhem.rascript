@@ -20,7 +20,7 @@ function CurrentArea(screenId) => byte(0x0086b9) == screenId || byte(0x0086f9) =
 function SandwichComplete(achTitle, episodeNum, episodeHex, sandwichAddr) {
   achievement(
     title = achTitle,
-    description = "Create both sandwiches in episode" + episodeNum,
+    description = "Create both sandwiches in episode " + episodeNum,
     points = 5,
     trigger = (
       IsInGame() &&
@@ -34,7 +34,7 @@ function ClueFound(achTitle, clueName, clueAddr, episodeNum, episodeHex) {
   achievement(
     title = achTitle,
     description = "Find the" + "\"" + clueName + "\"" + " clue in episode " + episodeNum,
-    points = 2,
+    points = 3,
     type = "Progression",
     trigger = (
       IsInGame() &&
@@ -49,7 +49,7 @@ function TomePagesFound(achTitle, episodeNum, episodeHex, pageAddr){
   achievement(
     title = achTitle,
     description = "Find all of the tome pages on episode " + episodeNum,
-    points = 4,
+    points = 5,
     trigger = (
       IsInGame() &&
       measured(pageAddr == 3, CurrentEpisode == episodeHex) &&
@@ -150,11 +150,11 @@ LevelComplete("A Bright Knight", "Progression", 2, 0x01, byte(0x01af89), 0x3f, 0
 // ---------- Level 3 ------------
 // mine cart speedrun
 ClueFound("Note", "Note", bit6(0x01af64), 3, 0x02)
-ClueFound("	A Ticket to the Wild West", "One-Way Train Ticket", bit7(0x01af64), 3, 0x02)
+ClueFound("A Ticket to the Wild West", "One-Way Train Ticket", bit7(0x01af64), 3, 0x02)
 ClueFound("Look at This Photograph", "Photograph", bit0(0x01af65), 3, 0x02)
 
 SandwichLevel3 = 
-bit6(0x01af83) + bit0(0x01af84) + bit1(0x01af84) + bit5(0x01af84) + bit0(0x01af85)
+bit6(0x01af83) + bit0(0x01af84) + bit1(0x01af84) + bit5(0x01af84) + bit0(0x01af85) + 
 bit4(0x01af83) + bit7(0x01af83) + bit2(0x01af84) + bit6(0x01af84) + bit7(0x01af84)
 SandwichComplete("A Weird Wild Sandwich", 3, 0x02, SandwichLevel3)
 
