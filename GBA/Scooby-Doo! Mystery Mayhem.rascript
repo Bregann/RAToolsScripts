@@ -146,3 +146,19 @@ TombPagesLevel2 = bit4(0x01af95) + bit5(0x01af95) + bit6(0x01af95)
 TomePagesFound("A Spooky Movie Script", 2, 0x01, TombPagesLevel2)
 
 LevelComplete("A Bright Knight", "Progression", 2, 0x01, byte(0x01af89), 0x3f, 0x7f)
+
+// ---------- Level 3 ------------
+// mine cart speedrun
+ClueFound("Note", "Note", bit6(0x01af64), 3, 0x02)
+ClueFound("	A Ticket to the Wild West", "One-Way Train Ticket", bit7(0x01af64), 3, 0x02)
+ClueFound("Look at This Photograph", "Photograph", bit0(0x01af65), 3, 0x02)
+
+SandwichLevel3 = 
+bit6(0x01af83) + bit0(0x01af84) + bit1(0x01af84) + bit5(0x01af84) + bit0(0x01af85)
+bit4(0x01af83) + bit7(0x01af83) + bit2(0x01af84) + bit6(0x01af84) + bit7(0x01af84)
+SandwichComplete("A Weird Wild Sandwich", 3, 0x02, SandwichLevel3)
+
+TombPagesLevel3 = bit7(0x01af95) + bit0(0x01af96) + bit1(0x01af96)
+TomePagesFound("Wild West Pages", 3, 0x02, TombPagesLevel3)
+
+LevelComplete("Dust Devil Destroyer", "Progression", 3, 0x02, byte(0x01af8c), 0x7f, 0xff)
