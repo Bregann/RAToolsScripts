@@ -58,11 +58,11 @@ function TomePagesFound(achTitle, episodeNum, episodeHex, pageAddr){
   )
 }
 
-function LevelComplete(achTitle, type, episodeNum, episodeHex, levelAddr, prevLevelHex, levelHex) {
+function LevelComplete(achTitle, points, type, episodeNum, episodeHex, levelAddr, prevLevelHex, levelHex) {
   achievement(
     title = achTitle,
     description = "Complete episode " + episodeNum,
-    points = 5,
+    points = points,
     type = type,
     trigger = (
       IsInGame() &&
@@ -81,7 +81,7 @@ function CartSpeedrun(achTitle, achDesc, startingLevelId, endLevelId, cartLevelI
     type = "Missable",
     trigger = (
       once(CurrentArea(startingLevelId)) &&
-      never(tally(600, any_of(cartLevelIds, id => id == byte(0x0086b9) || id == byte(0x0086f9))) || IsInMenus()) &&
+      never(tally(frames, any_of(cartLevelIds, id => id == byte(0x0086b9) || id == byte(0x0086f9))) || IsInMenus()) &&
       never((prev(byte(0x0086b9)) > byte(0x0086b9)) || (prev(byte(0x0086f9)) > byte(0x0086f9))) &&
       trigger_when(CurrentArea(endLevelId))
     )
@@ -113,29 +113,32 @@ function CartLeaderboard(lbTitle, levelNum, startingLevelId, lastCartAreaId, end
 
 // ---------- Level 1 ------------
 // idea: book cart speedrun
-ClueFound("Receipt", "Receipt", bit0(0x01af64), 1, 0x00)
-ClueFound("Telegram", "Telegram", bit1(0x01af64), 1, 0x00)
-ClueFound("Crumpled Note", "Crumpled Note", bit2(0x01af64), 1, 0x00)
+ClueFound("Spooky Sales Slip", "Receipt", bit0(0x01af64), 1, 0x00)
+ClueFound("You've Got Frightmail", "Telegram", bit1(0x01af64), 1, 0x00)
+ClueFound("A Note-orious Clue", "Crumpled Note", bit2(0x01af64), 1, 0x00)
 
 Level1CartAreaHex = [0x17, 0x18, 0x19, 0x1a, 0x1b, 0x1c]
-CartSpeedrun("cat", "cccc", 0x17, 0x1d, Level1CartAreaHex, 600)
+CartSpeedrun("Book Cart Dash", "Complete the book cart minigame in under 34 seconds (crash the cart or reload your save to try again)", 0x17, 0x1d, Level1CartAreaHex, 2040)
 CartLeaderboard("Episode 1 - Cart Minigame", 1, 0x17, 0x1c, 0x1d, Level1CartAreaHex)
 
 SandwichLevel1 = 
 bit0(0x01af85) + bit3(0x01af84) + bit5(0x01af84) + bit6(0x01af84) + bit7(0x01af84) +
 bit3(0x01af83) + bit4(0x01af83) + bit6(0x01af83) + bit2(0x01af84) + bit4(0x01af84)
-
 SandwichComplete("The Mansion Sandwiches", 1, 0x00, SandwichLevel1)
 
-LevelComplete("The Mansion Mystery Solved!", "Progression", 1, 0x00, byte(0x01af87), 0xef, 0xff)
+LevelComplete("The Mansion Mystery Solved!", 5, "Progression", 1, 0x00, byte(0x01af87), 0xef, 0xff)
 
 // ---------- Level 2 ------------
 // no mega phone usage through the first scooby alone area?
 // movie cart speedrun
 
-ClueFound("Receipt", "Receipt", bit3(0x01af64), 2, 0x01)
-ClueFound("Business Card", "Business Card", bit4(0x01af64), 2, 0x01)
-ClueFound("Brochure", "Brochure", bit5(0x01af64), 2, 0x01)
+ClueFound("Box Office Bust", "Receipt", bit3(0x01af64), 2, 0x01)
+ClueFound("Director's Credentials", "Business Card", bit4(0x01af64), 2, 0x01)
+ClueFound("Plot Twist Pamphlet", "Brochure", bit5(0x01af64), 2, 0x01)
+
+Level2CartAreaHex = [0x28, 0x29, 0x2a, 0x2b, 0x2c]
+CartSpeedrun("Straight out of an Action Movie!", "Complete the movie cart minigame in under 30 seconds (crash the cart or reload your save to try again)", 0x28, 0x2d, Level2CartAreaHex, 1800)
+CartLeaderboard("Episode 2 - Cart Minigame", 2, 0x28, 0x2c, 0x2d, Level2CartAreaHex)
 
 SandwichLevel2 = 
 bit7(0x01af83) + bit2(0x01af84) + bit6(0x01af84) + bit7(0x01af84) + bit0(0x01af85) +
@@ -145,13 +148,17 @@ SandwichComplete("Movie Snacks", 2, 0x01, SandwichLevel2)
 TombPagesLevel2 = bit4(0x01af95) + bit5(0x01af95) + bit6(0x01af95)
 TomePagesFound("A Spooky Movie Script", 2, 0x01, TombPagesLevel2)
 
-LevelComplete("A Bright Knight", "Progression", 2, 0x01, byte(0x01af89), 0x3f, 0x7f)
+LevelComplete("A Bright Knight", 5, "Progression", 2, 0x01, byte(0x01af89), 0x3f, 0x7f)
 
 // ---------- Level 3 ------------
 // mine cart speedrun
-ClueFound("Note", "Note", bit6(0x01af64), 3, 0x02)
+ClueFound("Saloon Scribbles", "Note", bit6(0x01af64), 3, 0x02)
 ClueFound("A Ticket to the Wild West", "One-Way Train Ticket", bit7(0x01af64), 3, 0x02)
 ClueFound("Look at This Photograph", "Photograph", bit0(0x01af65), 3, 0x02)
+
+Level3CartAreaHex = [0x3f, 0x40, 0x41, 0x42]
+CartSpeedrun("Mining Away", "Complete the mine cart minigame in under 52 seconds (crash the cart or reload your save to try again)", 0x3f, 0x43, Level3CartAreaHex, 3120)
+CartLeaderboard("Episode 3 - Cart Minigame", 3, 0x3f, 0x42, 0x43, Level3CartAreaHex)
 
 SandwichLevel3 = 
 bit6(0x01af83) + bit0(0x01af84) + bit1(0x01af84) + bit5(0x01af84) + bit0(0x01af85) + 
@@ -161,4 +168,49 @@ SandwichComplete("A Weird Wild Sandwich", 3, 0x02, SandwichLevel3)
 TombPagesLevel3 = bit7(0x01af95) + bit0(0x01af96) + bit1(0x01af96)
 TomePagesFound("Wild West Pages", 3, 0x02, TombPagesLevel3)
 
-LevelComplete("Dust Devil Destroyer", "Progression", 3, 0x02, byte(0x01af8c), 0x7f, 0xff)
+LevelComplete("Dust Devil Destroyer", 5, "Progression", 3, 0x02, byte(0x01af8c), 0x7f, 0xff)
+
+// ---------- Level 4 ------------
+// boat speedrun
+ClueFound("Swampy Secrets", "Letter", bit1(0x01af65), 4, 0x03)
+ClueFound("The Bayou Grimoire", "Book", bit2(0x01af65), 4, 0x03)
+ClueFound("Documents of Doom", "Greenwood Development Documents", bit3(0x01af65), 4, 0x03)
+
+Level4CartAreaHex = [0x4e, 0x4f, 0x50]
+CartSpeedrun("Speedboat", "Complete the boat minigame in under 52 seconds (crash the boat or reload your save to try again)", 0x3f, 0x51, Level4CartAreaHex, 3120)
+CartLeaderboard("Episode 4 - Boat Minigame", 3, 0x4e, 0x50, 0x51, Level4CartAreaHex)
+
+SandwichLevel4 =
+bit6(0x01af83) + bit7(0x01af83) + bit2(0x01af84) + bit3(0x01af84) + bit5(0x01af84) +
+bit4(0x01af83) + bit0(0x01af84) + bit4(0x01af84) + bit6(0x01af84) + bit7(0x01af84)
+
+SandwichComplete("Zombie Sandwich", 4, 0x03, SandwichLevel4)
+
+TombPagesLevel4 = bit2(0x01af96) + bit3(0x01af96) + bit4(0x01af96)
+TomePagesFound("Dead Pages", 4, 0x03, TombPagesLevel4)
+
+LevelComplete("Zombie Banisher", 5, "Progression", 4, 0x03, byte(0x01af93), 0x1f, 0x3f)
+
+// ---------- Level 5 ------------
+// cart speedrun
+ClueFound("Labyrinth of the Lab", "Geographical Map", bit4(0x1af65), 5, 0x04)
+ClueFound("Secrets in Storage", "Encrypted Computer Disk", bit5(0x1af65), 5, 0x04)
+ClueFound("Lab Rats List", "List of Names", bit6(0x1af65), 5, 0x04)
+
+SandwichLevel5 = 
+bit1(0x01af84) + bit4(0x01af84) + bit5(0x01af84) + bit6(0x01af84) + bit7(0x01af84) +
+bit6(0x01af83) + bit7(0x01af83) + bit2(0x01af84) + bit0(0x01af85) + bit0(0x01af84)
+
+SandwichComplete("Lab Snacks", 5, 0x04, SandwichLevel5)
+
+TombPagesLevel5 = bit5(0x01af96) + bit6(0x01af96) + bit7(0x01af96)
+TomePagesFound("Lab Notes", 5, 0x04, TombPagesLevel5)
+
+LevelComplete("Haunting Deleted", 10, "Win_Condition", 5, 0x04, byte(0x01af94), 0xbf, 0xff)
+
+// RP
+rich_presence_conditional_display(IsInMenus(), "In The Title Screen")
+rich_presence_display("Shaggy and Scooby are solving a mystery in episode {0}! {1} lives",
+    rich_presence_value("Episode", CurrentEpisode + 1),
+    rich_presence_value("Lives", byte(0x01af40))
+)
