@@ -8,14 +8,26 @@ byte(0x0086b9) != 0x0a && byte(0x0086b9) != 0x62 && byte(0x0086b9) != 0x68 && by
 (byte(0x0086f9) != 0x00 && byte(0x0086f9) != 0x6b && byte(0x0086f9) != 0x69 && byte(0x0086f9) != 0x60 && byte(0x0086f9) != 0x61 &&
 byte(0x0086f9) != 0x0a && byte(0x0086f9) != 0x62 && byte(0x0086f9) != 0x68 && byte(0x0086f9) != 0x6a) 
 
+function IsInGameNoLoading() => 
+(byte(0x0086b9) != 0x00 && byte(0x0086b9) != 0x6b && byte(0x0086b9) != 0x69 && byte(0x0086b9) != 0x60 && byte(0x0086b9) != 0x61 &&
+byte(0x0086b9) != 0x0a && byte(0x0086b9) != 0x62 && byte(0x0086b9) != 0x6a) ||
+(byte(0x0086f9) != 0x00 && byte(0x0086f9) != 0x6b && byte(0x0086f9) != 0x69 && byte(0x0086f9) != 0x60 && byte(0x0086f9) != 0x61 &&
+byte(0x0086f9) != 0x0a && byte(0x0086f9) != 0x62 && byte(0x0086f9) != 0x6a) 
+
 function IsInMenus() => 
 (byte(0x0086b9) == 0x00 || byte(0x0086b9) == 0x6b || byte(0x0086b9) == 0x69 || byte(0x0086b9) == 0x60 || byte(0x0086b9) == 0x61 ||
 byte(0x0086b9) == 0x0a || byte(0x0086b9) == 0x62 || byte(0x0086b9) == 0x68 || byte(0x0086b9) == 0x6a) ||
 (byte(0x0086f9) == 0x00 || byte(0x0086f9) == 0x6b || byte(0x0086f9) == 0x69 || byte(0x0086f9) == 0x60 || byte(0x0086f9) == 0x61 ||
 byte(0x0086f9) == 0x0a || byte(0x0086f9) == 0x62 || byte(0x0086f9) == 0x68 || byte(0x0086f9) == 0x6a) 
 
+function IsInMenusNoLoading() => 
+(byte(0x0086b9) == 0x00 || byte(0x0086b9) == 0x6b || byte(0x0086b9) == 0x69 || byte(0x0086b9) == 0x60 || byte(0x0086b9) == 0x61 ||
+byte(0x0086b9) == 0x0a || byte(0x0086b9) == 0x62 || byte(0x0086b9) == 0x6a) ||
+(byte(0x0086f9) == 0x00 || byte(0x0086f9) == 0x6b || byte(0x0086f9) == 0x69 || byte(0x0086f9) == 0x60 || byte(0x0086f9) == 0x61 ||
+byte(0x0086f9) == 0x0a || byte(0x0086f9) == 0x62 || byte(0x0086f9) == 0x6a) 
 
 function CurrentArea(screenId) => byte(0x0086b9) == screenId || byte(0x0086f9) == screenId
+function PrevCurrentArea(screenId) => prev(byte(0x0086f9)) == screenId
 
 function SandwichComplete(achTitle, episodeNum, episodeHex, sandwichAddr) {
   achievement(
@@ -33,7 +45,7 @@ function SandwichComplete(achTitle, episodeNum, episodeHex, sandwichAddr) {
 function ClueFound(achTitle, clueName, clueAddr, episodeNum, episodeHex) {
   achievement(
     title = achTitle,
-    description = "Find the" + "\"" + clueName + "\"" + " clue in episode " + episodeNum,
+    description = "Find the " + "\"" + clueName + "\"" + " clue in episode " + episodeNum,
     points = 3,
     type = "Progression",
     trigger = (
@@ -41,6 +53,21 @@ function ClueFound(achTitle, clueName, clueAddr, episodeNum, episodeHex) {
       CurrentEpisode == episodeHex &&
       clueAddr == 1 &&
       prev(clueAddr) == 0
+    )
+  )
+}
+
+// because there are different ways you can get the clues it seems like...
+function Level1ClueFound(achTitle, clueName, clueAddr, clueHex, episodeNum, episodeHex) {
+  achievement(
+    title = achTitle,
+    description = "Find the " + "\"" + clueName + "\"" + " clue in episode " + episodeNum,
+    points = 3,
+    type = "Progression",
+    trigger = (
+      IsInGame() &&
+      CurrentEpisode == episodeHex &&
+      clueAddr == prev(clueAddr) + clueHex
     )
   )
 }
@@ -73,16 +100,15 @@ function LevelComplete(achTitle, points, type, episodeNum, episodeHex, levelAddr
   )
 }
 
-function CartSpeedrun(achTitle, achDesc, startingLevelId, endLevelId, cartLevelIds, frames){
+function CartSpeedrun(achTitle, achDesc, beforeCartId, startingLevelId, endLevelId, cartLevelIds, frames){
   achievement(
     title = achTitle,
     description = achDesc,
     points = 10,
     type = "Missable",
     trigger = (
-      once(CurrentArea(startingLevelId)) &&
-      never(tally(frames, any_of(cartLevelIds, id => id == byte(0x0086b9) || id == byte(0x0086f9))) || IsInMenus()) &&
-      never((prev(byte(0x0086b9)) > byte(0x0086b9)) || (prev(byte(0x0086f9)) > byte(0x0086f9))) &&
+      (once(CurrentArea(beforeCartId) && PrevCurrentArea(beforeCartId)) || (once(CurrentArea(beforeCartId) && PrevCurrentArea(0x68)))) &&
+      never(tally(frames, any_of(cartLevelIds, id => id == byte(0x0086b9) || id == byte(0x0086f9))) || IsInMenusNoLoading()) &&
       trigger_when(CurrentArea(endLevelId))
     )
   )
@@ -91,13 +117,13 @@ function CartSpeedrun(achTitle, achDesc, startingLevelId, endLevelId, cartLevelI
 function CartLeaderboard(lbTitle, levelNum, startingLevelId, lastCartAreaId, endingLevelId, cartLevelIds){
   leaderboard(
     title = lbTitle,
-    description = "Complete the cart mini game on episode " + levelNum + " in the fastest time possible",
+    description = "Complete the cart minigame on episode " + levelNum + " in the fastest time possible",
     start = (
-      IsInGame() &&
+      IsInGameNoLoading() &&
       CurrentArea(startingLevelId)
     ),
     cancel = (
-    IsInMenus()
+      IsInMenus() 
     ),
     submit = (
       (prev(byte(0x0086b9) == lastCartAreaId) || prev(byte(0x0086f9) == lastCartAreaId)) &&
@@ -112,13 +138,12 @@ function CartLeaderboard(lbTitle, levelNum, startingLevelId, lastCartAreaId, end
 }
 
 // ---------- Level 1 ------------
-// idea: book cart speedrun
-ClueFound("Spooky Sales Slip", "Receipt", bit0(0x01af64), 1, 0x00)
-ClueFound("You've Got Frightmail", "Telegram", bit1(0x01af64), 1, 0x00)
-ClueFound("A Note-orious Clue", "Crumpled Note", bit2(0x01af64), 1, 0x00)
+Level1ClueFound("Spooky Sales Slip", "Receipt", byte(0x01af80), 0x3f, 1, 0x00)
+Level1ClueFound("You've Got Frightmail", "Telegram", byte(0x01af80), 0x40, 1, 0x00)
+Level1ClueFound("A Note-orious Clue", "Crumpled Note", bit2(0x01af80), 0x80, 1, 0x00)
 
 Level1CartAreaHex = [0x17, 0x18, 0x19, 0x1a, 0x1b, 0x1c]
-CartSpeedrun("Book Cart Dash", "Complete the book cart minigame in under 34 seconds (crash the cart or reload your save to try again)", 0x17, 0x1d, Level1CartAreaHex, 2040)
+CartSpeedrun("Book Cart Dash", "Complete the book cart minigame in under 34 seconds (reload your save to try again)", 0x16, 0x17, 0x1d, Level1CartAreaHex, 2040)
 CartLeaderboard("Episode 1 - Cart Minigame", 1, 0x17, 0x1c, 0x1d, Level1CartAreaHex)
 
 SandwichLevel1 = 
@@ -129,15 +154,12 @@ SandwichComplete("The Mansion Sandwiches", 1, 0x00, SandwichLevel1)
 LevelComplete("The Mansion Mystery Solved!", 5, "Progression", 1, 0x00, byte(0x01af87), 0xef, 0xff)
 
 // ---------- Level 2 ------------
-// no mega phone usage through the first scooby alone area?
-// movie cart speedrun
-
 ClueFound("Box Office Bust", "Receipt", bit3(0x01af64), 2, 0x01)
 ClueFound("Director's Credentials", "Business Card", bit4(0x01af64), 2, 0x01)
 ClueFound("Plot Twist Pamphlet", "Brochure", bit5(0x01af64), 2, 0x01)
 
 Level2CartAreaHex = [0x28, 0x29, 0x2a, 0x2b, 0x2c]
-CartSpeedrun("Straight out of an Action Movie!", "Complete the movie cart minigame in under 30 seconds (crash the cart or reload your save to try again)", 0x28, 0x2d, Level2CartAreaHex, 1800)
+CartSpeedrun("Straight out of an Action Movie!", "Complete the movie cart minigame in under 30 seconds (reload your save to try again)", 0x27, 0x28, 0x2d, Level2CartAreaHex, 1800)
 CartLeaderboard("Episode 2 - Cart Minigame", 2, 0x28, 0x2c, 0x2d, Level2CartAreaHex)
 
 SandwichLevel2 = 
@@ -151,13 +173,12 @@ TomePagesFound("A Spooky Movie Script", 2, 0x01, TombPagesLevel2)
 LevelComplete("A Bright Knight", 5, "Progression", 2, 0x01, byte(0x01af89), 0x3f, 0x7f)
 
 // ---------- Level 3 ------------
-// mine cart speedrun
 ClueFound("Saloon Scribbles", "Note", bit6(0x01af64), 3, 0x02)
 ClueFound("A Ticket to the Wild West", "One-Way Train Ticket", bit7(0x01af64), 3, 0x02)
 ClueFound("Look at This Photograph", "Photograph", bit0(0x01af65), 3, 0x02)
 
 Level3CartAreaHex = [0x3f, 0x40, 0x41, 0x42]
-CartSpeedrun("Mining Away", "Complete the mine cart minigame in under 52 seconds (crash the cart or reload your save to try again)", 0x3f, 0x43, Level3CartAreaHex, 3120)
+CartSpeedrun("Mining Away", "Complete the mine cart minigame in under 52 seconds (reload your save to try again)", 0x3e, 0x3f, 0x43, Level3CartAreaHex, 3120)
 CartLeaderboard("Episode 3 - Cart Minigame", 3, 0x3f, 0x42, 0x43, Level3CartAreaHex)
 
 SandwichLevel3 = 
@@ -171,13 +192,12 @@ TomePagesFound("Wild West Pages", 3, 0x02, TombPagesLevel3)
 LevelComplete("Dust Devil Destroyer", 5, "Progression", 3, 0x02, byte(0x01af8c), 0x7f, 0xff)
 
 // ---------- Level 4 ------------
-// boat speedrun
 ClueFound("Swampy Secrets", "Letter", bit1(0x01af65), 4, 0x03)
 ClueFound("The Bayou Grimoire", "Book", bit2(0x01af65), 4, 0x03)
 ClueFound("Documents of Doom", "Greenwood Development Documents", bit3(0x01af65), 4, 0x03)
 
 Level4CartAreaHex = [0x4e, 0x4f, 0x50]
-CartSpeedrun("Speedboat", "Complete the boat minigame in under 52 seconds (crash the boat or reload your save to try again)", 0x3f, 0x51, Level4CartAreaHex, 3120)
+CartSpeedrun("Speedboat", "Complete the boat minigame in under 52 seconds (reload your save to try again)", 0x4d, 0x4e, 0x51, Level4CartAreaHex, 3120)
 CartLeaderboard("Episode 4 - Boat Minigame", 3, 0x4e, 0x50, 0x51, Level4CartAreaHex)
 
 SandwichLevel4 =
@@ -196,6 +216,10 @@ LevelComplete("Zombie Banisher", 5, "Progression", 4, 0x03, byte(0x01af93), 0x1f
 ClueFound("Labyrinth of the Lab", "Geographical Map", bit4(0x1af65), 5, 0x04)
 ClueFound("Secrets in Storage", "Encrypted Computer Disk", bit5(0x1af65), 5, 0x04)
 ClueFound("Lab Rats List", "List of Names", bit6(0x1af65), 5, 0x04)
+
+Level5CartAreaHex = [0x5c, 0x5d, 0x5e]
+CartSpeedrun("Lab Cart Dash", "Complete the cart minigame in under 30 seconds (reload your save to try again)", 0x5a, 0x5c, 0x59, Level5CartAreaHex, 1800)
+CartLeaderboard("Episode 5 - Cart Minigame", 4, 0x5c, 0x5e, 0x59, Level5CartAreaHex)
 
 SandwichLevel5 = 
 bit1(0x01af84) + bit4(0x01af84) + bit5(0x01af84) + bit6(0x01af84) + bit7(0x01af84) +
