@@ -140,7 +140,7 @@ function CartLeaderboard(lbTitle, levelNum, startingLevelId, lastCartAreaId, end
 // ---------- Level 1 ------------
 Level1ClueFound("Spooky Sales Slip", "Receipt", byte(0x01af80), 0x3f, 1, 0x00)
 Level1ClueFound("You've Got Frightmail", "Telegram", byte(0x01af80), 0x40, 1, 0x00)
-Level1ClueFound("A Note-orious Clue", "Crumpled Note", bit2(0x01af80), 0x80, 1, 0x00)
+Level1ClueFound("A Note-orious Clue", "Crumpled Note", byte(0x01af80), 0x80, 1, 0x00)
 
 Level1CartAreaHex = [0x17, 0x18, 0x19, 0x1a, 0x1b, 0x1c]
 CartSpeedrun("Book Cart Dash", "Complete the book cart minigame in under 34 seconds (reload your save to try again)", 0x16, 0x17, 0x1d, Level1CartAreaHex, 2040)
