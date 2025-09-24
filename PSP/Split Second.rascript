@@ -1,0 +1,38 @@
+// Split/Second
+// #ID = 18474
+
+Episode1LevelIds = [
+  0x00c73390,
+  0x00c73430,
+  0x00c734d0,
+  0x00c73570,
+  0x00c73610,
+  0x00c736f8
+]
+
+Episode2LevelIds = [
+  0x00c737a0,
+  0x00c73848,
+  0x00c738f0,
+  0x00c73990,
+  0x00c73a30,
+  0x00c73b18
+]
+
+Episode3LevelIds = [
+  0x00c73bc0,
+  0x00c73c78,
+  0x00c72fe8,
+  0x00c73060,
+  0x00c73f08,
+  0x00c73fe0
+]
+
+Episode4LevelIds = [
+  0x00c74088,
+  0x00c74128,
+  0x00c741c8,
+  0x00c74268,
+  0x00c74308,
+  0x00c743f8
+]

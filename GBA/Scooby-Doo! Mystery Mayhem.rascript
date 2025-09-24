@@ -138,7 +138,7 @@ function CartLeaderboard(lbTitle, levelNum, startingLevelId, lastCartAreaId, end
 }
 
 // ---------- Level 1 ------------
-Level1ClueFound("Spooky Sales Slip", "Receipt", byte(0x01af80), 0x3f, 1, 0x00)
+Level1ClueFound("Spooky Sales Slip", "Receipt", byte(0x01af80), 0x20, 1, 0x00)
 Level1ClueFound("You've Got Frightmail", "Telegram", byte(0x01af80), 0x40, 1, 0x00)
 Level1ClueFound("A Note-orious Clue", "Crumpled Note", byte(0x01af80), 0x80, 1, 0x00)
 
