@@ -1,6 +1,13 @@
 // Split/Second
 // #ID = 18474
 
+// this is the video that plays in the option menu
+// only way I could figure out how to prevent save unlocks due to how the memory goes in game
+// unlocks happen outside of races
+Generic3Ascii = 0x656e6547
+
+function CheatAndLoadProtection() => dword(0x00ab74d0) != 0xffffffff && dword(0x01fbf89e) != Generic3Ascii
+
 Episode1RaceIds = [
   0x00c73390,
   0x00c73430,
@@ -69,7 +76,8 @@ Episode8RaceIds = [
   0x00c75180,
   0x00c75220,
   0x00c752c0,
-  0x00c75360 //missing 1
+  0x00c73d18,
+  0x00c75360
 ]
 
 Episode9RaceIds = [
@@ -116,33 +124,38 @@ BonusRaceIds = [
   0x00c746f0,
   0x00c74bb0,
   0x00c74fc0,
-  0x01, // "Cleaning Up",
+  0x00c73ce0,
   0x00c756f0,
-  0x02, // "Boneyard Rush",
+  0x00c75c88,
   0x00c75528,
   0x00c76538
 ]
 
 CarUnlockIds = {
-  0xc76a90: "Hanzo Bayonet R",
-  0xc76c40: "Ryback Thunder",
-  0xc76d70: "Corbetti Nero GT 400",
-  0xc76e28: "Hanzo Indus V8R",
-  0xc76ee0: "Ryback Mohawk",
-  0xc76f98: "Cobretti Irdium",
-  0xc77060: "Rayback Bandit",
-  0xc77138: "Corbetti GT RS",
-  0xc77218: "Corbetti GT500",
-  0xc772f8: "Cobretti Vortex",
-  0xc77848: "Cobretti Pursuit",
-  0xc77900: "Cobretti Slipstream",
-  0xc779b8: "Ryback Coyote",
-  0xc77a98: "Cobretti 530 GTS",
-  0xc77b78: "Hanzo FX350",
-  0xc77d38: "Ryback Titan",
-  0xc77e18: "Ryback Cyclone RS",
-  0xc77ef8: "Elite 440 Special",
-  0xc77fd8: "Elite S510"
+  0x00c76d70: "Corbetti Nero GT 400",
+  0x00c76e28: "Hanzo Indus V8R",
+  0x00c76ee0: "Ryback Mohawk",
+  0x00c76f98: "Cobretti Irdium",
+  0x00c77060: "Rayback Bandit",
+  0x00c77138: "Corbetti GT RS",
+  0x00c77218: "Corbetti GT500",
+  0x00c772f8: "Cobretti Vortex",
+  0x00c75f50: "Cobretti Cascade",
+  0x00c76a90: "Hanzo Bayonet R",
+  0x00c76b60: "Hanzo GT",
+  0x00c76c40: "Ryback Thunder",
+  0x00c77848: "Cobretti Pursuit",
+  0x00c77900: "Cobretti Slipstream",
+  0x00c779b8: "Ryback Coyote",
+  0x00c77a98: "Cobretti 530 GTS",
+  0x00c77b78: "Hanzo FX350",
+  0x00c77c58: "Ryback Firestorm",
+  0x00c77d38: "Ryback Titan",
+  0x00c77e18: "Ryback Cyclone RS",
+  0x00c77ef8: "Elite 440 Special",
+  0x00c77fd8: "Elite S510",
+  0x00c780b8: "Elite Goliath",
+  0x00c78198: "Elite GT12"
 }
 
 // ------------------------ PROGRESSION ------------------------
@@ -153,12 +166,12 @@ function CompleteEliteRace(achTitle, episodeName, points, type, raceId) {
     points = points,
     type = type,
     trigger = (
+      CheatAndLoadProtection() &&
       (
-        prev(dword(raceId)) == 0x00 ||
-        prev(dword(raceId)) > 0x99) && //TODO: find out the value
+        prev(dword(raceId)) < 0x1e) && // less than 30 as 3rd place gets 30
       (
         dword(raceId) == 0x32 ||
-        (dword(raceId) > 0x40 && dword(raceId) < 0x32) // min value 
+        (dword(raceId) >= 0x1e && dword(raceId) <= 0x32)
       )
     )
   )
@@ -184,6 +197,7 @@ function UnlockBonusRace(achTitle, episodeName, unlockId) {
     description = "Unlock the bonus race on episode " + episodeName,
     points = 3,
     trigger = (
+      CheatAndLoadProtection() &&
       dword(unlockId) == 0x01 &&
       prev(dword(unlockId)) == 0x00
     )
@@ -228,6 +242,7 @@ function AllRaces1st(achTitle, episodeName, raceIds) {
       description = "Get 50/50 credits across every race in episode " + episodeName,
       points = 10,
       trigger = (
+        CheatAndLoadProtection() &&
         Tally(raceIds) == 0x06 &&
         PrevTally(raceIds) == 0x05
       )
@@ -252,8 +267,9 @@ function UnlockCar(carName, unlockId) {
   achievement(
     title = carName + " Unlocked",
     description = "Unlock the " + carName,
-    points = 3,
+    points = 4,
     trigger = (
+      CheatAndLoadProtection() && 
       dword(unlockId) == 0x01 &&
       prev(dword(unlockId)) == 0x00
     )
@@ -271,6 +287,7 @@ function UnlockAward(awardName, awardId, points, awardAddressId) {
     description = "Unlock the award " + awardId,
     points = points,
     trigger = (
+      CheatAndLoadProtection() &&
       dword(unlockId) == 0x01 &&
       prev(dword(unlockId)) == 0x00
     )
