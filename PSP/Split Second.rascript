@@ -177,7 +177,7 @@ function CompleteEliteRace(achTitle, episodeName, points, type, raceId) {
   )
 }
 
-CompleteEliteRace("Not a Rigged  Race!", "Rigged to Blow", 5, "Progression", 0x00c736f8)
+CompleteEliteRace("Not a Rigged Race!", "Rigged to Blow", 5, "Progression", 0x00c736f8)
 CompleteEliteRace("Splashing Down the Competition", "Splashdown", 5, "Progression", 0x00c73b18)
 CompleteEliteRace("Big Race Boom!", "Big Rig Boom!", 5, "Progression", 0x00c73fe0)
 CompleteEliteRace("Leaving the Competition in the Sunset", "Sunset", 5, "Progression", 0x00c743f8)
@@ -195,7 +195,7 @@ function UnlockBonusRace(achTitle, episodeName, unlockId) {
   achievement(
     title = achTitle,
     description = "Unlock the bonus race on episode " + episodeName,
-    points = 3,
+    points = 4,
     trigger = (
       CheatAndLoadProtection() &&
       dword(unlockId) == 0x01 &&
@@ -281,15 +281,36 @@ for car in CarUnlockIds{
 }
 
 // ------------------------ Awards ------------------------
-function UnlockAward(awardName, awardId, points, awardAddressId) {
+function UnlockAward(awardName, points, awardAddressId) {
   achievement(
     title = awardName,
-    description = "Unlock the award " + awardId,
+    description = "Unlock the award " + awardName,
     points = points,
     trigger = (
       CheatAndLoadProtection() &&
-      dword(unlockId) == 0x01 &&
-      prev(dword(unlockId)) == 0x00
+      dword(awardAddressId) == 0x01 &&
+      prev(dword(awardAddressId)) == 0x00
     )
   )
 }
+
+UnlockAward("Untouchable", 5, 0x00c7aa88)
+UnlockAward("Split/Second", 5, 0x00c78410)
+UnlockAward("Route Explorer", 5, 0x00c79a88)
+UnlockAward("Bully", 10, 0x00c79ad8)
+UnlockAward("Cheapskate", 5, 0x00c79b28)
+UnlockAward("Zero to Hero", 10, 0x00c79be8)
+UnlockAward("Frequent Flyer", 5, 0x00c79c48)
+UnlockAward("Swept Away", 5, 0x00c79c48)
+UnlockAward("The Pain Train", 5, 0x00c79d08)
+UnlockAward("Shipwrecked", 5, 0x00c79d68)
+UnlockAward("High Pipe", 5, 0x00c79dc8)
+UnlockAward("Beat the Team", 10, 0x00c799e8)
+UnlockAward("Beat the Team II: The Revenge", 10, 0x00c7ac88)
+UnlockAward("Convoy", 10, 0x00c7ad48)
+UnlockAward("Fearless", 5, 0x00c7ada8)
+UnlockAward("Once, Twice, Three time evasive", 10, 0x00c7aec8)
+UnlockAward("Triple Trouble", 5, 0x00c7af88)
+UnlockAward("Giant Killer", 5, 0x00c7b7f8)
+UnlockAward("Action Scene", 10, 0x00c7aad8)
+UnlockAward("Back From the Brink", 100x00c7abd8)
