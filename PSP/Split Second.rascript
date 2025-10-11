@@ -379,12 +379,112 @@ eventMode = {
     0x08f07a47: "Survival"
 }
 
-
-
-
 rich_presence_conditional_display(InGame(), "Browsing the menus")
 rich_presence_display("Racing on {0} in {1} mode with the {2}",
     rich_presence_lookup("Track", Track(), tracks),
     rich_presence_lookup("Mode", Mode(), eventMode),
     rich_presence_lookup("Car", Car(), cars)
 )
+
+// ------------------------ Leaderboards ------------------------
+RaceTimer = float(0x00ab74f8)
+RaceScore = dword(0x00ab7548)
+RaceEndShowing = byte(0x00ab74e4)
+RaceStatus = byte(0x0098eff8)
+
+function RaceLeaderboard(trackName, trackId, name, mode){
+  leaderboard(
+    title = name + " - " + trackName,
+    description = "Complete the race in the quickest time possible",
+    start = (
+      RaceTimer == 0.0 &&
+      RaceStatus == 0x02 &&
+      Track() == trackId &&
+      Mode() == mode
+    ),
+    cancel = (
+      RaceStatus == 0x01
+    ),
+    submit = (
+      RaceEndShowing == 0x01
+    ),
+    value = (
+      RaceTimer
+    ),
+    format = "SECS",
+    lower_is_better = true
+  )
+}
+
+function ScoreLeaderboard(trackName, trackId, name, mode){
+  leaderboard(
+    title = name + " - " + trackName,
+    description = "Earn the highest score in the race",
+    start = (
+      RaceScore == 0 &&
+      RaceStatus == 0x02 &&
+      Track() == trackId &&
+      Mode() == mode
+    ),
+    cancel = (
+      RaceStatus == 0x01
+    ),
+    submit = (
+      RaceEndShowing == 0x01
+    ),
+    value = (
+      RaceScore
+    ),
+    format = "SCORE"
+  )
+}
+
+for track in tracks{
+  RaceLeaderboard(tracks[track], track, "Race", 0x08f078e0)
+}
+
+detonatorTracks = {
+    0x08f08d8b: "Airport Terminal",
+    0x08f08ed5: "Dry Docks",
+    0x08f08f7f: "Ferry Wharf",
+    0x08f09029: "Port Bridge",
+    0x08f090c8: "The Docks",
+    0x08f09172: "Downtown Central",
+    0x08f0921e: "Expressway",
+    0x08f092ce: "Construction Site",
+    0x08f0937e: "Power Plant",
+    0x08f09432: "Storm Drain",
+    0x08f094e2: "Canyon",
+    0x08f09594: "Aircraft Graveyard"
+}
+
+for track in detonatorTracks{
+  RaceLeaderboard(detonatorTracks[track], track, "Detonator Race", 0x08f0791e)
+}
+
+airstrikeTracks = {
+  0x08f08d8b: "Airport Terminal",
+  0x08f09029: "Port Bridge",
+  0x08f09172: "Downtown Central",
+  0x08f09432: "Storm Drain",
+  0x08f09594: "Aircraft Graveyard"
+}
+
+for track in airstrikeTracks{
+  ScoreLeaderboard(detonatorTracks[track], track, "Air Strike", 0x08f079b0)
+}
+
+for track in airstrikeTracks{
+  RaceLeaderboard(detonatorTracks[track], track, "Air Revenge", 0x08f079ff)
+}
+
+survivalTracks = {
+  0x08f09642: "Downtown Circuit",
+  0x08f096fe: "Desert Run",
+  0x08f097bc: "Stormdrain Speedway",
+  0x08f09872: "Warehouse Strip"
+}
+
+for track in survivalTracks{
+  ScoreLeaderboard(survivalTracks[track], track, "Survival", 0x08f07a47)
+}
