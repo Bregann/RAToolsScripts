@@ -8,6 +8,16 @@ Generic3Ascii = 0x656e6547
 
 function CheatAndLoadProtection() => dword(0x00ab74d0) != 0xffffffff && dword(0x01fbf89e) != Generic3Ascii
 
+RaceTimer = float(0x00ab74f8)
+RaceScore = dword(0x00ab7548)
+RaceEndShowing = byte(0x00ab74e4)
+RaceStatus = byte(0x0098eff8)
+
+function InGame() => byte(0x0098eff8) == 0x01
+function Track() => dword(0x00c711d8)
+function Mode() => dword(0x00c712f8)
+function Car() => dword(0x00c71278)
+
 Episode1RaceIds = [
   0x00c73390,
   0x00c73430,
@@ -221,7 +231,7 @@ UnlockBonusRace("Out With a Bonus Bang", "Out With a Bang", BonusRaceIds[11])
 function Tally(data) {
   total = 0
   for item in data{
-      total = total + byte(item) / 0x32
+      total = byte(item) == 0x32
   }
   
   return total
@@ -243,8 +253,8 @@ function AllRaces1st(achTitle, episodeName, raceIds) {
       points = 10,
       trigger = (
         CheatAndLoadProtection() &&
-        Tally(raceIds) == 0x06 &&
-        PrevTally(raceIds) == 0x05
+        any_of(raceIds, e => prev(byte(e)) != 0x32) &&
+        all_of(raceIds, e => byte(e) == 0x32)
       )
   )
 }
@@ -315,12 +325,70 @@ UnlockAward("Giant Killer", 5, 0x00c7b7f8)
 UnlockAward("Action Scene", 10, 0x00c7aad8)
 UnlockAward("Back From the Brink", 10, 0x00c7abd8)
 
-// ------------------------ RP ------------------------
-function InGame() => byte(0x0098eff8) == 0x01
-function Track() => dword(0x00c711d8)
-function Mode() => dword(0x00c712f8)
-function Car() => dword(0x00c71278)
+// ------------------------ Misc Achievements ------------------------
+PPPointer = dword(0x00ab74e8) & 0x1ffffff
+PowerPlayBar = float(PPPointer + 0x1e4)
 
+achievement(
+  title = "Power Plays? Who Needs Them!",
+  description = "Place 1st in a regular race event without using any power plays",
+  points = 10,
+  trigger = (
+    once(
+      PowerPlayBar == 0.0 && 
+      RaceTimer == 0.0 && 
+      Mode() == 0x08f078e0
+    ) 
+    &&
+    never(
+      byte(0x0098eff8) == 0x01 ||
+      PowerPlayBar < prev(PowerPlayBar)
+    ) 
+    &&
+    trigger_when(
+      RaceEndShowing == 0x01 &&
+      dword(0x00ab74d4) == 0x00
+    )
+  )
+)
+
+achievement(
+  title = "Destruction Master",
+  description = "Score over 50,000 points in the destruction challenge",
+  points = 10,
+  trigger = (
+    Track() == 0x08f08d8b &&
+    Mode() == 0x08f056cb &&
+    RaceScore > 50000 &&
+    prev(RaceScore) < 50000
+  )
+)
+
+achievement(
+  title = "Power Sliding All over the Place",
+  description = "Score over 50,000 points in the power slide challenge",
+  points = 10,
+  trigger = (
+    Track() == 0x08f08cd3 &&
+    Mode() == 0x08f0571f &&
+    RaceScore > 50000 &&
+    prev(RaceScore) < 50000
+  )
+)
+
+achievement(
+  title = "Keep on Truckin'",
+  description = "Score over 50,000 points in the Keep on Truckin' challenge",
+  points = 10,
+  trigger = (
+    Track() == 0x08f096fe &&
+    Mode() == 0x08f0577d &&
+    RaceScore > 50000 &&
+    prev(RaceScore) < 50000
+  )
+)
+
+// ------------------------ RP ------------------------
 tracks = {
     0x08f08d8b: "Airport Terminal",
     0x08f08ed5: "Dry Docks",
@@ -337,7 +405,9 @@ tracks = {
     0x08f09642: "Downtown Circuit",
     0x08f096fe: "Desert Run",
     0x08f097bc: "Stormdrain Speedway",
-    0x08f09872: "Warehouse Strip"
+    0x08f09872: "Warehouse Strip",
+    0x08f08cd3: "Power Slide Challenge",
+    0x08d694ce: "Training Ground"
 }
 
 cars = {
@@ -367,7 +437,8 @@ cars = {
     0xc87b6251: "Elite 440 Special",
     0x75c31576: "Elite S510",
     0x882a6120: "Elite Goliath",
-    0xde2a1c6c: "Elite GT12"
+    0xde2a1c6c: "Elite GT12",
+    0x00000000: "Unknown"
 }
 
 eventMode = {
@@ -376,7 +447,12 @@ eventMode = {
     0x08f07961: "Elimination",
     0x08f079b0: "Air Strike",
     0x08f079ff: "Air Revenge",
-    0x08f07a47: "Survival"
+    0x08f07a47: "Survival",
+    0x08f056cb: "Challenge",
+    0x08f0577d: "Challenge",
+    0x08f0571f: "Challenge",
+    0x08d69493: "Tutorial"
+
 }
 
 rich_presence_conditional_display(InGame(), "Browsing the menus")
@@ -387,10 +463,24 @@ rich_presence_display("Racing on {0} in {1} mode with the {2}",
 )
 
 // ------------------------ Leaderboards ------------------------
-RaceTimer = float(0x00ab74f8)
-RaceScore = dword(0x00ab7548)
-RaceEndShowing = byte(0x00ab74e4)
-RaceStatus = byte(0x0098eff8)
+raceTracks = {
+    0x08f08d8b: "Airport Terminal",
+    0x08f08ed5: "Dry Docks",
+    0x08f08f7f: "Ferry Wharf",
+    0x08f09029: "Port Bridge",
+    0x08f090c8: "The Docks",
+    0x08f09172: "Downtown Central",
+    0x08f0921e: "Expressway",
+    0x08f092ce: "Construction Site",
+    0x08f0937e: "Power Plant",
+    0x08f09432: "Storm Drain",
+    0x08f094e2: "Canyon",
+    0x08f09594: "Aircraft Graveyard",
+    0x08f09642: "Downtown Circuit",
+    0x08f096fe: "Desert Run",
+    0x08f097bc: "Stormdrain Speedway",
+    0x08f09872: "Warehouse Strip"
+}
 
 function RaceLeaderboard(trackName, trackId, name, mode){
   leaderboard(
@@ -439,8 +529,8 @@ function ScoreLeaderboard(trackName, trackId, name, mode){
   )
 }
 
-for track in tracks{
-  RaceLeaderboard(tracks[track], track, "Race", 0x08f078e0)
+for track in raceTracks{
+  RaceLeaderboard(raceTracks[track], track, "Race", 0x08f078e0)
 }
 
 detonatorTracks = {
