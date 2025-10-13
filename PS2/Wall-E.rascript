@@ -78,6 +78,7 @@ LidoDeckDash = 0xEA01
 
 BnlTuneUpChapterCompleted = byte(dword(0x8b8600) + 0xFFFFFB99)
 SandstormSprintChapterCompleted = byte(dword(0x8b8600) + 0x01)
+HomeSweetHomeChapterCompleted = byte(dword(0x8b8600) + 0x3121)
 WorkDayChapterCompleted = byte(dword(0x8b8600) + 0x02E9)
 HiddenTreasureChapterCompleted = byte(dword(0x8b8600) + 0x1E59)
 TruckSweetTruckChapterCompleted = byte(dword(0x8b8600) + 0x31D9)
