@@ -6,7 +6,7 @@
 // unlocks happen outside of races
 Generic3Ascii = 0x656e6547
 
-function CheatAndLoadProtection() => dword(0x00ab74d0) != 0xffffffff && dword(0x01fbf89e) != Generic3Ascii
+function CheatAndLoadProtection() => (dword(0x00ab74d0) != 0xffffffff || dword(0x00ab74d4) != 0xffffffff) && dword(0x01fbf89e) != Generic3Ascii
 
 RaceTimer = float(0x00ab74f8)
 RaceScore = dword(0x00ab7548)
@@ -118,7 +118,7 @@ Episode11RaceIds = [
 ]
 
 Episode12RaceIds = [
-  0x00c75561,
+  0x00c75560,
   0x00c76390,
   0x00c76430,
   0x00c764d0,
@@ -135,7 +135,7 @@ BonusRaceIds = [
   0x00c74bb0,
   0x00c74fc0,
   0x00c73ce0,
-  0x00c756f0,
+  0x00c75870,
   0x00c75c88,
   0x00c75528,
   0x00c76538
@@ -191,13 +191,13 @@ CompleteEliteRace("Not a Rigged Race!", "Rigged to Blow", 5, "Progression", 0x00
 CompleteEliteRace("Splashing Down the Competition", "Splashdown", 5, "Progression", 0x00c73b18)
 CompleteEliteRace("Big Race Boom!", "Big Rig Boom!", 5, "Progression", 0x00c73fe0)
 CompleteEliteRace("Leaving the Competition in the Sunset", "Sunset", 5, "Progression", 0x00c743f8)
-CompleteEliteRace("Skidding Over the Racers", "Hit the Skids", 5, "Progression", 0x00c74728)
+CompleteEliteRace("Skidding Over the Racers", "Hit the Skids", 5, "Progression", 0x00c73da8)
 CompleteEliteRace("Passing the Opponents", "Midway Pass", 5, "Progression", 0x00c74cd0)
 CompleteEliteRace("Breaking Cars", "Threshold Break", 5, "Progression", 0x00c750e0)
-CompleteEliteRace("Cleaning Up the Competition", "Cleaning Up", 5, "Progression", 0x00c75360)
+CompleteEliteRace("Cleaning Up the Competition", "Cleaning Up", 5, "Progression", 0x00c748d0)
 CompleteEliteRace("Burning Rubber", "Scorched Rubber", 5, "Progression", 0x00c75990)
 CompleteEliteRace("Boneyard Smash", "Boneyard Rush", 5, "Progression", 0x00c75da8)
-CompleteEliteRace("One Elite Race to Go!", "One Last Push", 5, "Progression", 0x00c75ee8)
+CompleteEliteRace("One Elite Race to Go!", "One Last Push", 5, "Progression", 0x00c75648)
 CompleteEliteRace("All Competitors Blown Up", "Out With a Bang", 10, "Win_Condition", 0x00c76658)
 
 // ------------------------ bonus races unlocked ------------------------
@@ -311,7 +311,7 @@ UnlockAward("Bully", 10, 0x00c79ad8)
 UnlockAward("Cheapskate", 5, 0x00c79b28)
 UnlockAward("Zero to Hero", 10, 0x00c79be8)
 UnlockAward("Frequent Flyer", 5, 0x00c79c48)
-UnlockAward("Swept Away", 5, 0x00c79c48)
+UnlockAward("Swept Away", 5, 0x00c79ca8)
 UnlockAward("The Pain Train", 5, 0x00c79d08)
 UnlockAward("Shipwrecked", 5, 0x00c79d68)
 UnlockAward("High Pipe", 5, 0x00c79dc8)
@@ -496,7 +496,8 @@ function RaceLeaderboard(trackName, trackId, name, mode){
       RaceStatus == 0x01
     ),
     submit = (
-      RaceEndShowing == 0x01
+      RaceEndShowing == 0x01 &&
+      RaceTimer > 1.0
     ),
     value = (
       RaceTimer
@@ -520,7 +521,8 @@ function ScoreLeaderboard(trackName, trackId, name, mode){
       RaceStatus == 0x01
     ),
     submit = (
-      RaceEndShowing == 0x01
+      RaceEndShowing == 0x01 &&
+      RaceTimer > 1.0
     ),
     value = (
       RaceScore
