@@ -4,27 +4,23 @@
 OFFSET = 0x580
 
 LevelID = {
-  // 1
-  0x00: "Port",
+  0x00: "Port",  // 1
   0x01: "Port Royal",
   0x02: "Tortuga",
   0x03: "The Black Pearl Attacks",
   0x04: "Smuggler's Den",
   0x05: "Isla De Muerta",
-  // 2
-  0x07: "Pelegosto",
+  0x07: "Pelegosto",  // 2
   0x08: "A Touch of Destiny",
   0x09: "The Dutchman's Secret",
   0x0a: "Isla Cruces",
   0x0b: "The Kraken",
-  // 3
-  0x0d: "Singapore",
+  0x0d: "Singapore",  // 3
   0x0e: "Davy Jones' Locker",
   0x0f: "Norrington's Choice",
   0x10: "The Brethren Court",
   0x11: "The Maelstrom",
-  // 4
-  0x13: "London Town",
+  0x13: "London Town",  // 4
   0x14: "Queen Anne's Revenge",
   0x15: "White Cap Bay",
   0x16: "A Spanish Legacy",
@@ -84,29 +80,29 @@ function LevelComplete(achTitle, levelName, type, levelId, levelAddr) {
   )
 }
 
-LevelComplete("Sailing Away", LevelID[1], "Progression", 0x01, 0x01080b96)
-LevelComplete("Assembling a Crew", LevelID[2], "Progression", 0x02, 0x01080baa)
-LevelComplete("It's the Pearl!", LevelID[3], "Progression", 0x03, 0x01080bbe)
-LevelComplete("Smuggler's Den", LevelID[4], "Progression", 0x04, 0x01080bd2)
-LevelComplete("Island of Death", LevelID[5], "Progression", 0x05, 0x01080be6)
+LevelComplete("Sailing Away", LevelID[0x01], "Progression", 0x01, 0x01080b96)
+LevelComplete("Assembling a Crew", LevelID[0x02], "Progression", 0x02, 0x01080baa)
+LevelComplete("It's the Pearl!", LevelID[0x03], "Progression", 0x03, 0x01080bbe)
+LevelComplete("Smuggler's Den", LevelID[0x04], "Progression", 0x04, 0x01080bd2)
+LevelComplete("Island of Death", LevelID[0x05], "Progression", 0x05, 0x01080be6)
 
-LevelComplete("Escaping the Cannibals", LevelID[6], "Progression", 0x07, 0x01080c0e)
-LevelComplete("A Visit to Tia Dalma", LevelID[7], "Progression", 0x08, 0x01080c22)
-LevelComplete("The Dutchman's Secret", LevelID[8], "Progression", 0x09, 0x01080c36)
-LevelComplete("Hunt For the Heart", LevelID[10], "Progression", 0x0a, 0x01080c4a)
-LevelComplete("Kraken Attack", LevelID[11], "Progression", 0x0b, 0x01080c5e)
+LevelComplete("Escaping the Cannibals", LevelID[0x07], "Progression", 0x07, 0x01080c0e)
+LevelComplete("A Visit to Tia Dalma", LevelID[0x08], "Progression", 0x08, 0x01080c22)
+LevelComplete("The Dutchman's Secret", LevelID[0x09], "Progression", 0x09, 0x01080c36)
+LevelComplete("Hunt For the Heart", LevelID[0x0a], "Progression", 0x0a, 0x01080c4a)
+LevelComplete("Kraken Attack", LevelID[0x0b], "Progression", 0x0b, 0x01080c5e)
 
-LevelComplete("Singapore", LevelID[12], "Progression", 0x0d, 0x01080c86)
-LevelComplete("Davy Jones' Locker", LevelID[13], "Progression", 0x0e, 0x01080c9a)
-LevelComplete("Norrington's Choice", LevelID[14], "Progression", 0x0f, 0x01080cae)
-LevelComplete("A Pirate Reunion", LevelID[15], "Progression", 0x10, 0x01080cc2)
-LevelComplete("The Calypso Sea Battle", LevelID[16], "Progression", 0x11, 0x01080cd6)
+LevelComplete("Singapore", LevelID[0x0d], "Progression", 0x0d, 0x01080c86)
+LevelComplete("Davy Jones' Locker", LevelID[0x0e], "Progression", 0x0e, 0x01080c9a)
+LevelComplete("Norrington's Choice", LevelID[0x0f], "Progression", 0x0f, 0x01080cae)
+LevelComplete("A Pirate Reunion", LevelID[0x10], "Progression", 0x10, 0x01080cc2)
+LevelComplete("The Calypso Sea Battle", LevelID[0x11], "Progression", 0x11, 0x01080cd6)
 
-LevelComplete("London Town", LevelID[17], "Progression", 0x13, 0x01080cfe)
-LevelComplete("Queen Anne's Revenge", LevelID[18], "Progression", 0x14, 0x01080d12)
-LevelComplete("Mermaid Beach", LevelID[19], "Progression", 0x15, 0x01080d26)
-LevelComplete("A Spanish Visit", LevelID[20], "Progression", 0x16, 0x01080d3a)
-LevelComplete("Finding the Fountain", LevelID[21], "Progression", 0x17, 0x01080d4e)
+LevelComplete("London Town", LevelID[0x13], "Progression", 0x13, 0x01080cfe)
+LevelComplete("Queen Anne's Revenge", LevelID[0x14], "Progression", 0x14, 0x01080d12)
+LevelComplete("Mermaid Beach", LevelID[0x15], "Progression", 0x15, 0x01080d26)
+LevelComplete("A Spanish Visit", LevelID[0x16], "Progression", 0x16, 0x01080d3a)
+LevelComplete("Finding the Fountain", LevelID[0x17], "Progression", 0x17, 0x01080d4e)
 
 // ---------------------------------------- TRUE PIRATE ----------------------------------------
 CurseOfBlackPearlTruePirate = [
@@ -155,10 +151,10 @@ function TruePirateComplete(achTitle, episodeName, tpData){
   )
 }
 
-TruePirateComplete("", "\"Curse of the Black Pearl\"", CurseOfBlackPearlTruePirate)
-TruePirateComplete("", "\" Dead Man's Chest\"", DeadMansChestTruePirate)
-TruePirateComplete("", "\"At World's End\"", AtWorldsEndTruePirate)
-TruePirateComplete("", "\"On Stranger Tides\"", OnStrangerTidesTruePirate)
+TruePirateComplete("Pirate of Fortune and Glory", "\"Curse of the Black Pearl\"", CurseOfBlackPearlTruePirate)
+TruePirateComplete("I've Got a Jar of Studs", "\"Dead Man's Chest\"", DeadMansChestTruePirate)
+TruePirateComplete("Nine Pieces of Studs", "\"At World's End\"", AtWorldsEndTruePirate)
+TruePirateComplete("Studs of Youth", "\"On Stranger Tides\"", OnStrangerTidesTruePirate)
 
 // ---------------------------------------- MINI KITS ----------------------------------------
 CurseOfBlackPearlMinikits = [
@@ -207,10 +203,10 @@ function MinikitsComplete(achTitle, episodeName, mkData) {
   )
 }
 
-MinikitsComplete("", "\"Curse of the Black Pearl\"", CurseOfBlackPearlMinikits)
-MinikitsComplete("", "\" Dead Man's Chest\"", DeadMansChestMinikits)
-MinikitsComplete("", "\"At World's End\"", AtWorldsEndMinikits)
-MinikitsComplete("", "\"On Stranger Tides\"", OnStrangerTidesMinikits)
+MinikitsComplete("Cursed Minikits", "\"Curse of the Black Pearl\"", CurseOfBlackPearlMinikits)
+MinikitsComplete("Minikit Kraken", "\" Dead Man's Chest\"", DeadMansChestMinikits)
+MinikitsComplete("Nine Pieces of Eight? Try Ten Pieces of Plastic", "\"At World's End\"", AtWorldsEndMinikits)
+MinikitsComplete("Stranger Minkits", "\"On Stranger Tides\"", OnStrangerTidesMinikits)
 
 // ---------------------------------------- COMPASS PIECES ----------------------------------------
 CurseOfBlackPearlCompassPieces = [
@@ -245,6 +241,25 @@ OnStrangerTidesCompassPieces = [
   0x1080d52
 ]
 
+function CompassComplete(achTitle, episodeName, compassData) {
+  achievement(
+    title = achTitle,
+    description = "Find all 40 compass items in episode " + episodeName,
+    points = 10,
+    trigger = (
+      (TallyBitcount(compassData) == 40 &&
+      TallyPrevBitcount(compassData) < 40) ||
+      (TallyBitcount(compassData, OFFSET) == 40 &&
+      TallyPrevBitcount(compassData, OFFSET) < 40)
+    )
+  )
+}
+
+CompassComplete("It Points to What You Want Most", "Curse of the Black Pearl", CurseOfBlackPearlCompassPieces)
+CompassComplete("The Compass Never Lies", "Dead Man's Chest", DeadMansChestCompassPieces)
+CompassComplete("Path of the Pirate", "At World's End", AtWorldsEndCompassPieces)
+CompassComplete("Seeker of Legend", "On Stranger Tide", OnStrangerTidesCompassPieces)
+
 // ---------------------------------------- PURCHASES ----------------------------------------
 
 Characters = [
@@ -260,3 +275,17 @@ Characters = [
   0x1084059, 0x108405b, 0x1084066, 0x1084067, 0x1084068, 0x108406d, 0x108406f,
   0x108407b, 0x108407c, 0x108407d, 0x1084083, 0x1084090, 0x10840b6
 ]
+
+function Purchases(achTitle, achDesc, points, data, amount) {
+  achievement(
+    title = achTitle,
+    description = achDesc,
+    points = points,
+    trigger = (
+      (Tally(data) <= amount &&
+      TallyPrev(data) < amount) ||
+      (Tally(data, OFFSET) <= amount &&
+      TallyPrev(data, OFFSET) < amount)
+    )
+  )
+}

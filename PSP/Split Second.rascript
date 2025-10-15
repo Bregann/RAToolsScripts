@@ -360,7 +360,7 @@ achievement(
     Track() == 0x08f08d8b &&
     Mode() == 0x08f056cb &&
     RaceScore > 50000 &&
-    prev(RaceScore) < 50000
+    prev(RaceScore) <= 50000
   )
 )
 
@@ -372,7 +372,7 @@ achievement(
     Track() == 0x08f08cd3 &&
     Mode() == 0x08f0571f &&
     RaceScore > 50000 &&
-    prev(RaceScore) < 50000
+    prev(RaceScore) <= 50000
   )
 )
 
@@ -384,7 +384,7 @@ achievement(
     Track() == 0x08f096fe &&
     Mode() == 0x08f0577d &&
     RaceScore > 50000 &&
-    prev(RaceScore) < 50000
+    prev(RaceScore) <= 50000
   )
 )
 
