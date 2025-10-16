@@ -24,10 +24,13 @@ LevelID = {
   0x14: "Queen Anne's Revenge",
   0x15: "White Cap Bay",
   0x16: "A Spanish Legacy",
-  0x17: "The Fountain of Youth"
+  0x17: "The Fountain of Youth",
+  0x19: "The Ride" // bonus level
 }
 
-CurrentLevelID = dword_be(0x8102d0)
+CurrentLevelID = dword_be(0x008102d0)
+LastLoadedLevelID = dword_be(0x008102d4)
+function LoadProtection() => LastLoadedLevelID != 0xffffffff && LastLoadedLevelID != CurrentLevelID
 
 function Tally(data, offset = 0) {
   total = 0
@@ -50,7 +53,7 @@ function TallyPrev(data, offset = 0) {
 function TallyBitcount(data, offset = 0) {
   total = 0
   for item in data {
-      total = total + bitcount(byte(item + offset))
+      total = total + bitcount(item + offset)
   }
   
   return total
@@ -69,7 +72,7 @@ function TallyPrevBitcount(data, offset = 0) {
 function LevelComplete(achTitle, levelName, type, levelId, levelAddr) {
   achievement(
     title = achTitle,
-    description = "Complete level " + levelName + " on story mode",
+    description = "Complete " + "\"" + levelName + "\"" + " on story mode",
     type = type,
     points = 4,
     trigger = (
@@ -89,7 +92,7 @@ LevelComplete("Island of Death", LevelID[0x05], "Progression", 0x05, 0x01080be6)
 LevelComplete("Escaping the Cannibals", LevelID[0x07], "Progression", 0x07, 0x01080c0e)
 LevelComplete("A Visit to Tia Dalma", LevelID[0x08], "Progression", 0x08, 0x01080c22)
 LevelComplete("The Dutchman's Secret", LevelID[0x09], "Progression", 0x09, 0x01080c36)
-LevelComplete("Hunt For the Heart", LevelID[0x0a], "Progression", 0x0a, 0x01080c4a)
+LevelComplete("Hunt for the Heart", LevelID[0x0a], "Progression", 0x0a, 0x01080c4a)
 LevelComplete("Kraken Attack", LevelID[0x0b], "Progression", 0x0b, 0x01080c5e)
 
 LevelComplete("Singapore", LevelID[0x0d], "Progression", 0x0d, 0x01080c86)
@@ -140,13 +143,18 @@ OnStrangerTidesTruePirate = [
 function TruePirateComplete(achTitle, episodeName, tpData){
   achievement(
     title = achTitle,
-    description = "Reach true pirate status on all the levels in episode " + episodeName,
+    description = "Reach True Pirate status on every level in the " + episodeName + " episode",
     points = 10,
     trigger = (
-        (Tally(tpData) == 0x05 &&
-        TallyPrev(tpData) == 0x04) ||
-        (Tally(tpData, OFFSET) == 0x05 &&
-        TallyPrev(tpData, OFFSET) == 0x04)
+        (
+          LoadProtection() &&
+          Tally(tpData) == 0x05 &&
+          TallyPrev(tpData) == 0x04) ||
+        (
+          LoadProtection() &&
+          Tally(tpData, OFFSET) == 0x05 &&
+          TallyPrev(tpData, OFFSET) == 0x04
+        )
     )
   )
 }
@@ -192,21 +200,27 @@ OnStrangerTidesMinikits = [
 function MinikitsComplete(achTitle, episodeName, mkData) {
   achievement(
     title = achTitle,
-    description = "Collect all 50 minikits in episode " + episodeName,
+    description = "Collect all 50 minikits in the " + "\"" + episodeName + "\"" + " episode",
     points = 10,
     trigger = (
-      (Tally(mkData) == 0x32 &&
-      TallyPrev(mkData) < 0x32) ||
-      (Tally(mkData, OFFSET) == 0x32 &&
-      TallyPrev(mkData, OFFSET) < 0x32)
+      (
+        LoadProtection() &&
+        Tally(mkData) == 0x32 &&
+        TallyPrev(mkData) < 0x32
+      ) ||
+      (
+        LoadProtection() &&
+        Tally(mkData, OFFSET) == 0x32 &&
+        TallyPrev(mkData, OFFSET) < 0x32
+      )
     )
   )
 }
 
-MinikitsComplete("Cursed Minikits", "\"Curse of the Black Pearl\"", CurseOfBlackPearlMinikits)
-MinikitsComplete("Minikit Kraken", "\" Dead Man's Chest\"", DeadMansChestMinikits)
-MinikitsComplete("Nine Pieces of Eight? Try Ten Pieces of Plastic", "\"At World's End\"", AtWorldsEndMinikits)
-MinikitsComplete("Stranger Minkits", "\"On Stranger Tides\"", OnStrangerTidesMinikits)
+MinikitsComplete("Cursed Minikits", "Curse of the Black Pearl", CurseOfBlackPearlMinikits)
+MinikitsComplete("Minikit Kraken", "Dead Man's Chest", DeadMansChestMinikits)
+MinikitsComplete("Nine Pieces of Eight? Try Ten Pieces of Plastic", "At World's End", AtWorldsEndMinikits)
+MinikitsComplete("Stranger Minikits", "On Stranger Tides", OnStrangerTidesMinikits)
 
 // ---------------------------------------- COMPASS PIECES ----------------------------------------
 CurseOfBlackPearlCompassPieces = [
@@ -241,16 +255,32 @@ OnStrangerTidesCompassPieces = [
   0x1080d52
 ]
 
+RedHats = [
+  0x1081201,
+  0x1081202,
+  0x1081203
+]
+
+GoldBricks = byte(0x108122a)
+GoldBricksOS = byte(0x108122a + OFFSET)
+
 function CompassComplete(achTitle, episodeName, compassData) {
   achievement(
     title = achTitle,
-    description = "Find all 40 compass items in episode " + episodeName,
+    description = "Find all 40 Compass Items in the " + "\"" + episodeName + "\"" + " episode",
     points = 10,
     trigger = (
-      (TallyBitcount(compassData) == 40 &&
-      TallyPrevBitcount(compassData) < 40) ||
-      (TallyBitcount(compassData, OFFSET) == 40 &&
-      TallyPrevBitcount(compassData, OFFSET) < 40)
+      (
+        LoadProtection() &&
+        TallyBitcount(compassData) == 40 &&
+        TallyPrevBitcount(compassData) < 40
+      ) 
+      ||
+      (
+        LoadProtection() &&
+        TallyBitcount(compassData, OFFSET) == 40 &&
+        TallyPrevBitcount(compassData, OFFSET) < 40
+      )
     )
   )
 }
@@ -282,10 +312,103 @@ function Purchases(achTitle, achDesc, points, data, amount) {
     description = achDesc,
     points = points,
     trigger = (
-      (Tally(data) <= amount &&
-      TallyPrev(data) < amount) ||
-      (Tally(data, OFFSET) <= amount &&
-      TallyPrev(data, OFFSET) < amount)
+      (
+        LoadProtection() &&
+        Tally(data) >= amount &&
+        TallyPrev(data) < amount
+      ) 
+      ||
+      (
+        LoadProtection() &&
+        Tally(data, OFFSET) >= amount &&
+        TallyPrev(data, OFFSET) < amount
+      )
     )
   )
 }
+
+Purchases("Plundering Party", "Unlock 50% of the characters in the game", 10, Characters, 38)
+Purchases("Part of the Ship, Part of the Crew", "Unlock 100% of the characters in the game", 10, Characters, 76)
+
+achievement(
+  title = "Captain Jack… Now With Rhythm!",
+  description = "Use the code \"VDJSPW\" to unlock a musical Jack Sparrow",
+  points = 2,
+  trigger = (
+    (
+      LoadProtection() &&
+      prev(byte(0x010840b6)) == 0x00 &&
+      byte(0x010840b6) == 0x01
+    ) ||
+    (
+      LoadProtection() &&
+      prev(byte(0x010840b6 + OFFSET)) == 0x00 &&
+      byte(0x010840b6 + OFFSET) == 0x01
+    )
+  )
+)
+
+// Misc bits
+achievement(
+  title = "Tools of a True Pirate",
+  description = "Unlock and purchase all 20 Red Hats",
+  points = 25,
+  trigger = (
+    (
+      LoadProtection() &&
+      TallyBitcount(RedHats) == 20 &&
+      TallyPrevBitcount(RedHats) == 19
+    ) ||
+    (
+      LoadProtection() &&
+      TallyBitcount(RedHats, OFFSET) == 20 &&
+      TallyPrevBitcount(RedHats, OFFSET) == 19
+    )
+  )
+)
+
+achievement(
+  title = "A Gold Plundering Pirate",
+  description = "Collect all 85 Gold Bricks",
+  points = 25,
+  trigger = (
+    (
+      LoadProtection() &&
+      GoldBricks == 85 &&
+      prev(GoldBricks) < 85
+    ) ||
+    (
+      LoadProtection() &&
+      GoldBricksOS == 85 &&
+      prev(GoldBricksOS) < 85
+    ) 
+  )
+)
+
+achievement(
+  title = "Hold My Grog, I Got This",
+  description = "Complete the bonus level \"The Ride\"",
+  points = 5,
+  trigger = (
+    (
+      CurrentLevelID == 0x19 &&
+      bit3(0x01080d76) == 0x01 &&
+      prev(bit3(0x01080d76) == 0x00)
+    ) ||
+    (
+      CurrentLevelID == 0x19 &&
+      bit3(0x01080d76 + OFFSET) == 0x01 &&
+      prev(bit3(0x01080d76 + OFFSET) == 0x00)
+    )
+  )
+)
+
+// ------------------------ RP ------------------------
+function IsInMainMenu() => (dword_be(0x008102d0) == 0x01 && prior(dword_be(0x008102d0) == 0xffffffff)) || dword_be(0x008102d0) == 0xffffffff
+function IsInPort() => CurrentLevelID == 0x00
+rich_presence_conditional_display(IsInMainMenu(), "Captain Jack Sparrow and the crew are preparing to plunder ☠️")
+rich_presence_conditional_display(IsInPort(), "Captain Jack Sparrow and the crew are exploring the port 🏴‍☠️☠️")
+rich_presence_display("Plundering studs in {0} 🏴‍☠️ [gold bricks: {1}]",
+    rich_presence_lookup("Level", CurrentLevelID, LevelID),
+    rich_presence_value("GoldBricks", GoldBricks + GoldBricksOS)
+)
