@@ -33,7 +33,7 @@ LevelIDs = {
 function LevelComplete(achTitle, levelName, type, levelId, levelAddr) {
   achievement(
     title = achTitle,
-    description = "Complete " + "\"" + levelName + "\"" + " on story mode",
+    description = "Complete " + "\"" + levelName + "\"" + " in Story mode",
     type = type,
     points = 4,
     trigger = (
@@ -47,7 +47,7 @@ function LevelComplete(achTitle, levelName, type, levelId, levelAddr) {
 function BonusLevelComplete(achTitle, levelName, levelId, levelAddr) {
   achievement(
     title = achTitle,
-    description = "Complete bonus level " + "\"" + levelName + "\"",
+    description = "Complete the bonus level " + "\"" + levelName + "\"",
     points = 10,
     trigger = (
       CurrentLevelID == levelId &&
@@ -79,8 +79,8 @@ LevelComplete("Rollin' Through the Desert", "Desert Ambush", "Progression", 0x13
 LevelComplete("Only the Penitent Man Shall Pass", "Temple of the Grail", "Win_Condition", 0x14, 0x5b0a47)
 
 BonusLevelComplete("Every Legend Has a Beginning", "Young Indy", 0x16, 0x005b0a67)
-BonusLevelComplete("City of Gold… and Plastic", "Ancient City", 0x17, 0x005b0a77)
-BonusLevelComplete("Handle With Care", "Warehouse", 0x18, 0x005b0a87)
+BonusLevelComplete("City of Gold... and Plastic", "Ancient City", 0x17, 0x005b0a77)
+BonusLevelComplete("Handle with Care", "Warehouse", 0x18, 0x005b0a87)
 
 // -------------------- Level Collectibles --------------------
 LostArkTA = 

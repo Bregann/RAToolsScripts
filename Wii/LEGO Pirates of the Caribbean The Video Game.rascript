@@ -72,7 +72,7 @@ function TallyPrevBitcount(data, offset = 0) {
 function LevelComplete(achTitle, levelName, type, levelId, levelAddr) {
   achievement(
     title = achTitle,
-    description = "Complete " + "\"" + levelName + "\"" + " on story mode",
+    description = "Complete " + "\"" + levelName + "\"" + " in Story mode",
     type = type,
     points = 4,
     trigger = (
