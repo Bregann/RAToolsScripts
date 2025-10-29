@@ -12,8 +12,9 @@ Player2ProfileAward = dword_be(GameDataPointer + 0x157c)
 Player3ProfileAward = dword_be(GameDataPointer + 0x2120)
 Player4ProfileAward = dword_be(GameDataPointer + 0x2cc4)
 
-function IsInGame() => PropertyPointer != 0x00
+function IsInGame() => dword_be(0x0057aad0) != 0x00
 function CurrentRuleSet() => dword_be(0x1285033c)
+function CurrentRound() => dword_be(GameDataPointer + 0x5184)
 
 AiPlayer2Difficulty = dword_be(0x12850570)
 AiPlayer3Difficulty = dword_be(0x12850574)
@@ -30,6 +31,8 @@ function PlayerWonGame() =>
   Player1ProfileAward > Player3ProfileAward && 
   Player1ProfileAward > Player4ProfileAward && 
   prev(Player1ProfileAward) == 0x00
+
+function PlayerPosition() => dword_be(0x0054d74c)
 
 function ptr(base, offsets, accessor=dword_be)
 {
@@ -154,7 +157,7 @@ PurchaseUnlockable("A Famous Board", "Landmark City", "board", 5, 0x08, dword_be
 function PropertyHousePurchases(achTitle, boardName, boardColourGroup, propertyNames, propertyOwnerAddrs, propertyHotelAddrs, houseCount, boardAscii) {
   achievement(
     title = achTitle,
-    description = "On the " + boardName + " using the \"Official MONOPOLY\" rule set, own and build hotels on all " + boardColourGroup + " properties (" + propertyNames + ")",
+    description = "On the " + boardName + " board using the \"Official MONOPOLY\" rule set, own and build hotels on all " + boardColourGroup + " properties (" + propertyNames + ")",
     points = 5,
     trigger = (
       IsInGame() &&
@@ -207,6 +210,147 @@ achievement(
     CurrentRuleSet() == 0x00 &&
     trigger_when(TrainsAndUtilityOwners == 0x00) &&
     prev(TrainsAndUtilityOwners) != 0x00
+  )
+)
+
+// -------------------- Misc Challenges --------------------
+function StartOfGameCheck() {
+  return (
+    IsInGame() &&
+    CurrentRound() == 0x00 &&
+    dword_be(0x0054d74c) == 0x00 &&
+    dword_be(0x0054d7fc) == 0x00 &&
+    dword_be(0x0054d8ac) == 0x00 &&
+    dword_be(0x0054d95c) == 0x00
+  )
+}
+
+BrownProperty1Owner = dword_be(PropertyPointer + 0x1c4)
+BrownProperty2Owner = dword_be(PropertyPointer + 0x1cc)
+
+LightBlueProperty1Owner = dword_be(PropertyPointer + 0x1d8)
+LightBlueProperty2Owner = dword_be(PropertyPointer + 0x1e0)
+LightBlueProperty3Owner = dword_be(PropertyPointer + 0x1e4)
+
+PinkProperty1Owner = dword_be(PropertyPointer + 0x1ec)
+PinkProperty2Owner = dword_be(PropertyPointer + 0x1f4)
+PinkProperty3Owner = dword_be(PropertyPointer + 0x1f8)
+
+OrangeProperty1Owner = dword_be(PropertyPointer + 0x200)
+OrangeProperty2Owner = dword_be(PropertyPointer + 0x208)
+OrangeProperty3Owner = dword_be(PropertyPointer + 0x20c)
+
+RedProperty1Owner = dword_be(PropertyPointer + 0x214)
+RedProperty2Owner = dword_be(PropertyPointer + 0x21c)
+RedProperty3Owner = dword_be(PropertyPointer + 0x220)
+
+YellowProperty1Owner = dword_be(PropertyPointer + 0x228)
+YellowProperty2Owner = dword_be(PropertyPointer + 0x22c)
+YellowProperty3Owner = dword_be(PropertyPointer + 0x234)
+
+GreenProperty1Owner = dword_be(PropertyPointer + 0x23c)
+GreenProperty2Owner = dword_be(PropertyPointer + 0x240)
+GreenProperty3Owner = dword_be(PropertyPointer + 0x248)
+
+DarkBlueProperty1Owner = dword_be(PropertyPointer + 0x254)
+DarkBlueProperty2Owner = dword_be(PropertyPointer + 0x25c)
+
+TrainAndUtility1Owner = dword_be(PropertyPointer + 0x1d4)
+TrainAndUtility2Owner = dword_be(PropertyPointer + 0x1f0)
+TrainAndUtility3Owner = dword_be(PropertyPointer + 0x1fc)
+TrainAndUtility4Owner = dword_be(PropertyPointer + 0x21c)
+TrainAndUtility5Owner = dword_be(PropertyPointer + 0x230)
+TrainAndUtility6Owner = dword_be(PropertyPointer + 0x24c)
+
+AllProperties = [
+  BrownProperty1Owner,
+  BrownProperty2Owner,
+  LightBlueProperty1Owner,
+  LightBlueProperty2Owner,
+  LightBlueProperty3Owner,
+  PinkProperty1Owner,
+  PinkProperty2Owner,
+  PinkProperty3Owner,
+  OrangeProperty1Owner,
+  OrangeProperty2Owner,
+  OrangeProperty3Owner,
+  RedProperty1Owner,
+  RedProperty2Owner,
+  RedProperty3Owner,
+  YellowProperty1Owner,
+  YellowProperty2Owner,
+  YellowProperty3Owner,
+  GreenProperty1Owner,
+  GreenProperty2Owner,
+  GreenProperty3Owner,
+  DarkBlueProperty1Owner,
+  DarkBlueProperty2Owner,
+  TrainAndUtility1Owner,
+  TrainAndUtility2Owner,
+  TrainAndUtility3Owner,
+  TrainAndUtility4Owner,
+  TrainAndUtility5Owner,
+  TrainAndUtility6Owner
+]
+
+achievement(
+  title = "The Best Bull Market Trader",
+  description = "In a single session on Medium difficulty or higher, win a game of \"Bull Market\" without winning any properties during the initial bidding",
+  points = 10,
+  trigger = (
+    once(
+      all_of(AllProperties, x => x != 0x00 && x != 0xffffffff) &&
+      StartOfGameCheck()
+    )
+    &&
+    CurrentRuleSet() == 0x03 &&
+    never(dword_be(0x0057aad0) == 0x00) &&
+    IsAgainstAIs(0x02) &&
+    trigger_when(PlayerWonGame())
+  )
+)
+
+achievement(
+  title = "Hit the Jackpot",
+  description = "In a single session on Medium difficulty or higher, win a game of \"Jackpot\" without owning a full colour set (train stations and utilities allowed)",
+  points = 10,
+  trigger = (
+    once(
+      StartOfGameCheck()
+    ) &&
+    never(
+      (BrownProperty1Owner == 0x00 && BrownProperty2Owner == 0x00)
+      ||
+      (LightBlueProperty1Owner == 0x00 && LightBlueProperty2Owner == 0x00 && LightBlueProperty3Owner == 0x00)
+      ||
+      (PinkProperty1Owner == 0x00 && PinkProperty2Owner == 0x00 && PinkProperty3Owner == 0x00)
+      ||
+      (OrangeProperty1Owner == 0x00 && OrangeProperty2Owner == 0x00 && OrangeProperty3Owner == 0x00)
+      ||
+      (RedProperty1Owner == 0x00 && RedProperty2Owner == 0x00 && RedProperty3Owner == 0x00)
+      ||
+      (YellowProperty1Owner == 0x00 && YellowProperty2Owner == 0x00 && YellowProperty3Owner == 0x00)
+      ||
+      (GreenProperty1Owner == 0x00 && GreenProperty2Owner == 0x00 && GreenProperty3Owner == 0x00)
+      ||
+      (DarkBlueProperty1Owner == 0x00 && DarkBlueProperty2Owner == 0x00)
+    )
+    &&
+    CurrentRuleSet() == 0x04 &&
+    IsAgainstAIs(0x02) &&
+    trigger_when(PlayerWonGame())
+  )
+)
+
+achievement(
+  title = "Quick Cash",
+  description = "Playing on the \"Fast Deal\" rule set, land on the Free Parking square to earn $200",
+  points = 2,
+  trigger = (
+    IsInGame() &&
+    CurrentRuleSet() == 0x05 &&
+    PlayerPosition() == 0x14 &&
+    prev(PlayerPosition()) < 0x14
   )
 )
 
@@ -477,3 +621,13 @@ SweetBoardPosition = {
     0x26: "Super Tax",
     0x27: "Toffee Apple"
 }
+
+
+rich_presence_conditional_display(!IsInGame(), "Browsing the menus")
+rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[0]), "Playing on the Monopoly City board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
+  rich_presence_lookup("Ruleset", CurrentRuleSet(), RuleSets),
+  rich_presence_lookup("Square", PlayerPosition(), ClassicBoardPosition),
+  rich_presence_value("Round", CurrentRound()),
+  rich_presence_value("Money", CurrentRound())
+)
+rich_presence_display("Playing Monopoly")
