@@ -15,6 +15,7 @@ Player4ProfileAward = dword_be(GameDataPointer + 0x2cc4)
 function IsInGame() => dword_be(0x0057aad0) != 0x00
 function CurrentRuleSet() => dword_be(0x1285033c)
 function CurrentRound() => dword_be(GameDataPointer + 0x5184)
+function PlayerMoney() => dword_be(GameDataPointer + 0x09cc)
 
 AiPlayer2Difficulty = dword_be(0x12850570)
 AiPlayer3Difficulty = dword_be(0x12850574)
@@ -74,7 +75,7 @@ MonopolyBoards = [
 function GameWonAchievement(achTitle, ruleSet, ruleSetSelected){
   achievement(
     title = achTitle,
-    description = "Win a game against any CPU difficulty on the \"" + ruleSet + "\" rule set",
+    description = "Win a game against 3 CPU players using the \"" + ruleSet + "\" rule set",
     points = 5,
     type = "Progression",
     trigger = (
@@ -94,7 +95,7 @@ GameWonAchievement("Going Once, Going Twice...", "Fast Deal", 0x05)
 
 achievement(
   title = "Master of All Trades",
-  description = "Win an \"Official MONOPOLY\" rule set game against three AIs - one on Easy, one on Medium, and one on Hard difficulty",
+  description = "Win a game using the \"Official MONOPOLY\" rule set against three AIs - one on Easy, one on Medium, and one on Hard difficulty",
   points = 10,
   trigger = (
     PlayerWonGame() &&
@@ -130,18 +131,18 @@ achievement(
 function PurchaseUnlockable(achTitle, itemName, itemType, points, itemPos, itemUnlockAddr){
   achievement(
     title = achTitle,
-  description = "Purchase the \"" + itemName + "\"" + itemType + " from the MONOPOLY Streets Store",
+  description = "Purchase the \"" + itemName + "\" " + itemType + " from the MONOPOLY Streets Store",
   points = points,
   trigger = (
     MenuDataPointer == itemPos &&
     itemUnlockAddr == 0x02 &&
     prev(itemUnlockAddr) == 0x00
-  )
+    )
   )
 }
 
 PurchaseUnlockable("Officer on Board", "Cop Hat", "token", 5, 0x02, dword_be(0x12a7d0ac))
-PurchaseUnlockable("Ironing out the Money", "Iron", "token", 3, 0x05, dword_be(0x12a7d0c4))
+PurchaseUnlockable("Ironing Out the Money", "Iron", "token", 3, 0x05, dword_be(0x12a7d0c4))
 PurchaseUnlockable("Bag Secured", "Moneybag", "token", 4, 0x06, dword_be(0x12a7d0cc))
 
 PurchaseUnlockable("Not Very Useful in the Rain!", "Cardboard Board", "board", 3, 0x02, dword_be(0x12a7d09c))
@@ -152,12 +153,23 @@ PurchaseUnlockable("Monopoly in the Park", "Plaza Board", "board", 3, 0x06, dwor
 PurchaseUnlockable("Warning: Do Not Eat", "Sweet Board", "board", 4, 0x07, dword_be(0x12a7d0f4))
 PurchaseUnlockable("A Famous Board", "Landmark City", "board", 5, 0x08, dword_be(0x12a7d0fc))
 
+achievement(
+  title = "Look at Mii Go!",
+  description = "Purchase the \"Playable Mii\" option from the MONOPOLY Streets Store",
+  points = 3,
+  trigger = (
+    MenuDataPointer == 0x00 &&
+    byte(0x12851cd8) == 0x01 &&
+    prev(byte(0x12851cd8)) == 0x00
+  )
+)
+
 // -------------------- Property purchases --------------------
 
 function PropertyHousePurchases(achTitle, boardName, boardColourGroup, propertyNames, propertyOwnerAddrs, propertyHotelAddrs, houseCount, boardAscii) {
   achievement(
     title = achTitle,
-    description = "On the " + boardName + " board using the \"Official MONOPOLY\" rule set, own and build hotels on all " + boardColourGroup + " properties (" + propertyNames + ")",
+    description = "On the \"" + boardName + "\" board using the \"Official MONOPOLY\" rule set, own a Hotel on " + propertyNames,
     points = 5,
     trigger = (
       IsInGame() &&
@@ -312,7 +324,7 @@ achievement(
 
 achievement(
   title = "Hit the Jackpot",
-  description = "In a single session on Medium difficulty or higher, win a game of \"Jackpot\" without owning a full colour set (train stations and utilities allowed)",
+  description = "In a single session on Medium difficulty or higher, win a game of \"Jackpot\" without owning a full colour set - Owning the train stations and utilities is allowed",
   points = 10,
   trigger = (
     once(
@@ -344,13 +356,23 @@ achievement(
 
 achievement(
   title = "Quick Cash",
-  description = "Playing on the \"Fast Deal\" rule set, land on the Free Parking square to earn $200",
+  description = "Using the \"Fast Deal\" rule set, land on the Free Parking space to earn $200",
   points = 2,
   trigger = (
     IsInGame() &&
     CurrentRuleSet() == 0x05 &&
     PlayerPosition() == 0x14 &&
     prev(PlayerPosition()) < 0x14
+  )
+)
+
+achievement(
+  title = "You're Under Arrest!",
+  description = "Land on the \"Go To Jail\" space and get sent to jail",
+  points = 2,
+  trigger = (
+    IsInGame() &&
+    PlayerPosition() == 0x1e
   )
 )
 
@@ -622,12 +644,61 @@ SweetBoardPosition = {
     0x27: "Toffee Apple"
 }
 
-
+// we ignore this mess because why loop when you can copy paste
 rich_presence_conditional_display(!IsInGame(), "Browsing the menus")
-rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[0]), "Playing on the Monopoly City board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
+rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[0]), "Playing on the Monopoly City Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
   rich_presence_lookup("Ruleset", CurrentRuleSet(), RuleSets),
   rich_presence_lookup("Square", PlayerPosition(), ClassicBoardPosition),
-  rich_presence_value("Round", CurrentRound()),
-  rich_presence_value("Money", CurrentRound())
+  rich_presence_value("Round", CurrentRound() + 1),
+  rich_presence_value("Money", PlayerMoney())
 )
+rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[1]), "Playing on the Landmark City Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
+  rich_presence_lookup("Ruleset", CurrentRuleSet(), RuleSets),
+  rich_presence_lookup("Square", PlayerPosition(), ClassicBoardPosition),
+  rich_presence_value("Round", CurrentRound() + 1),
+  rich_presence_value("Money", PlayerMoney())
+)
+rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[2]), "Playing on the Classic Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
+  rich_presence_lookup("Ruleset", CurrentRuleSet(), RuleSets),
+  rich_presence_lookup("Square", PlayerPosition(), ClassicBoardPosition),
+  rich_presence_value("Round", CurrentRound() + 1),
+  rich_presence_value("Money", PlayerMoney())
+)
+rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[3]), "Playing on the Cardboard Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
+  rich_presence_lookup("Ruleset", CurrentRuleSet(), RuleSets),
+  rich_presence_lookup("Square", PlayerPosition(), ClassicBoardPosition),
+  rich_presence_value("Round", CurrentRound() + 1),
+  rich_presence_value("Money", PlayerMoney())
+)
+rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[4]), "Playing on the Cheeseboard Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
+  rich_presence_lookup("Ruleset", CurrentRuleSet(), RuleSets),
+  rich_presence_lookup("Square", PlayerPosition(), ClassicBoardPosition),
+  rich_presence_value("Round", CurrentRound() + 1),
+  rich_presence_value("Money", PlayerMoney())
+)
+rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[5]), "Playing on the Ice Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
+  rich_presence_lookup("Ruleset", CurrentRuleSet(), RuleSets),
+  rich_presence_lookup("Square", PlayerPosition(), ClassicBoardPosition),
+  rich_presence_value("Round", CurrentRound() + 1),
+  rich_presence_value("Money", PlayerMoney())
+)
+rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[6]), "Playing on the Jungle Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
+  rich_presence_lookup("Ruleset", CurrentRuleSet(), RuleSets),
+  rich_presence_lookup("Square", PlayerPosition(), ClassicBoardPosition),
+  rich_presence_value("Round", CurrentRound() + 1),
+  rich_presence_value("Money", PlayerMoney())
+)
+rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[6]), "Playing on the Plaza Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
+  rich_presence_lookup("Ruleset", CurrentRuleSet(), RuleSets),
+  rich_presence_lookup("Square", PlayerPosition(), ClassicBoardPosition),
+  rich_presence_value("Round", CurrentRound() + 1),
+  rich_presence_value("Money", PlayerMoney())
+)
+rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[6]), "Playing on the Sweet Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
+  rich_presence_lookup("Ruleset", CurrentRuleSet(), RuleSets),
+  rich_presence_lookup("Square", PlayerPosition(), ClassicBoardPosition),
+  rich_presence_value("Round", CurrentRound() + 1),
+  rich_presence_value("Money", PlayerMoney())
+)
+
 rich_presence_display("Playing Monopoly")
