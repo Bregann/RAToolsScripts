@@ -158,7 +158,7 @@ for i in CupInfo{
 function CollectCollectibles(achName, mapName, val1, val2){
   achievement(
     title = achName,
-    description = "Collect both hidden DreamWorks Icons on " + mapName,
+    description = "Collect both hidden DreamWorks Icons in " + mapName,
     points = 3,
     trigger = (
       IsInGame() &&
@@ -183,7 +183,7 @@ CollectCollectibles("Concrete Jungle Collectathon", "New York City Zoo", 0x0fe87
 CollectCollectibles("Extra-Terrestrial Icon Hunter", "Gallaxhar's Spaceship", 0x3b58a95a, 0x3b58a95b)
 CollectCollectibles("Icon King of the Savannah", "Africa", 0x66b5c926, 0x66b5c927)
 CollectCollectibles("Icons of Berk", "Island Of Berk", 0xa589d9d1, 0xa589d9d2)
-CollectCollectibles("Under the Dragon’s Watch", "Dragon's Keep", 0x7ec5f071, 0x7ec5f072)
+CollectCollectibles("Under the Dragon's Watch", "Dragon's Keep", 0x7ec5f071, 0x7ec5f072)
 CollectCollectibles("Midnight Icon Hunt in the Swamp", "Shrek's Swamp Night", 0x45e5978d, 0x45e5978e)
 CollectCollectibles("Berk's Hidden Icons", "Island Of Berk Night", 0xb58f4687, 0xb58f4688)
 CollectCollectibles("Safari After Dark", "Africa Night", 0xb92436b0, 0xb92436af)
@@ -192,7 +192,7 @@ CollectCollectibles("Safari After Dark", "Africa Night", 0xb92436b0, 0xb92436af)
 function ChallengesCompleted(achName, challengeName, vals){
   achievement(
     title = achName,
-    description = "Complete all the races in the " + challengeName + " challenge category",
+    description = "Complete all of the races in the " + challengeName + " challenge category",
     points = 10,
     trigger = (
       IsInGame() &&
@@ -227,7 +227,7 @@ function ChallengesCompleted(achName, challengeName, vals){
 
 ChallengesCompleted("Star Racer", "Star Collectible Races", [0x3b58a960, 0x0fe87dc6, 0x52ee7193, 0xb92436b5, 0x45e59793, 0xa589d9d7])
 ChallengesCompleted("No Items Needed!", "Pure Races", [0xf7367613, 0xb58f468b, 0x0fe87dc4, 0x7ec5f075, 0xb92436b3, 0x3b58a95e])
-ChallengesCompleted("The New Start of the Show", "Superstar Races", [0xb92436b4, 0x52ee7192, 0xbe46693c, 0xb58f468c, 0x45e59792, 0x0fe87dc5])
+ChallengesCompleted("The New Star of the Show", "Superstar Races", [0xb92436b4, 0x52ee7192, 0xbe46693c, 0xb58f468c, 0x45e59792, 0x0fe87dc5])
 ChallengesCompleted("Rocket Man", "Turbo Races", [0x66b5c92e, 0xbe21d7a5, 0x7ec5f079, 0x45e59795, 0xb58f468f, 0xbe46693f])
 ChallengesCompleted("Excellent Aim", "Precision Races", [0xbe21d7a0, 0xf7367612, 0x3b58a95d, 0xa589d9d4, 0x7ec5f074, 0x66b5c929])
 ChallengesCompleted("Planned to Win", "Strategic Races", [0xa589d9d8, 0xbe46693e, 0x66b5c92d, 0xbe21d7a4, 0x3b58a961, 0x52ee7194])
@@ -262,22 +262,39 @@ for i in LevelAscii{
   Leaderboard(LevelAscii[i], i)
 }
 
-Leaderboard("Shrek's Swamp (Night)", "Shrek_Swamp_Night.wad")
-Leaderboard("Isle Of Berk (Night)", "IsleOfBerk_Night.wad")
-Leaderboard("Africa (Night)", "Africa_Night.wad")
+Leaderboard("Shrek's Swamp Night", "Shrek_Swamp_Night.wad")
+Leaderboard("Isle Of Berk Night", "IsleOfBerk_Night.wad")
+Leaderboard("Africa Night", "Africa_Night.wad")
 
-function TimeTrialSpeedrun(achTitle, mapName, descTime, trackAscii){
+function TimeTrialSpeedrun(achTitle, mapName, descTime, trackAscii, raceTime){
   achievement(
     title = achTitle,
-    description = "Complete " + mapName + " on Time Trial mode in under " + descTime,
+    description = "Complete " + mapName + " in Time Trial mode in under " + descTime,
     points = 10,
     trigger = (
       CurrentMode() == 0x03 &&
-      RaceTimer() == 0 &&
-      ascii_string_equals(CurrentLevel(), trackAscii)
+      ascii_string_equals(CurrentLevel(), trackAscii) &&
+      RaceTimer() <= raceTime &&
+      trigger_when(
+        CurrentLap() == 4 &&
+        CurrentLapPrev() == 3
+      )
     )
   )
 }
+
+TimeTrialSpeedrun("Speeding Through the Swamp", "Shrek's Swamp", "3:06", "Shrek_Swamp.wad", 186.0)
+TimeTrialSpeedrun("I Like to Move It, Move It!", "Madagascar", "3:01", "Madagascar.wad", 181.0)
+TimeTrialSpeedrun("Flying past the Dragon", "Dragon Island", "3:11", "DragonsNest.wad", 191.0)
+TimeTrialSpeedrun("Fast Fast Away", "Far Far Away", "3:56", "FarFarAway.wad", 236.0)
+TimeTrialSpeedrun("Time Trials at the Zoo", "New York City Zoo", "3:01", "Zoo.wad", 181.0)
+TimeTrialSpeedrun("Fastest in the Fleet", "Gallaxhar's Spaceship", "4:21", "Gallaxhar.wad", 261.0)
+TimeTrialSpeedrun("Savannah Speedrun", "Africa", "4:16", "Africa.wad", 256.0)
+TimeTrialSpeedrun("Fastest in Berk", "Isle Of Berk", "4:21", "IsleOfBerk.wad", 261.0)
+TimeTrialSpeedrun("Keep's Fastest Flame", "Dragon's Keep", "3:46", "DragonsKeep.wad", 226.0)
+TimeTrialSpeedrun("Night Swamp Speedster", "Shrek's Swamp Night", "4:01", "Shrek_Swamp_Night.wad", 241.0)
+TimeTrialSpeedrun("Fastest in the Night Isles", "Isle Of Berk Night", "4:26", "IsleOfBerk_Night.wad", 266.0)
+TimeTrialSpeedrun("Savannah After Dark", "Africa Night", "5:01", "Africa_Night.wad", 301.0)
 
 // -------------------- RP --------------------
 CharacterAscii = {
