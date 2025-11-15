@@ -168,6 +168,74 @@ CarUnlockIds = {
   0x00c78198: "Elite GT12"
 }
 
+Mode = {
+    0x08f078e0: "Race",
+    0x08f08ce0: "Race",
+    0x08f08fa0: "Race",
+    0x08f0a260: "Race",
+    0x08f08160: "Race",
+    0x08efc920: "Race",
+
+    0x08f0791e: "Detonator",
+    0x08f08d1e: "Detonator",
+    0x08f08fde: "Detonator",
+    0x08f0a29e: "Detonator",
+    0x08f0819e: "Detonator",
+    0x08efc95e: "Detonator",
+
+    0x08f07961: "Elimination",
+    0x08f08d61: "Elimination",
+    0x08f09021: "Elimination",
+    0x08f0a2e1: "Elimination",
+    0x08f081e1: "Elimination",
+    0x08efc9a1: "Elimination",
+
+    0x08f079b0: "Air Strike",
+    0x08f08db0: "Air Strike",
+    0x08f09070: "Air Strike",
+    0x08f0a330: "Air Strike",
+    0x08f08230: "Air Strike",
+    0x08efc9f0: "Air Strike",
+
+    0x08f079ff: "Air Revenge",
+    0x08f08dff: "Air Revenge",
+    0x08f090bf: "Air Revenge",
+    0x08f0a37f: "Air Revenge",
+    0x08f0827f: "Air Revenge",
+    0x08efca3f: "Air Revenge",
+
+    0x08f07a47: "Survival",
+    0x08f08e47: "Survival",
+    0x08f09107: "Survival",
+    0x08f0a3c7: "Survival",
+    0x08f082c7: "Survival",
+    0x08efca87: "Survival",
+
+    0x08f056cb: "Destruction Challenge",
+    0x08f06acb: "Destruction Challenge",
+    0x08f06d8b: "Destruction Challenge",
+    0x08f0804b: "Destruction Challenge",
+    0x08efa70b: "Destruction Challenge",
+
+    0x08f0571f: "Powerslide Challenge",
+    0x08f06b1f: "Powerslide Challenge",
+    0x08f06ddf: "Powerslide Challenge",
+    0x08f0809f: "Powerslide Challenge",
+    0x08f05f4b: "Powerslide Challenge",
+    0x08f05f9f: "Powerslide Challenge",
+    0x08efa75f: "Powerslide Challenge",
+
+    0x08f0577d: "Truckin Challenge",
+    0x08f06b7d: "Truckin Challenge",
+    0x08f06e3d: "Truckin Challenge",
+    0x08f080fd: "Truckin Challenge",
+    0x08f05ffd: "Truckin Challenge",
+    0x08efa7bd: "Truckin Challenge",
+
+    0x08d69493: "Tutorial"
+}
+
+
 // ------------------------ PROGRESSION ------------------------
 function CompleteEliteRace(achTitle, episodeName, points, type, raceId) {
   achievement(
@@ -337,7 +405,14 @@ achievement(
     once(
       PowerPlayBar == 0.0 && 
       RaceTimer == 0.0 && 
-      Mode() == 0x08f078e0
+      (
+        Mode() == 0x08f078e0 ||
+        Mode() == 0x08f08ce0 ||
+        Mode() == 0x08f08fa0 ||
+        Mode() == 0x08f0a260 ||
+        Mode() == 0x08f08160 ||
+        Mode() == 0x08efc920
+      )
     ) 
     &&
     never(
@@ -358,7 +433,14 @@ achievement(
   points = 10,
   trigger = (
     Track() == 0x08f08d8b &&
-    Mode() == 0x08f056cb &&
+    (
+      Mode() == 0x08f056cb ||
+      Mode() == 0x08f06acb ||
+      Mode() == 0x08f06d8b ||
+      Mode() == 0x08f0804b ||
+      Mode() == 0x08d69493 ||
+      Mode() == 0x08efa70b
+    ) &&
     RaceScore > 50000 &&
     prev(RaceScore) <= 50000
   )
@@ -370,7 +452,16 @@ achievement(
   points = 10,
   trigger = (
     Track() == 0x08f08cd3 &&
-    Mode() == 0x08f0571f &&
+    (
+      Mode() == 0x08f0571f ||
+      Mode() == 0x08f06b1f ||
+      Mode() == 0x08f06ddf ||
+      Mode() == 0x08f0809f ||
+      Mode() == 0x08f05f4b ||
+      Mode() == 0x08f05f9f ||
+      Mode() == 0x08efa75f
+     ) 
+     &&
     RaceScore > 50000 &&
     prev(RaceScore) <= 50000
   )
@@ -382,7 +473,15 @@ achievement(
   points = 10,
   trigger = (
     Track() == 0x08f096fe &&
-    Mode() == 0x08f0577d &&
+    (
+      Mode() == 0x08f0577d || 
+      Mode() == 0x08f06b7d || 
+      Mode() == 0x08f06e3d || 
+      Mode() == 0x08f080fd || 
+      Mode() == 0x08f05ffd || 
+      Mode() == 0x08efa7bd
+    )
+    &&
     RaceScore > 50000 &&
     prev(RaceScore) <= 50000
   )
