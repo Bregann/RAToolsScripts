@@ -127,7 +127,7 @@ LevelAscii = {
   "Zoo.wad": "New York City Zoo",
   "Gallaxhar.wad": "Gallaxhar's Spaceship",
   "Africa.wad": "Africa",
-  "IsleOfBerk.wad": "Isle Of Berk",
+  "IsleOfBerk.wad": "Island Of Berk",
   "DragonsKeep.wad": "Dragon's Keep"
 }
 
@@ -263,7 +263,7 @@ for i in LevelAscii{
 }
 
 Leaderboard("Shrek's Swamp Night", "Shrek_Swamp_Night.wad")
-Leaderboard("Isle Of Berk Night", "IsleOfBerk_Night.wad")
+Leaderboard("Island Of Berk Night", "IsleOfBerk_Night.wad")
 Leaderboard("Africa Night", "Africa_Night.wad")
 
 function TimeTrialSpeedrun(achTitle, mapName, descTime, trackAscii, raceTime){
@@ -290,10 +290,10 @@ TimeTrialSpeedrun("Fast Fast Away", "Far Far Away", "3:56", "FarFarAway.wad", 23
 TimeTrialSpeedrun("Time Trials at the Zoo", "New York City Zoo", "3:01", "Zoo.wad", 181.0)
 TimeTrialSpeedrun("Fastest in the Fleet", "Gallaxhar's Spaceship", "4:21", "Gallaxhar.wad", 261.0)
 TimeTrialSpeedrun("Savannah Speedrun", "Africa", "4:16", "Africa.wad", 256.0)
-TimeTrialSpeedrun("Fastest in Berk", "Isle Of Berk", "4:21", "IsleOfBerk.wad", 261.0)
+TimeTrialSpeedrun("Fastest in Berk", "Island Of Berk", "4:21", "IsleOfBerk.wad", 261.0)
 TimeTrialSpeedrun("Keep's Fastest Flame", "Dragon's Keep", "3:46", "DragonsKeep.wad", 226.0)
 TimeTrialSpeedrun("Night Swamp Speedster", "Shrek's Swamp Night", "4:01", "Shrek_Swamp_Night.wad", 241.0)
-TimeTrialSpeedrun("Fastest in the Night Isles", "Isle Of Berk Night", "4:26", "IsleOfBerk_Night.wad", 266.0)
+TimeTrialSpeedrun("Fastest in the Night Isles", "Island Of Berk Night", "4:26", "IsleOfBerk_Night.wad", 266.0)
 TimeTrialSpeedrun("Savannah After Dark", "Africa Night", "5:01", "Africa_Night.wad", 301.0)
 
 // -------------------- RP --------------------
@@ -341,7 +341,7 @@ rich_presence_conditional_display(ascii_string_equals(CharacterAddress(), "Shrek
   rich_presence_lookup("Placement", CurrentPosition(), Placement),
   rich_presence_value("Lap", CurrentLap())
 )
-rich_presence_conditional_display(ascii_string_equals(CharacterAddress(), "IsleOfBerk_Night.wad"), "{0} is racing in Isle Of Berk (Night) on {1} mode [{2} place] [lap: {3}]",
+rich_presence_conditional_display(ascii_string_equals(CharacterAddress(), "IsleOfBerk_Night.wad"), "{0} is racing in Island Of Berk (Night) on {1} mode [{2} place] [lap: {3}]",
   rich_presence_ascii_string_lookup("Character", CharacterAddress(), CharacterAscii),
   rich_presence_lookup("Mode", CurrentMode(), Modes),
   rich_presence_lookup("Placement", CurrentPosition(), Placement),

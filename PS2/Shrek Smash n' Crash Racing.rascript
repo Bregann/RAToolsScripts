@@ -210,11 +210,10 @@ function TimeTrialAchievements(trackName, trackId, speedrunTimer, timeToBeat, de
 {
     achievement(
         title = trackName + " Speedrunner",
-        description = "Beat " + trackName + " in " + descTimeToBeat + " or lower in time trial mode",
+        description = "Beat " + trackName + " in " + descTimeToBeat + " or lower (any mode allowed)",
         points = 10,
         trigger = (
             CurrentTrack == trackId &&
-            CurrentMode == 0x03 &&
             (prev(speedrunTimer) == 0.00 || prev(speedrunTimer) > timeToBeat) &&
             speedrunTimer < timeToBeat &&
             speedrunTimer != 0.00
