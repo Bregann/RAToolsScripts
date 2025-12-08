@@ -9,7 +9,7 @@ function LoadProtection() => CurrentLevel() != 0xfffffff && CurrentLevel() != 0x
 PlayableLevels = {
     0x37: ["Raven Rescue", "Raiders of the Lost Ark", "Story", 0x10dc2933],
     0x39: ["Market Mayhem", "Raiders of the Lost Ark", "Story", 0x10dc2bcb],
-    0x3b: ["Map Room Mayhem", "Raiders of the Lost Ark", "Story", 0x10dc2e63],
+    0x3b: ["Map Room Mystery", "Raiders of the Lost Ark", "Story", 0x10dc2e63],
     0x3e: ["After the Ark", "Raiders of the Lost Ark", "Story", 0x10dc3247],
     0x40: ["Belloq Battle", "Raiders of the Lost Ark", "Story", 0x10dc34df],
     0x38: ["Toasty Tavern", "Raiders of the Lost Ark", "TreasureMode", 0x10dc2a7f],
@@ -163,3 +163,226 @@ function CompleteLevel(levelName, levelType, levelAddr){
 for i in PlayableLevels{
   CompleteLevel(PlayableLevels[i][0], PlayableLevels[i][2], PlayableLevels[i][3])
 }
+
+RaidersTrueAdventurer = 
+byte(0x10dc2931) + byte(0x10dc2bc9) + byte(0x10dc2e61) + byte(0x10dc3245) + byte(0x10dc34dd) + 
+byte(0x10dc2a7d) + byte(0x10dc2d15) + byte(0x10dc30f9) + byte(0x10dc3391) + byte(0x10dc3629) + 
+byte(0x10dc8fa5) + byte(0x10dc90f1) + byte(0x10dc923d) + byte(0x10dc9389) + byte(0x10dc94d5)
+
+TempleOfDoomTrueAdventurer = 
+byte(0x10dc3a0d) + byte(0x10dc3df1) + byte(0x10dc4089) + byte(0x10dc4321) + byte(0x10dc45b9) + 
+byte(0x10dc3b59) + byte(0x10dc3f3d) + byte(0x10dc41d5) + byte(0x10dc446d) + byte(0x10dc4705) + 
+byte(0x10dc98b9) + byte(0x10dc9a05) + byte(0x10dc9b51) + byte(0x10dc9c9d) + byte(0x10dc9de9)
+
+LastCrusadeTrueAdventurer = 
+byte(0x10dc4ae9) + byte(0x10dc4d81) + byte(0x10dc5019) + byte(0x10dc52b1) + byte(0x10dc5549) + 
+byte(0x10dc4c35) + byte(0x10dc4ecd) + byte(0x10dc5165) + byte(0x10dc53fd) + byte(0x10dc5695) + 
+byte(0x10dca081) + byte(0x10dca1cd) + byte(0x10dca319) + byte(0x10dca465) + byte(0x10dca5b1)
+
+CrystalSkullP1TrueAdventurer = 
+byte(0x10dc5bc5) + byte(0x10dc5fa9) + byte(0x10dc638d) + byte(0x10dc6625) + byte(0x10dc6a09) + 
+byte(0x10dc5d11) + byte(0x10dc6241) + byte(0x10dc64d9) + byte(0x10dc6771) + byte(0x10dc6ca1) + 
+byte(0x10dca849) + byte(0x10dca995) + byte(0x10dcaae1) + byte(0x10dcac2d) + byte(0x10dcad79)
+
+CrystalSkullP2TrueAdventurer = 
+byte(0x10dc7085) + byte(0x10dc731d) + byte(0x10dc75b5) + byte(0x10dc784d) + byte(0x10dc7c31) + 
+byte(0x10dc71d1) + byte(0x10dc7469) + byte(0x10dc7701) + byte(0x10dc7999) + byte(0x10dc7d7d) + 
+byte(0x10dcb011) + byte(0x10dcb15d) + byte(0x10dcb2a9) + byte(0x10dcb3f5) + byte(0x10dcb541)
+
+CrystalSkullP3TrueAdventurer = 
+byte(0x10dc8015) + byte(0x10dc82ad) + byte(0x10dc8545) + byte(0x10dc87dd) + byte(0x10dc8a75) + 
+byte(0x10dc8161) + byte(0x10dc83f9) + byte(0x10dc8691) + byte(0x10dc8929) + byte(0x10dc8d0d) + 
+byte(0x10dcb7d9) + byte(0x10dcb925) + byte(0x10dcba71) + byte(0x10dcbbbd) + byte(0x10dcbd09)
+
+function TrueAdventurer(achTitle, episodeName, addresses){
+  achievement(
+    title = achTitle,
+    description = "Reach True Adventurer status on every level in the " + "\"" + episodeName + "\"" + " episode",
+    points = 10,
+    trigger = (
+      LoadProtection() &&
+      addresses == 15 &&
+      prev(addresses) == 14
+  )
+  )
+}
+
+TrueAdventurer("Digging In The Right Place", "Raiders of the Lost Ark", RaidersTrueAdventurer)
+TrueAdventurer("Diamonds, Lao Che!", "Temple of Doom", TempleOfDoomTrueAdventurer)
+TrueAdventurer("You Collected... Wisely", "The Last Crusade", LastCrusadeTrueAdventurer)
+TrueAdventurer("Not as Easy as It Used to Be", "Kingdom of the Crystal Skull - Part 1", CrystalSkullP1TrueAdventurer)
+TrueAdventurer("We Call It Archaeology", "Kingdom of the Crystal Skull - Part 2", CrystalSkullP2TrueAdventurer)
+TrueAdventurer("Knowledge Was Their Treasure", "Kingdom of the Crystal Skull - Part 3", CrystalSkullP3TrueAdventurer)
+
+RaidersBricks =
+dword_be(0x10dde764) + dword_be(0x10dde768) + dword_be(0x10dde76c)
+
+TempleOfDoomBricks =
+dword_be(0x10dde780) + dword_be(0x10dde784) + dword_be(0x10dde788)
+
+LastCrusadeBricks =
+dword_be(0x10dde79c) + dword_be(0x10dde7a0) + dword_be(0x10dde7a4)
+
+CrystalSkullP1Bricks =
+dword_be(0x10dde7b8) + dword_be(0x10dde7bc) + dword_be(0x10dde7c0)
+
+CrystalSkullP2Bricks =
+dword_be(0x10dde7d4) + dword_be(0x10dde7d8) + dword_be(0x10dde7dc)
+
+CrystalSkullP3Bricks =
+dword_be(0x10dde7f0) + dword_be(0x10dde7f4) + dword_be(0x10dde7f8)
+
+// ---------------------------------------- UNLOCKS ----------------------------------------
+
+function BricksCollected(achTitle, episodeName, addresses){
+  achievement(
+    title = achTitle,
+    description = "Collect all red, green and blue bricks in " + "\"" + episodeName + "\"",
+    points = 10,
+    trigger = (
+      LoadProtection() &&
+      addresses == 30 &&
+      prev(addresses) == 29
+  )
+  )
+}
+
+BricksCollected("Raider of the Coloured Bricks", "Raiders of the Lost Ark", RaidersBricks)
+BricksCollected("Temple of Bricks", "Temple of Doom", TempleOfDoomBricks)
+BricksCollected("Crusade for Bricks", "The Last Crusade", LastCrusadeBricks)
+BricksCollected("Property of Hangar 51", "Kingdom of the Crystal Skull - Part 1", CrystalSkullP1Bricks)
+BricksCollected("Kingdom of the Crystal Bricks", "Kingdom of the Crystal Skull - Part 2", CrystalSkullP2Bricks)
+BricksCollected("A Gift From Another World", "Kingdom of the Crystal Skull - Part 3", CrystalSkullP3Bricks)
+
+RaidersCharactersVehicles = 
+bit0(0x10de3a6f) + bit0(0x10de3a71) + bit0(0x10de3a72) + bit0(0x10de3a7f) + bit0(0x10de3a80) + 
+bit0(0x10de3a8d) + bit0(0x10de3a9c) + bit0(0x10de3aa5) + bit0(0x10de3aac) + bit0(0x10de3aad) + 
+bit0(0x10de3aaf) + bit0(0x10de3ab1) + bit0(0x10de3aba) + bit0(0x10de3ace) + bit0(0x10de3ad2) + 
+bit0(0x10de3ad5) + bit0(0x10de3ad6) + bit0(0x10de3aea) + bit0(0x10de3b64) + bit0(0x10de3b8a) + 
+bit0(0x10de3ba9) + bit0(0x10de3bac) + bit0(0x10de3bbe) + bit0(0x10de3bc3) + bit0(0x10de3bc4)
+
+TempleOfDoomCharactersVehicles = 
+bit1(0x10de3a73) + bit1(0x10de3a77) + bit1(0x10de3a7a) + bit1(0x10de3a7d) + bit1(0x10de3a8c) + 
+bit1(0x10de3a8e) + bit1(0x10de3ac1) + bit1(0x10de3ad0) + bit1(0x10de3ade) + bit1(0x10de3aec) + 
+bit1(0x10de3b04) + bit1(0x10de3b10) + bit1(0x10de3b12) + bit1(0x10de3b3c) + bit1(0x10de3b6b) + 
+bit1(0x10de3b86) + bit1(0x10de3b88) + bit1(0x10de3b89) + bit1(0x10de3bc8) + bit1(0x10de3bcd) + 
+bit1(0x10de3bd1) + bit1(0x10de3bea)
+
+LastCrusadeCharactersVehicles = 
+bit2(0x10de3a6f) + bit2(0x10de3a90) + bit2(0x10de3a96) + bit2(0x10de3a98) + bit2(0x10de3a9b) + 
+bit2(0x10de3a9e) + bit2(0x10de3aa0) + bit2(0x10de3aa9) + bit2(0x10de3ab6) + bit2(0x10de3ad5) + 
+bit2(0x10de3ad9) + bit2(0x10de3adc) + bit2(0x10de3b0d) + bit2(0x10de3b18) + bit2(0x10de3b26) + 
+bit2(0x10de3b39) + bit2(0x10de3b58) + bit2(0x10de3b64) + bit2(0x10de3b80) + bit2(0x10de3b81) + 
+bit2(0x10de3b82) + bit2(0x10de3b83) + bit2(0x10de3bc3) + bit2(0x10de3be7) + bit2(0x10de3bef)
+
+CrystalSkullP1CharactersVehicles = 
+bit3(0x10de3b19) + bit3(0x10de3b24) + bit3(0x10de3b27) + bit3(0x10de3b2c) + bit3(0x10de3b2e) + 
+bit3(0x10de3b30) + bit3(0x10de3b34) + bit3(0x10de3b36) + bit3(0x10de3b41) + bit3(0x10de3b47) + 
+bit3(0x10de3b49) + bit3(0x10de3b4a) + bit3(0x10de3b4c) + bit3(0x10de3b4d) + bit3(0x10de3b4f) + 
+bit3(0x10de3b54) + bit3(0x10de3b60) + bit3(0x10de3b63) + bit3(0x10de3b64) + bit3(0x10de3ba8) + 
+bit3(0x10de3bab) + bit3(0x10de3bb7) + bit3(0x10de3bbc) + bit3(0x10de3bbd) + bit3(0x10de3bc0) + 
+bit3(0x10de3bc5)
+
+CrystalSkullP2CharactersVehicles = 
+bit4(0x10de3ad5) + bit4(0x10de3b20) + bit4(0x10de3b2a) + bit4(0x10de3b2d) + bit4(0x10de3b33) + 
+bit4(0x10de3b3a) + bit4(0x10de3b3b) + bit4(0x10de3b40) + bit4(0x10de3b47) + bit4(0x10de3b54) + 
+bit4(0x10de3b59) + bit4(0x10de3b5a) + bit4(0x10de3b5e) + bit4(0x10de3b5f) + bit4(0x10de3b60) + 
+bit4(0x10de3b64) + bit4(0x10de3b6a) + bit4(0x10de3bbc) + bit4(0x10de3bbf) + bit4(0x10de3bc6) + 
+bit4(0x10de3bc7) + bit4(0x10de3be6)
+
+CrystalSkullP3CharactersVehicles = 
+bit5(0x10de3b16) + bit5(0x10de3b2a) + bit5(0x10de3b2b) + bit5(0x10de3b33) + bit5(0x10de3b42) + 
+bit5(0x10de3b43) + bit5(0x10de3b44) + bit5(0x10de3b45) + bit5(0x10de3b47) + bit5(0x10de3b54) + 
+bit5(0x10de3b5c) + bit5(0x10de3b5e) + bit5(0x10de3b5f) + bit5(0x10de3b60) + bit5(0x10de3b66) + 
+bit5(0x10de3b71) + bit5(0x10de3b72) + bit5(0x10de3ba8) + bit5(0x10de3bb1) + bit5(0x10de3bb2) + 
+bit5(0x10de3beb)
+
+function CharactersUnlocked(achTitle, episodeName, addresses, amount){
+  achievement(
+    title = achTitle,
+    description = "Unlock every character and vehicle in " + "\"" + episodeName + "\"",
+    points = 10,
+    trigger = (
+      LoadProtection() &&
+      addresses == amount &&
+      prev(addresses) == amount - 1
+  )
+  )
+}
+
+CharactersUnlocked("The Cairo Connection", "Raiders of the Lost Ark", RaidersCharactersVehicles, 25)
+CharactersUnlocked("Pankot Palace Guest List", "Temple of Doom", TempleOfDoomCharactersVehicles, 22)
+CharactersUnlocked("The Jones Family Reunion", "The Last Crusade", LastCrusadeCharactersVehicles, 25)
+CharactersUnlocked("Doom Town Residents", "Kingdom of the Crystal Skull - Part 1", CrystalSkullP1CharactersVehicles, 26)
+CharactersUnlocked("Jungle Cutter Crew", "Kingdom of the Crystal Skull - Part 2", CrystalSkullP2CharactersVehicles, 22)
+CharactersUnlocked("Interdimensional Travelers", "Kingdom of the Crystal Skull - Part 3", CrystalSkullP3CharactersVehicles, 21)
+
+ExtrasPurchased = 
+bit0(0x10ddf02d) + bit1(0x10ddf02d) + bit2(0x10ddf02d) +
+bitcount(0x10ddf02e) + 
+bit1(0x10ddf02f) + bit2(0x10ddf02f) + bit3(0x10ddf02f) + 
+bit4(0x10ddf02f) + bit5(0x10ddf02f) + bit6(0x10ddf02f) + 
+bit7(0x10ddf02f)
+
+achievement(
+  title = "It Belongs in a Museum!",
+  description = "Purchase every extra in the game",
+  points = 25,
+  trigger = (
+    LoadProtection() &&
+    ExtrasPurchased == 18 &&
+    prev(ExtrasPurchased) == 17
+  )
+)
+
+// ---------------------------------------- CREATOR ----------------------------------------
+CreatorLevels = 
+bit7(0x10dcca03) + bit7(0x10dccb4f) + 
+bit7(0x10dccc9b) + bit7(0x10dccde7)
+
+achievement(
+  title = "Time to Get Creative",
+  description = "Complete all 4 tutorial levels in the creator mode",
+  points = 3,
+  trigger = (
+    LoadProtection() &&
+    CreatorLevels == 4 &&
+  prev(CreatorLevels) == 3
+  )
+)
+
+CreatorPurchases = bit1(0x10dfb664) + bit2(0x10dfb664) + bit4(0x10dfb664) + bit5(0x10dfb664) + 
+bit0(0x10dfb665) + bit2(0x10dfb665) + bit4(0x10dfb665) + bit5(0x10dfb665) + bit6(0x10dfb665) + 
+bit7(0x10dfb665) + bit0(0x10dfb666) + bit2(0x10dfb666) + bit3(0x10dfb666) + bit4(0x10dfb666) + 
+bit5(0x10dfb666) + bit6(0x10dfb666) + bit7(0x10dfb666) + bitcount(0x10dfb667) + bitcount(0x10dfb668) +
+bit0(0x10dfb669) + bit1(0x10dfb669) + bit4(0x10dfb669) + bit5(0x10dfb669) + bit6(0x10dfb669) + 
+bit7(0x10dfb669) + bit0(0x10dfb66a) + bit2(0x10dfb66a) + bit3(0x10dfb66a) + bit4(0x10dfb66a) + 
+bit6(0x10dfb66a) + bit7(0x10dfb66a) + bit6(0x10dfb66c) + bit7(0x10dfb66c) + bit0(0x10dfb66d) + 
+bit1(0x10dfb66d) + bit2(0x10dfb66d) + bit3(0x10dfb66d) + bit5(0x10dfb66d) + bit6(0x10dfb66d) + 
+bit7(0x10dfb66d) + bitcount(0x10dfb66e) + bit2(0x10dfb66f) + bit3(0x10dfb66f) + bit4(0x10dfb66f) + 
+bit5(0x10dfb66f) + bit6(0x10dfb66f) + bit7(0x10dfb66f) + bit4(0x10dfb670) + bit5(0x10dfb670) + 
+bit6(0x10dfb670) + bit7(0x10dfb670) + bit0(0x10dfb671) + bit1(0x10dfb671) + bit2(0x10dfb671) + 
+bit3(0x10dfb671) + bit4(0x10dfb671) + bit6(0x10dfb671) + bit7(0x10dfb671) + bit0(0x10dfb672) + 
+bit2(0x10dfb672) + bit3(0x10dfb672) + bit4(0x10dfb672) + bit5(0x10dfb672) + bit6(0x10dfb672) + 
+bit7(0x10dfb672) + bitcount(0x10dfb673) + bitcount(0x10dfb674) + bitcount(0x10dfb675) + 
+bitcount(0x10dfb676) + bitcount(0x10dfb677) + bitcount(0x10dfb678) + bitcount(0x10dfb679) + 
+bitcount(0x10dfb67a) + bitcount(0x10dfb67b) + bitcount(0x10dfb67c) + bit0(0x10dfb67d) + 
+bit1(0x10dfb67d) + bit4(0x10dfb67d) + bit5(0x10dfb67d) + bit6(0x10dfb67d) + bit7(0x10dfb67d) + 
+bitcount(0x10dfb67e) + bitcount(0x10dfb67f) + bitcount(0x10dfb680) + bitcount(0x10dfb681) + 
+bit0(0x10dfb682) + bit1(0x10dfb682) + bit2(0x10dfb682) + bit3(0x10dfb682) + bit4(0x10dfb682) + 
+bit6(0x10dfb682) + bit7(0x10dfb682) + bitcount(0x10dfb683) + bitcount(0x10dfb684) + bit0(0x10dfb685) + 
+bit1(0x10dfb685) + bit2(0x10dfb685) + bit3(0x10dfb685) + bit5(0x10dfb685) + bit6(0x10dfb685) + 
+bit7(0x10dfb685) + bitcount(0x10dfb686) + bit0(0x10dfb687) + bit1(0x10dfb687) + bit3(0x10dfb687) + 
+bit4(0x10dfb687) + bit5(0x10dfb687) + bit6(0x10dfb687) + bit7(0x10dfb687) + bit0(0x10dfb688) + 
+bit2(0x10dfb688) + bit3(0x10dfb688)
+
+achievement(
+  title = "Master Builder",
+  description = "Purchase every item in the " + "\"Creator\"" +  " mode",
+  points = 25,
+  trigger = (
+    LoadProtection() &&
+    CreatorPurchases == 252 &&
+    prev(CreatorPurchases) == 251
+  )
+)
