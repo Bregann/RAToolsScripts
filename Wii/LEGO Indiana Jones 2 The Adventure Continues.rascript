@@ -37,7 +37,7 @@ PlayableLevels = {
     0x8f: ["Slave Driver Cave", "Temple of Doom", "BonusLevel", 0x10dc9b53, 0x10dc9b54],
     0x90: ["Mountain Cave", "Temple of Doom", "BonusLevel", 0x10dc9c9f, 0x10dc9ca0],
     0x91: ["Princess Rescue", "Temple of Doom", "BonusLevel", 0x10dc9deb, 0x10dc9dec],
-    0x51: ["Coronado Caper", "The Last Crusade", "Story", 0x10dc4aeb, 0x10dc4aec],
+    0x51: ["The Coronado Caper", "The Last Crusade", "Story", 0x10dc4aeb, 0x10dc4aec],
     0x53: ["Brunwald Blaze", "The Last Crusade", "Story", 0x10dc4d83, 0x10dc4d84],
     0x55: ["Berlin Brawl", "The Last Crusade", "Story", 0x10dc501b, 0x10dc501c],
     0x57: ["Cannon Canyon", "The Last Crusade", "Story", 0x10dc52b3, 0x10dc52b4],
@@ -54,7 +54,7 @@ PlayableLevels = {
     0x97: ["Venice Tunnel", "The Last Crusade", "BonusLevel", 0x10dca5b3, 0x10dca5b4],
     0x5e: ["Hangar Havoc", "Crystal Skull Part 1", "Story", 0x10dc5bc7, 0x10dc5bc8],
     0x61: ["Doom Town", "Crystal Skull Part 1", "Story", 0x10dc5fab, 0x10dc5fac],
-    0x64: ["Cafe Chaos", "Crystal Skull Part 1", "Story", 0x10dc638f, 0x10dc6390],
+    0x64: ["Café Chaos", "Crystal Skull Part 1", "Story", 0x10dc638f, 0x10dc6390],
     0x66: ["Motorbike Mayhem", "Crystal Skull Part 1", "Story", 0x10dc6627, 0x10dc6628],
     0x69: ["Crane Train", "Crystal Skull Part 1", "Story", 0x10dc6a0b, 0x10dc6a0c],
     0x5f: ["Forklift Fun", "Crystal Skull Part 1", "TreasureMode", 0x10dc5d13, 0x10dc5d14],
@@ -231,7 +231,7 @@ byte(0x10dcb7d9) + byte(0x10dcb925) + byte(0x10dcba71) + byte(0x10dcbbbd) + byte
 function TrueAdventurer(achTitle, episodeName, addresses){
   achievement(
     title = achTitle,
-    description = "Reach True Adventurer status on every level in the " + "\"" + episodeName + "\"" + " episode",
+    description = "Reach True Adventurer status on every level in " + "\"" + episodeName + "\"",
     points = 10,
     trigger = (
       LoadProtection() &&
@@ -241,7 +241,7 @@ function TrueAdventurer(achTitle, episodeName, addresses){
   )
 }
 
-TrueAdventurer("Digging In The Right Place", "Raiders of the Lost Ark", RaidersTrueAdventurer)
+TrueAdventurer("Digging in the Right Place", "Raiders of the Lost Ark", RaidersTrueAdventurer)
 TrueAdventurer("Diamonds, Lao Che!", "Temple of Doom", TempleOfDoomTrueAdventurer)
 TrueAdventurer("You Collected... Wisely", "The Last Crusade", LastCrusadeTrueAdventurer)
 TrueAdventurer("Not as Easy as It Used to Be", "Kingdom of the Crystal Skull - Part 1", CrystalSkullP1TrueAdventurer)
@@ -286,7 +286,7 @@ BricksCollected("Temple of Bricks", "Temple of Doom", TempleOfDoomBricks)
 BricksCollected("Crusade for Bricks", "The Last Crusade", LastCrusadeBricks)
 BricksCollected("Property of Hangar 51", "Kingdom of the Crystal Skull - Part 1", CrystalSkullP1Bricks)
 BricksCollected("Kingdom of the Crystal Bricks", "Kingdom of the Crystal Skull - Part 2", CrystalSkullP2Bricks)
-BricksCollected("A Gift From Another World", "Kingdom of the Crystal Skull - Part 3", CrystalSkullP3Bricks)
+BricksCollected("A Gift from Another World", "Kingdom of the Crystal Skull - Part 3", CrystalSkullP3Bricks)
 
 RaidersCharactersVehicles = 
 bit0(0x10de3a6f) + bit0(0x10de3a71) + bit0(0x10de3a72) + bit0(0x10de3a7f) + bit0(0x10de3a80) + 
@@ -376,7 +376,7 @@ bit7(0x10dccc9b) + bit7(0x10dccde7)
 
 achievement(
   title = "Time to Get Creative",
-  description = "Complete all 4 tutorial levels in the creator mode",
+  description = "Complete all 4 tutorial levels in the \"Creator\" mode",
   points = 3,
   trigger = (
     LoadProtection() &&
@@ -439,13 +439,13 @@ function SpeedrunLevel(achTitle, levelName, levelTimerAddr, textTime, secs){
   )
 }
 
-SpeedrunLevel("Too Toasty Here!", "Toasty Tavern", 0x10dc2a80, "1 minutes 8 seconds", 68)
-SpeedrunLevel("Speedozer", "Buildozer", 0x10dc362c, "1 minutes 18 seconds", 78)
-SpeedrunLevel("Wrong Gong Rush", "Wrong Gong Rung", 0x10dc3f40, "1 minutes 6 seconds", 66)
-SpeedrunLevel("Dad. What? Dad! What? Head for the Fireplace", "Brunwald Blaze", 0x10dc4d84, "2 minutes 2 seconds", 122)
-SpeedrunLevel("Cafe Crasher", "Cafe Chaos", 0x10dc6390, "1 minutes 22 seconds", 82)
-SpeedrunLevel("Speed Attack", "Mac Attack", 0x10dc75b8, "3 minutes 2 seconds", 182)
-SpeedrunLevel("Pit Speedrunner", "Pit of Peril", 0x10dc8d10, "1 minutes 20 seconds", 80)
+SpeedrunLevel("Too Toasty Here!", "Toasty Tavern", 0x10dc2a80, "1 minute and 8 seconds", 68)
+SpeedrunLevel("Speedozer", "Buildozer", 0x10dc362c, "1 minute and 18 seconds", 78)
+SpeedrunLevel("Wrong Gong Rush", "Wrong Gong Rung", 0x10dc3f40, "1 minute and 6 seconds", 66)
+SpeedrunLevel("Dad. What? Dad! What? Head for the Fireplace", "Brunwald Blaze", 0x10dc4d84, "2 minutes and 2 seconds", 122)
+SpeedrunLevel("Café Crasher", "Café Chaos", 0x10dc6390, "1 minute and 22 seconds", 82)
+SpeedrunLevel("Speed Attack", "Mac Attack", 0x10dc75b8, "3 minutes and 2 seconds", 182)
+SpeedrunLevel("Pit Speedrunner", "Pit of Peril", 0x10dc8d10, "1 minute and 20 seconds", 80)
 // ---------------------------------------- RP ----------------------------------------
 
 LevelIDs = {
@@ -482,7 +482,7 @@ LevelIDs = {
     0x90: "Mountain Cave",
     0x91: "Princess Rescue",
     0x50: "The Last Crusade Hub",
-    0x51: "Coronado Caper",
+    0x51: "The Coronado Caper",
     0x53: "Brunwald Blaze",
     0x55: "Berlin Brawl",
     0x57: "Cannon Canyon",
@@ -501,7 +501,7 @@ LevelIDs = {
     0x5e: "Hangar Havoc",
     0x60: "Hangar Havoc",
     0x61: "Doom Town",
-    0x64: "Cafe Chaos",
+    0x64: "Café Chaos",
     0x66: "Motorbike Mayhem",
     0x69: "Crane Train",
     0x5f: "Forklift Fun",
