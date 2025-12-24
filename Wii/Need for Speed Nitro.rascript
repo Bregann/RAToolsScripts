@@ -2,7 +2,17 @@
 // #ID = 34593
 
 OFFSET = 0xD50
+
+ScorePointer = dword_be(0x007726f4) & 0x1fffffff
+
 function CurrentProfile() => dword_be(0x01578d80)
+function IsInGame() => dword_be(0x007726f4) != 0x00000000
+function ReliableRaceTimer() => float_be(0x1337cca0)
+
+function SelectedCup() => byte(0x0157c1d8)
+function SelectedArea() => byte(0x0157c1d9)
+function SelectedEvent() => byte(0x0157c1da)
+function CurrentScore() => dword_be(ScorePointer + 0x38)
 
 // Dictionaries
 function CalculateOffsetAndReturnAddress(baseAddr){
@@ -181,18 +191,18 @@ GPWon("Golden Racer", "Progression", "Gold", GoldGP)
 function AllStarsEarned(achTitle, locName, cupName, raceDict){
   achievement(
     title = achTitle,
-    description = "Earn 5 stars on every event in " + locName + " in the " + cupName + " Cup",
+    description = "Earn the maximum amount of stars on every event in " + locName + " in the " + cupName + " Cup",
     points = 10,
     // confusing maths stuff lol
     trigger = (
       any_of(range(0, 5), p_id =>
         CurrentProfile() == p_id && 
-        all_of(raceDict, addr => 
-          byte(addr - ((p_id - 5) * OFFSET)) == 1
-        ) &&
-        any_of(raceDict, addr => 
-          prev(byte(addr - ((p_id -5) * OFFSET))) != 1
-        )
+        sum_of(raceDict, addr => 
+          byte(addr - ((p_id - 5) * OFFSET))
+        ) == 16 &&
+        sum_of(raceDict, addr => 
+          prev(byte(addr - ((p_id -5) * OFFSET)))
+        ) > 16
       )
     )
   )
@@ -215,3 +225,96 @@ AllStarsEarned("Cairo Champion - Gold", "Cairo", "Gold", CairoGoldP6)
 AllStarsEarned("Madrid Master - Gold", "Madrid", "Gold", MadridGoldP6)
 AllStarsEarned("Singapore Superstar - Gold", "Singapore", "Gold", SingaporeGoldP6)
 AllStarsEarned("Dubai Dominator - Gold", "Dubai", "Gold", DubaiGoldP6)
+
+CircuitRaces = {
+  0: ["Bronze", "Rio De Janeiro", 0x00, 0x00, 0x00],
+  1: ["Bronze", "Rio De Janeiro", 0x00, 0x00, 0x06],
+  2: ["Bronze", "Cairo", 0x00, 0x01, 0x00],
+  3: ["Bronze", "Cairo", 0x00, 0x01, 0x04],
+  4: ["Bronze", "Madrid", 0x00, 0x02, 0x00],
+  5: ["Bronze", "Madrid", 0x00, 0x02, 0x06],
+  6: ["Bronze", "Singapore", 0x00, 0x03, 0x00],
+  7: ["Bronze", "Singapore", 0x00, 0x03, 0x04],
+  8: ["Bronze", "Dubai", 0x00, 0x04, 0x00],
+  9: ["Bronze", "Dubai", 0x00, 0x04, 0x06],
+
+  10: ["Silver", "Rio De Janeiro", 0x01, 0x00, 0x00],
+  11: ["Silver", "Rio De Janeiro", 0x01, 0x00, 0x06],
+  12: ["Silver", "Cairo", 0x01, 0x01, 0x00],
+  13: ["Silver", "Cairo", 0x01, 0x01, 0x04],
+  14: ["Silver", "Madrid", 0x01, 0x02, 0x00],
+  15: ["Silver", "Madrid", 0x01, 0x02, 0x06],
+  16: ["Silver", "Singapore", 0x01, 0x03, 0x00],
+  17: ["Silver", "Singapore", 0x01, 0x03, 0x04],
+  18: ["Silver", "Dubai", 0x01, 0x04, 0x00],
+  19: ["Silver", "Dubai", 0x01, 0x04, 0x06],
+
+  20: ["Gold", "Rio De Janeiro", 0x02, 0x00, 0x00],
+  21: ["Gold", "Rio De Janeiro", 0x02, 0x00, 0x06],
+  22: ["Gold", "Cairo", 0x02, 0x01, 0x00],
+  23: ["Gold", "Cairo", 0x02, 0x01, 0x04],
+  24: ["Gold", "Madrid", 0x02, 0x02, 0x00],
+  25: ["Gold", "Madrid", 0x02, 0x02, 0x06],
+  26: ["Gold", "Singapore", 0x02, 0x03, 0x00],
+  27: ["Gold", "Singapore", 0x02, 0x03, 0x04],
+  28: ["Gold", "Dubai", 0x02, 0x04, 0x00],
+  29: ["Gold", "Dubai", 0x02, 0x04, 0x06]
+}
+
+function CircuitRaceLeaderboard(cup, location, cupId, locId, raceId){
+  leaderboard(
+    title = cup + " - " + location + " - " + "Circuit - Race Timer",
+    description = "Win the race in the quickest time",
+    start = (
+      IsInGame() &&
+      ReliableRaceTimer() == 0.0 &&
+      SelectedCup() == cupId &&
+      SelectedArea() == locId &&
+      SelectedEvent() == raceId
+    ),
+    cancel = (
+      !IsInGame()
+    ),
+    submit = (
+      dword_be(0x00c94610) == 0x03 &&
+      prev(dword_be(0x00c94610)) == 0x00
+    ),
+    value = (
+      ReliableRaceTimer()
+    ),
+    format = "SECS",
+    lower_is_better = true
+  )
+}
+
+function SkillScoreLeaderboard(cup, location, cupId, locId, raceId, endDesc){
+  leaderboard(
+    title = cup + " - " + location + " - " + endDesc,
+    description = "Earn the highest skill score",
+    start = (
+      IsInGame() &&
+      ReliableRaceTimer() == 0.0 &&
+      SelectedCup() == cupId &&
+      SelectedArea() == locId &&
+      SelectedEvent() == raceId
+    ),
+    cancel = (
+      !IsInGame()
+    ),
+    submit = (
+      dword_be(0x00c94610) == 0x03 &&
+      prev(dword_be(0x00c94610)) == 0x00
+    ),
+    value = (
+      CurrentScore()
+    )
+  )
+}
+
+for race in CircuitRaces{
+  CircuitRaceLeaderboard(CircuitRaces[race][0], CircuitRaces[race][1], CircuitRaces[race][2], CircuitRaces[race][3], CircuitRaces[race][4])
+}
+
+for race in CircuitRaces{
+  SkillScoreLeaderboard(CircuitRaces[race][0], CircuitRaces[race][1], CircuitRaces[race][2], CircuitRaces[race][3], CircuitRaces[race][4], "Circuit - Skill Score")
+}
