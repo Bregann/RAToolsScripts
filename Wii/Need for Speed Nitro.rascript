@@ -8,11 +8,13 @@ ScorePointer = dword_be(0x007726f4) & 0x1fffffff
 function CurrentProfile() => dword_be(0x01578d80)
 function IsInGame() => dword_be(0x007726f4) != 0x00000000
 function ReliableRaceTimer() => float_be(0x1337cca0)
+function RaceStart() => float_be(0x1337cca0) > 0.0
 
 function SelectedCup() => byte(0x0157c1d8)
 function SelectedArea() => byte(0x0157c1d9)
 function SelectedEvent() => byte(0x0157c1da)
 function CurrentScore() => dword_be(ScorePointer + 0x38)
+function DriftScore() => dword_be(ScorePointer + 0x3c)
 
 // Dictionaries
 function CalculateOffsetAndReturnAddress(baseAddr){
@@ -136,6 +138,8 @@ DubaiGoldP6 = [
   0x1338f2d0, 0x1338f2d1, 0x1338f2d2, 0x1338f2dc
 ]
 
+// -------------------- Progression & 100% --------------------
+
 function StarsUnlocked(achTitle, placeName, cupName, starsAmount){
   achievement(
     title = achTitle,
@@ -227,57 +231,99 @@ AllStarsEarned("Singapore Superstar - Gold", "Singapore", "Gold", SingaporeGoldP
 AllStarsEarned("Dubai Dominator - Gold", "Dubai", "Gold", DubaiGoldP6)
 
 CircuitRaces = {
-  0: ["Bronze", "Rio De Janeiro", 0x00, 0x00, 0x00],
-  1: ["Bronze", "Rio De Janeiro", 0x00, 0x00, 0x06],
-  2: ["Bronze", "Cairo", 0x00, 0x01, 0x00],
-  3: ["Bronze", "Cairo", 0x00, 0x01, 0x04],
-  4: ["Bronze", "Madrid", 0x00, 0x02, 0x00],
-  5: ["Bronze", "Madrid", 0x00, 0x02, 0x06],
-  6: ["Bronze", "Singapore", 0x00, 0x03, 0x00],
-  7: ["Bronze", "Singapore", 0x00, 0x03, 0x04],
-  8: ["Bronze", "Dubai", 0x00, 0x04, 0x00],
-  9: ["Bronze", "Dubai", 0x00, 0x04, 0x06],
+  0: ["Bronze", "Rio De Janeiro", 0x00, 0x00, 0x00, 1],
+  1: ["Bronze", "Rio De Janeiro", 0x00, 0x00, 0x06, 2],
+  2: ["Bronze", "Cairo", 0x00, 0x01, 0x00, 1],
+  3: ["Bronze", "Cairo", 0x00, 0x01, 0x04, 2],
+  4: ["Bronze", "Madrid", 0x00, 0x02, 0x00, 1],
+  5: ["Bronze", "Madrid", 0x00, 0x02, 0x06, 2],
+  6: ["Bronze", "Singapore", 0x00, 0x03, 0x00, 1],
+  7: ["Bronze", "Singapore", 0x00, 0x03, 0x04, 2],
+  8: ["Bronze", "Dubai", 0x00, 0x04, 0x00, 1],
+  9: ["Bronze", "Dubai", 0x00, 0x04, 0x06, 2],
 
-  10: ["Silver", "Rio De Janeiro", 0x01, 0x00, 0x00],
-  11: ["Silver", "Rio De Janeiro", 0x01, 0x00, 0x06],
-  12: ["Silver", "Cairo", 0x01, 0x01, 0x00],
-  13: ["Silver", "Cairo", 0x01, 0x01, 0x04],
-  14: ["Silver", "Madrid", 0x01, 0x02, 0x00],
-  15: ["Silver", "Madrid", 0x01, 0x02, 0x06],
-  16: ["Silver", "Singapore", 0x01, 0x03, 0x00],
-  17: ["Silver", "Singapore", 0x01, 0x03, 0x04],
-  18: ["Silver", "Dubai", 0x01, 0x04, 0x00],
-  19: ["Silver", "Dubai", 0x01, 0x04, 0x06],
+  10: ["Silver", "Rio De Janeiro", 0x01, 0x00, 0x00, 1],
+  11: ["Silver", "Rio De Janeiro", 0x01, 0x00, 0x06, 2],
+  12: ["Silver", "Cairo", 0x01, 0x01, 0x00, 1],
+  13: ["Silver", "Cairo", 0x01, 0x01, 0x04, 2],
+  14: ["Silver", "Madrid", 0x01, 0x02, 0x00, 1],
+  15: ["Silver", "Madrid", 0x01, 0x02, 0x06, 2],
+  16: ["Silver", "Singapore", 0x01, 0x03, 0x00, 1],
+  17: ["Silver", "Singapore", 0x01, 0x03, 0x04, 2],
+  18: ["Silver", "Dubai", 0x01, 0x04, 0x00, 1],
+  19: ["Silver", "Dubai", 0x01, 0x04, 0x06, 2],
 
-  20: ["Gold", "Rio De Janeiro", 0x02, 0x00, 0x00],
-  21: ["Gold", "Rio De Janeiro", 0x02, 0x00, 0x06],
-  22: ["Gold", "Cairo", 0x02, 0x01, 0x00],
-  23: ["Gold", "Cairo", 0x02, 0x01, 0x04],
-  24: ["Gold", "Madrid", 0x02, 0x02, 0x00],
-  25: ["Gold", "Madrid", 0x02, 0x02, 0x06],
-  26: ["Gold", "Singapore", 0x02, 0x03, 0x00],
-  27: ["Gold", "Singapore", 0x02, 0x03, 0x04],
-  28: ["Gold", "Dubai", 0x02, 0x04, 0x00],
-  29: ["Gold", "Dubai", 0x02, 0x04, 0x06]
+  20: ["Gold", "Rio De Janeiro", 0x02, 0x00, 0x00, 1],
+  21: ["Gold", "Rio De Janeiro", 0x02, 0x00, 0x06, 2],
+  22: ["Gold", "Cairo", 0x02, 0x01, 0x00, 1],
+  23: ["Gold", "Cairo", 0x02, 0x01, 0x04, 2],
+  24: ["Gold", "Madrid", 0x02, 0x02, 0x00, 1],
+  25: ["Gold", "Madrid", 0x02, 0x02, 0x06, 2],
+  26: ["Gold", "Singapore", 0x02, 0x03, 0x00, 1],
+  27: ["Gold", "Singapore", 0x02, 0x03, 0x04, 2],
+  28: ["Gold", "Dubai", 0x02, 0x04, 0x00, 1],
+  29: ["Gold", "Dubai", 0x02, 0x04, 0x06, 2]
 }
 
-function CircuitRaceLeaderboard(cup, location, cupId, locId, raceId){
+DriftRaces = {
+  0: ["Bronze", "Rio De Janeiro", 0x00, 0x00, 0x02],
+  2: ["Bronze", "Cairo", 0x00, 0x01, 0x02],
+  4: ["Bronze", "Madrid", 0x00, 0x02, 0x07],
+  6: ["Bronze", "Singapore", 0x00, 0x03, 0x05],
+  9: ["Bronze", "Dubai", 0x00, 0x04, 0x02],
+
+  10: ["Silver", "Rio De Janeiro", 0x01, 0x00, 0x02],
+  12: ["Silver", "Cairo", 0x01, 0x01, 0x02],
+  14: ["Silver", "Madrid", 0x01, 0x02, 0x07],
+  16: ["Silver", "Singapore", 0x01, 0x03, 0x05],
+  18: ["Silver", "Dubai", 0x01, 0x04, 0x02],
+
+  20: ["Gold", "Rio De Janeiro", 0x02, 0x00, 0x02],
+  22: ["Gold", "Cairo", 0x02, 0x01, 0x02],
+  24: ["Gold", "Madrid", 0x02, 0x02, 0x07],
+  26: ["Gold", "Singapore", 0x02, 0x03, 0x05],
+  28: ["Gold", "Dubai", 0x02, 0x04, 0x02]
+}
+
+TimeAttackRaces = {
+  0: ["Bronze", "Rio De Janeiro", 0x00, 0x00, 0x07],
+  2: ["Bronze", "Cairo", 0x00, 0x01, 0x05],
+  4: ["Bronze", "Madrid", 0x00, 0x02, 0x02],
+  6: ["Bronze", "Singapore", 0x00, 0x03, 0x02],
+  9: ["Bronze", "Dubai", 0x00, 0x04, 0x07],
+
+  10: ["Silver", "Rio De Janeiro", 0x01, 0x00, 0x07],
+  12: ["Silver", "Cairo", 0x01, 0x01, 0x05],
+  14: ["Silver", "Madrid", 0x01, 0x02, 0x02],
+  16: ["Silver", "Singapore", 0x01, 0x03, 0x02],
+  18: ["Silver", "Dubai", 0x01, 0x04, 0x07],
+
+  20: ["Gold", "Rio De Janeiro", 0x02, 0x00, 0x07],
+  22: ["Gold", "Cairo", 0x02, 0x01, 0x05],
+  24: ["Gold", "Madrid", 0x02, 0x02, 0x02],
+  26: ["Gold", "Singapore", 0x02, 0x03, 0x02],
+  28: ["Gold", "Dubai", 0x02, 0x04, 0x07]
+}
+
+// -------------------- Leaderboards --------------------
+function CircuitRaceLeaderboard(cup, location, cupId, locId, raceId, raceNum){
   leaderboard(
-    title = cup + " - " + location + " - " + "Circuit - Race Timer",
+    title = cup + " - " + location + " - " + "Circuit " + raceNum + " - Race Timer",
     description = "Win the race in the quickest time",
     start = (
       IsInGame() &&
-      ReliableRaceTimer() == 0.0 &&
       SelectedCup() == cupId &&
       SelectedArea() == locId &&
-      SelectedEvent() == raceId
+      SelectedEvent() == raceId &&
+      dword_be(0x00676920) == 0x02
     ),
     cancel = (
       !IsInGame()
     ),
     submit = (
-      dword_be(0x00c94610) == 0x03 &&
-      prev(dword_be(0x00c94610)) == 0x00
+      dword_be(0x00676920) == 0x01 &&
+      prev(dword_be(0x00676920)) == 0x00 &&
+      ReliableRaceTimer() > 0.0
     ),
     value = (
       ReliableRaceTimer()
@@ -290,31 +336,96 @@ function CircuitRaceLeaderboard(cup, location, cupId, locId, raceId){
 function SkillScoreLeaderboard(cup, location, cupId, locId, raceId, endDesc){
   leaderboard(
     title = cup + " - " + location + " - " + endDesc,
-    description = "Earn the highest skill score",
+    description = "Earn the highest skill score in the event",
     start = (
       IsInGame() &&
-      ReliableRaceTimer() == 0.0 &&
       SelectedCup() == cupId &&
       SelectedArea() == locId &&
-      SelectedEvent() == raceId
+      SelectedEvent() == raceId &&
+      dword_be(0x00676920) == 0x02
     ),
     cancel = (
       !IsInGame()
     ),
     submit = (
-      dword_be(0x00c94610) == 0x03 &&
-      prev(dword_be(0x00c94610)) == 0x00
+      dword_be(0x00676920) == 0x01 &&
+      prev(dword_be(0x00676920)) == 0x00 &&
+      CurrentScore() > 0
     ),
     value = (
       CurrentScore()
-    )
+    ),
+    lower_is_better = false
   )
 }
 
+function DriftScoreLeaderboard(cup, location, cupId, locId, raceId, endDesc){
+  leaderboard(
+    title = cup + " - " + location + " - " + endDesc,
+    description = "Earn the highest drift score in the event",
+    start = (
+      IsInGame() &&
+      SelectedCup() == cupId &&
+      SelectedArea() == locId &&
+      SelectedEvent() == raceId &&
+      dword_be(0x00676920) == 0x02
+    ),
+    cancel = (
+      !IsInGame()
+    ),
+    submit = (
+      dword_be(0x00676920) == 0x01 &&
+      prev(dword_be(0x00676920)) == 0x00 &&
+      CurrentScore() > 0
+    ),
+    value = (
+      DriftScore()
+      
+    ),
+    lower_is_better = false
+  )
+}
+
+function TimeAttackRaceLeaderboard(cup, location, cupId, locId, raceId){
+  leaderboard(
+    title = cup + " - " + location + " - " + "Time Attack - Race Timer",
+    description = "Complete the event in the quickest time",
+    start = (
+      IsInGame() &&
+      SelectedCup() == cupId &&
+      SelectedArea() == locId &&
+      SelectedEvent() == raceId &&
+      dword_be(0x00676920) == 0x02
+    ),
+    cancel = (
+      !IsInGame()
+    ),
+    submit = (
+      ReliableRaceTimer() > 0.0 &&
+      dword_be(0x00676920) == 0x01 &&
+      prev(dword_be(0x00676920)) == 0x00
+    ),
+    value = (
+      ReliableRaceTimer()
+    ),
+    format = "SECS",
+    lower_is_better = true
+  )
+}
+
+
 for race in CircuitRaces{
-  CircuitRaceLeaderboard(CircuitRaces[race][0], CircuitRaces[race][1], CircuitRaces[race][2], CircuitRaces[race][3], CircuitRaces[race][4])
+  CircuitRaceLeaderboard(CircuitRaces[race][0], CircuitRaces[race][1], CircuitRaces[race][2], CircuitRaces[race][3], CircuitRaces[race][4], CircuitRaces[race][5])
 }
 
 for race in CircuitRaces{
-  SkillScoreLeaderboard(CircuitRaces[race][0], CircuitRaces[race][1], CircuitRaces[race][2], CircuitRaces[race][3], CircuitRaces[race][4], "Circuit - Skill Score")
+  SkillScoreLeaderboard(CircuitRaces[race][0], CircuitRaces[race][1], CircuitRaces[race][2], CircuitRaces[race][3], CircuitRaces[race][4], "Circuit " + CircuitRaces[race][5] + " - Skill Score")
+}
+
+for race in DriftRaces{
+  DriftScoreLeaderboard(DriftRaces[race][0], DriftRaces[race][1], DriftRaces[race][2], DriftRaces[race][3], DriftRaces[race][4], "Drift Challenge - Score")
+}
+
+for race in TimeAttackRaces{
+  TimeAttackRaceLeaderboard(TimeAttackRaces[race][0], TimeAttackRaces[race][1], TimeAttackRaces[race][2], TimeAttackRaces[race][3], TimeAttackRaces[race][4])
 }
