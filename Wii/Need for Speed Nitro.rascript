@@ -8,7 +8,8 @@ ScorePointer = dword_be(0x007726f4) & 0x1fffffff
 function CurrentProfile() => dword_be(0x01578d80)
 function IsInGame() => dword_be(0x007726f4) != 0x00000000
 function ReliableRaceTimer() => float_be(0x1337cca0)
-function RaceStart() => float_be(0x1337cca0) > 0.0
+function CurrentCar() => dword_be(0x00888160)
+function RaceCompleted() => dword_be(0x00676920) == 0x01 && prev(dword_be(0x00676920)) == 0x00
 
 function SelectedCup() => byte(0x0157c1d8)
 function SelectedArea() => byte(0x0157c1d9)
@@ -27,9 +28,8 @@ function CalculateOffsetAndReturnAddress(baseAddr){
   return dict
 }
 
-
 StarsEarned = CalculateOffsetAndReturnAddress(0x1338ec6c)
-BronzeGP = CalculateOffsetAndReturnAddress(0x1338ec80)
+BronzeGP = CalculateOffsetAndReturnAddress(0x1338ee98)
 SilverGP = CalculateOffsetAndReturnAddress(0x1338f0b7)
 GoldGP = CalculateOffsetAndReturnAddress(0x1338f2f0)
 
@@ -84,7 +84,7 @@ MadridBronzeP6 = [
 
 MadridSilverP6 = [
   0x1338ef84, 0x1338ef85, 0x1338ef86, 0x1338ef91,
-  0x1338ef92, 0x13393223, 0x1338ef9c, 0x1338efa8,
+  0x1338ef92, 0x1338ef93, 0x1338ef9c, 0x1338efa8,
   0x1338efb4, 0x1338efb5, 0x1338efb6, 0x1338efc0,
   0x1338efcc, 0x1338efcd, 0x1338efce, 0x1338efd8
 ]
@@ -138,6 +138,79 @@ DubaiGoldP6 = [
   0x1338f2d0, 0x1338f2d1, 0x1338f2d2, 0x1338f2dc
 ]
 
+AllCars = {
+  0xffffffff: "Not in game",
+  0x00: "Dodge Charger R/T",
+  0x04: "Ford GT",
+  0x05: "Nissan GT-R",
+  0x06: "Hummer H2",
+  0x09: "VW Beetle",
+  0x0b: "Chevrolet Camaro SS",
+  0x0c: "Ford Shelby GT500",
+  0x0d: "Audi TT RS Coupé",
+  0x0e: "Audi R8",
+  0x0f: "Chevrolet Corvette Sting Ray",
+  0x10: "Chevrolet Corvette ZR1",
+  0x11: "Nissan 370Z",
+  0x12: "VW Type 2",
+  0x13: "Nissan Cube",
+  0x14: "Lamborghini Reventón",
+  0x15: "Porsche 911 GT3 RS",
+  0x16: "Subaru Impreza WRX STI",
+  0x17: "Shelby G.T. 500",
+  0x18: "Lamborghini Gallardo",
+  0x19: "Dodge Challenger",
+  0x1b: "Pagani Zonda R",
+  0x1c: "Ford Escort RS Cosworth",
+  0x1d: "Mitsubishi Lancer Evolution",
+  0x1e: "Nissan Skyline GT-R",
+  0x1f: "Porsche Cayman S",
+  0x20: "Tesla Roaster",
+  0x21: "Porsche Cayenne Turbo S",
+  0x24: "Renault 4L",
+  0x25: "Toyota Corolla GT-S",
+  0x26: "Ford Explorer Sport Trac Adrenalin"
+}
+
+ClassACars = {
+    0x04: "Ford GT",
+    0x0c: "Ford Shelby GT500",
+    0x0d: "Audi TT RS Coupé",
+    0x0e: "Audi R8",
+    0x10: "Chevrolet Corvette ZR1",
+    0x14: "Lamborghini Reventón",
+    0x15: "Porsche 911 GT3 RS",
+    0x18: "Lamborghini Gallardo",
+    0x19: "Dodge Challenger",
+    0x1b: "Pagani Zonda R",
+    0x1e: "Nissan Skyline GT-R"
+}
+
+ClassBCars = {
+  0x00: "Dodge Charger R/T",
+  0x05: "Nissan GT-R",
+  0x0f: "Chevrolet Corvette Sting Ray",
+  0x11: "Nissan 370Z",
+  0x16: "Subaru Impreza WRX STI",
+  0x17: "Shelby G.T. 500",
+  0x1c: "Ford Escort RS Cosworth",
+  0x1d: "Mitsubishi Lancer Evolution",
+  0x1f: "Porsche Cayman S",
+  0x21: "Porsche Cayenne Turbo S"
+}
+
+ClassCCars = {
+  0x06: "Hummer H2",
+  0x09: "VW Beetle",
+  0x0b: "Chevrolet Camaro SS",
+  0x12: "VW Type 2",
+  0x13: "Nissan Cube",
+  0x20: "Tesla Roaster",
+  0x24: "Renault 4L",
+  0x25: "Toyota Corolla GT-S",
+  0x26: "Ford Explorer Sport Trac Adrenalin"
+}
+
 // -------------------- Progression & 100% --------------------
 
 function StarsUnlocked(achTitle, placeName, cupName, starsAmount){
@@ -165,8 +238,8 @@ function GPWon(achTitle, type, cupName, gpDict){
     trigger = (
       any_of(gpDict, addr => 
         CurrentProfile() == addr &&
-        dword_be(gpDict[addr]) == 1 &&
-        prev(dword_be(gpDict[addr])) != 1
+        byte(gpDict[addr]) == 1 &&
+        prev(byte(gpDict[addr])) != 1
       )
     )
   )
@@ -179,7 +252,7 @@ StarsUnlocked("Driving in Dubai", "Dubai", "Bronze", 80)
 GPWon("The Bronze Age Winner", "Progression", "Bronze", BronzeGP)
 
 StarsUnlocked("Racing in Rio", "Rio De Janeiro", "Silver", 100)
-StarsUnlocked("Race Like An Egyptian", "Cairo", "Silver", 120)
+StarsUnlocked("Race Like an Egyptian", "Cairo", "Silver", 120)
 StarsUnlocked("Racing with the Bulls", "Madrid", "Silver", 140)
 StarsUnlocked("Marina Bay Drifter", "Singapore", "Silver", 160)
 StarsUnlocked("Dubai Racer", "Dubai", "Silver", 180)
@@ -190,7 +263,7 @@ StarsUnlocked("Cairo Carnage", "Cairo", "Gold", 220)
 StarsUnlocked("Madrid Mischief", "Madrid", "Gold", 140)
 StarsUnlocked("Singapore Speedster", "Singapore", "Gold", 160)
 StarsUnlocked("Dubai Drifter", "Dubai", "Gold", 180)
-GPWon("Golden Racer", "Progression", "Gold", GoldGP)
+GPWon("Golden Grand Prix Winner", "Win_Condition", "Gold", GoldGP)
 
 function AllStarsEarned(achTitle, locName, cupName, raceDict){
   achievement(
@@ -229,6 +302,45 @@ AllStarsEarned("Cairo Champion - Gold", "Cairo", "Gold", CairoGoldP6)
 AllStarsEarned("Madrid Master - Gold", "Madrid", "Gold", MadridGoldP6)
 AllStarsEarned("Singapore Superstar - Gold", "Singapore", "Gold", SingaporeGoldP6)
 AllStarsEarned("Dubai Dominator - Gold", "Dubai", "Gold", DubaiGoldP6)
+
+BronzeCircuitRaces = {
+  0: ["Bronze", "Rio De Janeiro", 0x00, 0x00, 0x00, 1],
+  1: ["Bronze", "Rio De Janeiro", 0x00, 0x00, 0x06, 2],
+  2: ["Bronze", "Cairo", 0x00, 0x01, 0x00, 1],
+  3: ["Bronze", "Cairo", 0x00, 0x01, 0x04, 2],
+  4: ["Bronze", "Madrid", 0x00, 0x02, 0x00, 1],
+  5: ["Bronze", "Madrid", 0x00, 0x02, 0x06, 2],
+  6: ["Bronze", "Singapore", 0x00, 0x03, 0x00, 1],
+  7: ["Bronze", "Singapore", 0x00, 0x03, 0x04, 2],
+  8: ["Bronze", "Dubai", 0x00, 0x04, 0x00, 1],
+  9: ["Bronze", "Dubai", 0x00, 0x04, 0x06, 2]
+}
+
+SilverCircuitRaces = {
+  10: ["Silver", "Rio De Janeiro", 0x01, 0x00, 0x00, 1],
+  11: ["Silver", "Rio De Janeiro", 0x01, 0x00, 0x06, 2],
+  12: ["Silver", "Cairo", 0x01, 0x01, 0x00, 1],
+  13: ["Silver", "Cairo", 0x01, 0x01, 0x04, 2],
+  14: ["Silver", "Madrid", 0x01, 0x02, 0x00, 1],
+  15: ["Silver", "Madrid", 0x01, 0x02, 0x06, 2],
+  16: ["Silver", "Singapore", 0x01, 0x03, 0x00, 1],
+  17: ["Silver", "Singapore", 0x01, 0x03, 0x04, 2],
+  18: ["Silver", "Dubai", 0x01, 0x04, 0x00, 1],
+  19: ["Silver", "Dubai", 0x01, 0x04, 0x06, 2]
+}
+
+GoldCircuitRaces = {
+  20: ["Gold", "Rio De Janeiro", 0x02, 0x00, 0x00, 1],
+  21: ["Gold", "Rio De Janeiro", 0x02, 0x00, 0x06, 2],
+  22: ["Gold", "Cairo", 0x02, 0x01, 0x00, 1],
+  23: ["Gold", "Cairo", 0x02, 0x01, 0x04, 2],
+  24: ["Gold", "Madrid", 0x02, 0x02, 0x00, 1],
+  25: ["Gold", "Madrid", 0x02, 0x02, 0x06, 2],
+  26: ["Gold", "Singapore", 0x02, 0x03, 0x00, 1],
+  27: ["Gold", "Singapore", 0x02, 0x03, 0x04, 2],
+  28: ["Gold", "Dubai", 0x02, 0x04, 0x00, 1],
+  29: ["Gold", "Dubai", 0x02, 0x04, 0x06, 2]
+}
 
 CircuitRaces = {
   0: ["Bronze", "Rio De Janeiro", 0x00, 0x00, 0x00, 1],
@@ -305,10 +417,109 @@ TimeAttackRaces = {
   28: ["Gold", "Dubai", 0x02, 0x04, 0x07]
 }
 
+// -------------------- Challenges --------------------
+PlayerGPPoints = dword_be(0x0157c1dc)
+NPC1GPPoints = dword_be(0x0157c1e0)
+NPC2GPPoints = dword_be(0x0157c1e4)
+NPC3GPPoints = dword_be(0x0157c1e8)
+NPC4GPPoints = dword_be(0x0157c1ec)
+NPC5GPPoints = dword_be(0x0157c1f0)
+NPC6GPPoints = dword_be(0x0157c1f4)
+NPC7GPPoints = dword_be(0x0157c1f8)
+
+TotalPoints = PlayerGPPoints + NPC1GPPoints + NPC2GPPoints + NPC3GPPoints +
+NPC4GPPoints + NPC5GPPoints + NPC6GPPoints + NPC7GPPoints
+
+achievement(
+  title = "The Silver Underdog",
+  description = "Win the Silver Cup Grand Prix using any C class car",
+  points = 10,
+  trigger = (
+    IsInGame() &&
+    SelectedCup() == 0x01 &&
+    SelectedArea() == 0x63 &&
+    TotalPoints == 170 &&
+    prev(TotalPoints) < 170 &&
+    PlayerGPPoints > NPC1GPPoints &&
+    PlayerGPPoints > NPC2GPPoints &&
+    PlayerGPPoints > NPC3GPPoints &&
+    PlayerGPPoints > NPC4GPPoints &&
+    PlayerGPPoints > NPC5GPPoints &&
+    PlayerGPPoints > NPC6GPPoints &&
+    PlayerGPPoints > NPC7GPPoints &&
+    any_of(ClassCCars, car => CurrentCar() == car)
+  )
+)
+
+achievement(
+  title = "Golden Racer",
+  description = "Win the Gold Cup Grand Prix using any B class car",
+  points = 10,
+  trigger = (
+    IsInGame() &&
+    SelectedCup() == 0x02 &&
+    SelectedArea() == 0x63 &&
+    TotalPoints == 170 &&
+    prev(TotalPoints) < 170 &&
+    PlayerGPPoints > NPC1GPPoints &&
+    PlayerGPPoints > NPC2GPPoints &&
+    PlayerGPPoints > NPC3GPPoints &&
+    PlayerGPPoints > NPC4GPPoints &&
+    PlayerGPPoints > NPC5GPPoints &&
+    PlayerGPPoints > NPC6GPPoints &&
+    PlayerGPPoints > NPC7GPPoints &&
+    any_of(ClassBCars, car => CurrentCar() == car)
+  )
+)
+
+function DriftChallenge(achTitle, pointsAmountDesc, placeName, pointsAmountNum, cupId, locId, raceId, cupName){
+  achievement(
+    title = achTitle,
+    description = "Earn " + pointsAmountDesc + " on the Drift Challenge in " + placeName + " in the " + cupName + " Cup",
+    points = 10,
+    trigger = (
+      IsInGame() &&
+      SelectedCup() == cupId &&
+      SelectedArea() == locId &&
+      SelectedEvent() == raceId &&
+      DriftScore() >= pointsAmountNum &&
+      prev(dword_be(ScorePointer + 0x3c)) < pointsAmountNum
+    )
+  )
+}
+
+DriftChallenge("The Samba Slide", "15,000", "Rio De Janeiro", 15000, 1, 0, 2, "Silver")
+DriftChallenge("Drifting in De-Nile", "16,500", "Cairo", 16500, 0, 1, 2, "Bronze")
+DriftChallenge("Drifting in Madrid", "13,000", "Madrid", 13000, 0, 2, 7, "Bronze")
+DriftChallenge("Singapore Sling", "17,000", "Singapore", 17000, 0, 3, 5, "Bronze")
+DriftChallenge("Dubai Drift King", "12,000", "Dubai", 12000, 0, 3, 2, "Bronze")
+
+function ClassChallenge(achTitle, pointsAmountDesc, pointsAmountNum, cupName, carClassName, carClassList, circuitList){
+    achievement(
+    title = achTitle,
+    description = "Earn " + pointsAmountDesc + " skill points on any circuit race in the " + cupName + " Cup using any " + carClassName + " class car",
+    points = 10,
+    trigger = (
+      IsInGame() &&
+      CurrentScore() >= pointsAmountNum &&
+      prev(dword_be(ScorePointer + 0x38)) < pointsAmountNum &&
+      any_of(circuitList, cr => 
+        circuitList[cr][3] == SelectedArea() &&
+        circuitList[cr][4] == SelectedEvent()
+      ) &&
+      any_of(carClassList, car => CurrentCar() == car)
+    )
+  )
+}
+
+ClassChallenge("Skid Mark Specialist", "70,000", 70000, "Bronze", "C", ClassCCars, BronzeCircuitRaces)
+ClassChallenge("Sideways Certified", "107,000", 107000, "Silver", "B", ClassBCars, SilverCircuitRaces)
+ClassChallenge("Style Icon", "110,000", 110000, "Gold", "A", ClassACars, GoldCircuitRaces)
+
 // -------------------- Leaderboards --------------------
 function CircuitRaceLeaderboard(cup, location, cupId, locId, raceId, raceNum){
   leaderboard(
-    title = cup + " - " + location + " - " + "Circuit " + raceNum + " - Race Timer",
+    title = cup + " Cup - " + location + " - " + "Circuit " + raceNum + " - Race Timer",
     description = "Win the race in the quickest time",
     start = (
       IsInGame() &&
@@ -321,8 +532,7 @@ function CircuitRaceLeaderboard(cup, location, cupId, locId, raceId, raceNum){
       !IsInGame()
     ),
     submit = (
-      dword_be(0x00676920) == 0x01 &&
-      prev(dword_be(0x00676920)) == 0x00 &&
+      RaceCompleted() &&
       ReliableRaceTimer() > 0.0
     ),
     value = (
@@ -335,7 +545,7 @@ function CircuitRaceLeaderboard(cup, location, cupId, locId, raceId, raceNum){
 
 function SkillScoreLeaderboard(cup, location, cupId, locId, raceId, endDesc){
   leaderboard(
-    title = cup + " - " + location + " - " + endDesc,
+    title = cup + " Cup - " + location + " - " + endDesc,
     description = "Earn the highest skill score in the event",
     start = (
       IsInGame() &&
@@ -348,8 +558,7 @@ function SkillScoreLeaderboard(cup, location, cupId, locId, raceId, endDesc){
       !IsInGame()
     ),
     submit = (
-      dword_be(0x00676920) == 0x01 &&
-      prev(dword_be(0x00676920)) == 0x00 &&
+      RaceCompleted() &&
       CurrentScore() > 0
     ),
     value = (
@@ -361,7 +570,7 @@ function SkillScoreLeaderboard(cup, location, cupId, locId, raceId, endDesc){
 
 function DriftScoreLeaderboard(cup, location, cupId, locId, raceId, endDesc){
   leaderboard(
-    title = cup + " - " + location + " - " + endDesc,
+    title = cup + " Cup - " + location + " - " + endDesc,
     description = "Earn the highest drift score in the event",
     start = (
       IsInGame() &&
@@ -374,8 +583,7 @@ function DriftScoreLeaderboard(cup, location, cupId, locId, raceId, endDesc){
       !IsInGame()
     ),
     submit = (
-      dword_be(0x00676920) == 0x01 &&
-      prev(dword_be(0x00676920)) == 0x00 &&
+      RaceCompleted() &&
       CurrentScore() > 0
     ),
     value = (
@@ -388,7 +596,7 @@ function DriftScoreLeaderboard(cup, location, cupId, locId, raceId, endDesc){
 
 function TimeAttackRaceLeaderboard(cup, location, cupId, locId, raceId){
   leaderboard(
-    title = cup + " - " + location + " - " + "Time Attack - Race Timer",
+    title = cup + " Cup - " + location + " - " + "Time Attack - Race Timer",
     description = "Complete the event in the quickest time",
     start = (
       IsInGame() &&
@@ -401,9 +609,8 @@ function TimeAttackRaceLeaderboard(cup, location, cupId, locId, raceId){
       !IsInGame()
     ),
     submit = (
-      ReliableRaceTimer() > 0.0 &&
-      dword_be(0x00676920) == 0x01 &&
-      prev(dword_be(0x00676920)) == 0x00
+      RaceCompleted() &&
+      ReliableRaceTimer() > 0.0
     ),
     value = (
       ReliableRaceTimer()
@@ -429,3 +636,52 @@ for race in DriftRaces{
 for race in TimeAttackRaces{
   TimeAttackRaceLeaderboard(TimeAttackRaces[race][0], TimeAttackRaces[race][1], TimeAttackRaces[race][2], TimeAttackRaces[race][3], TimeAttackRaces[race][4])
 }
+
+// -------------------- RP --------------------
+Cups = {
+  0x00: "Bronze",
+  0x01: "Silver",
+  0x02: "Gold"
+}
+
+Location = {
+  0x00: "Rio De Janeiro",
+  0x01: "Cairo",
+  0x02: "Madrid",
+  0x03: "Singapore",
+  0x04: "Dubai",
+  0x63: "Grand Prix"
+}
+
+
+rich_presence_conditional_display(!IsInGame() && CurrentProfile() == 0x00, "Preparing for a race! [Profile 1] [⭐ {0}] [💰 {1}]",
+  rich_presence_value("Stars", dword_be(0x13392efc)),
+  rich_presence_value("Money", dword_be(0x13392f00))
+)
+rich_presence_conditional_display(!IsInGame() && CurrentProfile() == 0x01, "Preparing for a race! [Profile 2] [⭐ {0}] [💰 {1}]",
+  rich_presence_value("Stars", dword_be(0x133921ac)),
+  rich_presence_value("Money", dword_be(0x133921b0))
+)
+rich_presence_conditional_display(!IsInGame() && CurrentProfile() == 0x02, "Preparing for a race! [Profile 3] [⭐ {0}] [💰 {1}]",
+  rich_presence_value("Stars", dword_be(0x1339145c)),
+  rich_presence_value("Money", dword_be(0x13391460))
+)
+rich_presence_conditional_display(!IsInGame() && CurrentProfile() == 0x03, "Preparing for a race! [Profile 4] [⭐ {0}] [💰 {1}]",
+  rich_presence_value("Stars", dword_be(0x1339070c)),
+  rich_presence_value("Money", dword_be(0x13390710))
+)
+rich_presence_conditional_display(!IsInGame() && CurrentProfile() == 0x04, "Preparing for a race! [Profile 5] [⭐ {0}] [💰 {1}]",
+  rich_presence_value("Stars", dword_be(0x1338f9bc)),
+  rich_presence_value("Money", dword_be(0x1338f9c0))
+)
+rich_presence_conditional_display(!IsInGame() && CurrentProfile() == 0x05, "Preparing for a race! [Profile 6] [⭐ {0}] [💰 {1}]",
+  rich_presence_value("Stars", dword_be(0x1338ec6c)),
+  rich_presence_value("Money", dword_be(0x1338ec70))
+)
+rich_presence_conditional_display(IsInGame(), "Racing in {0} in the {1} Cup driving the {2} [Skill Score: {3}]",
+  rich_presence_lookup("Location", SelectedArea(), Location),
+  rich_presence_lookup("Cup", SelectedCup(), Cups),
+  rich_presence_lookup("Car", CurrentCar(), AllCars),
+  rich_presence_value("SkillScore", CurrentScore())
+)
+rich_presence_display("Playing Need for Speed: Nitro")
