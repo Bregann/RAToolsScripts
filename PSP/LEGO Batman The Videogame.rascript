@@ -87,7 +87,7 @@ byte(0x00d639f1) + byte(0x00d639fd) + byte(0x00d63a09) + byte(0x00d63a15) + byte
 byte(0x00d63a45) + byte(0x00d63a51) + byte(0x00d63a5d) + byte(0x00d63a69) + byte(0x00d63a75) +
 byte(0x00d63a99) + byte(0x00d63aa5) + byte(0x00d63ab1) + byte(0x00d63abd) + byte(0x00d63ac9)
 
-VillianMinikitsUnlocked = 
+VillainMinikitsUnlocked = 
 byte(0x00d63ae1) + byte(0x00d63aed) + byte(0x00d63af9) + byte(0x00d63b05) + byte(0x00d63b11) + 
 byte(0x00d63b1d) + byte(0x00d63b29) + byte(0x00d63b35) + byte(0x00d63b41) + byte(0x00d63b4d) + 
 byte(0x00d63b59) + byte(0x00d63b65) + byte(0x00d63b71) + byte(0x00d63b7d) + byte(0x00d63b89)
@@ -98,7 +98,7 @@ byte(0x00d639ed) + byte(0x00d639f9) + byte(0x00d63a05) + byte(0x00d63a11) + byte
 byte(0x00d63a41) + byte(0x00d63a4d) + byte(0x00d63a59) + byte(0x00d63a65) + byte(0x00d63a71) +
 byte(0x00d63a95) + byte(0x00d63aa1) + byte(0x00d63aad) + byte(0x00d63ab9) + byte(0x00d63ac5)
 
-VillianTrueBatmans = 
+VillainTrueBatmans = 
 byte(0x00d63add) + byte(0x00d63ae9) + byte(0x00d63af5) + byte(0x00d63b01) + byte(0x00d63b0d) + 
 byte(0x00d63b19) + byte(0x00d63b25) + byte(0x00d63b31) + byte(0x00d63b3d) + byte(0x00d63b49) + 
 byte(0x00d63b55) + byte(0x00d63b61) + byte(0x00d63b6d) + byte(0x00d63b79) + byte(0x00d63b85)
@@ -106,7 +106,7 @@ byte(0x00d63b55) + byte(0x00d63b61) + byte(0x00d63b6d) + byte(0x00d63b79) + byte
 //Hostages saved
 HeroHostagesSaved = bitcount(0x00d64000) + bit0(0x00d64001) + bit1(0x00d64001) + bit2(0x00d64001) + bit3(0x00d64001)
 
-VillianHostagesSaved = 
+VillainHostagesSaved = 
 bit4(0x00d64001) + bit5(0x00d64001) + bit6(0x00d64001) + bit7(0x00d64001) + 
 bitcount(0x00d64002) + bit0(0x00d64003)
 
@@ -226,7 +226,7 @@ BonusLevelComplete("Arkham Asylum", "Complete the villain bonus level", ArkhamAs
 // Minikit/true batman completions
 // ================================
 
-function HeroVillianSplitAchievements(achName, achDesc, typeOfUnlock, amount, prevAmount, heroOrVillian)
+function HeroVillainSplitAchievements(achName, achDesc, typeOfUnlock, amount, prevAmount, heroOrVillain)
 {
     achievement (
         title = achName,
@@ -235,17 +235,17 @@ function HeroVillianSplitAchievements(achName, achDesc, typeOfUnlock, amount, pr
         trigger = (
             typeOfUnlock == amount &&
             prev(typeOfUnlock) <= prevAmount &&
-            heroOrVillian
+            heroOrVillain
             )
         )
 }
 
-HeroVillianSplitAchievements("Minikit Master", "Collect all 150 minikits in the hero levels", HeroMinikitsUnlocked, 0x96, 0x95, IsHeroEp())
-HeroVillianSplitAchievements("Minikit Mastermind", "Collect all 150 minikits in the villian levels", VillianMinikitsUnlocked, 0x96, 0x95, IsVillainEp())
-HeroVillianSplitAchievements("I'm Batman", "Reach true batman in the hero levels", HeroTrueBatmans, 0x0f, 0x0e, IsHeroEp())
-HeroVillianSplitAchievements("The Dark Knight Rises", "Reach true batman in the villian levels", VillianTrueBatmans, 0x0f, 0x0e, IsVillainEp())
-HeroVillianSplitAchievements("The Hero of Gotham", "Save every hostage in the hero levels", HeroHostagesSaved, 0x0c, 0x0b, IsHeroEp())
-HeroVillianSplitAchievements("The Evil Hero of Gotham", "Save every hostage in the villian levels", VillianHostagesSaved, 0x0d, 0x0c, IsVillainEp())
+HeroVillainSplitAchievements("Minikit Master", "Collect all 150 minikits in the Hero levels", HeroMinikitsUnlocked, 0x96, 0x95, IsHeroEp())
+HeroVillainSplitAchievements("Minikit Mastermind", "Collect all 150 minikits in the Villain levels", VillainMinikitsUnlocked, 0x96, 0x95, IsVillainEp())
+HeroVillainSplitAchievements("I'm Batman", "Reach Super Hero status in the Hero levels", HeroTrueBatmans, 0x0f, 0x0e, IsHeroEp())
+HeroVillainSplitAchievements("The Dark Knight Rises", "Reach Super Villain status in the Villain levels", VillainTrueBatmans, 0x0f, 0x0e, IsVillainEp())
+HeroVillainSplitAchievements("The Hero of Gotham", "Save every hostage in the Hero levels", HeroHostagesSaved, 0x0c, 0x0b, IsHeroEp())
+HeroVillainSplitAchievements("The Evil Hero of Gotham", "Save every hostage in the Villain levels", VillainHostagesSaved, 0x0d, 0x0c, IsVillainEp())
 
 // ================================
 // Red brick collected completions
@@ -253,7 +253,7 @@ HeroVillianSplitAchievements("The Evil Hero of Gotham", "Save every hostage in t
 
 achievement(
     title = "Master of the Red Bricks",
-    description = "Collect every red brick from all hero and villian levels",
+    description = "Collect every red brick from all hero and Villain levels",
     points = 25,
     trigger = (
         RedBricksCollected == 0x1e &&

@@ -251,24 +251,24 @@ StarsUnlocked("Trip to Singapore", "Singapore", "Bronze", 60)
 StarsUnlocked("Driving in Dubai", "Dubai", "Bronze", 80)
 GPWon("The Bronze Age Winner", "Progression", "Bronze", BronzeGP)
 
-StarsUnlocked("Racing in Rio", "Rio De Janeiro", "Silver", 100)
+StarsUnlocked("Racing in Rio", "Rio de Janeiro", "Silver", 100)
 StarsUnlocked("Race Like an Egyptian", "Cairo", "Silver", 120)
 StarsUnlocked("Racing with the Bulls", "Madrid", "Silver", 140)
 StarsUnlocked("Marina Bay Drifter", "Singapore", "Silver", 160)
 StarsUnlocked("Dubai Racer", "Dubai", "Silver", 180)
 GPWon("Silver Speedster", "Progression", "Silver", SilverGP)
 
-StarsUnlocked("Ripping up Rio", "Rio De Janeiro", "Gold", 200)
+StarsUnlocked("Ripping Up Rio", "Rio de Janeiro", "Gold", 200)
 StarsUnlocked("Cairo Carnage", "Cairo", "Gold", 220)
-StarsUnlocked("Madrid Mischief", "Madrid", "Gold", 140)
-StarsUnlocked("Singapore Speedster", "Singapore", "Gold", 160)
-StarsUnlocked("Dubai Drifter", "Dubai", "Gold", 180)
+StarsUnlocked("Madrid Mischief", "Madrid", "Gold", 240)
+StarsUnlocked("Singapore Speedster", "Singapore", "Gold", 260)
+StarsUnlocked("Dubai Drifter", "Dubai", "Gold", 280)
 GPWon("Golden Grand Prix Winner", "Win_Condition", "Gold", GoldGP)
 
 function AllStarsEarned(achTitle, locName, cupName, raceDict){
   achievement(
     title = achTitle,
-    description = "Earn the maximum amount of stars on every event in " + locName + " in the " + cupName + " Cup",
+    description = "Earn the maximum amount of stars in every event in " + locName + " in the " + cupName + " Cup",
     points = 10,
     // confusing maths stuff lol
     trigger = (
@@ -285,27 +285,27 @@ function AllStarsEarned(achTitle, locName, cupName, raceDict){
   )
 }
 
-AllStarsEarned("Rio Ruler - Bronze", "Rio De Janeiro", "Bronze", RioBronzeP6)
+AllStarsEarned("Rio Ruler - Bronze", "Rio de Janeiro", "Bronze", RioBronzeP6)
 AllStarsEarned("Cairo Champion - Bronze", "Cairo", "Bronze", CairoBronzeP6)
 AllStarsEarned("Madrid Master - Bronze", "Madrid", "Bronze", MadridBronzeP6)
 AllStarsEarned("Singapore Superstar - Bronze", "Singapore", "Bronze", SingaporeBronzeP6)
 AllStarsEarned("Dubai Dominator - Bronze", "Dubai", "Bronze", DubaiBronzeP6)
 
-AllStarsEarned("Rio Ruler - Silver", "Rio De Janeiro", "Silver", RioSilverP6)
+AllStarsEarned("Rio Ruler - Silver", "Rio de Janeiro", "Silver", RioSilverP6)
 AllStarsEarned("Cairo Champion - Silver", "Cairo", "Silver", CairoSilverP6)
 AllStarsEarned("Madrid Master - Silver", "Madrid", "Silver", MadridSilverP6)
 AllStarsEarned("Singapore Superstar - Silver", "Singapore", "Silver", SingaporeSilverP6)
 AllStarsEarned("Dubai Dominator - Silver", "Dubai", "Silver", DubaiSilverP6)
 
-AllStarsEarned("Rio Ruler - Gold", "Rio De Janeiro", "Gold", RioGoldP6)
+AllStarsEarned("Rio Ruler - Gold", "Rio de Janeiro", "Gold", RioGoldP6)
 AllStarsEarned("Cairo Champion - Gold", "Cairo", "Gold", CairoGoldP6)
 AllStarsEarned("Madrid Master - Gold", "Madrid", "Gold", MadridGoldP6)
 AllStarsEarned("Singapore Superstar - Gold", "Singapore", "Gold", SingaporeGoldP6)
 AllStarsEarned("Dubai Dominator - Gold", "Dubai", "Gold", DubaiGoldP6)
 
 BronzeCircuitRaces = {
-  0: ["Bronze", "Rio De Janeiro", 0x00, 0x00, 0x00, 1],
-  1: ["Bronze", "Rio De Janeiro", 0x00, 0x00, 0x06, 2],
+  0: ["Bronze", "Rio de Janeiro", 0x00, 0x00, 0x00, 1],
+  1: ["Bronze", "Rio de Janeiro", 0x00, 0x00, 0x06, 2],
   2: ["Bronze", "Cairo", 0x00, 0x01, 0x00, 1],
   3: ["Bronze", "Cairo", 0x00, 0x01, 0x04, 2],
   4: ["Bronze", "Madrid", 0x00, 0x02, 0x00, 1],
@@ -317,8 +317,8 @@ BronzeCircuitRaces = {
 }
 
 SilverCircuitRaces = {
-  10: ["Silver", "Rio De Janeiro", 0x01, 0x00, 0x00, 1],
-  11: ["Silver", "Rio De Janeiro", 0x01, 0x00, 0x06, 2],
+  10: ["Silver", "Rio de Janeiro", 0x01, 0x00, 0x00, 1],
+  11: ["Silver", "Rio de Janeiro", 0x01, 0x00, 0x06, 2],
   12: ["Silver", "Cairo", 0x01, 0x01, 0x00, 1],
   13: ["Silver", "Cairo", 0x01, 0x01, 0x04, 2],
   14: ["Silver", "Madrid", 0x01, 0x02, 0x00, 1],
@@ -330,8 +330,8 @@ SilverCircuitRaces = {
 }
 
 GoldCircuitRaces = {
-  20: ["Gold", "Rio De Janeiro", 0x02, 0x00, 0x00, 1],
-  21: ["Gold", "Rio De Janeiro", 0x02, 0x00, 0x06, 2],
+  20: ["Gold", "Rio de Janeiro", 0x02, 0x00, 0x00, 1],
+  21: ["Gold", "Rio de Janeiro", 0x02, 0x00, 0x06, 2],
   22: ["Gold", "Cairo", 0x02, 0x01, 0x00, 1],
   23: ["Gold", "Cairo", 0x02, 0x01, 0x04, 2],
   24: ["Gold", "Madrid", 0x02, 0x02, 0x00, 1],
@@ -343,8 +343,8 @@ GoldCircuitRaces = {
 }
 
 CircuitRaces = {
-  0: ["Bronze", "Rio De Janeiro", 0x00, 0x00, 0x00, 1],
-  1: ["Bronze", "Rio De Janeiro", 0x00, 0x00, 0x06, 2],
+  0: ["Bronze", "Rio de Janeiro", 0x00, 0x00, 0x00, 1],
+  1: ["Bronze", "Rio de Janeiro", 0x00, 0x00, 0x06, 2],
   2: ["Bronze", "Cairo", 0x00, 0x01, 0x00, 1],
   3: ["Bronze", "Cairo", 0x00, 0x01, 0x04, 2],
   4: ["Bronze", "Madrid", 0x00, 0x02, 0x00, 1],
@@ -354,8 +354,8 @@ CircuitRaces = {
   8: ["Bronze", "Dubai", 0x00, 0x04, 0x00, 1],
   9: ["Bronze", "Dubai", 0x00, 0x04, 0x06, 2],
 
-  10: ["Silver", "Rio De Janeiro", 0x01, 0x00, 0x00, 1],
-  11: ["Silver", "Rio De Janeiro", 0x01, 0x00, 0x06, 2],
+  10: ["Silver", "Rio de Janeiro", 0x01, 0x00, 0x00, 1],
+  11: ["Silver", "Rio de Janeiro", 0x01, 0x00, 0x06, 2],
   12: ["Silver", "Cairo", 0x01, 0x01, 0x00, 1],
   13: ["Silver", "Cairo", 0x01, 0x01, 0x04, 2],
   14: ["Silver", "Madrid", 0x01, 0x02, 0x00, 1],
@@ -365,8 +365,8 @@ CircuitRaces = {
   18: ["Silver", "Dubai", 0x01, 0x04, 0x00, 1],
   19: ["Silver", "Dubai", 0x01, 0x04, 0x06, 2],
 
-  20: ["Gold", "Rio De Janeiro", 0x02, 0x00, 0x00, 1],
-  21: ["Gold", "Rio De Janeiro", 0x02, 0x00, 0x06, 2],
+  20: ["Gold", "Rio de Janeiro", 0x02, 0x00, 0x00, 1],
+  21: ["Gold", "Rio de Janeiro", 0x02, 0x00, 0x06, 2],
   22: ["Gold", "Cairo", 0x02, 0x01, 0x00, 1],
   23: ["Gold", "Cairo", 0x02, 0x01, 0x04, 2],
   24: ["Gold", "Madrid", 0x02, 0x02, 0x00, 1],
@@ -378,19 +378,19 @@ CircuitRaces = {
 }
 
 DriftRaces = {
-  0: ["Bronze", "Rio De Janeiro", 0x00, 0x00, 0x02],
+  0: ["Bronze", "Rio de Janeiro", 0x00, 0x00, 0x02],
   2: ["Bronze", "Cairo", 0x00, 0x01, 0x02],
   4: ["Bronze", "Madrid", 0x00, 0x02, 0x07],
   6: ["Bronze", "Singapore", 0x00, 0x03, 0x05],
   9: ["Bronze", "Dubai", 0x00, 0x04, 0x02],
 
-  10: ["Silver", "Rio De Janeiro", 0x01, 0x00, 0x02],
+  10: ["Silver", "Rio de Janeiro", 0x01, 0x00, 0x02],
   12: ["Silver", "Cairo", 0x01, 0x01, 0x02],
   14: ["Silver", "Madrid", 0x01, 0x02, 0x07],
   16: ["Silver", "Singapore", 0x01, 0x03, 0x05],
   18: ["Silver", "Dubai", 0x01, 0x04, 0x02],
 
-  20: ["Gold", "Rio De Janeiro", 0x02, 0x00, 0x02],
+  20: ["Gold", "Rio de Janeiro", 0x02, 0x00, 0x02],
   22: ["Gold", "Cairo", 0x02, 0x01, 0x02],
   24: ["Gold", "Madrid", 0x02, 0x02, 0x07],
   26: ["Gold", "Singapore", 0x02, 0x03, 0x05],
@@ -398,19 +398,19 @@ DriftRaces = {
 }
 
 TimeAttackRaces = {
-  0: ["Bronze", "Rio De Janeiro", 0x00, 0x00, 0x07],
+  0: ["Bronze", "Rio de Janeiro", 0x00, 0x00, 0x07],
   2: ["Bronze", "Cairo", 0x00, 0x01, 0x05],
   4: ["Bronze", "Madrid", 0x00, 0x02, 0x02],
   6: ["Bronze", "Singapore", 0x00, 0x03, 0x02],
   9: ["Bronze", "Dubai", 0x00, 0x04, 0x07],
 
-  10: ["Silver", "Rio De Janeiro", 0x01, 0x00, 0x07],
+  10: ["Silver", "Rio de Janeiro", 0x01, 0x00, 0x07],
   12: ["Silver", "Cairo", 0x01, 0x01, 0x05],
   14: ["Silver", "Madrid", 0x01, 0x02, 0x02],
   16: ["Silver", "Singapore", 0x01, 0x03, 0x02],
   18: ["Silver", "Dubai", 0x01, 0x04, 0x07],
 
-  20: ["Gold", "Rio De Janeiro", 0x02, 0x00, 0x07],
+  20: ["Gold", "Rio de Janeiro", 0x02, 0x00, 0x07],
   22: ["Gold", "Cairo", 0x02, 0x01, 0x05],
   24: ["Gold", "Madrid", 0x02, 0x02, 0x02],
   26: ["Gold", "Singapore", 0x02, 0x03, 0x02],
@@ -475,7 +475,7 @@ achievement(
 function DriftChallenge(achTitle, pointsAmountDesc, placeName, pointsAmountNum, cupId, locId, raceId, cupName){
   achievement(
     title = achTitle,
-    description = "Earn " + pointsAmountDesc + " on the Drift Challenge in " + placeName + " in the " + cupName + " Cup",
+    description = "Earn " + pointsAmountDesc + " points on the Drift Challenge in " + placeName + " in the " + cupName + " Cup",
     points = 10,
     trigger = (
       IsInGame() &&
@@ -488,7 +488,7 @@ function DriftChallenge(achTitle, pointsAmountDesc, placeName, pointsAmountNum, 
   )
 }
 
-DriftChallenge("The Samba Slide", "15,000", "Rio De Janeiro", 15000, 1, 0, 2, "Silver")
+DriftChallenge("The Samba Slide", "15,000", "Rio de Janeiro", 15000, 1, 0, 2, "Silver")
 DriftChallenge("Drifting in De-Nile", "16,500", "Cairo", 16500, 0, 1, 2, "Bronze")
 DriftChallenge("Drifting in Madrid", "13,000", "Madrid", 13000, 0, 2, 7, "Bronze")
 DriftChallenge("Singapore Sling", "17,000", "Singapore", 17000, 0, 3, 5, "Bronze")
@@ -497,7 +497,7 @@ DriftChallenge("Dubai Drift King", "12,000", "Dubai", 12000, 0, 3, 2, "Bronze")
 function ClassChallenge(achTitle, pointsAmountDesc, pointsAmountNum, cupName, carClassName, carClassList, circuitList){
     achievement(
     title = achTitle,
-    description = "Earn " + pointsAmountDesc + " skill points on any circuit race in the " + cupName + " Cup using any " + carClassName + " class car",
+    description = "Earn " + pointsAmountDesc + " skill points in any circuit race in the " + cupName + " Cup using any " + carClassName + " class car",
     points = 10,
     trigger = (
       IsInGame() &&
@@ -645,7 +645,7 @@ Cups = {
 }
 
 Location = {
-  0x00: "Rio De Janeiro",
+  0x00: "Rio de Janeiro",
   0x01: "Cairo",
   0x02: "Madrid",
   0x03: "Singapore",
