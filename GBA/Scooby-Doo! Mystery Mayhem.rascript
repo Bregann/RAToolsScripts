@@ -107,7 +107,21 @@ function CartSpeedrun(achTitle, achDesc, beforeCartId, startingLevelId, endLevel
     points = 10,
     type = "Missable",
     trigger = (
-      (once((byte(0x0086b9) == startingLevelId || byte(0x0086f9) == startingLevelId) && prior(byte(0x0086b9)) == beforeCartId) || (once(byte(0x0086b9) == startingLevelId && byte(0x0086f9) == startingLevelId && prior(byte(0x0086f9)) == 0x68))) &&
+      (
+        once(
+          (
+            byte(0x0086b9) == startingLevelId || 
+            byte(0x0086f9) == startingLevelId
+          ) 
+          && 
+            prior(byte(0x0086b9)) == beforeCartId) 
+          || 
+          (
+            once(byte(0x0086b9) == startingLevelId && 
+            byte(0x0086f9) == startingLevelId && 
+            prior(byte(0x0086f9)) == 0x68)
+          )
+        ) &&
       never(tally(frames, any_of(cartLevelIds, id => id == byte(0x0086b9) || id == byte(0x0086f9))) || IsInMenusNoLoading()) &&
       trigger_when(CurrentArea(endLevelId))
     )
@@ -138,9 +152,9 @@ function CartLeaderboard(lbTitle, levelNum, startingLevelId, lastCartAreaId, end
 }
 
 // ---------- Level 1 ------------
-Level1ClueFound("Spooky Sales Slip", "Receipt", byte(0x01af80), 0x20, 1, 0x00)
-Level1ClueFound("You've Got Frightmail", "Telegram", byte(0x01af80), 0x40, 1, 0x00)
-Level1ClueFound("A Note-orious Clue", "Crumpled Note", byte(0x01af80), 0x80, 1, 0x00)
+ClueFound("Spooky Sales Slip", "Receipt", bit0(0x01af64), 1, 0x00)
+ClueFound("You've Got Frightmail", "Telegram", bit1(0x01af64), 1, 0x00)
+ClueFound("A Note-orious Clue", "Crumpled Note", bit2(0x01af64), 1, 0x00)
 
 Level1CartAreaHex = [0x17, 0x18, 0x19, 0x1a, 0x1b, 0x1c]
 CartSpeedrun("Book Cart Dash", "Complete the book cart minigame in under 34 seconds (reload your save to try again)", 0x16, 0x17, 0x1d, Level1CartAreaHex, 2040)

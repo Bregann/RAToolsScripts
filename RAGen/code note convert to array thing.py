@@ -3,7 +3,7 @@ import re
 import os
 
 # 🏴‍☠️ CONFIGURATION 🏴‍☠️
-INPUT_FILENAME = '34593-Notes.json'
+INPUT_FILENAME = '35935-Notes.json'
 
 def parse_and_sort_booty():
     print(f"--- 🏴‍☠️ OPENING THE MANIFEST: {INPUT_FILENAME} 🏴‍☠️ ---")
