@@ -100,26 +100,65 @@ BadgeAchievement("Bird of Clay", "Clay Shooting", CalculateOffsetAndReturnAddres
 BadgeAchievement("Pinpoint Precision", "Rifle Shooting", CalculateOffsetAndReturnAddress(0x1003d0dd))
 
 // -------------------- Keys --------------------
-function SilverKeyAchievement(achTitle, description, points, baseAddresses, targetCount){
+function SilverKeyAchievement(achTitle, points, keyDict, minigameName, keyName = ""){
+  description = ""
+
+  if(keyName != "") {
+    description = "Unlock the " + "\"" + keyName + "\"" + " Silver Key from the " + "\"" + minigameName + "\"" + " minigame"
+  }
+  else {
+    description = "Unlock the Silver Key from the " + "\"" + minigameName + "\"" + " minigame"
+  }
+
   achievement(
     title = achTitle,
     description = description,
     points = points,
     trigger = (
       IsInGame() &&
-      any_of(range(1, 8), profileKey =>
-        sum_of(baseAddresses, addr => byte(addr + ((profileKey - 1) * OFFSET))) == targetCount &&
-        prev(sum_of(baseAddresses, addr => byte(addr + ((profileKey - 1) * OFFSET)))) < targetCount  
+      any_of(keyDict, addr =>
+        bit7(keyDict[addr]) == 1 &&
+        prev(bit7(keyDict[addr])) == 0
       )
     )
   )
 }
 
+SilverKeyAchievement("Marine Sprint", 5, CalculateOffsetAndReturnAddress(0x1003cfc5), "Marine Bike Races", "Sprint Race: Clear All Stages")
+SilverKeyAchievement("Driving Laps in the Water", 5, CalculateOffsetAndReturnAddress(0x1003cfc6), "Marine Bike Races", "Circuit Race: Clear All Stages")
+SilverKeyAchievement("Ring Leader", 5, CalculateOffsetAndReturnAddress(0x1003cfc7), "Marine Bike Races", "Hoop Challenge: Clear All Stages")
+
+SilverKeyAchievement("Skydiving Master", 5, CalculateOffsetAndReturnAddress(0x1003cfbf), "Sky Diving")
+
+SilverKeyAchievement("Master of Beach Elimination", 5, CalculateOffsetAndReturnAddress(0x1003cfc1), "Beach Volleyball")
+
+SilverKeyAchievement("Muddy Sprint", 5, CalculateOffsetAndReturnAddress(0x1003cfc2), "ATV Races", "Sprint Race: Clear All Stages")
+SilverKeyAchievement("Mud-Caked Circuit Champion", 5, CalculateOffsetAndReturnAddress(0x1003cfc3), "ATV Races", "Circuit Race: Clear All Stages")
+SilverKeyAchievement("Speeding Through the Gates", 5, CalculateOffsetAndReturnAddress(0x1003cfc4), "ATV Races", "Slalom Challenge: Clear All Stages")
+
+SilverKeyAchievement("Recording Fish", 5, CalculateOffsetAndReturnAddress(0x1003cfbc), "Scuba Diving", "Free Diving: Complete 30% of the Diving Chart")
+SilverKeyAchievement("Pro Fish Finder", 5, CalculateOffsetAndReturnAddress(0x1003cfbd), "Scuba Diving", "Free Diving: Complete 80% of the Diving Chart")
+SilverKeyAchievement("Fish Searching Expert", 5, CalculateOffsetAndReturnAddress(0x1003cfbe), "Scuba Diving", "Fish Search: Clear All Levels")
+
+SilverKeyAchievement("Tropical Harvester", 5, CalculateOffsetAndReturnAddress(0x1003cfcf), "Surfing", "Coco Challenge: Rank 4 or Higher")
+SilverKeyAchievement("Heavy Water Hero", 5, CalculateOffsetAndReturnAddress(0x1003cfcd), "Surfing", "Big Wave Ride: Rank \"A\" or Higher")
+SilverKeyAchievement("Skilled Surfer", 5, CalculateOffsetAndReturnAddress(0x1003cfce), "Surfing", "Score Trial: Rank 4 or Higher")
+
+SilverKeyAchievement("Water Gun Warrior", 5, CalculateOffsetAndReturnAddress(0x1003cfc0), "Water Gun Battle")
+
+SilverKeyAchievement("Flight of the Quad", 5, CalculateOffsetAndReturnAddress(0x1003cfc8), "ATV Tricks", "Jump Tricks: Rank 4 or Higher")
+SilverKeyAchievement("Muddy Multi-tasker", 5, CalculateOffsetAndReturnAddress(0x1003cfc9), "ATV Tricks", "Ride & Tricks: Rank 4 or Higher")
+
+SilverKeyAchievement("Wave Vaulter", 5, CalculateOffsetAndReturnAddress(0x1003cfca), "Marine Bike Tricks", "Jump Tricks: Rank 4 or Higher")
+SilverKeyAchievement("Aquatic Rider and Trickster", 5, CalculateOffsetAndReturnAddress(0x1003cfcb), "Marine Bike Tricks", "Ride & Tricks: Rank 4 or Higher")
+
+SilverKeyAchievement("Marine Multi-Sport Master", 5, CalculateOffsetAndReturnAddress(0x1003cfcc), "Triathlon")
+
 // -------------------- School --------------------
 function SchoolAchievement(achTitle, categoryName, resortName, points, baseAddresses, targetCount){
   achievement(
     title = achTitle,
-    description = "Complete all of the lessons in the " + "\"" + categoryName "\"" + " category in the " + resortName,
+    description = "Complete all of the lessons in the " + "\"" + categoryName + "\"" + " category in the " + resortName,
     points = points,
     trigger = (
       IsInGame() &&
@@ -184,16 +223,133 @@ MarineSchoolTubeSurfingTricks = [
   0x1003cc2f, 0x1003cc30, 0x1003cc31
 ]
 
-SchoolAchievement("", "Walk/Swim", "Marine Resort", 2, MarineSchoolWalkSwim, 4)
-SchoolAchievement("", "Marine Bike Controls", "Marine Resort", 3, MarineSchoolMarineBikeControls, 10)
-SchoolAchievement("", "Marine Bike Tricks", "Marine Resort", 4, MarineSchoolMarineBikeTricks, 12)
-SchoolAchievement("", "ATV Controls", "Marine Resort", 3, MarineSchoolATVControls, 7)
-SchoolAchievement("", "ATV Tricks", "Marine Resort", 4, MarineSchoolATVTricks, 13)
-SchoolAchievement("", "Windsurf Board", "Marine Resort", 2, MarineSchoolWindsurfBoard, 3)
-SchoolAchievement("", "Normal Surfing Controls", "Marine Resort", 4, MarineSchoolNormalSurfingControls, 11)
-SchoolAchievement("", "Normal Surfing Tricks", "Marine Resort", 3, MarineSchoolNormalSurfingTricks, 7)
-SchoolAchievement("", "Tube Surfing Controls", "Marine Resort", 2, MarineSchoolTubeSurfingControls, 8)
-SchoolAchievement("", "Tube Surfing Tricks", "Marine Resort", 3, MarineSchoolTubeSurfingTricks, 7)
+CitySchoolWalking = [
+  0x1003cc76, 0x1003cc77, 0x1003cc78
+]
+
+CitySchoolInlineSkatesControls = [
+  0x1003cc79, 0x1003cc7a, 0x1003cc7b, 0x1003cc7c, 
+  0x1003cc7d, 0x1003cc7e, 0x1003cc7f, 0x1003cc80, 
+  0x1003cc81
+]
+
+CitySchoolInlineSkatesTricks = [
+  0x1003cc82, 0x1003cc83, 0x1003cc84, 0x1003cc85, 
+  0x1003cc86, 0x1003cc87, 0x1003cc88, 0x1003cc89, 
+  0x1003cc8a, 0x1003cc8b, 0x1003cc8c, 0x1003cc8d, 
+  0x1003cc8e, 0x1003cc8f, 0x1003cc90
+]
+
+CitySchoolSkateboardControls = [
+  0x1003cc91, 0x1003cc92, 0x1003cc93, 0x1003cc94, 
+  0x1003cc95, 0x1003cc96, 0x1003cc97, 0x1003cc98, 
+  0x1003cc99
+]
+
+CitySchoolSkateboardTricks = [
+  0x1003cc9a, 0x1003cc9b, 0x1003cc9c, 0x1003cc9d, 
+  0x1003cc9e, 0x1003cc9f, 0x1003cca0, 0x1003cca1, 
+  0x1003cca2, 0x1003cca3, 0x1003cca4, 0x1003cca5, 
+  0x1003cca6, 0x1003cca7, 0x1003cca8, 0x1003cca9
+]
+
+SnowSchoolWalking = [
+  0x1003cd92, 0x1003cd93, 0x1003cd94
+]
+
+SnowSchoolSkisControls = [
+  0x1003cd95, 0x1003cd96, 0x1003cd97, 0x1003cd98, 
+  0x1003cd99, 0x1003cd9a, 0x1003cd9b, 0x1003cd9c, 
+  0x1003cd9d, 0x1003cd9e, 0x1003cd9f, 0x1003cda0, 
+  0x1003cda1
+]
+
+SnowSchoolSkisTricks = [
+  0x1003cda2, 0x1003cda3, 0x1003cda4, 0x1003cda5, 
+  0x1003cda6, 0x1003cda7, 0x1003cda8, 0x1003cda9, 
+  0x1003cdaa, 0x1003cdab, 0x1003cdac, 0x1003cdad, 
+  0x1003cdae, 0x1003cdaf, 0x1003cdb0
+]
+
+SnowSchoolSnowboardControls = [
+  0x1003cdb1, 0x1003cdb2, 0x1003cdb3, 0x1003cdb4, 
+  0x1003cdb5, 0x1003cdb6, 0x1003cdb7, 0x1003cdb8, 
+  0x1003cdb9, 0x1003cdba, 0x1003cdbb, 0x1003cdbc, 
+  0x1003cdbd
+]
+
+SnowSchoolSnowboardTricks = [
+  0x1003cdbe, 0x1003cdbf, 0x1003cdc0, 0x1003cdc1, 
+  0x1003cdc2, 0x1003cdc3, 0x1003cdc4, 0x1003cdc5, 
+  0x1003cdc6, 0x1003cdc7, 0x1003cdc8, 0x1003cdc9, 
+  0x1003cdca, 0x1003cdcb, 0x1003cdcc
+]
+
+SnowSchoolSnowmobileControls = [
+  0x1003cdcd, 0x1003cdce, 0x1003cdcf, 0x1003cdd0, 
+  0x1003cdd1
+]
+
+SnowSchoolSnowmobileTricks = [
+  0x1003cdd2, 0x1003cdd3, 0x1003cdd4, 0x1003cdd5, 
+  0x1003cdd6, 0x1003cdd7, 0x1003cdd8, 0x1003cdd9, 
+  0x1003cdda, 0x1003cddb, 0x1003cddc, 0x1003cddd, 
+  0x1003cdde
+]
+
+SnowSchoolSnowTube = [
+  0x1003cddf, 0x1003cde0, 0x1003cde1, 0x1003cde2
+]
+
+MountainSchoolWalkingSwimming = [
+  0x1003cd1e, 0x1003cd1f, 0x1003cd20, 0x1003cd21
+]
+
+MountainSchoolHorseControls = [
+  0x1003cd22, 0x1003cd23, 0x1003cd24, 0x1003cd25, 
+  0x1003cd26, 0x1003cd27, 0x1003cd28, 0x1003cd29, 
+  0x1003cd2a, 0x1003cd2b
+]
+
+MountainSchoolOffRoadCar = [
+  0x1003cd2c, 0x1003cd2d, 0x1003cd2e, 0x1003cd2f
+]
+
+MountainSchoolKayakControls = [
+  0x1003cd30, 0x1003cd31, 0x1003cd32, 0x1003cd33, 
+  0x1003cd34
+]
+
+SchoolAchievement("Just Keep Swimming", "Walk/Swim", "Marine School", 2, MarineSchoolWalkSwim, 4)
+SchoolAchievement("Wave Runner 101", "Marine Bike Controls", "Marine School", 3, MarineSchoolMarineBikeControls, 10)
+SchoolAchievement("Beginner Marine Biker", "Marine Bike Tricks", "Marine School", 4, MarineSchoolMarineBikeTricks, 12)
+SchoolAchievement("ATV Beginner", "ATV Controls", "Marine School", 3, MarineSchoolATVControls, 7)
+SchoolAchievement("Dirt Track Tricks", "ATV Tricks", "Marine School", 4, MarineSchoolATVTricks, 13)
+SchoolAchievement("Sail Away", "Windsurf Board", "Marine School", 2, MarineSchoolWindsurfBoard, 3)
+SchoolAchievement("Wave Leaner", "Normal Surfing Controls", "Marine School", 4, MarineSchoolNormalSurfingControls, 11)
+SchoolAchievement("Shredding the Waves", "Normal Surfing Tricks", "Marine School", 3, MarineSchoolNormalSurfingTricks, 7)
+SchoolAchievement("Tunnel Vision", "Tube Surfing Controls", "Marine School", 3, MarineSchoolTubeSurfingControls, 8)
+SchoolAchievement("Tube Trickster", "Tube Surfing Tricks", "Marine School", 3, MarineSchoolTubeSurfingTricks, 7)
+
+SchoolAchievement("Walking in the City", "Walk", "City School", 2, CitySchoolWalking, 4)
+SchoolAchievement("Roller Ready", "Inline Skate Controls", "City School", 3, CitySchoolInlineSkatesControls, 7)
+SchoolAchievement("Inline Trick Master", "Inline Skate Tricks", "City School", 4, CitySchoolInlineSkatesTricks, 15)
+SchoolAchievement("Board Basic Training", "Skateboard Controls", "City School", 3, CitySchoolSkateboardControls, 9)
+SchoolAchievement("Kickflip Classroom", "Skateboard Controls", "City School", 4, CitySchoolSkateboardTricks, 16)
+
+SchoolAchievement("Winter Walking", "Walk", "Snow School", 2, CitySchoolWalking, 3)
+SchoolAchievement("Skiing Fundamentals", "Ski Controls", "Snow School", 4, SnowSchoolSkisControls, 13)
+SchoolAchievement("Freestyle Ski School", "Ski Tricks", "Snow School", 4, SnowSchoolSkisTricks, 15)
+SchoolAchievement("Snowboarding Basics", "Snowboard Controls", "Snow School", 4, SnowSchoolSnowboardControls, 13)
+SchoolAchievement("Board Acrobatics 101", "Snowboard Tricks", "Snow School", 4, SnowSchoolSnowboardTricks, 15)
+SchoolAchievement("Snowmobile Safety Course", "Snowmobile Controls", "Snow School", 3, SnowSchoolSkisControls, 5)
+SchoolAchievement("High-Speed Stunts", "Snowmobile Tricks", "Snow School", 4, SnowSchoolSnowmobileTricks, 16)
+SchoolAchievement("Tubing Techniques", "Snow Tube", "Snow School", 2, SnowSchoolSnowTube, 4)
+
+SchoolAchievement("Alpine Mobility", "Walk/Swim", "Mountain School", 2, MountainSchoolWalkingSwimming, 4)
+SchoolAchievement("Equestrian Essentials", "Horse", "Mountain School", 3, MountainSchoolHorseControls, 10)
+SchoolAchievement("4WD Fundamentals", "Off-Road Car", "Mountain School", 2, MountainSchoolOffRoadCar, 4)
+SchoolAchievement("River Navigation Theory", "Kayak", "Mountain School", 2, MountainSchoolKayakControls, 5)
 
 // -------------------- Hints/Chests/Photo Spots --------------------
 function TreasureChestAchievement(achTitle, locName, baseAddresses){
