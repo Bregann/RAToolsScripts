@@ -154,6 +154,55 @@ SilverKeyAchievement("Aquatic Rider and Trickster", 5, CalculateOffsetAndReturnA
 
 SilverKeyAchievement("Marine Multi-Sport Master", 5, CalculateOffsetAndReturnAddress(0x1003cfcc), "Triathlon")
 
+SilverKeyAchievement("City Circuit Champ", 5, CalculateOffsetAndReturnAddress(0x1003cfe0), "Motor Fest", "Street Race: Clear All Stages")
+SilverKeyAchievement("Sequence Speeder", 5, CalculateOffsetAndReturnAddress(0x1003cfe1), "Motor Fest", "Number Chaser: Clear All Stages")
+SilverKeyAchievement("Two-Wheel Terror", 5, CalculateOffsetAndReturnAddress(0x1003cfe2), "Motor Fest", "Motorcycle Race: Clear All Stages")
+SilverKeyAchievement("Nimble Navigator", 5, CalculateOffsetAndReturnAddress(0x1003cfe3), "Motor Fest", "Motorcycle Slalom: Clear All Stages")
+SilverKeyAchievement("Left Turn Legend", 5, CalculateOffsetAndReturnAddress(0x1003cfe4), "Motor Fest", "Oval Race: Clear All Levels")
+
+SilverKeyAchievement("Dance Fever", 5, CalculateOffsetAndReturnAddress(0x1003cfd8), "Dance")
+
+SilverKeyAchievement("Pie Pro", 5, CalculateOffsetAndReturnAddress(0x1003cfd7), "Pie Throwing")
+
+SilverKeyAchievement("Needle in the Sky", 5, CalculateOffsetAndReturnAddress(0x1003cfe5), "Hang Gliding", "Balloon Buster: Clear All Stages")
+SilverKeyAchievement("Through the Hoop", 5, CalculateOffsetAndReturnAddress(0x1003cfe6), "Hang Gliding", "Flying Hoops: Clear All Stages")
+
+SilverKeyAchievement("Frictionless Phenomenon", 5, CalculateOffsetAndReturnAddress(0x1003cfdd), "Wheel Slider")
+
+SilverKeyAchievement("Hockey Hero", 5, CalculateOffsetAndReturnAddress(0x1003cfd1), "Table Hockey")
+
+SilverKeyAchievement("", 5, CalculateOffsetAndReturnAddress(0x1003cfd2), "Glass Harp")
+
+SilverKeyAchievement("", 5, CalculateOffsetAndReturnAddress(0x1003cfda), "Skate Tricks", "")
+SilverKeyAchievement("", 5, CalculateOffsetAndReturnAddress(0x1003cfdb), "Skate Tricks", "")
+
+SilverKeyAchievement("", 5, CalculateOffsetAndReturnAddress(0x1003cfdc), "Grind Master")
+
+SilverKeyAchievement("Mole Masher", 5, CalculateOffsetAndReturnAddress(0x1003cfd5), "Mole Hitter")
+
+SilverKeyAchievement("", 5, CalculateOffsetAndReturnAddress(0x1003cfd3), "Power Hitter")
+
+SilverKeyAchievement("", 5, CalculateOffsetAndReturnAddress(0x1003cfd6), "Bucket Ball")
+
+SilverKeyAchievement("", 5, CalculateOffsetAndReturnAddress(0x1003cfd4), "Power Boxer")
+
+SilverKeyAchievement("", 5, CalculateOffsetAndReturnAddress(0x1003cfd9), "Mini Golf")
+
+SilverKeyAchievement("", 5, CalculateOffsetAndReturnAddress(0x1003cfd0), "Halfpipe")
+
+SilverKeyAchievement("", 5, CalculateOffsetAndReturnAddress(0x1003cfe7), "Snowball Fight")
+
+SilverKeyAchievement("Professional Doggy Commander", 5, CalculateOffsetAndReturnAddress(0x1003cfe8), "Dog Sled")
+
+SilverKeyAchievement("", 5, CalculateOffsetAndReturnAddress(0x1003cfea), "Snow Races", "")
+SilverKeyAchievement("", 5, CalculateOffsetAndReturnAddress(0x1003cfeb), "Snow Races", "")
+
+SilverKeyAchievement("", 5, CalculateOffsetAndReturnAddress(0x1003cfec), "Snow Tricks", "")
+SilverKeyAchievement("", 5, CalculateOffsetAndReturnAddress(0x1003cfed), "Snow Tricks", "")
+
+SilverKeyAchievement("", 5, CalculateOffsetAndReturnAddress(0x1003cff5), "Snow Tubing", "")
+SilverKeyAchievement("", 5, CalculateOffsetAndReturnAddress(0x1003cff6), "Snow Tubing", "")
+
 // -------------------- School --------------------
 function SchoolAchievement(achTitle, categoryName, resortName, points, baseAddresses, targetCount){
   achievement(
