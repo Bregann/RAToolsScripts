@@ -429,61 +429,34 @@ achievement(
 
 achievement(
   title = "Destruction Master",
-  description = "Score over 50,000 points in the destruction challenge",
+  description = "Reach 1st position in the Destruction challenge",
   points = 10,
   trigger = (
-    Track() == 0x08f08d8b &&
-    (
-      Mode() == 0x08f056cb ||
-      Mode() == 0x08f06acb ||
-      Mode() == 0x08f06d8b ||
-      Mode() == 0x08f0804b ||
-      Mode() == 0x08d69493 ||
-      Mode() == 0x08efa70b
-    ) &&
-    RaceScore > 50000 &&
-    prev(RaceScore) <= 50000
+    CheatAndLoadProtection() &&
+    dword(0x00c72338) == 0x00 &&
+    prev(dword(0x00c72338)) != 0x00
   )
 )
 
 achievement(
   title = "Power Sliding All over the Place",
-  description = "Score over 50,000 points in the power slide challenge",
+  description = "Reach 1st position in the Power Slide challenge",
   points = 10,
   trigger = (
-    Track() == 0x08f08cd3 &&
-    (
-      Mode() == 0x08f0571f ||
-      Mode() == 0x08f06b1f ||
-      Mode() == 0x08f06ddf ||
-      Mode() == 0x08f0809f ||
-      Mode() == 0x08f05f4b ||
-      Mode() == 0x08f05f9f ||
-      Mode() == 0x08efa75f
-     ) 
-     &&
-    RaceScore > 50000 &&
-    prev(RaceScore) <= 50000
+    CheatAndLoadProtection() &&
+    dword(0x00c723a8) == 0x00 &&
+    prev(dword(0x00c723a8)) != 0x00
   )
 )
 
 achievement(
   title = "Keep on Truckin'",
-  description = "Score over 50,000 points in the Keep on Truckin' challenge",
+  description = "Reach 1st position in the Keep on Truckin' challenge",
   points = 10,
   trigger = (
-    Track() == 0x08f096fe &&
-    (
-      Mode() == 0x08f0577d || 
-      Mode() == 0x08f06b7d || 
-      Mode() == 0x08f06e3d || 
-      Mode() == 0x08f080fd || 
-      Mode() == 0x08f05ffd || 
-      Mode() == 0x08efa7bd
-    )
-    &&
-    RaceScore > 50000 &&
-    prev(RaceScore) <= 50000
+    CheatAndLoadProtection() &&
+    dword(0x00c72418) == 0x00 &&
+    prev(dword(0x00c72418)) != 0x00
   )
 )
 
