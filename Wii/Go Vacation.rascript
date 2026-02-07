@@ -79,11 +79,11 @@ BadgeAchievement("Gravity Defier", "Halfpipe", CalculateOffsetAndReturnAddress(0
 BadgeAchievement("Winter Warfare", "Snowball Fight", CalculateOffsetAndReturnAddress(0x1003d0e8))
 BadgeAchievement("Leader of the Pack", "Dog Sled", CalculateOffsetAndReturnAddress(0x1003d0e5))
 BadgeAchievement("Alpine Racer", "Snow Races", CalculateOffsetAndReturnAddress(0x1003d0df))
-BadgeAchievement("Ice-Cold Style", "Snow Tricks", CalculateOffsetAndReturnAddress(0x1003d0e0))
+BadgeAchievement("Perfect Routine", "Trick CHallenge", CalculateOffsetAndReturnAddress(0x1003d0e0))
 BadgeAchievement("Slippery Slope", "Snow Tubing", CalculateOffsetAndReturnAddress(0x1003d0e4))
 BadgeAchievement("Engine on Ice", "Snowmobile Races", CalculateOffsetAndReturnAddress(0x1003d0e2))
 BadgeAchievement("Bumpy Business", "Mogul", CalculateOffsetAndReturnAddress(0x1003d0e1))
-BadgeAchievement("Perfect Routine", "Trick Challenge", CalculateOffsetAndReturnAddress(0x1003d0e3))
+BadgeAchievement("Ice-Cold Style", "Snow Tricks", CalculateOffsetAndReturnAddress(0x1003d0e3))
 BadgeAchievement("Do You Want to Build a Snowman?", "Snowman Making", CalculateOffsetAndReturnAddress(0x1003d0e6))
 BadgeAchievement("Leap of Faith", "Ski Jumping", CalculateOffsetAndReturnAddress(0x1003d0e9))
 BadgeAchievement("Here Fishy Fishy!", "Ice Fishing", CalculateOffsetAndReturnAddress(0x1003d0e7))
@@ -171,37 +171,102 @@ SilverKeyAchievement("Frictionless Phenomenon", 5, CalculateOffsetAndReturnAddre
 
 SilverKeyAchievement("Hockey Hero", 5, CalculateOffsetAndReturnAddress(0x1003cfd1), "Table Hockey")
 
-SilverKeyAchievement("", 5, CalculateOffsetAndReturnAddress(0x1003cfd2), "Glass Harp")
+SilverKeyAchievement("Musical Legend", 5, CalculateOffsetAndReturnAddress(0x1003cfd2), "Glass Harp")
 
-SilverKeyAchievement("", 5, CalculateOffsetAndReturnAddress(0x1003cfda), "Skate Tricks", "")
-SilverKeyAchievement("", 5, CalculateOffsetAndReturnAddress(0x1003cfdb), "Skate Tricks", "")
+SilverKeyAchievement("Park Life", 5, CalculateOffsetAndReturnAddress(0x1003cfda), "Skate Tricks", "Park Tricks: Rank 4 or Higher")
+SilverKeyAchievement("Urban Legend", 5, CalculateOffsetAndReturnAddress(0x1003cfdb), "Skate Tricks", "Street Tricks: Clear All Stages")
 
-SilverKeyAchievement("", 5, CalculateOffsetAndReturnAddress(0x1003cfdc), "Grind Master")
+SilverKeyAchievement("Rail Gliding Expert", 5, CalculateOffsetAndReturnAddress(0x1003cfdc), "Grind Master")
 
 SilverKeyAchievement("Mole Masher", 5, CalculateOffsetAndReturnAddress(0x1003cfd5), "Mole Hitter")
 
-SilverKeyAchievement("", 5, CalculateOffsetAndReturnAddress(0x1003cfd3), "Power Hitter")
+SilverKeyAchievement("Hard Hitter", 5, CalculateOffsetAndReturnAddress(0x1003cfd3), "Power Hitter")
 
-SilverKeyAchievement("", 5, CalculateOffsetAndReturnAddress(0x1003cfd6), "Bucket Ball")
+SilverKeyAchievement("Bucket Beast", 5, CalculateOffsetAndReturnAddress(0x1003cfd6), "Bucket Ball")
 
-SilverKeyAchievement("", 5, CalculateOffsetAndReturnAddress(0x1003cfd4), "Power Boxer")
+SilverKeyAchievement("Heavy Hitter", 5, CalculateOffsetAndReturnAddress(0x1003cfd4), "Power Boxer")
 
-SilverKeyAchievement("", 5, CalculateOffsetAndReturnAddress(0x1003cfd9), "Mini Golf")
+SilverKeyAchievement("Putt-Putt Professional", 5, CalculateOffsetAndReturnAddress(0x1003cfd9), "Mini Golf")
 
-SilverKeyAchievement("", 5, CalculateOffsetAndReturnAddress(0x1003cfd0), "Halfpipe")
+SilverKeyAchievement("Airbound Artist", 5, CalculateOffsetAndReturnAddress(0x1003cfd0), "Halfpipe")
 
-SilverKeyAchievement("", 5, CalculateOffsetAndReturnAddress(0x1003cfe7), "Snowball Fight")
+SilverKeyAchievement("Snow Sniper", 5, CalculateOffsetAndReturnAddress(0x1003cfe7), "Snowball Fight")
 
 SilverKeyAchievement("Professional Doggy Commander", 5, CalculateOffsetAndReturnAddress(0x1003cfe8), "Dog Sled")
 
-SilverKeyAchievement("", 5, CalculateOffsetAndReturnAddress(0x1003cfea), "Snow Races", "")
-SilverKeyAchievement("", 5, CalculateOffsetAndReturnAddress(0x1003cfeb), "Snow Races", "")
+SilverKeyAchievement("Snowy Sprint", 5, CalculateOffsetAndReturnAddress(0x1003cfea), "Snow Races", "Sprint Race: Clear All Stages")
+SilverKeyAchievement("Gate Glider", 5, CalculateOffsetAndReturnAddress(0x1003cfeb), "Snow Races", "Slalom Challenge: Clear All Stages")
 
-SilverKeyAchievement("", 5, CalculateOffsetAndReturnAddress(0x1003cfec), "Snow Tricks", "")
-SilverKeyAchievement("", 5, CalculateOffsetAndReturnAddress(0x1003cfed), "Snow Tricks", "")
+SilverKeyAchievement("Ski Fanatic", 5, CalculateOffsetAndReturnAddress(0x1003cff2), "Trick Challenge", "Ski Tricks: Clear All Levels")
+SilverKeyAchievement("Board Brilliance", 5, CalculateOffsetAndReturnAddress(0x1003cff3), "Trick Challenge", "Snowboard Tricks: Clear All Levels")
+SilverKeyAchievement("Engine Airborne", 5, CalculateOffsetAndReturnAddress(0x1003cff4), "Trick Challenge", "Snowmobile Tricks: Clear All Levels")
 
-SilverKeyAchievement("", 5, CalculateOffsetAndReturnAddress(0x1003cff5), "Snow Tubing", "")
-SilverKeyAchievement("", 5, CalculateOffsetAndReturnAddress(0x1003cff6), "Snow Tubing", "")
+SilverKeyAchievement("Turbo Tubing", 5, CalculateOffsetAndReturnAddress(0x1003cff5), "Snow Tubing", "Sprint Race: Clear All Stages")
+SilverKeyAchievement("Slide & Strike", 5, CalculateOffsetAndReturnAddress(0x1003cff6), "Snow Tubing", "Tube Bowling: Score 30+ pts")
+
+SilverKeyAchievement("Snowmobile Sprint", 5, CalculateOffsetAndReturnAddress(0x1003cfef), "Snowmobile Races", "Sprint Race: Clear All Stages")
+SilverKeyAchievement("Snowmobile Circuit Sweep", 5, CalculateOffsetAndReturnAddress(0x1003cff0), "Snowmobile Races", "Circuit Race: Clear All Stages")
+SilverKeyAchievement("Snowy Trail Blazer", 5, CalculateOffsetAndReturnAddress(0x1003cff1), "Snowmobile Races", "Open Race: Clear All Stages")
+
+SilverKeyAchievement("Mogul Master", 5, CalculateOffsetAndReturnAddress(0x1003cfee), "Mogul")
+
+SilverKeyAchievement("Snowy Halfpipe", 5, CalculateOffsetAndReturnAddress(0x1003cfec), "Snow Tricks", "Halfpipe Tricks: Rank 4 or Higher")
+SilverKeyAchievement("Skilful Descent", 5, CalculateOffsetAndReturnAddress(0x1003cfed), "Snow Tricks", "Slopestyle: Rank 4 or Higher")
+
+SilverKeyAchievement("Airbound Athlete", 5, CalculateOffsetAndReturnAddress(0x1003cfe9), "Ski Jumping")
+
+SilverKeyAchievement("Court Dominator", 5, CalculateOffsetAndReturnAddress(0x1003cffc), "Tennis")
+
+SilverKeyAchievement("Thundering Hooves", 5, CalculateOffsetAndReturnAddress(0x1003cffd), "Horseback Riding", "Sprint Race: Clear All Stages")
+SilverKeyAchievement("Gallop and Gather", 5, CalculateOffsetAndReturnAddress(0x1003cffe), "Horseback Riding", "Coin Collect: Clear All Stages")
+
+SilverKeyAchievement("Draft Popper", 5, CalculateOffsetAndReturnAddress(0x1003d005), "Paragliding", "Balloon Buster: Clear All Stages")
+SilverKeyAchievement("Target Acquired", 5, CalculateOffsetAndReturnAddress(0x1003d006), "Paragliding", "Aimed Flight: Clear All Stages")
+
+SilverKeyAchievement("River Rusher", 5, CalculateOffsetAndReturnAddress(0x1003d001), "Kayaking", "River Race: Clear All Stages")
+SilverKeyAchievement("Gate Grazer", 5, CalculateOffsetAndReturnAddress(0x1003d002), "Kayaking", "River Slalom: Clear All Stages")
+SilverKeyAchievement("River Riches", 5, CalculateOffsetAndReturnAddress(0x1003d003), "Kayaking", "Coin Collect: Clear All Stages")
+
+SilverKeyAchievement("Route Master", 5, CalculateOffsetAndReturnAddress(0x1003cfff), "Off-Road Racing", "Open Race: Clear All Stages")
+SilverKeyAchievement("Rallying Around", 5, CalculateOffsetAndReturnAddress(0x1003d000), "Off-Road Racing", "Rally Car: Clear All Stages")
+
+SilverKeyAchievement("Torrent Tamer", 5, CalculateOffsetAndReturnAddress(0x1003d004), "Rafting")
+
+SilverKeyAchievement("Shot Specialist", 5, CalculateOffsetAndReturnAddress(0x1003cff9), "Target Shooting")
+
+SilverKeyAchievement("Fastest Gun in the West", 5, CalculateOffsetAndReturnAddress(0x1003cffa), "Quick Draw")
+
+SilverKeyAchievement("Shattered Ceramic", 5, CalculateOffsetAndReturnAddress(0x1003cff8), "Clay Shooting")
+
+SilverKeyAchievement("Marksman's Medal", 5, CalculateOffsetAndReturnAddress(0x1003cffb), "Rifle Shooting")
+
+function GoldKeyAchievement(achTitle, points, keyDict, keyName){
+  achievement(
+    title = achTitle,
+    description = "Unlock the " + "\"" + keyName + "\"" + " Gold Key",
+    points = points,
+    trigger = (
+      IsInGame() &&
+      any_of(keyDict, addr =>
+        bit7(keyDict[addr]) == 1 &&
+        prev(bit7(keyDict[addr])) == 0
+      )
+    )
+  )
+}
+
+GoldKeyAchievement("Marine Resort Master", 10, CalculateOffsetAndReturnAddress(0x1003d05c), "Marine Resort Master")
+GoldKeyAchievement("City Resort Master", 10, CalculateOffsetAndReturnAddress(0x1003d05d), "City Resort Master")
+GoldKeyAchievement("Snow Resort Master", 10, CalculateOffsetAndReturnAddress(0x1003d05e), "Snow Resort Master")
+GoldKeyAchievement("Mountain Resort Master", 10, CalculateOffsetAndReturnAddress(0x1003d05f), "Mountain Resort Master")
+GoldKeyAchievement("Marine Gear Master", 10, CalculateOffsetAndReturnAddress(0x1003d060), "Marine Gear Master")
+GoldKeyAchievement("City Gear Master", 10, CalculateOffsetAndReturnAddress(0x1003d061), "City Gear Master")
+GoldKeyAchievement("Snow Gear Master", 10, CalculateOffsetAndReturnAddress(0x1003d062), "Snow Gear Master")
+GoldKeyAchievement("Mountain Gear Master", 10, CalculateOffsetAndReturnAddress(0x1003d063), "Mountain Gear Master")
+GoldKeyAchievement("Everyone's Friend", 5, CalculateOffsetAndReturnAddress(0x1003d064), "Everyone's Friend")
+GoldKeyAchievement("Ball of Painful Memories", 10, CalculateOffsetAndReturnAddress(0x1003d065), "Ball of Painful Memories")
+GoldKeyAchievement("Journeyman of Resorts", 10, CalculateOffsetAndReturnAddress(0x1003d066), "Journeyman of Resorts")
+GoldKeyAchievement("Fun Master", 25, CalculateOffsetAndReturnAddress(0x1003d067), "Fun Master")
 
 // -------------------- School --------------------
 function SchoolAchievement(achTitle, categoryName, resortName, points, baseAddresses, targetCount){
