@@ -602,3 +602,84 @@ PhotoSpotAchievement("Capturing the Coast", "Marine Resort", MarineResortPhotoSp
 PhotoSpotAchievement("Urban Paparazzi", "City Resort", CityResortPhotoSpots)
 PhotoSpotAchievement("Say Freeze!", "Snow Resort", SnowResortPhotoSpots)
 PhotoSpotAchievement("Summit Sightseer", "Mountain Resort", MountainResortPhotoSpots)
+
+// -------------------- Leaderboard / Challenges --------------------
+function TimeLeaderboard(minigameRaceName, baseAddress) {
+    keyDict = CalculateOffsetAndReturnAddress(baseAddress)
+    
+    //Generate the dictionary of addresses
+    value_conditions = array_map(range(0, 7), i => 
+      measured(
+          // The Target Value (Save Slot Address)
+          dword_be(baseAddress + (i * OFFSET)) / 4,
+      
+          // The Condition: Only measure if Value != Prev Value
+          when = dword_be(baseAddress + (i * OFFSET)) != prev(dword_be(baseAddress + (i * OFFSET)))
+      )
+    )
+
+    leaderboard(
+      title = minigameRaceName,
+      description = "Complete the stage in the quickest time",
+      start = (
+        IsInGame() &&
+        any_of(keyDict, addr =>
+          (dword_be(keyDict[addr]) < prev(dword_be(keyDict[addr])))
+          ||
+          (dword_be(keyDict[addr]) != 0xfffffffc && prev(dword_be(keyDict[addr])) == 0xfffffffc)
+        )
+    ),
+    cancel = (
+      always_false()
+    ),
+    submit = (
+      any_of(keyDict, addr =>
+        (dword_be(keyDict[addr]) < prev(dword_be(keyDict[addr])))
+        ||
+        (dword_be(keyDict[addr]) != 0xfffffffc && prev(dword_be(keyDict[addr])) == 0xfffffffc)
+      )
+    ),
+    value = max_of(value_conditions),
+    format = "FRAMES",
+    lower_is_better = true
+  )
+}
+
+function SpeedrunTimeAchievement(achName, achDesc, timeAmount, points, keyDict, framesAmount){
+  achievement(
+    title = achName,
+    description = achDesc,
+    points = points,
+    trigger = (
+      IsInGame() &&
+      any_of(keyDict, addr =>
+        (
+          dword_be(keyDict[addr]) < framesAmount &&
+          prev(dword_be(keyDict[addr])) > framesAmount
+        )
+        ||
+        (
+          dword_be(keyDict[addr]) < framesAmount && 
+          prev(dword_be(keyDict[addr])) == 0xfffffffc
+        )
+      )
+    )
+  )
+}
+
+TimeLeaderboard("Marine Bike Races - Sprint Race - Stage 1", 0x1003c70c)
+TimeLeaderboard("Marine Bike Races - Sprint Race - Stage 2", 0x1003c710)
+TimeLeaderboard("Marine Bike Races - Sprint Race - Stage 3", 0x1003c714)
+
+SpeedrunTimeAchievement("Sprinting on the Water", "Complete Stage 1 of the Marine Bike Sprint Race in under 0'54\"30", 5, CalculateOffsetAndReturnAddress(0x1003c70c), 27768)
+
+TimeLeaderboard("Marine Bike Races - Circuit Race - Stage 1", 0x1003c718)
+TimeLeaderboard("Marine Bike Races - Circuit Race - Stage 2", 0x1003c71c)
+TimeLeaderboard("Marine Bike Races - Circuit Race - Stage 3", 0x1003c720)
+
+TimeLeaderboard("Marine Bike Races - Hoop Challenge - Stage 1", 0x1003c724)
+TimeLeaderboard("Marine Bike Races - Hoop Challenge - Stage 2", 0x1003c728)
+TimeLeaderboard("Marine Bike Races - Hoop Challenge - Stage 3", 0x1003c72c)
+TimeLeaderboard("Marine Bike Races - Hoop Challenge - Stage 4", 0x1003c730)
+TimeLeaderboard("Marine Bike Races - Hoop Challenge - Stage 5", 0x1003c734)
+
