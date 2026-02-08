@@ -672,6 +672,7 @@ TimeLeaderboard("Marine Bike Races - Sprint Race - Stage 2", 0x1003c710)
 TimeLeaderboard("Marine Bike Races - Sprint Race - Stage 3", 0x1003c714)
 
 SpeedrunTimeAchievement("Sprinting on the Water", "Complete Stage 1 of the Marine Bike Sprint Race in under 0'54\"30", 5, CalculateOffsetAndReturnAddress(0x1003c70c), 27768)
+SpeedrunTimeAchievement("", "Complete Stage 2 of the Marine Bike Circuit Race in under 3'21\"50", 5, CalculateOffsetAndReturnAddress(0x1003c71c), 109256)
 
 TimeLeaderboard("Marine Bike Races - Circuit Race - Stage 1", 0x1003c718)
 TimeLeaderboard("Marine Bike Races - Circuit Race - Stage 2", 0x1003c71c)
