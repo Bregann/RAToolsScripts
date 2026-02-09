@@ -1,10 +1,31 @@
 // Go Vacation
 // #ID = 35935
 
-OFFSET = 0x11A0
-function IsInGame() => dword_be(0x1001eb50) != 0xffffff00
-
 // -------------------- Helper Functions --------------------
+OFFSET = 0x11A0
+RA_MASK = 0x1FFFFFFF
+
+function ChainPointer(base, offsets, accessor=dword_be)
+{
+    val = base
+    val = val & RA_MASK
+    
+    for i in range(0, length(offsets) - 1)
+    {
+        addr = val + offsets[i]
+        if (i == length(offsets) - 1)
+        {
+            val = accessor(addr)
+        }
+        else
+        {
+            val = dword_be(addr)
+            val = val & RA_MASK
+        }
+    }
+    
+    return val
+}
 
 // Dictionaries
 function CalculateOffsetAndReturnAddress(baseAddr){
@@ -31,8 +52,16 @@ function CalculateOffsetArray(baseAddresses){
   return dict
 }
 
-// -------------------- Progression --------------------
+// -------------------- Variables --------------------
 
+function CurrentScreen() => dword_be(0x1001eb50)
+function IsInGame() => CurrentScreen() != 0xffffff00
+
+TimerRaceStatus = ChainPointer(dword_be(0x00a50808), [0x90, 0x24, 0x1c0])
+ChallengeTimer = ChainPointer(dword_be(0x00a50808), [0x90, 0x24, 0x42c])
+function ChallengeComplete() => ChainPointer(dword_be(0x00a50808), [0x90, 0x24, 0x1e4]) != 0xffffffff
+
+// -------------------- Progression --------------------
 function BadgeAchievement(achTitle, minigameName, badgeDict){
   achievement(
     title = achTitle,
@@ -645,24 +674,94 @@ function TimeLeaderboard(minigameRaceName, baseAddress) {
   )
 }
 
-function SpeedrunTimeAchievement(achName, achDesc, timeAmount, points, keyDict, framesAmount){
+function ScoreLeaderboard(minigameRaceName, baseAddress) {
+    keyDict = CalculateOffsetAndReturnAddress(baseAddress)
+    
+    //Generate the dictionary of addresses
+    value_conditions = array_map(range(0, 7), i => 
+      measured(
+          // The Target Value (Save Slot Address)
+          dword_be(baseAddress + (i * OFFSET)) / 4,
+      
+          // The Condition: Only measure if Value != Prev Value
+          when = dword_be(baseAddress + (i * OFFSET)) != prev(dword_be(baseAddress + (i * OFFSET)))
+      )
+    )
+
+    leaderboard(
+      title = minigameRaceName,
+      description = "Earn the highest points in the stage",
+      start = (
+        IsInGame() &&
+        any_of(keyDict, addr =>
+          (dword_be(keyDict[addr]) < prev(dword_be(keyDict[addr])))
+          ||
+          (dword_be(keyDict[addr]) != 0xfffffffc && prev(dword_be(keyDict[addr])) == 0xfffffffc)
+        )
+    ),
+    cancel = (
+      always_false()
+    ),
+    submit = (
+      any_of(keyDict, addr =>
+        (dword_be(keyDict[addr]) < prev(dword_be(keyDict[addr])))
+        ||
+        (dword_be(keyDict[addr]) != 0xfffffffc && prev(dword_be(keyDict[addr])) == 0xfffffffc)
+      )
+    ),
+    value = max_of(value_conditions),
+    format = "SCORE",
+    lower_is_better = false
+  )
+}
+
+function SpeedrunTimeAchievement(achName, achDesc, points, keyDict, framesAmount, screenAddr){
   achievement(
     title = achName,
     description = achDesc,
     points = points,
     trigger = (
       IsInGame() &&
-      any_of(keyDict, addr =>
-        (
-          dword_be(keyDict[addr]) < framesAmount &&
-          prev(dword_be(keyDict[addr])) > framesAmount
+      trigger_when(
+        any_of(keyDict, addr =>
+          (
+            dword_be(keyDict[addr]) < framesAmount &&
+            prev(dword_be(keyDict[addr])) > framesAmount
+          )
+          ||
+          (
+            dword_be(keyDict[addr]) < framesAmount && 
+            prev(dword_be(keyDict[addr])) == 0xfffffffc
+          )
         )
-        ||
-        (
-          dword_be(keyDict[addr]) < framesAmount && 
-          prev(dword_be(keyDict[addr])) == 0xfffffffc
+      ) &&
+      CurrentScreen() == screenAddr &&
+      TimerRaceStatus != 0x00
+    )
+  )
+}
+
+function ScoreAchievement(achName, achDesc, points, keyDict, pointsAmount, screenAddr){
+  achievement(
+    title = achName,
+    description = achDesc,
+    points = points,
+    trigger = (
+      IsInGame() &&
+      trigger_when(
+        any_of(keyDict, addr =>
+          (
+            dword_be(keyDict[addr]) >= pointsAmount &&
+            prev(dword_be(keyDict[addr])) =< pointsAmount
+          )
+          ||
+          (
+            dword_be(keyDict[addr]) >= pointsAmount && 
+            prev(dword_be(keyDict[addr])) == 0xfffffffc
+          )
         )
-      )
+      ) &&
+      CurrentScreen() == screenAddr
     )
   )
 }
@@ -672,11 +771,12 @@ TimeLeaderboard("Marine Bike Races - Sprint Race - Stage 2", 0x1003c710)
 TimeLeaderboard("Marine Bike Races - Sprint Race - Stage 3", 0x1003c714)
 
 SpeedrunTimeAchievement("Sprinting on the Water", "Complete Stage 1 of the Marine Bike Sprint Race in under 0'54\"30", 5, CalculateOffsetAndReturnAddress(0x1003c70c), 27768)
-SpeedrunTimeAchievement("", "Complete Stage 2 of the Marine Bike Circuit Race in under 3'21\"50", 5, CalculateOffsetAndReturnAddress(0x1003c71c), 109256)
 
 TimeLeaderboard("Marine Bike Races - Circuit Race - Stage 1", 0x1003c718)
 TimeLeaderboard("Marine Bike Races - Circuit Race - Stage 2", 0x1003c71c)
 TimeLeaderboard("Marine Bike Races - Circuit Race - Stage 3", 0x1003c720)
+
+SpeedrunTimeAchievement("Marine Circuit Speedster", "Complete Stage 2 of the Marine Bike Circuit Race in under 3'21\"50", 5, CalculateOffsetAndReturnAddress(0x1003c71c), 109256)
 
 TimeLeaderboard("Marine Bike Races - Hoop Challenge - Stage 1", 0x1003c724)
 TimeLeaderboard("Marine Bike Races - Hoop Challenge - Stage 2", 0x1003c728)
@@ -684,3 +784,27 @@ TimeLeaderboard("Marine Bike Races - Hoop Challenge - Stage 3", 0x1003c72c)
 TimeLeaderboard("Marine Bike Races - Hoop Challenge - Stage 4", 0x1003c730)
 TimeLeaderboard("Marine Bike Races - Hoop Challenge - Stage 5", 0x1003c734)
 
+achievement(
+  title = "No Hoops Missed!",
+  description = "Complete Stage 5 of the Marine Bike Hoop Challenge within the time limit without missing any hoops",
+  points = 5,
+  trigger = (
+    CurrentScreen() == 0x00030204 
+    &&
+    once(
+      TimerRaceStatus == 0x04 &&
+      prev(TimerRaceStatus) == 0x03 &&
+      !ChallengeComplete()
+    ) 
+    &&
+    never(
+      ChallengeTimer == prev(ChallengeTimer) + 151 ||
+      ChallengeTimer > 3003
+    ) 
+    &&
+    trigger_when(
+      ChallengeTimer < 3003 &&
+      TimerRaceStatus == 0x07
+    )
+  )
+)
