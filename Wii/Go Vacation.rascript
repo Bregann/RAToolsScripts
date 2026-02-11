@@ -694,7 +694,7 @@ function ScoreLeaderboard(minigameRaceName, baseAddress) {
       start = (
         IsInGame() &&
         any_of(keyDict, addr =>
-          (dword_be(keyDict[addr]) < prev(dword_be(keyDict[addr])))
+          (dword_be(keyDict[addr]) > prev(dword_be(keyDict[addr])))
           ||
           (dword_be(keyDict[addr]) != 0xfffffffc && prev(dword_be(keyDict[addr])) == 0xfffffffc)
         )
@@ -704,7 +704,7 @@ function ScoreLeaderboard(minigameRaceName, baseAddress) {
     ),
     submit = (
       any_of(keyDict, addr =>
-        (dword_be(keyDict[addr]) < prev(dword_be(keyDict[addr])))
+        (dword_be(keyDict[addr]) > prev(dword_be(keyDict[addr])))
         ||
         (dword_be(keyDict[addr]) != 0xfffffffc && prev(dword_be(keyDict[addr])) == 0xfffffffc)
       )
@@ -741,27 +741,26 @@ function SpeedrunTimeAchievement(achName, achDesc, points, keyDict, framesAmount
   )
 }
 
-function ScoreAchievement(achName, achDesc, points, keyDict, pointsAmount, screenAddr){
+function ScoreAchievement(achName, achDesc, points, keyDict, pointsAmount){
   achievement(
     title = achName,
     description = achDesc,
     points = points,
     trigger = (
       IsInGame() &&
-      trigger_when(
         any_of(keyDict, addr =>
           (
             dword_be(keyDict[addr]) >= pointsAmount &&
-            prev(dword_be(keyDict[addr])) =< pointsAmount
+            prev(dword_be(keyDict[addr])) <= pointsAmount &&
+            dword_be(keyDict[addr]) != 0xfffffffc
           )
           ||
           (
             dword_be(keyDict[addr]) >= pointsAmount && 
-            prev(dword_be(keyDict[addr])) == 0xfffffffc
+            prev(dword_be(keyDict[addr])) == 0xfffffffc &&
+            dword_be(keyDict[addr]) != 0xfffffffc
           )
         )
-      ) &&
-      CurrentScreen() == screenAddr
     )
   )
 }
@@ -770,13 +769,13 @@ TimeLeaderboard("Marine Bike Races - Sprint Race - Stage 1", 0x1003c70c)
 TimeLeaderboard("Marine Bike Races - Sprint Race - Stage 2", 0x1003c710)
 TimeLeaderboard("Marine Bike Races - Sprint Race - Stage 3", 0x1003c714)
 
-SpeedrunTimeAchievement("Sprinting on the Water", "Complete Stage 1 of the Marine Bike Sprint Race in under 0'54\"30", 5, CalculateOffsetAndReturnAddress(0x1003c70c), 27768)
+SpeedrunTimeAchievement("Sprinting on the Water", "Complete Stage 1 of the Marine Bike Sprint Race in under 0'54\"30", 5, CalculateOffsetAndReturnAddress(0x1003c70c), 27768, 0x00030000)
 
 TimeLeaderboard("Marine Bike Races - Circuit Race - Stage 1", 0x1003c718)
 TimeLeaderboard("Marine Bike Races - Circuit Race - Stage 2", 0x1003c71c)
 TimeLeaderboard("Marine Bike Races - Circuit Race - Stage 3", 0x1003c720)
 
-SpeedrunTimeAchievement("Marine Circuit Speedster", "Complete Stage 2 of the Marine Bike Circuit Race in under 3'21\"50", 5, CalculateOffsetAndReturnAddress(0x1003c71c), 109256)
+SpeedrunTimeAchievement("Marine Circuit Speedster", "Complete Stage 2 of the Marine Bike Circuit Race in under 3'21\"50", 5, CalculateOffsetAndReturnAddress(0x1003c71c), 109256, 0x00030101)
 
 TimeLeaderboard("Marine Bike Races - Hoop Challenge - Stage 1", 0x1003c724)
 TimeLeaderboard("Marine Bike Races - Hoop Challenge - Stage 2", 0x1003c728)
@@ -808,3 +807,16 @@ achievement(
     )
   )
 )
+
+ScoreLeaderboard("Sky Diving - Level 1", 0x1003c7bc)
+ScoreLeaderboard("Sky Diving - Level 2", 0x1003c7c0)
+
+ScoreAchievement("Super Sky Diver", "Earn a score of 4200 or higher on Level 2 of the Sky Diving minigame", 5, CalculateOffsetAndReturnAddress(0x1003c7c0), 16800)
+
+ScoreLeaderboard("Sky Diving - Level 3", 0x1003c7c4)
+
+TimeLeaderboard("ATV Racing - Sprint Race - Stage 1", 0x1003c6e0)
+TimeLeaderboard("ATV Racing - Sprint Race - Stage 2", 0x1003c6e4)
+TimeLeaderboard("ATV Racing - Sprint Race - Stage 3", 0x1003c6e8)
+
+SpeedrunTimeAchievement("Sprinting and Jumping", "Complete Stage 2 of the ATV Racing Sprint Race in under 1'04\"00", 5, CalculateOffsetAndReturnAddress(0x1003c6e4), 34704, 0x00020001)
