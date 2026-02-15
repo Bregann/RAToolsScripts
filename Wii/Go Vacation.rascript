@@ -38,20 +38,6 @@ function CalculateOffsetAndReturnAddress(baseAddr){
   return dict
 }
 
-function CalculateOffsetArray(baseAddresses){
-  dict = {}
-
-  for i in range(0, 7) {
-    addresses = []
-    for addr in baseAddresses {
-      array_push(addresses, addr + (i * OFFSET))
-    }
-    dict[i + 1] = addresses
-  }
-
-  return dict
-}
-
 // -------------------- Variables --------------------
 
 function CurrentScreen() => dword_be(0x1001eb50)
@@ -748,19 +734,43 @@ function ScoreAchievement(achName, achDesc, points, keyDict, pointsAmount){
     points = points,
     trigger = (
       IsInGame() &&
-        any_of(keyDict, addr =>
-          (
-            dword_be(keyDict[addr]) >= pointsAmount &&
-            prev(dword_be(keyDict[addr])) <= pointsAmount &&
-            dword_be(keyDict[addr]) != 0xfffffffc
-          )
-          ||
-          (
-            dword_be(keyDict[addr]) >= pointsAmount && 
-            prev(dword_be(keyDict[addr])) == 0xfffffffc &&
-            dword_be(keyDict[addr]) != 0xfffffffc
-          )
+      any_of(keyDict, addr =>
+        (
+          dword_be(keyDict[addr]) >= pointsAmount &&
+          prev(dword_be(keyDict[addr])) <= pointsAmount &&
+          dword_be(keyDict[addr]) != 0xfffffffc
         )
+        ||
+        (
+          dword_be(keyDict[addr]) >= pointsAmount && 
+          prev(dword_be(keyDict[addr])) == 0xfffffffc &&
+          dword_be(keyDict[addr]) != 0xfffffffc
+        )
+      )
+    )
+  )
+}
+
+function RankAchievement(achName, minigameName, keyDict, maxRank){
+  achievement(
+    title = achName,
+    description = "Reach the highest rank in the " + minigameName + " minigame",
+    points = 5,
+    trigger = (
+      IsInGame() &&
+      any_of(keyDict, addr =>
+        (
+          bit(keyDict[addr]) == maxRank &&
+          prev(bit(keyDict[addr])) <= maxRank &&
+          bit(keyDict[addr]) != 0xff
+        )
+        ||
+        (
+          bit(keyDict[addr]) == pointsAmount && 
+          prev(bit(keyDict[addr])) == 0xff &&
+          bit(keyDict[addr]) != 0xff
+        )
+      )
     )
   )
 }
@@ -810,13 +820,104 @@ achievement(
 
 ScoreLeaderboard("Sky Diving - Level 1", 0x1003c7bc)
 ScoreLeaderboard("Sky Diving - Level 2", 0x1003c7c0)
+ScoreLeaderboard("Sky Diving - Level 3", 0x1003c7c4)
 
 ScoreAchievement("Super Sky Diver", "Earn a score of 4200 or higher on Level 2 of the Sky Diving minigame", 5, CalculateOffsetAndReturnAddress(0x1003c7c0), 16800)
-
-ScoreLeaderboard("Sky Diving - Level 3", 0x1003c7c4)
 
 TimeLeaderboard("ATV Racing - Sprint Race - Stage 1", 0x1003c6e0)
 TimeLeaderboard("ATV Racing - Sprint Race - Stage 2", 0x1003c6e4)
 TimeLeaderboard("ATV Racing - Sprint Race - Stage 3", 0x1003c6e8)
 
 SpeedrunTimeAchievement("Sprinting and Jumping", "Complete Stage 2 of the ATV Racing Sprint Race in under 1'04\"00", 5, CalculateOffsetAndReturnAddress(0x1003c6e4), 34704, 0x00020001)
+
+TimeLeaderboard("ATV Racing - Circuit Race - Stage 1", 0x1003c6ec)
+TimeLeaderboard("ATV Racing - Circuit Race - Stage 2", 0x1003c6f0)
+TimeLeaderboard("ATV Racing - Circuit Race - Stage 3", 0x1003c6f4)
+
+SpeedrunTimeAchievement("Zooming Round the Beach", "Complete Stage 1 of the ATV Circuit Race in under 2'45\"00", 5, CalculateOffsetAndReturnAddress(0x1003c6ec), 88464, 0x00020100)
+
+TimeLeaderboard("ATV Racing - Slalom Challenge - Stage 1", 0x1003c6f8)
+TimeLeaderboard("ATV Racing - Slalom Challenge - Stage 2", 0x1003c6fc)
+TimeLeaderboard("ATV Racing - Slalom Challenge - Stage 3", 0x1003c700)
+TimeLeaderboard("ATV Racing - Slalom Challenge - Stage 4", 0x1003c704)
+TimeLeaderboard("ATV Racing - Slalom Challenge - Stage 5", 0x1003c708)
+
+achievement(
+  title = "Off-road Flag Adventure",
+  description = "Complete Stage 3 of the ATV Racing Slalom Challenge within the time limit without missing any gates",
+  points = 5,
+  trigger = (
+    CurrentScreen() == 0x00020202
+    &&
+    once(
+      TimerRaceStatus == 0x04 &&
+      prev(TimerRaceStatus) == 0x03 &&
+      !ChallengeComplete()
+    ) 
+    &&
+    never(
+      ChallengeTimer == prev(ChallengeTimer) + 151 ||
+      ChallengeTimer > 3150
+    ) 
+    &&
+    trigger_when(
+      ChallengeTimer < 3150 &&
+      TimerRaceStatus == 0x07
+    )
+  )
+)
+
+// scuba diving
+chartedStuff = 
+[
+  0x1003d08c, 0x1003d08d, 0x1003d08e, 0x1003d08f, 0x1003d090, 0x1003d091, 
+  0x1003d092, 0x1003d093,  0x1003d094, 0x1003d095, 0x1003d096, 0x1003d097, 
+  0x1003d098, 0x1003d099, 0x1003d09a, 0x1003d09b, 0x1003d09c, 0x1003d09d, 
+  0x1003d09e, 0x1003d09f, 0x1003d0a0, 0x1003d0a1, 0x1003d0a2, 0x1003d0a3, 
+  0x1003d0a4, 0x1003d0a5, 0x1003d0a6, 0x1003d0a7, 0x1003d0a8, 0x1003d0a9, 
+  0x1003d0aa, 0x1003d0ab, 0x1003d0ac, 0x1003d0ad, 0x1003d0ae, 0x1003d0af,
+  0x1003d0b0, 0x1003d0b1, 0x1003d0b2, 0x1003d0b3
+]
+
+achievement(
+  title = "Fish Finder Completionist",
+  description = "Complete 100% of the Diving Chart in the Scuba Diving minigame",
+  points = 10,
+  trigger = (
+    IsInGame() &&
+    any_of(range(1, 8), fish =>
+      sum_of(chartedStuff, addr => byte(addr + ((fish - 1) * OFFSET))) == 40 &&
+      prev(sum_of(chartedStuff, addr => byte(addr + ((fish - 1) * OFFSET)))) < 40
+    )
+  )
+)
+
+ScoreLeaderboard("Surfing - Big Wave Ride", 0x1003c77c)
+ScoreLeaderboard("Surfing - Score Trial", 0x1003c784)
+
+CocoHS = CalculateOffsetAndReturnAddress(0x1003c788)
+
+achievement(
+  title = "Coco Collecting Champion",
+  description = "Collect all 99 coconuts in the Coco Challenge minigame",
+  points = 5,
+  trigger = (
+    IsInGame() &&
+    any_of(CocoHS, addr =>
+      (
+        dword_be(CocoHS[addr]) >= 396 &&
+        prev(dword_be(CocoHS[addr])) <= 396 &&
+        dword_be(CocoHS[addr]) != 0xfffffffc
+      )
+      ||
+      (
+        dword_be(CocoHS[addr]) >= 396 && 
+        prev(dword_be(CocoHS[addr])) == 0xfffffffc &&
+        dword_be(CocoHS[addr]) != 0xfffffffc
+      )
+    )
+  )
+)
+
+RankAchievement("The Best Wave Rider", "Big Wave Ride", CalculateOffsetAndReturnAddress(0x1003cba4), 4)
+RankAchievement("Scoring on the Waves", "Score Trial", CalculateOffsetAndReturnAddress(0x1003cba6), 4)
