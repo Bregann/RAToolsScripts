@@ -760,15 +760,15 @@ function RankAchievement(achName, minigameName, keyDict, maxRank){
       IsInGame() &&
       any_of(keyDict, addr =>
         (
-          bit(keyDict[addr]) == maxRank &&
-          prev(bit(keyDict[addr])) <= maxRank &&
-          bit(keyDict[addr]) != 0xff
+          byte(keyDict[addr]) == maxRank &&
+          prev(byte(keyDict[addr])) <= maxRank &&
+          byte (keyDict[addr]) != 0xff
         )
         ||
         (
-          bit(keyDict[addr]) == pointsAmount && 
-          prev(bit(keyDict[addr])) == 0xff &&
-          bit(keyDict[addr]) != 0xff
+          byte(keyDict[addr]) == maxRank && 
+          prev(byte(keyDict[addr])) == 0xff &&
+          byte(keyDict[addr]) != 0xff
         )
       )
     )
@@ -921,3 +921,58 @@ achievement(
 
 RankAchievement("The Best Wave Rider", "Big Wave Ride", CalculateOffsetAndReturnAddress(0x1003cba4), 4)
 RankAchievement("Scoring on the Waves", "Score Trial", CalculateOffsetAndReturnAddress(0x1003cba6), 4)
+
+ScoreLeaderboard("Water Gun Battle - Score Attack - Sunshine Beach", 0x1003c7c8)
+ScoreLeaderboard("Water Gun Battle - Score Attack - Mystic Jungle", 0x1003c7cc)
+ScoreLeaderboard("Water Gun Battle - Score Attack - Marinus Ruins", 0x1003c7d0)
+
+ScoreLeaderboard("ATV Tricks - Jump Tricks", 0x1003c744)
+ScoreLeaderboard("ATV Tricks - Ride & Tricks", 0x1003c748)
+
+RankAchievement("ATV Jump Pro Trickster", "ATV Tricks Jump Tricks", CalculateOffsetAndReturnAddress(0x1003cba0), 4)
+RankAchievement("ATV Ride & Trick Expert", "ATV Tricks Ride & Tricks", CalculateOffsetAndReturnAddress(0x1003cba1), 4)
+
+ScoreLeaderboard("Marine Bike Tricks - Jump Tricks", 0x1003c74c)
+ScoreLeaderboard("Marine Bike Tricks - Ride & Tricks", 0x1003c750)
+
+RankAchievement("Professional Bike Jumper", "Marine Bike Tricks Jump Tricks", CalculateOffsetAndReturnAddress(0x1003cba2), 4)
+RankAchievement("Water Gliding And Tricking", "Marine Bike Tricks Ride & Tricks", CalculateOffsetAndReturnAddress(0x1003cba3), 4)
+
+TimeLeaderboard("Triathlon - Stage 1", 0x1003c738)
+TimeLeaderboard("Triathlon - Stage 2", 0x1003c73c)
+TimeLeaderboard("Triathlon - Stage 3", 0x1003c740)
+
+SpeedrunTimeAchievement("Master of Bikes, Running & Racing", "Complete Stage 3 of the Triathlon in under 2'29\"70", 5, CalculateOffsetAndReturnAddress(0x1003c740), 80664, 0x00060002)
+
+TimeLeaderboard("Motor Fest - Street Race - Stage 1", 0x1003c80c)
+TimeLeaderboard("Motor Fest - Street Race - Stage 2", 0x1003c810)
+TimeLeaderboard("Motor Fest - Street Race - Stage 3", 0x1003c814)
+TimeLeaderboard("Motor Fest - Street Race - Stage 4", 0x1003c818)
+TimeLeaderboard("Motor Fest - Street Race - Stage 5", 0x1003c81c)
+TimeLeaderboard("Motor Fest - Street Race - Stage 6", 0x1003c820)
+TimeLeaderboard("Motor Fest - Street Race - Stage 7", 0x1003c824)
+TimeLeaderboard("Motor Fest - Street Race - Stage 8", 0x1003c828)
+TimeLeaderboard("Motor Fest - Street Race - Stage 9", 0x1003c82c)
+TimeLeaderboard("Motor Fest - Street Race - Stage 10", 0x1003c830)
+
+TimeLeaderboard("Motor Fest - Number Chaser - Stage 1", 0x1003c834)
+TimeLeaderboard("Motor Fest - Number Chaser - Stage 2", 0x1003c838)
+TimeLeaderboard("Motor Fest - Number Chaser - Stage 3", 0x1003c83c)
+
+TimeLeaderboard("Motor Fest - Motorcycle Race - Stage 1", 0x1003c840)
+TimeLeaderboard("Motor Fest - Motorcycle Race - Stage 2", 0x1003c844)
+TimeLeaderboard("Motor Fest - Motorcycle Race - Stage 3", 0x1003c848)
+
+TimeLeaderboard("Motor Fest - Motorcycle Slalom - Stage 1", 0x1003c84c)
+TimeLeaderboard("Motor Fest - Motorcycle Slalom - Stage 2", 0x1003c850)
+TimeLeaderboard("Motor Fest - Motorcycle Slalom - Stage 3", 0x1003c854)
+TimeLeaderboard("Motor Fest - Motorcycle Slalom - Stage 4", 0x1003c858)
+TimeLeaderboard("Motor Fest - Motorcycle Slalom - Stage 5", 0x1003c85c)
+
+TimeLeaderboard("Motor Fest - Oval Race - Stage 1", 0x1003c860)
+TimeLeaderboard("Motor Fest - Oval Race - Stage 2", 0x1003c864)
+TimeLeaderboard("Motor Fest - Oval Race - Stage 3", 0x1003c868)
+
+SpeedrunTimeAchievement("Number Chaser Route Master 1", "Complete Stage 1 of Number Chaser in under 2'00\"00", 10, CalculateOffsetAndReturnAddress(0x1003c834), 63376, 0x00160100)
+SpeedrunTimeAchievement("Number Chaser Route Master 2", "Complete Stage 2 of Number Chaser in under 1'26\"00", 10, CalculateOffsetAndReturnAddress(0x1003c838), 45970, 0x00160101)
+SpeedrunTimeAchievement("Number Chaser Route Master 3", "Complete Stage 3 of Number Chaser in under 2'45\"60", 10, CalculateOffsetAndReturnAddress(0x1003c83c), 88816, 0x00160102)
