@@ -94,7 +94,7 @@ BadgeAchievement("Gravity Defier", "Halfpipe", CalculateOffsetAndReturnAddress(0
 BadgeAchievement("Winter Warfare", "Snowball Fight", CalculateOffsetAndReturnAddress(0x1003d0e8))
 BadgeAchievement("Leader of the Pack", "Dog Sled", CalculateOffsetAndReturnAddress(0x1003d0e5))
 BadgeAchievement("Alpine Racer", "Snow Races", CalculateOffsetAndReturnAddress(0x1003d0df))
-BadgeAchievement("Perfect Routine", "Trick CHallenge", CalculateOffsetAndReturnAddress(0x1003d0e0))
+BadgeAchievement("Perfect Routine", "Trick Challenge", CalculateOffsetAndReturnAddress(0x1003d0e0))
 BadgeAchievement("Slippery Slope", "Snow Tubing", CalculateOffsetAndReturnAddress(0x1003d0e4))
 BadgeAchievement("Engine on Ice", "Snowmobile Races", CalculateOffsetAndReturnAddress(0x1003d0e2))
 BadgeAchievement("Bumpy Business", "Mogul", CalculateOffsetAndReturnAddress(0x1003d0e1))
@@ -660,14 +660,14 @@ function TimeLeaderboard(minigameRaceName, baseAddress) {
   )
 }
 
-function ScoreLeaderboard(minigameRaceName, baseAddress) {
+function ScoreLeaderboard(minigameRaceName, baseAddress, divAmount = 4) {
     keyDict = CalculateOffsetAndReturnAddress(baseAddress)
     
     //Generate the dictionary of addresses
     value_conditions = array_map(range(0, 7), i => 
       measured(
           // The Target Value (Save Slot Address)
-          dword_be(baseAddress + (i * OFFSET)) / 4,
+          dword_be(baseAddress + (i * OFFSET)) / divAmount,
       
           // The Condition: Only measure if Value != Prev Value
           when = dword_be(baseAddress + (i * OFFSET)) != prev(dword_be(baseAddress + (i * OFFSET)))
@@ -976,3 +976,291 @@ TimeLeaderboard("Motor Fest - Oval Race - Stage 3", 0x1003c868)
 SpeedrunTimeAchievement("Number Chaser Route Master 1", "Complete Stage 1 of Number Chaser in under 2'00\"00", 10, CalculateOffsetAndReturnAddress(0x1003c834), 63376, 0x00160100)
 SpeedrunTimeAchievement("Number Chaser Route Master 2", "Complete Stage 2 of Number Chaser in under 1'26\"00", 10, CalculateOffsetAndReturnAddress(0x1003c838), 45970, 0x00160101)
 SpeedrunTimeAchievement("Number Chaser Route Master 3", "Complete Stage 3 of Number Chaser in under 2'45\"60", 10, CalculateOffsetAndReturnAddress(0x1003c83c), 88816, 0x00160102)
+
+ScoreLeaderboard("Dance - Colorful Life - Level 1", 0x1003c8f8, 2.5)
+ScoreLeaderboard("Dance - Colorful Life - Level 2", 0x1003c8fc, 2.5)
+ScoreLeaderboard("Dance - Colorful Life - Level 3", 0x1003c900, 2.5)
+
+ScoreLeaderboard("Dance - Kung-Fu Traveller - Level 1", 0x1003c904, 2.5)
+ScoreLeaderboard("Dance - Kung-Fu Traveller - Level 2", 0x1003c908, 2.5)
+ScoreLeaderboard("Dance - Kung-Fu Traveller - Level 3", 0x1003c90c, 2.5)
+
+ScoreLeaderboard("Dance - Twilight Rock - Level 1", 0x1003c910, 2.5)
+ScoreLeaderboard("Dance - Twilight Rock - Level 2", 0x1003c914, 2.5)
+ScoreLeaderboard("Dance - Twilight Rock - Level 3", 0x1003c918, 2.5)
+
+ScoreLeaderboard("Dance - Miles of Smiles - Level 1", 0x1003c91c, 2.5)
+ScoreLeaderboard("Dance - Miles of Smiles - Level 2", 0x1003c920, 2.5)
+ScoreLeaderboard("Dance - Miles of Smiles - Level 3", 0x1003c924, 2.5)
+
+ScoreLeaderboard("Dance - Dance Floor King - Level 1", 0x1003c928, 2.5)
+ScoreLeaderboard("Dance - Dance Floor King - Level 2", 0x1003c92c, 2.5)
+ScoreLeaderboard("Dance - Dance Floor King - Level 3", 0x1003c930, 2.5)
+
+Level1Dance = [
+  0x1003ccc7, 0x1003ccca, 0x1003cccd,
+  0x1003ccd0, 0x1003ccd3
+]
+
+Level2Dance = [
+  0x1003ccc8, 0x1003cccb, 0x1003ccce,
+  0x1003ccd1, 0x1003ccd4
+]
+
+Level3Dance = [
+  0x1003ccc9, 0x1003cccc, 0x1003cccf,
+  0x1003ccd2, 0x1003ccd5
+]
+
+achievement(
+  title = "Getting into the Groove",
+  description = "Complete all of the songs in the Dance minigame on level 1 difficulty",
+  points = 3,
+  trigger = (
+    IsInGame() &&
+    any_of(range(1, 8), dance =>
+      sum_of(Level1Dance, addr => byte(addr + ((dance - 1) * OFFSET))) == 5 &&
+      prev(sum_of(Level1Dance, addr => byte(addr + ((dance - 1) * OFFSET)))) < 5
+    )
+  )
+)
+
+achievement(
+  title = "Boogie Down",
+  description = "Complete all of the songs in the Dance minigame on level 2 difficulty",
+  points = 5,
+  trigger = (
+    IsInGame() &&
+    any_of(range(1, 8), dance =>
+      sum_of(Level2Dance, addr => byte(addr + ((dance - 1) * OFFSET))) == 5 &&
+      prev(sum_of(Level2Dance, addr => byte(addr + ((dance - 1) * OFFSET)))) < 5
+    )
+  )
+)
+
+achievement(
+  title = "Dancing Prodigy",
+  description = "Complete all of the songs in the Dance minigame on level 3 difficulty",
+  points = 10,
+  trigger = (
+    IsInGame() &&
+    any_of(range(1, 8), dance =>
+      sum_of(Level3Dance, addr => byte(addr + ((dance - 1) * OFFSET))) == 5 &&
+      prev(sum_of(Level3Dance, addr => byte(addr + ((dance - 1) * OFFSET)))) < 5
+    )
+  )
+)
+
+// pie throwing achievements here
+
+TimeLeaderboard("Hang Gliding - Balloon Buster - Stage 1", 0x1003c834)
+TimeLeaderboard("Hang Gliding - Balloon Buster - Stage 2", 0x1003c870)
+TimeLeaderboard("Hang Gliding - Balloon Buster - Stage 3", 0x1003c874)
+TimeLeaderboard("Hang Gliding - Balloon Buster - Stage 4", 0x1003c878)
+TimeLeaderboard("Hang Gliding - Balloon Buster - Stage 5", 0x1003c87c)
+
+ScoreLeaderboard("Hang Gliding - Flying Hoops - Stage 1", 0x1003c880)
+ScoreLeaderboard("Hang Gliding - Flying Hoops - Stage 2", 0x1003c884)
+ScoreLeaderboard("Hang Gliding - Flying Hoops - Stage 3", 0x1003c888)
+ScoreLeaderboard("Hang Gliding - Flying Hoops - Stage 4", 0x1003c88c)
+ScoreLeaderboard("Hang Gliding - Flying Hoops - Stage 5", 0x1003c890)
+
+// achievement for flying hoops and balloon buster
+
+TimeLeaderboard("Wheel Slider - Stage 1", 0x1003c7fc)
+TimeLeaderboard("Wheel Slider - Stage 2", 0x1003c800)
+TimeLeaderboard("Wheel Slider - Stage 3", 0x1003c804)
+
+// achievement for wheel slider?
+
+// table hockey pro achievement?
+
+// glass harp every pro level achievements
+
+ScoreLeaderboard("Skate Tricks - Park Tricks", 0x1003c7d8)
+ScoreLeaderboard("Skate Tricks - Street Tricks - Stage 1", 0x1003c7dc)
+ScoreLeaderboard("Skate Tricks - Street Tricks - Stage 2", 0x1003c7e0)
+ScoreLeaderboard("Skate Tricks - Street Tricks - Stage 3", 0x1003c7e4)
+ScoreLeaderboard("Skate Tricks - Street Tricks - Stage 4", 0x1003c7e8)
+ScoreLeaderboard("Skate Tricks - Street Tricks - Stage 5", 0x1003c7ec)
+
+RankAchievement("", "Skate Tricks Park Tricks", CalculateOffsetAndReturnAddress(0x1003cba8), 0x04)
+
+// street tricks achievement?
+
+ScoreLeaderboard("Grind Master - Stage 1", 0x1003c7f0, 136)
+ScoreLeaderboard("Grind Master - Stage 2", 0x1003c7f0, 136)
+ScoreLeaderboard("Grind Master - Stage 3", 0x1003c7f0, 136)
+
+// grind master achievement?
+
+ScoreLeaderboard("Mole Panic - Level 1", 0x1003c8cc)
+ScoreLeaderboard("Mole Panic - Level 2", 0x1003c8d0)
+ScoreLeaderboard("Mole Panic - Level 3", 0x1003c8d4)
+
+// mole panic achievement?
+ScoreLeaderboard("Power Hitter - Level 1", 0x1003c8a8)
+ScoreLeaderboard("Power Hitter - Level 2", 0x1003c8ac)
+ScoreLeaderboard("Power Hitter - Level 3", 0x1003c8b0)
+
+ScoreLeaderboard("Bucket Ball - Level 1", 0x1003c8d8)
+ScoreLeaderboard("Bucket Ball - Level 2", 0x1003c8dc)
+ScoreLeaderboard("Bucket Ball - Level 3", 0x1003c8e0)
+
+ScoreLeaderboard("Power Boxer - Level 1", 0x1003c8c0)
+ScoreLeaderboard("Power Boxer - Level 2", 0x1003c8c4)
+ScoreLeaderboard("Power Boxer - Level 3", 0x1003c8c8)
+
+ScoreLeaderboard("Halfpipe - Halfpipe Tricks", 0x1003c808)
+RankAchievement("", "Halfpipe Tricks", CalculateOffsetAndReturnAddress(0x1003cba9), 0x04)
+
+TimeLeaderboard("Snowball Fight - Defend the Flag - Level 1", 0x1003cb30)
+TimeLeaderboard("Snowball Fight - Defend the Flag - Level 2", 0x1003cb34)
+TimeLeaderboard("Snowball Fight - Defend the Flag - Level 3", 0x1003cb38)
+
+//defend the flag achievement?
+
+TimeLeaderboard("Dog Sled - Beginner Stage", 0x1003cb20)
+TimeLeaderboard("Dog Sled - Intermediate Stage", 0x1003cb24)
+TimeLeaderboard("Dog Sled - Advanced Stage", 0x1003cb28)
+
+// dog sled achievement?
+
+TimeLeaderboard("Snow Races - Sprint Race - Stage 1", 0x1003ca88)
+TimeLeaderboard("Snow Races - Sprint Race - Stage 2", 0x1003ca8c)
+TimeLeaderboard("Snow Races - Sprint Race - Stage 3", 0x1003ca90)
+TimeLeaderboard("Snow Races - Sprint Race - Stage 4", 0x1003ca94)
+TimeLeaderboard("Snow Races - Sprint Race - Stage 5", 0x1003ca98)
+
+TimeLeaderboard("Snow Races - Slalom Race - Stage 1", 0x1003ca9c)
+TimeLeaderboard("Snow Races - Slalom Race - Stage 2", 0x1003caa0)
+TimeLeaderboard("Snow Races - Slalom Race - Stage 3", 0x1003caa4)
+TimeLeaderboard("Snow Races - Slalom Race - Stage 4", 0x1003caa8)
+TimeLeaderboard("Snow Races - Slalom Race - Stage 5", 0x1003caac)
+
+// snow races achievements
+TimeLeaderboard("Snow Tubing - Sprint Race - Stage 1", 0x1003caf8)
+TimeLeaderboard("Snow Tubing - Sprint Race - Stage 2", 0x1003cafc)
+TimeLeaderboard("Snow Tubing - Sprint Race - Stage 3", 0x1003cb00)
+TimeLeaderboard("Snow Tubing - Sprint Race - Stage 4", 0x1003cb04)
+TimeLeaderboard("Snow Tubing - Sprint Race - Stage 5", 0x1003cb08)
+
+ScoreLeaderboard("Snow Tubing - Tube Bowling - Stage 1", 0x1003cb0c)
+ScoreLeaderboard("Snow Tubing - Tube Bowling - Stage 2", 0x1003cb10)
+ScoreLeaderboard("Snow Tubing - Tube Bowling - Stage 3", 0x1003cb14)
+ScoreLeaderboard("Snow Tubing - Tube Bowling - Stage 4", 0x1003cb18)
+ScoreLeaderboard("Snow Tubing - Tube Bowling - Stage 5", 0x1003cb1c)
+
+TimeLeaderboard("Snowmobile Races - Sprint Race - Stage 1", 0x1003cabc)
+TimeLeaderboard("Snowmobile Races - Sprint Race - Stage 2", 0x1003cac0)
+TimeLeaderboard("Snowmobile Races - Sprint Race - Stage 3", 0x1003cac4)
+TimeLeaderboard("Snowmobile Races - Sprint Race - Stage 4", 0x1003cac8)
+TimeLeaderboard("Snowmobile Races - Sprint Race - Stage 5", 0x1003cacc)
+
+TimeLeaderboard("Snowmobile Races - Circuit Race - Stage 1", 0x1003cad0)
+TimeLeaderboard("Snowmobile Races - Circuit Race - Stage 2", 0x1003cad4)
+TimeLeaderboard("Snowmobile Races - Circuit Race - Stage 3", 0x1003cad8)
+TimeLeaderboard("Snowmobile Races - Circuit Race - Stage 4", 0x1003cadc)
+TimeLeaderboard("Snowmobile Races - Circuit Race - Stage 5", 0x1003cae0)
+
+TimeLeaderboard("Snowmobile Races - Open Race - Stage 1", 0x1003cae4)
+TimeLeaderboard("Snowmobile Races - Open Race - Stage 2", 0x1003cae8)
+TimeLeaderboard("Snowmobile Races - Open Race - Stage 3", 0x1003caec)
+TimeLeaderboard("Snowmobile Races - Open Race - Stage 4", 0x1003caf0)
+TimeLeaderboard("Snowmobile Races - Open Race - Stage 5", 0x1003caf4)
+
+// open race challenges
+
+ScoreLeaderboard("Mogul", 0x1003cab8)
+
+ScoreLeaderboard("Snow Tricks - Halfpipe Tricks", 0x1003cab4)
+ScoreLeaderboard("Snow Tricks - Slopestyle", 0x1003cab8)
+
+RankAchievement("", "Snow Tricks Halfpipe Tricks", CalculateOffsetAndReturnAddress(0x1003cbab), 0x04)
+RankAchievement("", "Snow Tricks Slopestyle", CalculateOffsetAndReturnAddress(0x1003cbaa), 0x04)
+
+TimeLeaderboard("Horseback Riding - Sprint Race - Level 1", 0x1003c9c4)
+TimeLeaderboard("Horseback Riding - Sprint Race - Level 2", 0x1003c9c8)
+TimeLeaderboard("Horseback Riding - Sprint Race - Level 3", 0x1003c9cc)
+TimeLeaderboard("Horseback Riding - Sprint Race - Level 4", 0x1003c9d0)
+TimeLeaderboard("Horseback Riding - Sprint Race - Level 5", 0x1003c9d4)
+
+ScoreLeaderboard("Horseback Riding - Coin Collect - Level 1", 0x1003c9d8)
+ScoreLeaderboard("Horseback Riding - Coin Collect - Level 2", 0x1003c9dc)
+ScoreLeaderboard("Horseback Riding - Coin Collect - Level 3", 0x1003c9e0)
+ScoreLeaderboard("Horseback Riding - Coin Collect - Level 4", 0x1003c9e4)
+ScoreLeaderboard("Horseback Riding - Coin Collect - Level 5", 0x1003c9e8)
+
+// horseback achievements
+
+TimeLeaderboard("Paragliding - Balloon Buster - Level 1", 0x1003ca20)
+TimeLeaderboard("Paragliding - Balloon Buster - Level 2", 0x1003ca24)
+TimeLeaderboard("Paragliding - Balloon Buster - Level 3", 0x1003ca28)
+TimeLeaderboard("Paragliding - Balloon Buster - Level 4", 0x1003ca2c)
+TimeLeaderboard("Paragliding - Balloon Buster - Level 5", 0x1003ca30)
+
+ScoreLeaderboard("Paragliding - Aimed Flight - Level 1", 0x1003ca34)
+ScoreLeaderboard("Paragliding - Aimed Flight - Level 2", 0x1003ca38)
+ScoreLeaderboard("Paragliding - Aimed Flight - Level 3", 0x1003ca3c)
+ScoreLeaderboard("Paragliding - Aimed Flight - Level 4", 0x1003ca40)
+ScoreLeaderboard("Paragliding - Aimed Flight - Level 5", 0x1003ca44)
+
+TimeLeaderboard("Kayaking - River Race - Stage 1", 0x1003c988)
+TimeLeaderboard("Kayaking - River Race - Stage 2", 0x1003c988)
+TimeLeaderboard("Kayaking - River Race - Stage 3", 0x1003c988)
+TimeLeaderboard("Kayaking - River Race - Stage 4", 0x1003c988)
+TimeLeaderboard("Kayaking - River Race - Stage 5", 0x1003c988)
+
+TimeLeaderboard("Kayaking - River Slalom - Stage 1", 0x1003c99c)
+TimeLeaderboard("Kayaking - River Slalom - Stage 2", 0x1003c9a0)
+TimeLeaderboard("Kayaking - River Slalom - Stage 3", 0x1003c9a4)
+TimeLeaderboard("Kayaking - River Slalom - Stage 4", 0x1003c9a8)
+TimeLeaderboard("Kayaking - River Slalom - Stage 5", 0x1003c9ac)
+
+ScoreLeaderboard("Kayaking - Coin Collect - Stage 1", 0x1003c9b0)
+ScoreLeaderboard("Kayaking - Coin Collect - Stage 2", 0x1003c9b4)
+ScoreLeaderboard("Kayaking - Coin Collect - Stage 3", 0x1003c9b8)
+ScoreLeaderboard("Kayaking - Coin Collect - Stage 4", 0x1003c9bc)
+ScoreLeaderboard("Kayaking - Coin Collect - Stage 5", 0x1003c9c0)
+
+// kayaking achievements
+
+TimeLeaderboard("Off-Road Racing - Open Race - Stage 1", 0x1003c9ec)
+TimeLeaderboard("Off-Road Racing - Open Race - Stage 2", 0x1003c9f0)
+TimeLeaderboard("Off-Road Racing - Open Race - Stage 3", 0x1003c9f4)
+
+TimeLeaderboard("Off-Road Racing - Rally Car - Stage 1", 0x1003c9f8)
+TimeLeaderboard("Off-Road Racing - Rally Car - Stage 2", 0x1003c9fc)
+TimeLeaderboard("Off-Road Racing - Rally Car - Stage 3", 0x1003ca00)
+TimeLeaderboard("Off-Road Racing - Rally Car - Stage 4", 0x1003ca04)
+TimeLeaderboard("Off-Road Racing - Rally Car - Stage 5", 0x1003ca08)
+TimeLeaderboard("Off-Road Racing - Rally Car - Stage 6", 0x1003ca0c)
+TimeLeaderboard("Off-Road Racing - Rally Car - Stage 7", 0x1003ca10)
+TimeLeaderboard("Off-Road Racing - Rally Car - Stage 8", 0x1003ca14)
+TimeLeaderboard("Off-Road Racing - Rally Car - Stage 9", 0x1003ca18)
+TimeLeaderboard("Off-Road Racing - Rally Car - Stage 10", 0x1003ca1c)
+
+// off road racing open races
+
+TimeLeaderboard("Rafting - Stage 1", 0x1003ca48)
+TimeLeaderboard("Rafting - Stage 2", 0x1003ca4c)
+TimeLeaderboard("Rafting - Stage 3", 0x1003ca50)
+
+// rafting achievement?
+
+TimeLeaderboard("Target Shooting - Level 1", 0x1003ca60)
+TimeLeaderboard("Target Shooting - Level 2", 0x1003ca64)
+TimeLeaderboard("Target Shooting - Level 3", 0x1003ca68)
+
+//target shooting achievement?
+
+ScoreLeaderboard("Clay Shooting - Short", 0x1003ca54)
+ScoreLeaderboard("Clay Shooting - Middle", 0x1003ca58)
+ScoreLeaderboard("Clay Shooting - Long", 0x1003ca5c)
+
+// clay shooting achievement?
+TimeLeaderboard("Rifle Shooting - Level 1", 0x1003ca78)
+TimeLeaderboard("Rifle Shooting - Level 2", 0x1003ca7c)
+TimeLeaderboard("Rifle Shooting - Level 3", 0x1003ca80)
+
+//rifle shooting achievement?
