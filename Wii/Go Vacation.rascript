@@ -1051,7 +1051,7 @@ achievement(
   )
 )
 
-// pie throwing achievements here
+ScoreAchievement("Can't Pie Me!", "Score over 100 points in Level 1 of the \"Pie Throwing\" minigame in the \"Dodge Fest\" mode", 5, CalculateOffsetAndReturnAddress(0x1003c8e8), 400)
 
 TimeLeaderboard("Hang Gliding - Balloon Buster - Stage 1", 0x1003c834)
 TimeLeaderboard("Hang Gliding - Balloon Buster - Stage 2", 0x1003c870)
@@ -1065,17 +1065,63 @@ ScoreLeaderboard("Hang Gliding - Flying Hoops - Stage 3", 0x1003c888)
 ScoreLeaderboard("Hang Gliding - Flying Hoops - Stage 4", 0x1003c88c)
 ScoreLeaderboard("Hang Gliding - Flying Hoops - Stage 5", 0x1003c890)
 
-// achievement for flying hoops and balloon buster
-
 TimeLeaderboard("Wheel Slider - Stage 1", 0x1003c7fc)
 TimeLeaderboard("Wheel Slider - Stage 2", 0x1003c800)
 TimeLeaderboard("Wheel Slider - Stage 3", 0x1003c804)
 
-// achievement for wheel slider?
+Level1Glass = [
+  0x1003c934, 0x1003c940, 0x1003c94c,
+  0x1003c958, 0x1003c964
+]
 
-// table hockey pro achievement?
+Level2Glass = [
+  0x1003c938, 0x1003c944, 0x1003c950,
+  0x1003c958, 0x1003c964
+]
 
-// glass harp every pro level achievements
+Level3Glass = [
+  0x1003c93c, 0x1003c948, 0x1003c954,
+  0x1003c958, 0x1003c964
+]
+
+achievement(
+  title = "Glass Beginner",
+  description = "Reach Pro rank on all of the songs on Level 1 difficulty in the \"Glass Harp\" minigame",
+  points = 3,
+  trigger = (
+    IsInGame() &&
+    any_of(range(1, 8), glass =>
+      all_of(Level1Glass, addr => dword_be(addr + ((glass - 1) * OFFSET)) >= 0x08) &&
+      prev(any_of(Level1Glass, addr => dword_be(addr + ((glass - 1) * OFFSET)) != 0x08))
+    )
+  )
+)
+
+achievement(
+  title = "Glass Harmony",
+  description = "Reach Pro rank on all of the songs on Level 2 difficulty in the \"Glass Harp\" minigame",
+  points = 5,
+  trigger = (
+    IsInGame() &&
+    any_of(range(1, 8), glass =>
+      all_of(Level2Glass, addr => dword_be(addr + ((glass - 1) * OFFSET)) >= 0x08) &&
+      prev(any_of(Level2Glass, addr => dword_be(addr + ((glass - 1) * OFFSET)) != 0x08))
+    )
+  )
+)
+
+achievement(
+  title = "The Master of Glass",
+  description = "Reach Pro rank on all of the songs on Level 3 difficulty in the \"Glass Harp\" minigame",
+  points = 10,
+  trigger = (
+    IsInGame() &&
+    any_of(range(1, 8), glass =>
+      all_of(Level3Glass, addr => dword_be(addr + ((glass - 1) * OFFSET)) >= 0x08) &&
+      prev(any_of(Level3Glass, addr => dword_be(addr + ((glass - 1) * OFFSET)) != 0x08))
+    )
+  )
+)
 
 ScoreLeaderboard("Skate Tricks - Park Tricks", 0x1003c7d8)
 ScoreLeaderboard("Skate Tricks - Street Tricks - Stage 1", 0x1003c7dc)
@@ -1084,9 +1130,7 @@ ScoreLeaderboard("Skate Tricks - Street Tricks - Stage 3", 0x1003c7e4)
 ScoreLeaderboard("Skate Tricks - Street Tricks - Stage 4", 0x1003c7e8)
 ScoreLeaderboard("Skate Tricks - Street Tricks - Stage 5", 0x1003c7ec)
 
-RankAchievement("", "Skate Tricks Park Tricks", CalculateOffsetAndReturnAddress(0x1003cba8), 0x04)
-
-// street tricks achievement?
+RankAchievement("Becoming Tony Hawk", "Skate Tricks Park Tricks", CalculateOffsetAndReturnAddress(0x1003cba8), 0x04)
 
 ScoreLeaderboard("Grind Master - Stage 1", 0x1003c7f0, 136)
 ScoreLeaderboard("Grind Master - Stage 2", 0x1003c7f0, 136)
