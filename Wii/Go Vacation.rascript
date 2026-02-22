@@ -39,7 +39,6 @@ function CalculateOffsetAndReturnAddress(baseAddr){
 }
 
 // -------------------- Variables --------------------
-
 function CurrentScreen() => dword_be(0x1001eb50)
 function IsInGame() => CurrentScreen() != 0xffffff00
 
@@ -163,7 +162,7 @@ SilverKeyAchievement("Skilled Surfer", 5, CalculateOffsetAndReturnAddress(0x1003
 SilverKeyAchievement("Water Gun Warrior", 5, CalculateOffsetAndReturnAddress(0x1003cfc0), "Water Gun Battle")
 
 SilverKeyAchievement("Flight of the Quad", 5, CalculateOffsetAndReturnAddress(0x1003cfc8), "ATV Tricks", "Jump Tricks: Rank 4 or Higher")
-SilverKeyAchievement("Muddy Multi-tasker", 5, CalculateOffsetAndReturnAddress(0x1003cfc9), "ATV Tricks", "Ride & Tricks: Rank 4 or Higher")
+SilverKeyAchievement("Muddy Multi-Tasker", 5, CalculateOffsetAndReturnAddress(0x1003cfc9), "ATV Tricks", "Ride & Tricks: Rank 4 or Higher")
 
 SilverKeyAchievement("Wave Vaulter", 5, CalculateOffsetAndReturnAddress(0x1003cfca), "Marine Bike Tricks", "Jump Tricks: Rank 4 or Higher")
 SilverKeyAchievement("Aquatic Rider and Trickster", 5, CalculateOffsetAndReturnAddress(0x1003cfcb), "Marine Bike Tricks", "Ride & Tricks: Rank 4 or Higher")
@@ -205,6 +204,7 @@ SilverKeyAchievement("Heavy Hitter", 5, CalculateOffsetAndReturnAddress(0x1003cf
 SilverKeyAchievement("Putt-Putt Professional", 5, CalculateOffsetAndReturnAddress(0x1003cfd9), "Mini Golf")
 
 SilverKeyAchievement("Airbound Artist", 5, CalculateOffsetAndReturnAddress(0x1003cfd0), "Halfpipe")
+
 
 SilverKeyAchievement("Snow Sniper", 5, CalculateOffsetAndReturnAddress(0x1003cfe7), "Snowball Fight")
 
@@ -465,7 +465,7 @@ SchoolAchievement("Walking in the City", "Walk", "City School", 2, CitySchoolWal
 SchoolAchievement("Roller Ready", "Inline Skate Controls", "City School", 3, CitySchoolInlineSkatesControls, 7)
 SchoolAchievement("Inline Trick Master", "Inline Skate Tricks", "City School", 4, CitySchoolInlineSkatesTricks, 15)
 SchoolAchievement("Board Basic Training", "Skateboard Controls", "City School", 3, CitySchoolSkateboardControls, 9)
-SchoolAchievement("Kickflip Classroom", "Skateboard Controls", "City School", 4, CitySchoolSkateboardTricks, 16)
+SchoolAchievement("Kickflip Classroom", "Skateboard Tricks", "City School", 4, CitySchoolSkateboardTricks, 16)
 
 SchoolAchievement("Winter Walking", "Walk", "Snow School", 2, CitySchoolWalking, 3)
 SchoolAchievement("Skiing Fundamentals", "Ski Controls", "Snow School", 4, SnowSchoolSkisControls, 13)
@@ -489,10 +489,8 @@ function TreasureChestAchievement(achTitle, locName, baseAddresses){
     points = 10,
     trigger = (
       IsInGame() &&
-      any_of(range(1, 8), profileKey =>
-        sum_of(baseAddresses, addr => bit7(addr + ((profileKey - 1) * OFFSET))) == 7 &&
-        prev(sum_of(baseAddresses, addr => bit7(addr + ((profileKey - 1) * OFFSET)))) == 6  
-      )
+      sum_of(baseAddresses, addr => bit7(addr)) == 7 &&
+      prev(sum_of(baseAddresses, addr => bit7(addr))) == 6
     )
   )
 }
@@ -504,10 +502,8 @@ function BalloonHintAchievement(achTitle, hintName, points, baseAddresses, targe
     points = points,
     trigger = (
       IsInGame() &&
-      any_of(range(1, 8), profileKey =>
-        sum_of(baseAddresses, addr => byte(addr + ((profileKey - 1) * OFFSET))) == targetCount &&
-        prev(sum_of(baseAddresses, addr => byte(addr + ((profileKey - 1) * OFFSET)))) < targetCount  
-      )
+      sum_of(baseAddresses, addr => byte(addr)) == targetCount &&
+      prev(sum_of(baseAddresses, addr => byte(addr))) < targetCount
     )
   )
 }
@@ -518,11 +514,9 @@ function PhotoSpotAchievement(achTitle, locName, baseAddresses){
     description = "Unlock every Photo Spot in the " + locName,
     points = 10,
     trigger = (
-	      IsInGame() &&
-        any_of(range(1, 8), profileKey =>
-          sum_of(baseAddresses, addr => byte(addr + ((profileKey - 1) * OFFSET))) == 14 &&
-          prev(sum_of(baseAddresses, addr => byte(addr + ((profileKey - 1) * OFFSET)))) == 13  
-      )
+      IsInGame() &&
+      sum_of(baseAddresses, addr => bit7(addr)) == 14 &&
+      prev(sum_of(baseAddresses, addr => bit7(addr))) == 13
 	  )
   )
 }
@@ -934,7 +928,7 @@ ScoreLeaderboard("Marine Bike Tricks - Jump Tricks", 0x1003c74c)
 ScoreLeaderboard("Marine Bike Tricks - Ride & Tricks", 0x1003c750)
 
 RankAchievement("Professional Bike Jumper", "Marine Bike Tricks Jump Tricks", CalculateOffsetAndReturnAddress(0x1003cba2), 4)
-RankAchievement("Water Gliding And Tricking", "Marine Bike Tricks Ride & Tricks", CalculateOffsetAndReturnAddress(0x1003cba3), 4)
+RankAchievement("Water Gliding and Tricking", "Marine Bike Tricks Ride & Tricks", CalculateOffsetAndReturnAddress(0x1003cba3), 4)
 
 // TimeLeaderboard("Triathlon - Stage 1", 0x1003c738)
 // TimeLeaderboard("Triathlon - Stage 2", 0x1003c73c)
@@ -1011,7 +1005,7 @@ Level3Dance = [
 ]
 
 achievement(
-  title = "Getting into the Groove",
+  title = "Getting Into the Groove",
   description = "Complete all of the songs in the Dance minigame on level 1 difficulty",
   points = 3,
   trigger = (
@@ -1049,7 +1043,7 @@ achievement(
   )
 )
 
-ScoreAchievement("Can't Pie Me!", "Score over 100 points in Level 1 of the \"Pie Throwing\" minigame in the \"Dodge Fest\" mode", 5, CalculateOffsetAndReturnAddress(0x1003c8e8), 400)
+ScoreAchievement("Can't Pie Me!", "Score over 100 points in Level 1 of the \"Pie Throwing\" minigame", 5, CalculateOffsetAndReturnAddress(0x1003c8e8), 400)
 
 // TimeLeaderboard("Hang Gliding - Balloon Buster - Stage 1", 0x1003c834)
 // TimeLeaderboard("Hang Gliding - Balloon Buster - Stage 2", 0x1003c870)
@@ -1236,8 +1230,8 @@ ScoreLeaderboard("Mogul", 0x1003cab8)
 ScoreLeaderboard("Snow Tricks - Halfpipe Tricks", 0x1003cab4)
 ScoreLeaderboard("Snow Tricks - Slopestyle", 0x1003cab8)
 
-RankAchievement("Snowy Halfpipe Hero", "Snow Tricks Halfpipe Tricks", CalculateOffsetAndReturnAddress(0x1003cbab), 0x04)
-RankAchievement("Skilful Slopestyle Snow Trickster", "Snow Tricks Slopestyle", CalculateOffsetAndReturnAddress(0x1003cbaa), 0x04)
+RankAchievement("Snowy Halfpipe Hero", "\"Snow Tricks\" Halfpipe Tricks", CalculateOffsetAndReturnAddress(0x1003cbab), 0x04)
+RankAchievement("Skilful Slopestyle Snow Trickster", "\"Snow Tricks\" Slopestyle", CalculateOffsetAndReturnAddress(0x1003cbaa), 0x04)
 
 // TimeLeaderboard("Horseback Riding - Sprint Race - Level 1", 0x1003c9c4)
 // TimeLeaderboard("Horseback Riding - Sprint Race - Level 2", 0x1003c9c8)
@@ -1254,7 +1248,6 @@ ScoreLeaderboard("Horseback Riding - Coin Collect - Level 5", 0x1003c9e8)
 // horseback achievements
 SpeedrunTimeAchievement("Galloping to Glory", "Complete Stage 2 of the Horseback Riding Sprint Race in under 1'14\"50", 5, CalculateOffsetAndReturnAddress(0x1003c9c8), 40138)
 ScoreAchievement("Gold Collecting Horse", "Collect every coin on Stage 1 of the Horseback Riding Coin Collector minigame", 5, CalculateOffsetAndReturnAddress(0x1003c9d8), 2680)
-
 
 // TimeLeaderboard("Paragliding - Balloon Buster - Level 1", 0x1003ca20)
 // TimeLeaderboard("Paragliding - Balloon Buster - Level 2", 0x1003ca24)
@@ -1310,19 +1303,362 @@ SpeedrunTimeAchievement("Off-Road Rush 3", "Complete Stage 3 of the Off-Road Rac
 // TimeLeaderboard("Rafting - Stage 2", 0x1003ca4c)
 // TimeLeaderboard("Rafting - Stage 3", 0x1003ca50)
 
-// TimeLeaderboard("Target Shooting - Level 1", 0x1003ca60)
-// TimeLeaderboard("Target Shooting - Level 2", 0x1003ca64)
-// TimeLeaderboard("Target Shooting - Level 3", 0x1003ca68)
+ScoreLeaderboard("Target Shooting - Level 1", 0x1003ca60)
+ScoreLeaderboard("Target Shooting - Level 2", 0x1003ca64)
+ScoreLeaderboard("Target Shooting - Level 3", 0x1003ca68)
 
 //target shooting achievement?
+TargetShootingLevels = [
+  0x1003ca60, 0x1003ca64, 0x1003ca68
+]
+
+achievement(
+  title = "Sharp Shooter",
+  description = "Reach a total score of 340 or higher across all 5 target shooting levels in the \"Target Shooting\" minigame",
+  points = 10,
+  trigger = (
+    IsInGame() &&
+      any_of(range(1, 8), target =>
+      all_of(TargetShootingLevels, addr => dword_be(addr + ((target - 1) * OFFSET)) != 0xfffffffc) &&
+      sum_of(TargetShootingLevels, addr => dword_be(addr + ((target - 1) * OFFSET))) >= 1360
+    )
+  )
+)
 
 ScoreLeaderboard("Clay Shooting - Short", 0x1003ca54)
 ScoreLeaderboard("Clay Shooting - Middle", 0x1003ca58)
 ScoreLeaderboard("Clay Shooting - Long", 0x1003ca5c)
 
-// clay shooting achievement?
+
 // TimeLeaderboard("Rifle Shooting - Level 1", 0x1003ca78)
 // TimeLeaderboard("Rifle Shooting - Level 2", 0x1003ca7c)
 // TimeLeaderboard("Rifle Shooting - Level 3", 0x1003ca80)
 
 //rifle shooting achievement?
+SpeedrunTimeAchievement("Remembering with a Rifle", "Complete Stage 2 of the \"Rifle Shooting\" minigame in under 2'10\"00", 5, CalculateOffsetAndReturnAddress(0x1003ca7c), 70544)
+
+
+// -------------------- Special Quests --------------------
+MarineQuest = [
+  0x1003cbcb, 0x1003cbcc, 0x1003cbcd,
+  0x1003cbce, 0x1003cbcf
+]
+
+achievement(
+  title = "Thanks for the Memories",
+  description = "Complete the special quest in the Marine Resort",
+  points = 5,
+  trigger = (
+    IsInGame() &&
+    any_of(range(1, 8), quest =>
+      all_of(MarineQuest, addr => byte(addr + ((quest - 1) * OFFSET)) == 0x01) &&
+      prev(any_of(MarineQuest, addr => byte(addr + ((quest - 1) * OFFSET)) != 0x01))
+    )
+  )
+)
+
+SilverKeyAchievement("Postman Pat", 5, CalculateOffsetAndReturnAddress(0x1003cfdf), "Mail on Wheels")
+
+SnowQuest = [
+  0x1003cde3, 0x1003cde4, 0x1003cde5,
+  0x1003cde6, 0x1003cde7
+]
+
+achievement(
+  title = "Cooking up a Stew",
+  description = "Complete the special quest in the Snow Resort",
+  points = 5,
+  trigger = (
+    IsInGame() &&
+    any_of(range(1, 8), quest =>
+      all_of(SnowQuest, addr => byte(addr + ((quest - 1) * OFFSET)) == 0x01) &&
+      prev(any_of(SnowQuest, addr => byte(addr + ((quest - 1) * OFFSET)) != 0x01))
+    )
+  )
+)
+
+MountainQuest = [
+  0x1003cd35, 0x1003cd36, 0x1003cd37, 0x1003cd38, 0x1003cd39,
+  0x1003cd3a, 0x1003cd3b, 0x1003cd3c, 0x1003cd3d, 0x1003cd3e
+]
+
+
+achievement(
+  title = "King of the Castle",
+  description = "Complete the special quest in the Mountain Resort",
+  points = 5,
+  trigger = (
+    IsInGame() &&
+    any_of(range(1, 8), quest =>
+      all_of(MountainQuest, addr => byte(addr + ((quest - 1) * OFFSET)) == 0x01) &&
+      prev(any_of(MountainQuest, addr => byte(addr + ((quest - 1) * OFFSET)) != 0x01))
+    )
+  )
+)
+Locations = {
+  0xffffff00: "chilling at the Main Menu",
+  0x00000000: "exploring the Marine Resort",
+  0x00000100: "exploring the City Resort",
+  0x00000200: "exploring the Snow Resort",
+  0x00000300: "exploring the Mountain Resort",
+  0x00000400: "hanging out at the Villa",
+  0x00000500: "relaxing on Coconore Island",
+  0x0003ff00: "browsing the Marine Bike Races Menu",
+  0x00030000: "racing in Stage 1 of the Marine Bike Sprint",
+  0x00030001: "racing in Stage 2 of the Marine Bike Sprint",
+  0x00030002: "racing in Stage 3 of the Marine Bike Sprint",
+  0x00030100: "racing in Stage 1 of the Marine Bike Circuit",
+  0x00030101: "racing in Stage 2 of the Marine Bike Circuit",
+  0x00030102: "racing in Stage 3 of the Marine Bike Circuit",
+  0x00030200: "competing in Hoop Challenge 1 of the Marine Bike Races",
+  0x00030201: "competing in Hoop Challenge 2 of the Marine Bike Races",
+  0x00030202: "competing in Hoop Challenge 3 of the Marine Bike Races",
+  0x00030203: "competing in Hoop Challenge 4 of the Marine Bike Races",
+  0x00030204: "competing in Hoop Challenge 5 of the Marine Bike Races",
+  0x000dff00: "skydiving through the clouds",
+  0x000fff00: "playing a match of Beach Volleyball",
+  0x0002ff00: "browsing the ATV Races Menu",
+  0x00020000: "racing in Stage 1 of the ATV Sprint",
+  0x00020001: "racing in Stage 2 of the ATV Sprint",
+  0x00020002: "racing in Stage 3 of the ATV Sprint",
+  0x00020100: "racing in Stage 1 of the ATV Circuit",
+  0x00020101: "racing in Stage 2 of the ATV Circuit",
+  0x00020102: "racing in Stage 3 of the ATV Circuit",
+  0x00020200: "navigating Slalom Challenge 1 of the ATV Races",
+  0x00020201: "navigating Slalom Challenge 2 of the ATV Races",
+  0x00020202: "navigating Slalom Challenge 3 of the ATV Races",
+  0x00020203: "navigating Slalom Challenge 4 of the ATV Races",
+  0x00020204: "navigating Slalom Challenge 5 of the ATV Races",
+  0x00000c00: "scuba diving in the deep blue",
+  0x0008ff00: "browsing the Surfing Menu",
+  0x00080000: "shredding the Big Wave Ride",
+  0x00080100: "competing in the Surfing Score Trial",
+  0x00080200: "playing the Surfing Coco Challenge",
+  0x000eff00: "having a blast in a Water Gun Battle",
+  0x0004ff00: "browsing the ATV Tricks Menu",
+  0x00040000: "catching air in ATV Jump Tricks",
+  0x00040100: "showing off in ATV Ride & Tricks",
+  0x0005ff00: "browsing the Marine Bike Tricks Menu",
+  0x00050000: "catching air in Marine Bike Jump Tricks",
+  0x00050100: "showing off in Marine Bike Ride & Tricks",
+  0x0006ff00: "browsing the Triathlon Menu",
+  0x00060000: "sweating through Stage 1 of the Triathlon",
+  0x00060001: "sweating through Stage 2 of the Triathlon",
+  0x00060002: "sweating through Stage 3 of the Triathlon",
+  0x0019ff00: "visiting the City School",
+  0x0016ff00: "browsing the Motor Fest Menu",
+  0x00160000: "racing in Stage 1 of the Street Race",
+  0x00160001: "racing in Stage 2 of the Street Race",
+  0x00160002: "racing in Stage 3 of the Street Race",
+  0x00160003: "racing in Stage 4 of the Street Race",
+  0x00160004: "racing in Stage 5 of the Street Race",
+  0x00160005: "racing in Stage 6 of the Street Race",
+  0x00160006: "racing in Stage 7 of the Street Race",
+  0x00160007: "racing in Stage 8 of the Street Race",
+  0x00160008: "racing in Stage 9 of the Street Race",
+  0x00160009: "racing in Stage 10 of the Street Race",
+  0x00160100: "playing Stage 1 of Number Chaser",
+  0x00160101: "playing Stage 2 of Number Chaser",
+  0x00160102: "playing Stage 3 of Number Chaser",
+  0x00160200: "competing in Stage 1 of the Motorcycle Race",
+  0x00160201: "competing in Stage 2 of the Motorcycle Race",
+  0x00160202: "competing in Stage 3 of the Motorcycle Race",
+  0x00160300: "weaving through Stage 1 of the Motorcycle Slalom",
+  0x00160301: "weaving through Stage 2 of the Motorcycle Slalom",
+  0x00160302: "weaving through Stage 3 of the Motorcycle Slalom",
+  0x00160303: "weaving through Stage 4 of the Motorcycle Slalom",
+  0x00160304: "weaving through Stage 5 of the Motorcycle Slalom",
+  0x00160400: "doing laps in Level 1 of the Oval Race",
+  0x00160401: "doing laps in Level 2 of the Oval Race",
+  0x00160402: "doing laps in Level 3 of the Oval Race",
+  0x0023ff00: "tearing up the Dance floor",
+  0x0021ff00: "getting messy in Pie Throwing",
+  0x0017ff00: "browsing the Hang Gliding Menu",
+  0x00170000: "popping balloons in Stage 1 of Balloon Buster",
+  0x00170001: "popping balloons in Stage 2 of Balloon Buster",
+  0x00170002: "popping balloons in Stage 3 of Balloon Buster",
+  0x00170003: "popping balloons in Stage 4 of Balloon Buster",
+  0x00170004: "popping balloons in Stage 5 of Balloon Buster",
+  0x00170100: "flying through hoops in Stage 1 of Flying Hoops",
+  0x00170101: "flying through hoops in Stage 2 of Flying Hoops",
+  0x00170102: "flying through hoops in Stage 3 of Flying Hoops",
+  0x00170103: "flying through hoops in Stage 4 of Flying Hoops",
+  0x00170104: "flying through hoops in Stage 5 of Flying Hoops",
+  0x00170200: "soaring in Free Flight",
+  0x0014ff00: "browsing the Wheel Slider Menu",
+  0x00140000: "sliding through Stage 1 of the Wheel Slider",
+  0x00140001: "sliding through Stage 2 of the Wheel Slider",
+  0x00140002: "sliding through Stage 3 of the Wheel Slider",
+  0x0022ff00: "dominating in Table Hockey",
+  0x0024ff00: "making music on the Glass Harp",
+  0x0012ff00: "browsing the Skate Tricks Menu",
+  0x00120000: "showing off in Party Tricks",
+  0x00120100: "shredding Stage 1 of Street Tricks",
+  0x00120101: "shredding Stage 2 of Street Tricks",
+  0x00120102: "shredding Stage 3 of Street Tricks",
+  0x00120103: "shredding Stage 4 of Street Tricks",
+  0x00120104: "shredding Stage 5 of Street Tricks",
+  0x0013ff00: "browsing the Grind Master Menu",
+  0x00130000: "grinding through Stage 1 of Grind Master",
+  0x00130001: "grinding through Stage 2 of Grind Master",
+  0x00130002: "grinding through Stage 3 of Grind Master",
+  0x001eff00: "whacking moles in Mole Panic",
+  0x001bff00: "swinging for the fences in Power Hitter",
+  0x001fff00: "shooting hoops in Bucket Ball",
+  0x001dff00: "throwing hands in Power Boxer",
+  0x0025ff00: "putting for a birdie in Mini Golf",
+  0x0015ff00: "browsing the Halfpipe Menu",
+  0x00150000: "dropping in for Halfpipe Tricks",
+  0x0026ff00: "browsing the Mail on Wheels Menu",
+  0x00260000: "delivering mail in Stage 1 of Mail on Wheels",
+  0x00260001: "delivering mail in Stage 2 of Mail on Wheels",
+  0x00260002: "delivering mail in Stage 3 of Mail on Wheels",
+  0x00260003: "delivering mail in Stage 4 of Mail on Wheels",
+  0x00260004: "delivering mail in Stage 5 of Mail on Wheels",
+  0x003cff00: "visiting the Snow Resort School",
+  0x0041ff00: "getting icy in a Snowball Fight",
+  0x003eff00: "mushing the dogs on a Dog Sled",
+  0x0035ff00: "browsing the Snow Races Menu",
+  0x00350000: "racing in Stage 1 of the Snow Sprint",
+  0x00350001: "racing in Stage 2 of the Snow Sprint",
+  0x00350002: "racing in Stage 3 of the Snow Sprint",
+  0x00350003: "racing in Stage 4 of the Snow Sprint",
+  0x00350004: "racing in Stage 5 of the Snow Sprint",
+  0x00350100: "slaloming through Stage 1 of the Snow Race",
+  0x00350101: "slaloming through Stage 2 of the Snow Race",
+  0x00350102: "slaloming through Stage 3 of the Snow Race",
+  0x00350103: "slaloming through Stage 4 of the Snow Race",
+  0x00350104: "slaloming through Stage 5 of the Snow Race",
+  0x0039ff00: "browsing the Trick Challenge Menu",
+  0x00390000: "performing Level 1 of the Ski Trick Challenge",
+  0x00390001: "performing Level 2 of the Ski Trick Challenge",
+  0x00390002: "performing Level 3 of the Ski Trick Challenge",
+  0x00390003: "performing Level 4 of the Ski Trick Challenge",
+  0x00390004: "performing Level 5 of the Ski Trick Challenge",
+  0x00390005: "performing Level 6 of the Ski Trick Challenge",
+  0x00390006: "performing Level 7 of the Ski Trick Challenge",
+  0x00390007: "performing Level 8 of the Ski Trick Challenge",
+  0x00390008: "performing Level 9 of the Ski Trick Challenge",
+  0x00390009: "performing Level 10 of the Ski Trick Challenge",
+  0x00390100: "performing Level 1 of the Snowboard Trick Challenge",
+  0x00390101: "performing Level 2 of the Snowboard Trick Challenge",
+  0x00390102: "performing Level 3 of the Snowboard Trick Challenge",
+  0x00390103: "performing Level 4 of the Snowboard Trick Challenge",
+  0x00390104: "performing Level 5 of the Snowboard Trick Challenge",
+  0x00390105: "performing Level 6 of the Snowboard Trick Challenge",
+  0x00390106: "performing Level 7 of the Snowboard Trick Challenge",
+  0x00390107: "performing Level 8 of the Snowboard Trick Challenge",
+  0x00390108: "performing Level 9 of the Snowboard Trick Challenge",
+  0x00390109: "performing Level 10 of the Snowboard Trick Challenge",
+  0x00390200: "performing Level 1 of the Snowmobile Trick Challenge",
+  0x00390201: "performing Level 2 of the Snowmobile Trick Challenge",
+  0x00390202: "performing Level 3 of the Snowmobile Trick Challenge",
+  0x00390203: "performing Level 4 of the Snowmobile Trick Challenge",
+  0x00390204: "performing Level 5 of the Snowmobile Trick Challenge",
+  0x00390205: "performing Level 6 of the Snowmobile Trick Challenge",
+  0x00390206: "performing Level 7 of the Snowmobile Trick Challenge",
+  0x00390207: "performing Level 8 of the Snowmobile Trick Challenge",
+  0x00390208: "performing Level 9 of the Snowmobile Trick Challenge",
+  0x00390209: "performing Level 10 of the Snowmobile Trick Challenge",
+  0x003aff00: "browsing the Snow Tubing Menu",
+  0x003a0000: "tubing through Stage 1 of the Sprint Race",
+  0x003a0001: "tubing through Stage 2 of the Sprint Race",
+  0x003a0002: "tubing through Stage 3 of the Sprint Race",
+  0x003a0003: "tubing through Stage 4 of the Sprint Race",
+  0x003a0004: "tubing through Stage 5 of the Sprint Race",
+  0x003a0100: "knocking down pins in Stage 1 of Tube Bowling",
+  0x003a0101: "knocking down pins in Stage 2 of Tube Bowling",
+  0x003a0102: "knocking down pins in Stage 3 of Tube Bowling",
+  0x003a0103: "knocking down pins in Stage 4 of Tube Bowling",
+  0x003a0104: "knocking down pins in Stage 5 of Tube Bowling",
+  0x0038ff00: "browsing the Snowmobile Races Menu",
+  0x00380000: "racing in Stage 1 of the Snowmobile Sprint",
+  0x00380001: "racing in Stage 2 of the Snowmobile Sprint",
+  0x00380002: "racing in Stage 3 of the Snowmobile Sprint",
+  0x00380003: "racing in Stage 4 of the Snowmobile Sprint",
+  0x00380004: "racing in Stage 5 of the Snowmobile Sprint",
+  0x00380100: "racing in Stage 1 of the Snowmobile Circuit",
+  0x00380101: "racing in Stage 2 of the Snowmobile Circuit",
+  0x00380102: "racing in Stage 3 of the Snowmobile Circuit",
+  0x00380103: "racing in Stage 4 of the Snowmobile Circuit",
+  0x00380104: "racing in Stage 5 of the Snowmobile Circuit",
+  0x00380200: "racing in Stage 1 of the Snowmobile Open",
+  0x00380201: "racing in Stage 2 of the Snowmobile Open",
+  0x00380202: "racing in Stage 3 of the Snowmobile Open",
+  0x00380203: "racing in Stage 4 of the Snowmobile Open",
+  0x00380204: "racing in Stage 5 of the Snowmobile Open",
+  0x00420000: "soaring through the air in Ski Jumping",
+  0x0036ff00: "browsing the Snow Tricks Menu",
+  0x00360000: "performing in the Slopestyle",
+  0x00360100: "dropping in for Snow Halfpipe Tricks",
+  0x003f0000: "building a masterpiece in Snowman Making",
+  0x00370000: "bouncing through the Moguls",
+  0x00400000: "waiting for a bite while Ice Fishing",
+  0x002dff00: "visiting the Mountain School",
+  0x0033ff00: "serving an ace in Tennis",
+  0x0028ff00: "browsing the Horseback Riding Menu",
+  0x00280000: "competing in Stage 1 of the Horseback Sprint",
+  0x00280001: "competing in Stage 2 of the Horseback Sprint",
+  0x00280002: "competing in Stage 3 of the Horseback Sprint",
+  0x00280003: "competing in Stage 4 of the Horseback Sprint",
+  0x00280004: "competing in Stage 5 of the Horseback Sprint",
+  0x00280100: "collecting coins on Horseback in Stage 1",
+  0x00280101: "collecting coins on Horseback in Stage 2",
+  0x00280102: "collecting coins on Horseback in Stage 3",
+  0x00280103: "collecting coins on Horseback in Stage 4",
+  0x00280104: "collecting coins on Horseback in Stage 5",
+  0x002aff00: "browsing the Paragliding Menu",
+  0x002a0000: "popping balloons in Stage 1 of Paragliding",
+  0x002a0001: "popping balloons in Stage 2 of Paragliding",
+  0x002a0002: "popping balloons in Stage 3 of Paragliding",
+  0x002a0003: "popping balloons in Stage 4 of Paragliding",
+  0x002a0004: "popping balloons in Stage 5 of Paragliding",
+  0x002a0100: "aiming for the target in Stage 1 of Paragliding",
+  0x002a0101: "aiming for the target in Stage 2 of Paragliding",
+  0x002a0102: "aiming for the target in Stage 3 of Paragliding",
+  0x002a0103: "aiming for the target in Stage 4 of Paragliding",
+  0x002a0104: "aiming for the target in Stage 5 of Paragliding",
+  0x0027ff00: "browsing the Kayaking Menu",
+  0x00270000: "paddling through Stage 1 of the River Race",
+  0x00270001: "paddling through Stage 2 of the River Race",
+  0x00270002: "paddling through Stage 3 of the River Race",
+  0x00270003: "paddling through Stage 4 of the River Race",
+  0x00270004: "paddling through Stage 5 of the River Race",
+  0x00270100: "navigating Stage 1 of the River Slalom",
+  0x00270101: "navigating Stage 2 of the River Slalom",
+  0x00270102: "navigating Stage 3 of the River Slalom",
+  0x00270103: "navigating Stage 4 of the River Slalom",
+  0x00270104: "navigating Stage 5 of the River Slalom",
+  0x00270200: "collecting coins in a Kayak in Stage 1",
+  0x00270201: "collecting coins in a Kayak in Stage 2",
+  0x00270202: "collecting coins in a Kayak in Stage 3",
+  0x00270203: "collecting coins in a Kayak in Stage 4",
+  0x00270204: "collecting coins in a Kayak in Stage 5",
+  0x0029ff00: "browsing the Off-Road Racing Menu",
+  0x00290000: "racing in Stage 1 of the Off-Road Open",
+  0x00290001: "racing in Stage 2 of the Off-Road Open",
+  0x00290002: "racing in Stage 3 of the Off-Road Open",
+  0x00290100: "rallying in Stage 1 of the Rally Car Race",
+  0x00290101: "rallying in Stage 2 of the Rally Car Race",
+  0x00290102: "rallying in Stage 3 of the Rally Car Race",
+  0x00290103: "rallying in Stage 4 of the Rally Car Race",
+  0x00290104: "rallying in Stage 5 of the Rally Car Race",
+  0x00290105: "rallying in Stage 6 of the Rally Car Race",
+  0x00290106: "rallying in Stage 7 of the Rally Car Race",
+  0x00290107: "rallying in Stage 8 of the Rally Car Race",
+  0x00290108: "rallying in Stage 9 of the Rally Car Race",
+  0x00290109: "rallying in Stage 10 of the Rally Car Race",
+  0x002bff00: "browsing the Rafting Menu",
+  0x002b0000: "braving the rapids in Stage 1 of Rafting",
+  0x002b0001: "braving the rapids in Stage 2 of Rafting",
+  0x002b0002: "braving the rapids in Stage 3 of Rafting",
+  0x0030ff00: "taking aim in Target Shooting",
+  0x0031ff00: "testing reflexes in Quickdraw",
+  0x002fff00: "blasting away in Clay Shooting",
+  0x0032ff00: "focusing hard in Rifle Shooting",
+  0x00440000: "remodelling the Villa"
+}
+
+rich_presence_display("Player is {0}",
+  rich_presence_lookup("Level", CurrentScreen(), Locations)
+)
