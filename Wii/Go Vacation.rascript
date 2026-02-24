@@ -675,6 +675,7 @@ function ScoreLeaderboard(minigameRaceName, baseAddress, divAmount = 4) {
       description = "Earn the highest points in the stage",
       start = (
         IsInGame() &&
+        CurrentScreen() != 0x00 &&
         any_of(keyDict, addr =>
           (dword_be(keyDict[addr]) > prev(dword_be(keyDict[addr])))
           ||
@@ -704,6 +705,7 @@ function SpeedrunTimeAchievement(achName, achDesc, points, keyDict, framesAmount
     points = points,
     trigger = (
       IsInGame() &&
+      CurrentScreen() != 0x00 &&
         any_of(keyDict, addr =>
           (
             dword_be(keyDict[addr]) < framesAmount &&
@@ -1006,7 +1008,7 @@ Level3Dance = [
 
 achievement(
   title = "Getting Into the Groove",
-  description = "Complete all of the songs in the Dance minigame on level 1 difficulty",
+  description = "Complete all of the songs in the \"Dance\" minigame on level 1 difficulty",
   points = 3,
   trigger = (
     IsInGame() &&
@@ -1019,7 +1021,7 @@ achievement(
 
 achievement(
   title = "Boogie Down",
-  description = "Complete all of the songs in the Dance minigame on level 2 difficulty",
+  description = "Complete all of the songs in the \"Dance\" minigame on level 2 difficulty",
   points = 5,
   trigger = (
     IsInGame() &&
@@ -1032,7 +1034,7 @@ achievement(
 
 achievement(
   title = "Dancing Prodigy",
-  description = "Complete all of the songs in the Dance minigame on level 3 difficulty",
+  description = "Complete all of the songs in the \"Dance\" minigame on level 3 difficulty",
   points = 10,
   trigger = (
     IsInGame() &&
@@ -1196,7 +1198,8 @@ achievement(
     IsInGame() &&
       any_of(range(1, 8), bowl =>
       all_of(BowlingLevels, addr => dword_be(addr + ((bowl - 1) * OFFSET)) != 0xfffffffc) &&
-      sum_of(BowlingLevels, addr => dword_be(addr + ((bowl - 1) * OFFSET))) >= 960
+      sum_of(BowlingLevels, addr => dword_be(addr + ((bowl - 1) * OFFSET))) >= 960 &&
+      sum_of(BowlingLevels, addr => prev(dword_be(addr + ((bowl - 1) * OFFSET)))) < 960
     )
   )
 )
@@ -1320,7 +1323,8 @@ achievement(
     IsInGame() &&
       any_of(range(1, 8), target =>
       all_of(TargetShootingLevels, addr => dword_be(addr + ((target - 1) * OFFSET)) != 0xfffffffc) &&
-      sum_of(TargetShootingLevels, addr => dword_be(addr + ((target - 1) * OFFSET))) >= 1360
+      sum_of(TargetShootingLevels, addr => dword_be(addr + ((target - 1) * OFFSET))) >= 1360 &&
+      sum_of(TargetShootingLevels, addr => prev(dword_be(addr + ((target - 1) * OFFSET)))) < 1360
     )
   )
 )

@@ -427,12 +427,13 @@ achievement(
   )
 )
 
+// we're checking the byte is 0x36 (6 in ascii) becuase the movie is generic006 for the bonus race things
 achievement(
   title = "Destruction Master",
   description = "Reach 1st position in the Destruction challenge",
   points = 10,
   trigger = (
-    CheatAndLoadProtection() &&
+    byte(0x01fbf8a7) == 0x36 &&
     dword(0x00c72338) == 0x00 &&
     prev(dword(0x00c72338)) != 0x00
   )
@@ -443,7 +444,7 @@ achievement(
   description = "Reach 1st position in the Power Slide challenge",
   points = 10,
   trigger = (
-    CheatAndLoadProtection() &&
+    byte(0x01fbf8a7) == 0x36 &&
     dword(0x00c723a8) == 0x00 &&
     prev(dword(0x00c723a8)) != 0x00
   )
@@ -454,7 +455,7 @@ achievement(
   description = "Reach 1st position in the Keep on Truckin' challenge",
   points = 10,
   trigger = (
-    CheatAndLoadProtection() &&
+    byte(0x01fbf8a7) == 0x36 &&
     dword(0x00c72418) == 0x00 &&
     prev(dword(0x00c72418)) != 0x00
   )
