@@ -212,14 +212,15 @@ CheatActivatedGoldentracksSecretCode7 == 0
 // PROGRESSION ACHIEVEMENTS
 // ===================================
 
-function LevelCompleted(achId, achBadge, levelName, levelId, levelCompleteFlag)
+function LevelCompleted(achId, achBadge, levelName, levelId, levelCompleteFlag, type)
 {
     achievement(
         id = achId,
         badge = achBadge,
         title = levelName,
-        description = "Complete level " + levelName + " with no cheats enabled",
+        description = "Complete level " + "\"" + levelName + "\"" + " with no cheats enabled",
         points = 5,
+        type = type,
         trigger = (
             ChapterId == levelId &&
             levelCompleteFlag == 1 &&
@@ -229,31 +230,31 @@ function LevelCompleted(achId, achBadge, levelName, levelId, levelCompleteFlag)
     )
 }
 
-LevelCompleted(306346,"339150",ChapterNames[0],BnlTuneUp,BnlTuneUpChapterCompleted)
-LevelCompleted(306347,"339151",ChapterNames[1],SandstormSprint,SandstormSprintChapterCompleted)
-LevelCompleted(306349,"339153",ChapterNames[2],HomeSweetHome,HomeSweetHomeChapterCompleted)
-LevelCompleted(306351,"339155",ChapterNames[3],WorkDay,WorkDayChapterCompleted)
-LevelCompleted(306353,"339157",ChapterNames[4],HiddenTreasure,HiddenTreasureChapterCompleted)
-LevelCompleted(306355,"339159",ChapterNames[5],TruckSweetTruck,TruckSweetTruckChapterCompleted)
-LevelCompleted(306356,"339160",ChapterNames[6],Shipyard,ShipyardChapterCompleted)
+LevelCompleted(306346,"339150",ChapterNames[0],BnlTuneUp,BnlTuneUpChapterCompleted, "PROGRESSION")
+LevelCompleted(306347,"339151",ChapterNames[1],SandstormSprint,SandstormSprintChapterCompleted, "PROGRESSION")
+LevelCompleted(306349,"339153",ChapterNames[2],HomeSweetHome,HomeSweetHomeChapterCompleted, "PROGRESSION")
+LevelCompleted(306351,"339155",ChapterNames[3],WorkDay,WorkDayChapterCompleted, "PROGRESSION")
+LevelCompleted(306353,"339157",ChapterNames[4],HiddenTreasure,HiddenTreasureChapterCompleted, "PROGRESSION")
+LevelCompleted(306355,"339159",ChapterNames[5],TruckSweetTruck,TruckSweetTruckChapterCompleted, "PROGRESSION")
+LevelCompleted(306356,"339160",ChapterNames[6],Shipyard,ShipyardChapterCompleted, "PROGRESSION")
 LevelCompleted(306358,"339162",ChapterNames[7],TankerPlayground,TankerPlaygroundChapterCompleted)
-LevelCompleted(306359,"339163",ChapterNames[8],TakingFlight,TakingFlightChapterCompleted)
-LevelCompleted(306361,"339165",ChapterNames[9],SurpriseDeparture,SurpriseDepartureChapterCompleted)
-LevelCompleted(306363,"339167",ChapterNames[10],StowawayToSpace,StowawayToSpaceChapterCompleted)
-LevelCompleted(306365,"339169",ChapterNames[11],EvePursuit,EvePursuitChapterCompleted)
-LevelCompleted(306367,"339171",ChapterNames[12],CleanGetaway,CleanGetawayChapterCompleted)
-LevelCompleted(306369,"339173",ChapterNames[13],LifeOnTheAxiom,LifeOnTheAxiomChapterCompleted)
-LevelCompleted(306371,"339175",ChapterNames[14],RobotRescue,RobotRescueChapterCompleted)
+LevelCompleted(306359,"339163",ChapterNames[8],TakingFlight,TakingFlightChapterCompleted, "PROGRESSION")
+LevelCompleted(306361,"339165",ChapterNames[9],SurpriseDeparture,SurpriseDepartureChapterCompleted, "PROGRESSION")
+LevelCompleted(306363,"339167",ChapterNames[10],StowawayToSpace,StowawayToSpaceChapterCompleted, "PROGRESSION")
+LevelCompleted(306365,"339169",ChapterNames[11],EvePursuit,EvePursuitChapterCompleted, "PROGRESSION")
+LevelCompleted(306367,"339171",ChapterNames[12],CleanGetaway,CleanGetawayChapterCompleted, "PROGRESSION")
+LevelCompleted(306369,"339173",ChapterNames[13],LifeOnTheAxiom,LifeOnTheAxiomChapterCompleted, "PROGRESSION")
+LevelCompleted(306371,"339175",ChapterNames[14],RobotRescue,RobotRescueChapterCompleted, "PROGRESSION")
 LevelCompleted(306373,"339177",ChapterNames[15],RepairWardPlayground,RepairWardPlaygroundChapterCompleted)
-LevelCompleted(306374,"339178",ChapterNames[16],HumanHighway,HumanHighwayChapterCompleted)
-LevelCompleted(306376,"339180",ChapterNames[17],PodBlaster,PodBlasterChapterCompleted)
-LevelCompleted(306377,"339181",ChapterNames[18],CosmicSpeedway,CosmicSpeedwayChapterCompleted)
-LevelCompleted(306379,"339183",ChapterNames[19],RogueRobots,RogueRobotsChapterCompleted)
-LevelCompleted(306381,"339185",ChapterNames[20],TrashShoot,TrashShootChapterCompleted)
-LevelCompleted(306383,"339187",ChapterNames[21],FixingEve,FixingEveChapterCompleted)
-LevelCompleted(306385,"339189",ChapterNames[22],HoloDetectorDash,HoloDetectorDashChapterCompleted)
-LevelCompleted(306387,"339191",ChapterNames[23],ARobotsLastStand,ARobotsLastStandChapterCompleted)
-LevelCompleted(306389,"339193",ChapterNames[24],HomeComing,HomeComingChapterCompleted)
+LevelCompleted(306374,"339178",ChapterNames[16],HumanHighway,HumanHighwayChapterCompleted, "PROGRESSION")
+LevelCompleted(306376,"339180",ChapterNames[17],PodBlaster,PodBlasterChapterCompleted, "PROGRESSION")
+LevelCompleted(306377,"339181",ChapterNames[18],CosmicSpeedway,CosmicSpeedwayChapterCompleted, "PROGRESSION")
+LevelCompleted(306379,"339183",ChapterNames[19],RogueRobots,RogueRobotsChapterCompleted, "PROGRESSION")
+LevelCompleted(306381,"339185",ChapterNames[20],TrashShoot,TrashShootChapterCompleted, "PROGRESSION")
+LevelCompleted(306383,"339187",ChapterNames[21],FixingEve,FixingEveChapterCompleted, "PROGRESSION")
+LevelCompleted(306385,"339189",ChapterNames[22],HoloDetectorDash,HoloDetectorDashChapterCompleted, "PROGRESSION")
+LevelCompleted(306387,"339191",ChapterNames[23],ARobotsLastStand,ARobotsLastStandChapterCompleted, "PROGRESSION")
+LevelCompleted(306389,"339193",ChapterNames[24],HomeComing,HomeComingChapterCompleted, "WIN_CONDITION")
 LevelCompleted(306391,"339195",ChapterNames[25],Epilogue,EpilogueChapterCompleted)
 LevelCompleted(306392,"339196",ChapterNames[26],LidoDeckDash,LidoDeckDashChapterCompleted)
 
@@ -267,7 +268,7 @@ function BoxesDestroyed(achId, achBadge, levelName, levelId, boxDestroyedFlag)
         id = achId,
         badge = achBadge,
         title = levelName + " Box Destroyer",
-        description = "Destroy all the boxes in " + levelName,
+        description = "Destroy all the boxes in " + "\"" + levelName + "\"" + " with no cheats enabled",
         points = 5,
         trigger = (
             ChapterId == levelId &&
