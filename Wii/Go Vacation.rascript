@@ -64,7 +64,7 @@ function BadgeAchievement(achTitle, minigameName, badgeDict){
   )
 }
 
-BadgeAchievement("Marine Racer", "Marine Bike", CalculateOffsetAndReturnAddress(0x1003d0bd))
+BadgeAchievement("Marine Racer", "Marine Bike Races", CalculateOffsetAndReturnAddress(0x1003d0bd))
 BadgeAchievement("I Believe I Can Fly", "Sky Diving", CalculateOffsetAndReturnAddress(0x1003d0c3))
 BadgeAchievement("Shoreline Volley", "Beach Vollyball", CalculateOffsetAndReturnAddress(0x1003d0c5))
 BadgeAchievement("Island Trailblazer", "ATV Racing", CalculateOffsetAndReturnAddress(0x1003d0bc))
@@ -748,7 +748,7 @@ function ScoreAchievement(achName, achDesc, points, keyDict, pointsAmount){
 function RankAchievement(achName, minigameName, keyDict, maxRank){
   achievement(
     title = achName,
-    description = "Reach the highest rank in the " + minigameName + " minigame",
+    description = "Reach the highest rank in the " + "\"" + minigameName + "\"" + " mode",
     points = 5,
     trigger = (
       IsInGame() &&
@@ -773,13 +773,13 @@ function RankAchievement(achName, minigameName, keyDict, maxRank){
 // TimeLeaderboard("Marine Bike Races - Sprint Race - Stage 2", 0x1003c710)
 // TimeLeaderboard("Marine Bike Races - Sprint Race - Stage 3", 0x1003c714)
 
-SpeedrunTimeAchievement("Sprinting on the Water", "Complete Stage 1 of the Marine Bike Sprint Race in under 0'54\"30", 5, CalculateOffsetAndReturnAddress(0x1003c70c), 27768)
+SpeedrunTimeAchievement("Sprinting on the Water", "Complete Stage 1 of the \"Marine Bike Races - Sprint Race\" mode in under 0'54\"30", 5, CalculateOffsetAndReturnAddress(0x1003c70c), 27768)
 
 // TimeLeaderboard("Marine Bike Races - Circuit Race - Stage 1", 0x1003c718)
 // TimeLeaderboard("Marine Bike Races - Circuit Race - Stage 2", 0x1003c71c)
 // TimeLeaderboard("Marine Bike Races - Circuit Race - Stage 3", 0x1003c720)
 
-SpeedrunTimeAchievement("Marine Circuit Speedster", "Complete Stage 2 of the Marine Bike Circuit Race in under 3'21\"50", 5, CalculateOffsetAndReturnAddress(0x1003c71c), 109256)
+SpeedrunTimeAchievement("Marine Circuit Speedster", "Complete Stage 2 of the \"Marine Bike Races - Circuit Race\" mode in under 3'21\"50", 5, CalculateOffsetAndReturnAddress(0x1003c71c), 109256)
 
 // TimeLeaderboard("Marine Bike Races - Hoop Challenge - Stage 1", 0x1003c724)
 // TimeLeaderboard("Marine Bike Races - Hoop Challenge - Stage 2", 0x1003c728)
@@ -789,7 +789,7 @@ SpeedrunTimeAchievement("Marine Circuit Speedster", "Complete Stage 2 of the Mar
 
 achievement(
   title = "No Hoops Missed!",
-  description = "Complete Stage 5 of the Marine Bike Hoop Challenge within the time limit without missing any hoops",
+  description = "Complete Stage 5 of the \"Marine Bike Races - Hoop Challenge\" mode within the time limit without missing any hoops",
   points = 5,
   trigger = (
     CurrentScreen() == 0x00030204 
@@ -816,19 +816,19 @@ ScoreLeaderboard("Sky Diving - Level 1", 0x1003c7bc)
 ScoreLeaderboard("Sky Diving - Level 2", 0x1003c7c0)
 ScoreLeaderboard("Sky Diving - Level 3", 0x1003c7c4)
 
-ScoreAchievement("Super Sky Diver", "Earn a score of 4200 or higher on Level 2 of the Sky Diving minigame", 5, CalculateOffsetAndReturnAddress(0x1003c7c0), 16800)
+ScoreAchievement("Super Sky Diver", "Earn a score of 4,200 or higher on Level 2 of the \"Sky Diving\" minigame", 5, CalculateOffsetAndReturnAddress(0x1003c7c0), 16800)
 
 // TimeLeaderboard("ATV Racing - Sprint Race - Stage 1", 0x1003c6e0)
 // TimeLeaderboard("ATV Racing - Sprint Race - Stage 2", 0x1003c6e4)
 // TimeLeaderboard("ATV Racing - Sprint Race - Stage 3", 0x1003c6e8)
 
-SpeedrunTimeAchievement("Sprinting and Jumping", "Complete Stage 2 of the ATV Racing Sprint Race in under 1'04\"00", 5, CalculateOffsetAndReturnAddress(0x1003c6e4), 34704)
+SpeedrunTimeAchievement("Sprinting and Jumping", "Complete Stage 2 of the \"ATV Races - Sprint Race\" mode in under 1'04\"00", 5, CalculateOffsetAndReturnAddress(0x1003c6e4), 34704)
 
 // TimeLeaderboard("ATV Racing - Circuit Race - Stage 1", 0x1003c6ec)
 // TimeLeaderboard("ATV Racing - Circuit Race - Stage 2", 0x1003c6f0)
 // TimeLeaderboard("ATV Racing - Circuit Race - Stage 3", 0x1003c6f4)
 
-SpeedrunTimeAchievement("Zooming Round the Beach", "Complete Stage 1 of the ATV Circuit Race in under 2'45\"00", 5, CalculateOffsetAndReturnAddress(0x1003c6ec), 88464)
+SpeedrunTimeAchievement("Zooming Round the Beach", "Complete Stage 1 of the \"ATV Races - Circuit Race\" mode in under 2'45\"00", 5, CalculateOffsetAndReturnAddress(0x1003c6ec), 88464)
 
 // TimeLeaderboard("ATV Racing - Slalom Challenge - Stage 1", 0x1003c6f8)
 // TimeLeaderboard("ATV Racing - Slalom Challenge - Stage 2", 0x1003c6fc)
@@ -837,8 +837,8 @@ SpeedrunTimeAchievement("Zooming Round the Beach", "Complete Stage 1 of the ATV 
 // TimeLeaderboard("ATV Racing - Slalom Challenge - Stage 5", 0x1003c708)
 
 achievement(
-  title = "Off-road Flag Adventure",
-  description = "Complete Stage 3 of the ATV Racing Slalom Challenge within the time limit without missing any gates",
+  title = "Off-Road Flag Adventure",
+  description = "Complete Stage 3 of the \"ATV Races - Slalom Challenge\" mode within the time limit without missing any gates",
   points = 5,
   trigger = (
     CurrentScreen() == 0x00020202
@@ -875,7 +875,7 @@ chartedStuff =
 
 achievement(
   title = "Fish Finder Completionist",
-  description = "Complete 100% of the Diving Chart in the Scuba Diving minigame",
+  description = "Complete 100% of the Diving Chart in the \"Scuba Diving\" minigame",
   points = 10,
   trigger = (
     IsInGame() &&
@@ -893,7 +893,7 @@ CocoHS = CalculateOffsetAndReturnAddress(0x1003c788)
 
 achievement(
   title = "Coco Collecting Champion",
-  description = "Collect all 99 coconuts in the Coco Challenge minigame",
+  description = "Collect all 99 coconuts in the \"Surfing - Coco Challenge\" mode",
   points = 5,
   trigger = (
     IsInGame() &&
@@ -913,8 +913,8 @@ achievement(
   )
 )
 
-RankAchievement("The Best Wave Rider", "Big Wave Ride", CalculateOffsetAndReturnAddress(0x1003cba4), 4)
-RankAchievement("Scoring on the Waves", "Score Trial", CalculateOffsetAndReturnAddress(0x1003cba6), 4)
+RankAchievement("The Best Wave Rider", "Surfing - Big Wave Ride", CalculateOffsetAndReturnAddress(0x1003cba4), 4)
+RankAchievement("Scoring on the Waves", "Surfing - Score Trial", CalculateOffsetAndReturnAddress(0x1003cba6), 4)
 
 ScoreLeaderboard("Water Gun Battle - Score Attack - Sunshine Beach", 0x1003c7c8)
 ScoreLeaderboard("Water Gun Battle - Score Attack - Mystic Jungle", 0x1003c7cc)
@@ -923,20 +923,20 @@ ScoreLeaderboard("Water Gun Battle - Score Attack - Marinus Ruins", 0x1003c7d0)
 ScoreLeaderboard("ATV Tricks - Jump Tricks", 0x1003c744)
 ScoreLeaderboard("ATV Tricks - Ride & Tricks", 0x1003c748)
 
-RankAchievement("ATV Jump Pro Trickster", "ATV Tricks Jump Tricks", CalculateOffsetAndReturnAddress(0x1003cba0), 4)
-RankAchievement("ATV Ride & Trick Expert", "ATV Tricks Ride & Tricks", CalculateOffsetAndReturnAddress(0x1003cba1), 4)
+RankAchievement("ATV Jump Pro Trickster", "ATV Tricks - Jump Tricks", CalculateOffsetAndReturnAddress(0x1003cba0), 4)
+RankAchievement("ATV Ride & Trick Expert", "ATV Tricks - Ride & Tricks", CalculateOffsetAndReturnAddress(0x1003cba1), 4)
 
 ScoreLeaderboard("Marine Bike Tricks - Jump Tricks", 0x1003c74c)
 ScoreLeaderboard("Marine Bike Tricks - Ride & Tricks", 0x1003c750)
 
-RankAchievement("Professional Bike Jumper", "Marine Bike Tricks Jump Tricks", CalculateOffsetAndReturnAddress(0x1003cba2), 4)
-RankAchievement("Water Gliding and Tricking", "Marine Bike Tricks Ride & Tricks", CalculateOffsetAndReturnAddress(0x1003cba3), 4)
+RankAchievement("Professional Bike Jumper", "Marine Bike Tricks - Jump Tricks", CalculateOffsetAndReturnAddress(0x1003cba2), 4)
+RankAchievement("Water Gliding and Tricking", "Marine Bike Tricks - Ride & Tricks", CalculateOffsetAndReturnAddress(0x1003cba3), 4)
 
 // TimeLeaderboard("Triathlon - Stage 1", 0x1003c738)
 // TimeLeaderboard("Triathlon - Stage 2", 0x1003c73c)
 // TimeLeaderboard("Triathlon - Stage 3", 0x1003c740)
 
-SpeedrunTimeAchievement("Master of Bikes, Running & Racing", "Complete Stage 3 of the Triathlon in under 2'29\"70", 5, CalculateOffsetAndReturnAddress(0x1003c740), 80664)
+SpeedrunTimeAchievement("Master of Bikes, Running & Racing", "Complete Stage 3 of the \"Triathlon\" in under 2'29\"70", 5, CalculateOffsetAndReturnAddress(0x1003c740), 80664)
 
 // TimeLeaderboard("Motor Fest - Street Race - Stage 1", 0x1003c80c)
 // TimeLeaderboard("Motor Fest - Street Race - Stage 2", 0x1003c810)
@@ -967,9 +967,9 @@ SpeedrunTimeAchievement("Master of Bikes, Running & Racing", "Complete Stage 3 o
 // TimeLeaderboard("Motor Fest - Oval Race - Stage 2", 0x1003c864)
 // TimeLeaderboard("Motor Fest - Oval Race - Stage 3", 0x1003c868)
 
-SpeedrunTimeAchievement("Number Chaser Route Master 1", "Complete Stage 1 of Number Chaser in under 2'00\"00", 10, CalculateOffsetAndReturnAddress(0x1003c834), 63376)
-SpeedrunTimeAchievement("Number Chaser Route Master 2", "Complete Stage 2 of Number Chaser in under 1'26\"00", 10, CalculateOffsetAndReturnAddress(0x1003c838), 45970)
-SpeedrunTimeAchievement("Number Chaser Route Master 3", "Complete Stage 3 of Number Chaser in under 2'45\"60", 10, CalculateOffsetAndReturnAddress(0x1003c83c), 88816)
+SpeedrunTimeAchievement("Number Chaser Route Master 1", "Complete Stage 1 of \"Motor Fest - Number Chaser\" mode in under 2'00\"00", 10, CalculateOffsetAndReturnAddress(0x1003c834), 63376)
+SpeedrunTimeAchievement("Number Chaser Route Master 2", "Complete Stage 2 of \"Motor Fest - Number Chaser\" mode in under 1'26\"00", 10, CalculateOffsetAndReturnAddress(0x1003c838), 45970)
+SpeedrunTimeAchievement("Number Chaser Route Master 3", "Complete Stage 3 of \"Motor Fest - Number Chaser\" mode in under 2'45\"60", 10, CalculateOffsetAndReturnAddress(0x1003c83c), 88816)
 
 ScoreLeaderboard("Dance - Colorful Life - Level 1", 0x1003c8f8, 2.5)
 ScoreLeaderboard("Dance - Colorful Life - Level 2", 0x1003c8fc, 2.5)
@@ -1007,7 +1007,7 @@ Level3Dance = [
 ]
 
 achievement(
-  title = "Getting Into the Groove",
+  title = "Getting into the Groove",
   description = "Complete all of the songs in the \"Dance\" minigame on level 1 difficulty",
   points = 3,
   trigger = (
@@ -1124,13 +1124,13 @@ ScoreLeaderboard("Skate Tricks - Street Tricks - Stage 3", 0x1003c7e4)
 ScoreLeaderboard("Skate Tricks - Street Tricks - Stage 4", 0x1003c7e8)
 ScoreLeaderboard("Skate Tricks - Street Tricks - Stage 5", 0x1003c7ec)
 
-RankAchievement("Becoming Tony Hawk", "Skate Tricks Park Tricks", CalculateOffsetAndReturnAddress(0x1003cba8), 0x04)
+RankAchievement("Becoming Tony Hawk", "Skate Tricks - Park Tricks", CalculateOffsetAndReturnAddress(0x1003cba8), 0x04)
 
 ScoreLeaderboard("Grind Master - Stage 1", 0x1003c7f0, 136)
 ScoreLeaderboard("Grind Master - Stage 2", 0x1003c7f0, 136)
 ScoreLeaderboard("Grind Master - Stage 3", 0x1003c7f0, 136)
 
-ScoreAchievement("Grinding Along", "Reach over 2200ft on Stage 2 in the \"Grind Master\" minigame", 5, CalculateOffsetAndReturnAddress(0x1003c7f4), 293336)
+ScoreAchievement("Grinding Along", "Reach over 2,200ft on Stage 2 in the \"Grind Master\" minigame", 5, CalculateOffsetAndReturnAddress(0x1003c7f4), 293336)
 
 ScoreLeaderboard("Mole Panic - Level 1", 0x1003c8cc)
 ScoreLeaderboard("Mole Panic - Level 2", 0x1003c8d0)
@@ -1149,7 +1149,7 @@ ScoreLeaderboard("Power Boxer - Level 2", 0x1003c8c4)
 ScoreLeaderboard("Power Boxer - Level 3", 0x1003c8c8)
 
 ScoreLeaderboard("Halfpipe - Halfpipe Tricks", 0x1003c808)
-RankAchievement("Halfpipe Master", "Halfpipe Tricks", CalculateOffsetAndReturnAddress(0x1003cba9), 0x04)
+RankAchievement("Halfpipe Master", "Halfpipe - Halfpipe Tricks", CalculateOffsetAndReturnAddress(0x1003cba9), 0x04)
 
 // TimeLeaderboard("Snowball Fight - Defend the Flag - Level 1", 0x1003cb30, false)
 // TimeLeaderboard("Snowball Fight - Defend the Flag - Level 2", 0x1003cb34, false)
@@ -1222,19 +1222,19 @@ achievement(
 // TimeLeaderboard("Snowmobile Races - Open Race - Stage 4", 0x1003caf0)
 
 // open race challenges
-SpeedrunTimeAchievement("Snowmobile Speeder 1", "Complete Stage 1 of the Snowmobile Open Race in under 1'10\"00", 10, CalculateOffsetAndReturnAddress(0x1003cae4), 37778)
-SpeedrunTimeAchievement("Snowmobile Speeder 2", "Complete Stage 2 of the Snowmobile Open Race in under 1'13\"90", 10, CalculateOffsetAndReturnAddress(0x1003cae8), 39784)
-SpeedrunTimeAchievement("Snowmobile Speeder 3", "Complete Stage 3 of the Snowmobile Open Race in under 2'06\"00", 10, CalculateOffsetAndReturnAddress(0x1003caec), 68496)
-SpeedrunTimeAchievement("Snowmobile Speeder 4", "Complete Stage 4 of the Snowmobile Open Race in under 2'21\"50", 10, CalculateOffsetAndReturnAddress(0x1003caf0), 76488)
-SpeedrunTimeAchievement("Snowmobile Speeder 5", "Complete Stage 5 of the Snowmobile Open Race in under 2'27\"80", 10, CalculateOffsetAndReturnAddress(0x1003caf4), 79682)
+SpeedrunTimeAchievement("Snowmobile Speeder 1", "Complete Stage 1 of the \"Snowmobile Race - Open Race\" mode in under 1'10\"00", 10, CalculateOffsetAndReturnAddress(0x1003cae4), 37778)
+SpeedrunTimeAchievement("Snowmobile Speeder 2", "Complete Stage 2 of the \"Snowmobile Race - Open Race\" mode in under 1'13\"90", 10, CalculateOffsetAndReturnAddress(0x1003cae8), 39784)
+SpeedrunTimeAchievement("Snowmobile Speeder 3", "Complete Stage 3 of the \"Snowmobile Race - Open Race\" mode in under 2'06\"00", 10, CalculateOffsetAndReturnAddress(0x1003caec), 68496)
+SpeedrunTimeAchievement("Snowmobile Speeder 4", "Complete Stage 4 of the \"Snowmobile Race - Open Race\" mode in under 2'21\"50", 10, CalculateOffsetAndReturnAddress(0x1003caf0), 76488)
+SpeedrunTimeAchievement("Snowmobile Speeder 5", "Complete Stage 5 of the \"Snowmobile Race - Open Race\" mode in under 2'27\"80", 10, CalculateOffsetAndReturnAddress(0x1003caf4), 79682)
 
 ScoreLeaderboard("Mogul", 0x1003cab8)
 
 ScoreLeaderboard("Snow Tricks - Halfpipe Tricks", 0x1003cab4)
 ScoreLeaderboard("Snow Tricks - Slopestyle", 0x1003cab8)
 
-RankAchievement("Snowy Halfpipe Hero", "\"Snow Tricks\" Halfpipe Tricks", CalculateOffsetAndReturnAddress(0x1003cbab), 0x04)
-RankAchievement("Skilful Slopestyle Snow Trickster", "\"Snow Tricks\" Slopestyle", CalculateOffsetAndReturnAddress(0x1003cbaa), 0x04)
+RankAchievement("Snowy Halfpipe Hero", "Snow Tricks - Halfpipe Tricks", CalculateOffsetAndReturnAddress(0x1003cbab), 0x04)
+RankAchievement("Skilful Slopestyle Snow Trickster", "Snow Tricks - Slopestyle", CalculateOffsetAndReturnAddress(0x1003cbaa), 0x04)
 
 // TimeLeaderboard("Horseback Riding - Sprint Race - Level 1", 0x1003c9c4)
 // TimeLeaderboard("Horseback Riding - Sprint Race - Level 2", 0x1003c9c8)
@@ -1249,8 +1249,8 @@ ScoreLeaderboard("Horseback Riding - Coin Collect - Level 4", 0x1003c9e4)
 ScoreLeaderboard("Horseback Riding - Coin Collect - Level 5", 0x1003c9e8)
 
 // horseback achievements
-SpeedrunTimeAchievement("Galloping to Glory", "Complete Stage 2 of the Horseback Riding Sprint Race in under 1'14\"50", 5, CalculateOffsetAndReturnAddress(0x1003c9c8), 40138)
-ScoreAchievement("Gold Collecting Horse", "Collect every coin on Stage 1 of the Horseback Riding Coin Collector minigame", 5, CalculateOffsetAndReturnAddress(0x1003c9d8), 2680)
+SpeedrunTimeAchievement("Galloping to Glory", "Complete Stage 2 of the \"Horseback Riding - Sprint Race\" mode in under 1'14\"50", 5, CalculateOffsetAndReturnAddress(0x1003c9c8), 40138)
+ScoreAchievement("Gold Collecting Horse", "Collect every coin on Stage 1 of the \"Horseback Riding - Coin Collector\" mode", 5, CalculateOffsetAndReturnAddress(0x1003c9d8), 2680)
 
 // TimeLeaderboard("Paragliding - Balloon Buster - Level 1", 0x1003ca20)
 // TimeLeaderboard("Paragliding - Balloon Buster - Level 2", 0x1003ca24)
@@ -1298,9 +1298,9 @@ ScoreLeaderboard("Kayaking - Coin Collect - Stage 5", 0x1003c9c0)
 // TimeLeaderboard("Off-Road Racing - Rally Car - Stage 10", 0x1003ca1c)
 
 // off road racing open races
-SpeedrunTimeAchievement("Off-Road Rush 1", "Complete Stage 1 of the Off-Road Racing Open Race in under 0'58\"50", 10, CalculateOffsetAndReturnAddress(0x1003c9ec), 29898)
-SpeedrunTimeAchievement("Off-Road Rush 2", "Complete Stage 2 of the Off-Road Racing Open Race in under 0'54\"70", 10, CalculateOffsetAndReturnAddress(0x1003c9f0), 27928)
-SpeedrunTimeAchievement("Off-Road Rush 3", "Complete Stage 3 of the Off-Road Racing Open Race in under 1'53\"20", 10, CalculateOffsetAndReturnAddress(0x1003c9f4), 59872)
+SpeedrunTimeAchievement("Off-Road Rush 1", "Complete Stage 1 of the \"Off-Road Racing - Open Race\" mode in under 0'58\"50", 10, CalculateOffsetAndReturnAddress(0x1003c9ec), 29898)
+SpeedrunTimeAchievement("Off-Road Rush 2", "Complete Stage 2 of the \"Off-Road Racing - Open Race\" mode in under 0'54\"70", 10, CalculateOffsetAndReturnAddress(0x1003c9f0), 27928)
+SpeedrunTimeAchievement("Off-Road Rush 3", "Complete Stage 3 of the \"Off-Road Racing - Open Race\" mode in under 1'53\"20", 10, CalculateOffsetAndReturnAddress(0x1003c9f4), 59872)
 
 // TimeLeaderboard("Rafting - Stage 1", 0x1003ca48)
 // TimeLeaderboard("Rafting - Stage 2", 0x1003ca4c)
@@ -1369,7 +1369,7 @@ SnowQuest = [
 ]
 
 achievement(
-  title = "Cooking up a Stew",
+  title = "Cooking Up a Stew",
   description = "Complete the special quest in the Snow Resort",
   points = 5,
   trigger = (
