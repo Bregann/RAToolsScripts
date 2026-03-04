@@ -9,6 +9,7 @@ CurrentScreen = byte(0x01ff85dc)
 PuzzleAmountSolved = byte(dword(0x01fff910) + 0x3C0)
 BonusPoints = dword(0x00a1d9a0)
 GamePaused = byte(0x008e7780)
+BasePointer = dword(0x8b8600)
 
 // Chapter data
 ChapterId = word(0xA1DC40)
@@ -76,59 +77,59 @@ LidoDeckDash = 0xEA01
 //0x00 = false
 //0x01 = true
 
-BnlTuneUpChapterCompleted = byte(dword(0x8b8600) + 0xFFFFFB99)
-SandstormSprintChapterCompleted = byte(dword(0x8b8600) + 0x01)
-HomeSweetHomeChapterCompleted = byte(dword(0x8b8600) + 0x3121)
-WorkDayChapterCompleted = byte(dword(0x8b8600) + 0x02E9)
-HiddenTreasureChapterCompleted = byte(dword(0x8b8600) + 0x1E59)
-TruckSweetTruckChapterCompleted = byte(dword(0x8b8600) + 0x31D9)
-ShipyardChapterCompleted = byte(dword(0x8b8600) + 0x48E1)
-TankerPlaygroundChapterCompleted = byte(dword(0x8b8600) + 0xAE91)
-TakingFlightChapterCompleted = byte(dword(0x8b8600) + 0xC4A9)
-SurpriseDepartureChapterCompleted = byte(dword(0x8b8600) + 0x2431)
-StowawayToSpaceChapterCompleted = byte(dword(0x8b8600) + 0x27E1)
-EvePursuitChapterCompleted = byte(dword(0x8b8600) + 0x2C39)
-CleanGetawayChapterCompleted = byte(dword(0x8b8600) + 0x4EB1)
-LifeOnTheAxiomChapterCompleted = byte(dword(0x8b8600) + 0x7C31)
-RobotRescueChapterCompleted = byte(dword(0x8b8600) + 0x9281)
-RepairWardPlaygroundChapterCompleted = byte(dword(0x8b8600) + 0x7531)
-HumanHighwayChapterCompleted = byte(dword(0x8b8600) + 0x53D9)
-PodBlasterChapterCompleted = byte(dword(0x8b8600) + 0x5F69)
-CosmicSpeedwayChapterCompleted = byte(dword(0x8b8600) + 0xB2E9)
-RogueRobotsChapterCompleted = byte(dword(0x8b8600) + 0x5031)
-TrashShootChapterCompleted = byte(dword(0x8b8600) + 0x7231)
-FixingEveChapterCompleted = byte(dword(0x8b8600) + 0x61A1)
-HoloDetectorDashChapterCompleted = byte(dword(0x8b8600) + 0xD6E9)
-ARobotsLastStandChapterCompleted = byte(dword(0x8b8600) + 0x73B1)
-HomeComingChapterCompleted = byte(dword(0x8b8600) + 0x7A51)
-EpilogueChapterCompleted = byte(dword(0x8b8600) + 0x39C1)
-LidoDeckDashChapterCompleted = byte(dword(0x8b8600) + 0xDD71)
+BnlTuneUpChapterCompleted = byte(BasePointer + 0xFFFFFB99)
+SandstormSprintChapterCompleted = byte(BasePointer + 0x01)
+HomeSweetHomeChapterCompleted = byte(BasePointer + 0x3121)
+WorkDayChapterCompleted = byte(BasePointer + 0x02E9)
+HiddenTreasureChapterCompleted = byte(BasePointer + 0x1E59)
+TruckSweetTruckChapterCompleted = byte(BasePointer + 0x31D9)
+ShipyardChapterCompleted = byte(BasePointer + 0x48E1)
+TankerPlaygroundChapterCompleted = byte(BasePointer + 0xAE91)
+TakingFlightChapterCompleted = byte(BasePointer + 0xC4A9)
+SurpriseDepartureChapterCompleted = byte(BasePointer + 0x2431)
+StowawayToSpaceChapterCompleted = byte(BasePointer + 0x27E1)
+EvePursuitChapterCompleted = byte(BasePointer + 0x2C39)
+CleanGetawayChapterCompleted = byte(BasePointer + 0x4EB1)
+LifeOnTheAxiomChapterCompleted = byte(BasePointer + 0x7C31)
+RobotRescueChapterCompleted = byte(BasePointer + 0x9281)
+RepairWardPlaygroundChapterCompleted = byte(BasePointer + 0x7531)
+HumanHighwayChapterCompleted = byte(BasePointer + 0x53D9)
+PodBlasterChapterCompleted = byte(BasePointer + 0x5F69)
+CosmicSpeedwayChapterCompleted = byte(BasePointer + 0xB2E9)
+RogueRobotsChapterCompleted = byte(BasePointer + 0x5031)
+TrashShootChapterCompleted = byte(BasePointer + 0x7231)
+FixingEveChapterCompleted = byte(BasePointer + 0x61A1)
+HoloDetectorDashChapterCompleted = byte(BasePointer + 0xD6E9)
+ARobotsLastStandChapterCompleted = byte(BasePointer + 0x73B1)
+HomeComingChapterCompleted = byte(BasePointer + 0x7A51)
+EpilogueChapterCompleted = byte(BasePointer + 0x39C1)
+LidoDeckDashChapterCompleted = byte(BasePointer + 0xDD71)
 
 //All crates destroyed
 //0x00 = false
 //0x01 = true
 
-WorkDayAllBnlCratesDestroyed = byte(dword(0x8b8600) + 0x07F1)
-HiddenTreasureAllBnlCratesDestroyed = byte(dword(0x8b8600) + 0x17E1)
-SandstormSprintAllBnlCratesDestroyed = byte(dword(0x8b8600) + 0x0171)
-SurpriseDepartureAllBnlCratesDestroyed = byte(dword(0x8b8600) + 0x25A1)
-StowawayToSpaceAllBnlCratesDestroyed = byte(dword(0x8b8600) + 0x2899)
-EvePursuitAllBnlCratesDestroyed = byte(dword(0x8b8600) + 0x2FD1)
-HomeSweetHomeAllBnlCratesDestroyed = byte(dword(0x8b8600) + 0x3291)
-ShipyardAllBnlCratesDestroyed = byte(dword(0x8b8600) + 0x4999)
-CleanGetawayAllBnlCratesDestroyed = byte(dword(0x8b8600) + 0x4F69)
-RogueRobotsAllBnlCratesDestroyed = byte(dword(0x8b8600) + 0x50E9)
-HumanHighwayAllBnlCratesDestroyed = byte(dword(0x8b8600) + 0x5BC1)
-FixingEveAllBnlCratesDestroyed = byte(dword(0x8b8600) + 0x6BB1)
-TrashShootAllBnlCratesDestroyed = byte(dword(0x8b8600) + 0x72E9)
-ARobotSLastStandAllBnlCratesDestroyed = byte(dword(0x8b8600) + 0x7469)
-HomeComingAllBnlCratesDestroyed = byte(dword(0x8b8600) + 0x7B09)
-LifeOnTheAxiomAllBnlCratesDestroyed = byte(dword(0x8b8600) + 0x7DA1)
-RobotRescueAllBnlCratesDestroyed = byte(dword(0x8b8600) + 0xAA39)
-CosmicSpeedwayAllBnlCratesDestroyed = byte(dword(0x8b8600) + 0xB5C9)
-TakingFlightAllBnlCratesDestroyed = byte(dword(0x8b8600) + 0xC561)
-HoloDetectorDashAllBnlCratesDestroyed = byte(dword(0x8b8600) + 0xD911)
-LidoDeckDashAllBnlCratesDestroyed = byte(dword(0x8b8600) + 0xDE29)
+WorkDayAllBnlCratesDestroyed = byte(BasePointer + 0x07F1)
+HiddenTreasureAllBnlCratesDestroyed = byte(BasePointer + 0x17E1)
+SandstormSprintAllBnlCratesDestroyed = byte(BasePointer + 0x0171)
+SurpriseDepartureAllBnlCratesDestroyed = byte(BasePointer + 0x25A1)
+StowawayToSpaceAllBnlCratesDestroyed = byte(BasePointer + 0x2899)
+EvePursuitAllBnlCratesDestroyed = byte(BasePointer + 0x2FD1)
+HomeSweetHomeAllBnlCratesDestroyed = byte(BasePointer + 0x3291)
+ShipyardAllBnlCratesDestroyed = byte(BasePointer + 0x4999)
+CleanGetawayAllBnlCratesDestroyed = byte(BasePointer + 0x4F69)
+RogueRobotsAllBnlCratesDestroyed = byte(BasePointer + 0x50E9)
+HumanHighwayAllBnlCratesDestroyed = byte(BasePointer + 0x5BC1)
+FixingEveAllBnlCratesDestroyed = byte(BasePointer + 0x6BB1)
+TrashShootAllBnlCratesDestroyed = byte(BasePointer + 0x72E9)
+ARobotSLastStandAllBnlCratesDestroyed = byte(BasePointer + 0x7469)
+HomeComingAllBnlCratesDestroyed = byte(BasePointer + 0x7B09)
+LifeOnTheAxiomAllBnlCratesDestroyed = byte(BasePointer + 0x7DA1)
+RobotRescueAllBnlCratesDestroyed = byte(BasePointer + 0xAA39)
+CosmicSpeedwayAllBnlCratesDestroyed = byte(BasePointer + 0xB5C9)
+TakingFlightAllBnlCratesDestroyed = byte(BasePointer + 0xC561)
+HoloDetectorDashAllBnlCratesDestroyed = byte(BasePointer + 0xD911)
+LidoDeckDashAllBnlCratesDestroyed = byte(BasePointer + 0xDE29)
 
 //Artifacts
 //0x00 = false
@@ -157,40 +158,46 @@ BeachBallArtifactFound = byte(0x00a1d972)
 SkiGogglesArtifactFound = byte(0x00a1d973)
 
 //Unlocked cheats
-CheatIntergalacticUnlocked = byte(0x00bad445)
-CheatSoapbubblesUnlocked = byte(0x00bad505)
-CheatRatjukeboxUnlocked = byte(0x00bad575)
-CheatIncrejukeboxUnlocked = byte(0x00bad5e5)
-CheatBagpackUnlocked = byte(0x00bb4935)
-CheatSkateboarderUnlocked = byte(0x00bb49a5)
-CheatHeavyweaponUnlocked = byte(0x00bb4a15)
+CheatIntergalacticUnlocked = byte(BasePointer + 0xf005)
+CheatSoapbubblesUnlocked = byte(BasePointer + 0xf0c5)
+CheatRatjukeboxUnlocked = byte(BasePointer + 0xf135)
+CheatIncrejukeboxUnlocked = byte(BasePointer + 0xf1a5)
+CheatBagpackUnlocked = byte(BasePointer + 0x164f5)
+CheatSkateboarderUnlocked = byte(BasePointer + 0x16565)
+CheatHeavyweaponUnlocked = byte(BasePointer + 0x165d5)
 
 //Total unlocked extra materials
 TotalUnlockedMats = 
-byte(0x00bac5f5) + byte(0x00bac665) + byte(0x00bac6d5) + byte(0x00bac755) + byte(0x00bac7c5) +
-byte(0x00bac835) + byte(0x00bac8a5) + byte(0x00bac915) + byte(0x00bac985) + byte(0x00bac9f5) +
-byte(0x00baca65) + byte(0x00bacb05) + byte(0x00bacb75) + byte(0x00bacbe5) + byte(0x00bacc55) +
-byte(0x00baccc5) + byte(0x00bacd35) + byte(0x00bacda5) + byte(0x00bace15) + byte(0x00baced5) +
-byte(0x00bacf45) + byte(0x00bacfb5) + byte(0x00bb4f35) + byte(0x00bb8a65) + byte(0x00bb8ad5) +
-byte(0x00bb8b45) + byte(0x00bb8bb5) + byte(0x00bb8c25) + byte(0x00bb8c95) + byte(0x00bb8d05) +
-byte(0x00bb8d75) + byte(0x00bb8de5) + byte(0x00bb8e55) + byte(0x00bb8ec5) + byte(0x00bb8f35) +
-byte(0x00bb8fa5) + byte(0x00bb9115) + byte(0x00bb9185) + byte(0x00bb91f5) + byte(0x00bb9265)
+byte(BasePointer + 0xe1b5) + byte(BasePointer + 0xe225) + byte(BasePointer + 0x16af5) + 
+byte(BasePointer + 0xe315) + byte(BasePointer + 0xe385) + byte(BasePointer + 0xe3f5) + 
+byte(BasePointer + 0xe465) + byte(BasePointer + 0xe4d5) + byte(BasePointer + 0xe545) + 
+byte(BasePointer + 0xe5b5) + byte(BasePointer + 0xe295) + byte(BasePointer + 0xe6c5) + 
+byte(BasePointer + 0xe735) + byte(BasePointer + 0xe7a5) + byte(BasePointer + 0xe815) + 
+byte(BasePointer + 0xe885) + byte(BasePointer + 0xe8f5) + byte(BasePointer + 0xe965) + 
+byte(BasePointer + 0xe625) + byte(BasePointer + 0xea95) + byte(BasePointer + 0xeb05) + 
+byte(BasePointer + 0xeb75) + byte(BasePointer + 0x1a625) + byte(BasePointer + 0x1a695) + 
+byte(BasePointer + 0x1a705) + byte(BasePointer + 0x1a775) + byte(BasePointer + 0xe9d5) + 
+byte(BasePointer + 0x1a8c5) + byte(BasePointer + 0x1a935) + byte(BasePointer + 0x1a9a5) + 
+byte(BasePointer + 0x1aa15) + byte(BasePointer + 0x1aa85) + byte(BasePointer + 0x1aaf5) + 
+byte(BasePointer + 0x1ab65) + byte(BasePointer + 0x1a7e5) + byte(BasePointer + 0x1a855) + 
+byte(BasePointer + 0x1acd5) + byte(BasePointer + 0x1ad45) + byte(BasePointer + 0x1adb5) + 
+byte(BasePointer + 0x1ae25)
 
 // Cheat protection
-CheatActivatedIntergalactic = byte(0xBAD4A0)
-CheatActivatedSoapbubbles = byte(0xBAD560)
-CheatActivatedRatjukebox = byte(0xBAD5D0)
-CheatActivatedIncrejukebox = byte(0xBAD640)
-CheatActivatedBagpack = byte(0xBB4990)
-CheatActivatedSkateboarder = byte(0xBB4A00)
-CheatActivatedHeavyweapon = byte(0xBB4A70)
-CheatActivatedBotofwarSecretCode1 = byte(0xBB4AE0)
-CheatActivatedStealtharmorSecretCode2 = byte(0xBB4B50)
-CheatActivatedRainbowlaserSecretCode3 = byte(0xBB4C10)
-CheatActivatedExplosiveworldSecretCode4 = byte(0xBB4C80)
-CheatActivatedGlowinthedarkSecretCode5 = byte(0xBB4CF0)
-CheatActivatedBotofmysterySecretCode6 = byte(0xBB4D60)
-CheatActivatedGoldentracksSecretCode7 = byte(0xBB4DD0)
+CheatActivatedIntergalactic = byte(BasePointer + 0xf060)
+CheatActivatedSoapbubbles = byte(BasePointer + 0xf120)
+CheatActivatedRatjukebox = byte(BasePointer + 0xf190)
+CheatActivatedIncrejukebox = byte(BasePointer + 0xf200)
+CheatActivatedBagpack = byte(BasePointer + 0x16550)
+CheatActivatedSkateboarder = byte(BasePointer + 0x165c0)
+CheatActivatedHeavyweapon = byte(BasePointer + 0x16630)
+CheatActivatedBotofwarSecretCode1 = byte(BasePointer + 0x166a0)
+CheatActivatedStealtharmorSecretCode2 = byte(BasePointer + 0x16710)
+CheatActivatedRainbowlaserSecretCode3 = byte(BasePointer + 0x167d0)
+CheatActivatedExplosiveworldSecretCode4 = byte(BasePointer + 0x16840)
+CheatActivatedGlowinthedarkSecretCode5 = byte(BasePointer + 0x168b0)
+CheatActivatedBotofmysterySecretCode6 = byte(BasePointer + 0x16920)
+CheatActivatedGoldentracksSecretCode7 = byte(BasePointer + 0x16990)
 
 function NoCheatsEnabled() => 
 CheatActivatedIntergalactic == 0 && 
@@ -237,7 +244,7 @@ LevelCompleted(306351,"339155",ChapterNames[3],WorkDay,WorkDayChapterCompleted, 
 LevelCompleted(306353,"339157",ChapterNames[4],HiddenTreasure,HiddenTreasureChapterCompleted, "PROGRESSION")
 LevelCompleted(306355,"339159",ChapterNames[5],TruckSweetTruck,TruckSweetTruckChapterCompleted, "PROGRESSION")
 LevelCompleted(306356,"339160",ChapterNames[6],Shipyard,ShipyardChapterCompleted, "PROGRESSION")
-LevelCompleted(306358,"339162",ChapterNames[7],TankerPlayground,TankerPlaygroundChapterCompleted)
+LevelCompleted(306358,"339162",ChapterNames[7],TankerPlayground,TankerPlaygroundChapterCompleted, "")
 LevelCompleted(306359,"339163",ChapterNames[8],TakingFlight,TakingFlightChapterCompleted, "PROGRESSION")
 LevelCompleted(306361,"339165",ChapterNames[9],SurpriseDeparture,SurpriseDepartureChapterCompleted, "PROGRESSION")
 LevelCompleted(306363,"339167",ChapterNames[10],StowawayToSpace,StowawayToSpaceChapterCompleted, "PROGRESSION")
@@ -245,7 +252,7 @@ LevelCompleted(306365,"339169",ChapterNames[11],EvePursuit,EvePursuitChapterComp
 LevelCompleted(306367,"339171",ChapterNames[12],CleanGetaway,CleanGetawayChapterCompleted, "PROGRESSION")
 LevelCompleted(306369,"339173",ChapterNames[13],LifeOnTheAxiom,LifeOnTheAxiomChapterCompleted, "PROGRESSION")
 LevelCompleted(306371,"339175",ChapterNames[14],RobotRescue,RobotRescueChapterCompleted, "PROGRESSION")
-LevelCompleted(306373,"339177",ChapterNames[15],RepairWardPlayground,RepairWardPlaygroundChapterCompleted)
+LevelCompleted(306373,"339177",ChapterNames[15],RepairWardPlayground,RepairWardPlaygroundChapterCompleted, "")
 LevelCompleted(306374,"339178",ChapterNames[16],HumanHighway,HumanHighwayChapterCompleted, "PROGRESSION")
 LevelCompleted(306376,"339180",ChapterNames[17],PodBlaster,PodBlasterChapterCompleted, "PROGRESSION")
 LevelCompleted(306377,"339181",ChapterNames[18],CosmicSpeedway,CosmicSpeedwayChapterCompleted, "PROGRESSION")
@@ -255,8 +262,8 @@ LevelCompleted(306383,"339187",ChapterNames[21],FixingEve,FixingEveChapterComple
 LevelCompleted(306385,"339189",ChapterNames[22],HoloDetectorDash,HoloDetectorDashChapterCompleted, "PROGRESSION")
 LevelCompleted(306387,"339191",ChapterNames[23],ARobotsLastStand,ARobotsLastStandChapterCompleted, "PROGRESSION")
 LevelCompleted(306389,"339193",ChapterNames[24],HomeComing,HomeComingChapterCompleted, "WIN_CONDITION")
-LevelCompleted(306391,"339195",ChapterNames[25],Epilogue,EpilogueChapterCompleted)
-LevelCompleted(306392,"339196",ChapterNames[26],LidoDeckDash,LidoDeckDashChapterCompleted)
+LevelCompleted(306391,"339195",ChapterNames[25],Epilogue,EpilogueChapterCompleted, "")
+LevelCompleted(306392,"339196",ChapterNames[26],LidoDeckDash,LidoDeckDashChapterCompleted, "")
 
 // ===================================
 // CRATE BROKEN ACHIEVEMENTS
@@ -335,9 +342,9 @@ ArtifactFound("Hammer Time!", "Unlock the hammer artifiact", HammerArtifactFound
 ArtifactFound("Woof Woof", "Unlock the dog artifact", ToyDogArtifactFound, RobotRescue)
 ArtifactFound("Abosolutely Quackers", "Unlock the rubber duck artifact", RubberDuckArtifactFound, RobotRescue)
 ArtifactFound("Eye Can See You", "Unlock the drooping eyes artifact", DroopingEyesArtifactFound, HumanHighway)
-ArtifactFound("RAWRRRRR", "Unlock the rex artificat", RexArtifactFound, HumanHighway)
+ArtifactFound("RAWRRRRR", "Unlock the rex artifact", RexArtifactFound, HumanHighway)
 ArtifactFound("Ping Pong", "Unlock the paddle ball artifact", PaddleBallArtifactFound, FixingEve)
-ArtifactFound("Play Us a Song You're the Acordion Man", "Unlock the acordion artifact", AccordionArtifactFound, FixingEve)
+ArtifactFound("Play Us a Song You're the Accordion Man", "Unlock the accordion artifact", AccordionArtifactFound, FixingEve)
 ArtifactFound("It's Time to Ski", "Unlock the ski goggles artifact", SkiGogglesArtifactFound, HoloDetectorDash)
 ArtifactFound("Beachball Anyone?", "Unlock the beach ball artifact", BeachBallArtifactFound, HoloDetectorDash)
 
@@ -425,10 +432,10 @@ function PuzzleSpeedrun(achTitle, achDesc, musicId, timerSecs, timerFloat)
     )
 }
 
-PuzzleSpeedrun("Pattern Puzzle Speedrunner", "Complete the pattern puzzle in championship mode in under 24 seconds", 0xB7, 24.0, float(0x00b9e330))
-PuzzleSpeedrun("Switch Puzzle Speedrunner", "Complete the switch puzzle in championship mode in under 10 seconds", 0xB9, 10.0, float(0x00b9f9a0))
-PuzzleSpeedrun("Memory Puzzle Speedrunner", "Complete the memory puzzle in championship mode in under 19 seconds", 0xBB, 19.0, float(0x00ba0b10))
-PuzzleSpeedrun("Colour Match Puzzle Speedrunner", "Complete the colour match puzzle in championship mode in under 17 seconds", 0xBD, 17.0, float(0x00ba0760))
+PuzzleSpeedrun("Pattern Puzzle Speedrunner", "Complete the Pattern Puzzle in Championship mode in under 24 seconds", 0xB7, 24.0, float(BasePointer + 0xfffffef0))
+PuzzleSpeedrun("Switch Puzzle Speedrunner", "Complete the Switch Puzzle in Championship mode in under 10 seconds", 0xB9, 10.0, float(BasePointer + 0x1560))
+PuzzleSpeedrun("Memory Puzzle Speedrunner", "Complete the Memory Puzzle in Championship mode in under 19 seconds", 0xBB, 19.0, float(BasePointer + 0x2320))
+PuzzleSpeedrun("Colour Match Puzzle Speedrunner", "Complete the Colour Match Puzzle in Championship mode in under 17 seconds", 0xBD, 17.0, float(BasePointer + 0x26D0))
 
 // ===================================
 // PUZZLE LEADERBOARDS
