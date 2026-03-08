@@ -498,7 +498,7 @@ function TreasureChestAchievement(achTitle, locName, baseAddresses){
 function BalloonHintAchievement(achTitle, hintName, points, baseAddresses, targetCount){
   achievement(
     title = achTitle,
-    description = "Find every " + "\"" + hintName + "\"" + " Balloon Hint",
+    description = "Find every " + "\"" + hintName + "\"" + " Blue Balloon",
     points = points,
     trigger = (
       IsInGame() &&
@@ -511,7 +511,7 @@ function BalloonHintAchievement(achTitle, hintName, points, baseAddresses, targe
 function PhotoSpotAchievement(achTitle, locName, baseAddresses){
   achievement(
     title = achTitle,
-    description = "Unlock every Photo Spot in the " + locName,
+    description = "Unlock every photo spot in the " + locName,
     points = 10,
     trigger = (
       IsInGame() &&

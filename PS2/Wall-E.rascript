@@ -3,7 +3,10 @@
 // first script, decided mid way through to try out rascript so had some ids and badges in the progression as they were in unoffical
 
 //Misc bits
-Timer = float(0x00b891d0)
+
+Timer = float(dword(dword(dword(dword(0x006e4384) + 0xA8) + 0x00) + 0x278) + 0xA0)
+
+
 PlaygroundBoxesDestroyed= byte(dword(0x00a33b24) + 0xFFFFD550)
 CurrentScreen = byte(0x01ff85dc)
 PuzzleAmountSolved = byte(dword(0x01fff910) + 0x3C0)
@@ -393,7 +396,7 @@ function ExtraMatUnlocked(achTitle, achDesc, points, amount, prevAmount){
 }
 
 ExtraMatUnlocked("Image Enthusiast", "Unlock half of the extra materials", 10, 0x14, 0x15)
-ExtraMatUnlocked("Art Connoisseur", "Unlock all of the extra matertials", 25, 0x00, 0x01)
+ExtraMatUnlocked("Art Connoisseur", "Unlock all of the extra materials", 25, 0x00, 0x01)
 
 // ===================================
 // SPEEDRUN ACHIEVEMENTS
@@ -417,25 +420,37 @@ function PlaygroundSpeedrun(achTitle, achDesc, levelId, timerSecs)
 PlaygroundSpeedrun("Tanker Playground Speedrunner", "Beat the Tanker Playground box destroying challenge with 60 seconds or more on the clock", TankerPlayground, 60.0)
 PlaygroundSpeedrun("Repair-Ward Playground Speedrunner", "Beat the Repair-Ward Playground box destroying challenge with 45 seconds or more on the clock", RepairWardPlayground, 45.0)
 
-function PuzzleSpeedrun(achTitle, achDesc, musicId, timerSecs, timerFloat)
+function PuzzleSpeedrun(achTitle, achDesc, musicId, timerSecs, timerFloat, timer2nd, timer3rd)
 {
     achievement(
     title = achTitle,
     description = achDesc,
     points = 10,
     trigger = (
-        timerFloat < timerSecs &&
-        timerFloat > 0.0 &&
-        (prev(timerFloat) < 0.0 || prev(timerFloat) > timerSecs) &&
-        MusicId == musicId
+        MusicId == musicId &&
+        (
+          timerFloat < timerSecs &&
+          timerFloat > 0.0 &&
+          (prev(timerFloat) < 0.0 || prev(timerFloat) > timerSecs)
+        ) ||
+        (
+          timer2nd < timerSecs &&
+          timer2nd > 0.0 &&
+          (prev(timer2nd) < 0.0 || prev(timer2nd) > timerSecs)
+        )||
+        (
+          timer3rd < timerSecs &&
+          timer3rd > 0.0 &&
+          (prev(timer3rd) < 0.0 || prev(timer3rd) > timerSecs)
         )
+      )
     )
 }
 
-PuzzleSpeedrun("Pattern Puzzle Speedrunner", "Complete the Pattern Puzzle in Championship mode in under 24 seconds", 0xB7, 24.0, float(BasePointer + 0xfffffef0))
-PuzzleSpeedrun("Switch Puzzle Speedrunner", "Complete the Switch Puzzle in Championship mode in under 10 seconds", 0xB9, 10.0, float(BasePointer + 0x1560))
-PuzzleSpeedrun("Memory Puzzle Speedrunner", "Complete the Memory Puzzle in Championship mode in under 19 seconds", 0xBB, 19.0, float(BasePointer + 0x2320))
-PuzzleSpeedrun("Colour Match Puzzle Speedrunner", "Complete the Colour Match Puzzle in Championship mode in under 17 seconds", 0xBD, 17.0, float(BasePointer + 0x26D0))
+PuzzleSpeedrun("Pattern Puzzle Speedrunner", "Complete the Pattern Puzzle in Championship Key Puzzle mode in under 24 seconds", 0xB7, 24.0, float(BasePointer + 0xfffffef0), float(BasePointer + 0xfffffef4), float(BasePointer + 0xfffffef8))
+PuzzleSpeedrun("Switch Puzzle Speedrunner", "Complete the Switch Puzzle in Championship Key Puzzle mode in under 10 seconds", 0xB9, 10.0, float(BasePointer + 0x1560), float(BasePointer + 0x1564), float(BasePointer + 0x1568))
+PuzzleSpeedrun("Memory Puzzle Speedrunner", "Complete the Memory Puzzle in Championship Key Puzzle mode in under 19 seconds", 0xBB, 19.0, float(BasePointer + 0x26D0), float(BasePointer + 0x26D4), float(BasePointer + 0x26D8))
+PuzzleSpeedrun("Colour Match Puzzle Speedrunner", "Complete the Colour Match Puzzle in Championship Key Puzzle mode in under 17 seconds", 0xBD, 17.0, float(BasePointer + 0x2320), float(BasePointer + 0x2324), float(BasePointer + 0x2328))
 
 // ===================================
 // PUZZLE LEADERBOARDS
@@ -465,7 +480,7 @@ function PuzzleLb(lbTitle, lbDesc, musicId, floatTimer)
     )
 }
 
-PuzzleLb("Pattern Puzzle", "Get the lowest time on the pattern puzzle in championship mode", 0xB7, float(0x00b9e330))
+PuzzleLb("Pattern Puzzle", "Get the lowest time on the pattern puzzle in championship mode", 0xB7, float(BasePointer + 0xfffffef0))
 PuzzleLb("Switch Puzzle ", "Get the lowest time on the switch puzzle in championship mode", 0xB9, float(0x00b9f9a0))
 PuzzleLb("Memory Puzzle", "Get the lowest time on the memory puzzle in championship mode", 0xBB, float(0x00ba0b10))
 PuzzleLb("Colour Match Puzzle ", "Get the lowest time on the colour match puzzle in championship mode", 0xBD, float(0x00ba0760))
