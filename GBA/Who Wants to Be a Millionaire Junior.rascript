@@ -69,7 +69,7 @@ achievement(
 
 achievement(
     title = "Against All Odds!",
-    description = "Use up all 3 lifelines before you reach the £1,000 checkpoint then continue to win £1,000,000",
+    description = "Use all 3 lifelines before reaching the £1,000 question, then answer every question correctly and win £1,000,000",
     points = 5,
     trigger= (
         InGame() &&
@@ -79,6 +79,7 @@ achievement(
         never(byte(0x000124) == 0) &&
         CurrentQuestion == 0x0e &&
         CorrectAnswerSelected() &&
+        prev(byte(0x007eb7) != 0x08) &&
         AnswerSelected()
     )
 )

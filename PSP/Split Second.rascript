@@ -433,7 +433,8 @@ achievement(
   description = "Reach 1st position in the Destruction challenge",
   points = 10,
   trigger = (
-    byte(0x01fbf8a7) == 0x36 &&
+    byte(0x01fbf8a7) != 0x33 &&
+    byte(0x01fbf8a7) != 0x65 &&
     dword(0x00c72338) == 0x00 &&
     prev(dword(0x00c72338)) != 0x00
   )
@@ -444,7 +445,8 @@ achievement(
   description = "Reach 1st position in the Power Slide challenge",
   points = 10,
   trigger = (
-    byte(0x01fbf8a7) == 0x36 &&
+    byte(0x01fbf8a7) != 0x33 &&
+    byte(0x01fbf8a7) != 0x65 &&
     dword(0x00c723a8) == 0x00 &&
     prev(dword(0x00c723a8)) != 0x00
   )
@@ -455,7 +457,8 @@ achievement(
   description = "Reach 1st position in the Keep on Truckin' challenge",
   points = 10,
   trigger = (
-    byte(0x01fbf8a7) == 0x36 &&
+    byte(0x01fbf8a7) != 0x33 &&
+    byte(0x01fbf8a7) != 0x65 &&
     dword(0x00c72418) == 0x00 &&
     prev(dword(0x00c72418)) != 0x00
   )
