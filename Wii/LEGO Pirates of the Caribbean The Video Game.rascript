@@ -30,7 +30,13 @@ LevelID = {
 
 CurrentLevelID = dword_be(0x008102d0)
 LastLoadedLevelID = dword_be(0x008102d4)
-function LoadProtection() => LastLoadedLevelID != 0xffffffff && LastLoadedLevelID != CurrentLevelID
+function LoadProtection() => LastLoadedLevelID != 0xffffffff && CurrentLevelID == 0x00 && CurrentLevelID != 0xffffffff
+function GoldBrickProtection() => LastLoadedLevelID != 0xffffffff && CurrentLevelID != 0xffffffff
+
+function IsChapter1() => CurrentLevelID >= 0x01 && CurrentLevelID <= 0x05
+function IsChapter2() => CurrentLevelID >= 0x07 && CurrentLevelID <= 0x0b
+function IsChapter3() => CurrentLevelID >= 0x0d && CurrentLevelID <= 0x11
+function IsChapter4() => CurrentLevelID >= 0x13 && CurrentLevelID <= 0x17
 
 function Tally(data, offset = 0) {
   total = 0
@@ -140,18 +146,18 @@ OnStrangerTidesTruePirate = [
   0x1080d48
 ]
 
-function TruePirateComplete(achTitle, episodeName, tpData){
+function TruePirateComplete(achTitle, episodeName, tpData, ChapterProtection){
   achievement(
     title = achTitle,
     description = "Reach True Pirate status on every level in the " + episodeName + " episode",
     points = 10,
     trigger = (
         (
-          LoadProtection() &&
+          ChapterProtection &&
           Tally(tpData) == 0x05 &&
           TallyPrev(tpData) == 0x04) ||
         (
-          LoadProtection() &&
+          ChapterProtection &&
           Tally(tpData, OFFSET) == 0x05 &&
           TallyPrev(tpData, OFFSET) == 0x04
         )
@@ -159,10 +165,10 @@ function TruePirateComplete(achTitle, episodeName, tpData){
   )
 }
 
-TruePirateComplete("Pirate of Fortune and Glory", "\"Curse of the Black Pearl\"", CurseOfBlackPearlTruePirate)
-TruePirateComplete("I've Got a Jar of Studs", "\"Dead Man's Chest\"", DeadMansChestTruePirate)
-TruePirateComplete("Nine Pieces of Studs", "\"At World's End\"", AtWorldsEndTruePirate)
-TruePirateComplete("Studs of Youth", "\"On Stranger Tides\"", OnStrangerTidesTruePirate)
+TruePirateComplete("Pirate of Fortune and Glory", "\"Curse of the Black Pearl\"", CurseOfBlackPearlTruePirate, IsChapter1())
+TruePirateComplete("I've Got a Jar of Studs", "\"Dead Man's Chest\"", DeadMansChestTruePirate, IsChapter2())
+TruePirateComplete("Nine Pieces of Studs", "\"At World's End\"", AtWorldsEndTruePirate, IsChapter3())
+TruePirateComplete("Studs of Youth", "\"On Stranger Tides\"", OnStrangerTidesTruePirate, IsChapter4())
 
 // ---------------------------------------- MINI KITS ----------------------------------------
 CurseOfBlackPearlMinikits = [
@@ -197,19 +203,19 @@ OnStrangerTidesMinikits = [
   0x1080d4b
 ]
 
-function MinikitsComplete(achTitle, episodeName, mkData) {
+function MinikitsComplete(achTitle, episodeName, mkData, ChapterProtection) {
   achievement(
     title = achTitle,
     description = "Collect all 50 minikits in the " + "\"" + episodeName + "\"" + " episode",
     points = 10,
     trigger = (
       (
-        LoadProtection() &&
+        ChapterProtection &&
         Tally(mkData) == 0x32 &&
         TallyPrev(mkData) < 0x32
       ) ||
       (
-        LoadProtection() &&
+        ChapterProtection &&
         Tally(mkData, OFFSET) == 0x32 &&
         TallyPrev(mkData, OFFSET) < 0x32
       )
@@ -217,10 +223,10 @@ function MinikitsComplete(achTitle, episodeName, mkData) {
   )
 }
 
-MinikitsComplete("Cursed Minikits", "Curse of the Black Pearl", CurseOfBlackPearlMinikits)
-MinikitsComplete("Minikit Kraken", "Dead Man's Chest", DeadMansChestMinikits)
-MinikitsComplete("Nine Pieces of Eight? Try Ten Pieces of Plastic", "At World's End", AtWorldsEndMinikits)
-MinikitsComplete("Stranger Minikits", "On Stranger Tides", OnStrangerTidesMinikits)
+MinikitsComplete("Cursed Minikits", "Curse of the Black Pearl", CurseOfBlackPearlMinikits, IsChapter1())
+MinikitsComplete("Minikit Kraken", "Dead Man's Chest", DeadMansChestMinikits, IsChapter2())
+MinikitsComplete("Nine Pieces of Eight? Try Ten Pieces of Plastic", "At World's End", AtWorldsEndMinikits, IsChapter3())
+MinikitsComplete("Stranger Minikits", "On Stranger Tides", OnStrangerTidesMinikits, IsChapter4())
 
 // ---------------------------------------- COMPASS PIECES ----------------------------------------
 CurseOfBlackPearlCompassPieces = [
@@ -264,20 +270,20 @@ RedHats = [
 GoldBricks = byte(0x108122a)
 GoldBricksOS = byte(0x108122a + OFFSET)
 
-function CompassComplete(achTitle, episodeName, compassData) {
+function CompassComplete(achTitle, episodeName, compassData, ChapterProtection) {
   achievement(
     title = achTitle,
     description = "Find all 40 Compass Items in the " + "\"" + episodeName + "\"" + " episode",
     points = 10,
     trigger = (
       (
-        LoadProtection() &&
+        ChapterProtection &&
         TallyBitcount(compassData) == 40 &&
         TallyPrevBitcount(compassData) < 40
       ) 
       ||
       (
-        LoadProtection() &&
+        ChapterProtection &&
         TallyBitcount(compassData, OFFSET) == 40 &&
         TallyPrevBitcount(compassData, OFFSET) < 40
       )
@@ -285,10 +291,10 @@ function CompassComplete(achTitle, episodeName, compassData) {
   )
 }
 
-CompassComplete("It Points to What You Want Most", "Curse of the Black Pearl", CurseOfBlackPearlCompassPieces)
-CompassComplete("The Compass Never Lies", "Dead Man's Chest", DeadMansChestCompassPieces)
-CompassComplete("Path of the Pirate", "At World's End", AtWorldsEndCompassPieces)
-CompassComplete("Seeker of Legend", "On Stranger Tide", OnStrangerTidesCompassPieces)
+CompassComplete("It Points to What You Want Most", "Curse of the Black Pearl", CurseOfBlackPearlCompassPieces, IsChapter1())
+CompassComplete("The Compass Never Lies", "Dead Man's Chest", DeadMansChestCompassPieces, IsChapter2())
+CompassComplete("Path of the Pirate", "At World's End", AtWorldsEndCompassPieces, IsChapter3())
+CompassComplete("Seeker of Legend", "On Stranger Tide", OnStrangerTidesCompassPieces, IsChapter4())
 
 // ---------------------------------------- PURCHASES ----------------------------------------
 
@@ -313,14 +319,23 @@ function Purchases(achTitle, achDesc, points, data, amount) {
     points = points,
     trigger = (
       (
-        LoadProtection() &&
+        LastLoadedLevelID != 0xffffffff 
+        ||
+        (
+          LastLoadedLevelID != 0x01 &&
+          CurrentLevelID != 0x01
+        )
+      ) 
+      &&
+      (
         Tally(data) >= amount &&
+        TallyPrev(data) >= amount - 5 &&
         TallyPrev(data) < amount
       ) 
       ||
       (
-        LoadProtection() &&
         Tally(data, OFFSET) >= amount &&
+        TallyPrev(data, OFFSET) >= amount - 5 &&
         TallyPrev(data, OFFSET) < amount
       )
     )
@@ -331,17 +346,16 @@ Purchases("Plundering Party", "Unlock 50% of the characters in the game", 10, Ch
 Purchases("Part of the Ship, Part of the Crew", "Unlock 100% of the characters in the game", 10, Characters, 76)
 
 achievement(
-  title = "Captain Jack… Now With Rhythm!",
-  description = "Use the code \"VDJSPW\" to unlock a musical Jack Sparrow",
+  title = "Captain Jack... Now With Rhythm!",
+  description = "Use the code \"VDJSPW\" to unlock a musical Jack Sparrow when in the Port",
   points = 2,
   trigger = (
+    CurrentLevelID == 0x00 &&
     (
-      LoadProtection() &&
       prev(byte(0x010840b6)) == 0x00 &&
       byte(0x010840b6) == 0x01
     ) ||
     (
-      LoadProtection() &&
       prev(byte(0x010840b6 + OFFSET)) == 0x00 &&
       byte(0x010840b6 + OFFSET) == 0x01
     )
@@ -373,14 +387,16 @@ achievement(
   points = 25,
   trigger = (
     (
-      LoadProtection() &&
+      GoldBrickProtection() &&
       GoldBricks == 85 &&
-      prev(GoldBricks) < 85
+      prev(GoldBricks) >= 80 &&
+      prev(GoldBricks) <= 84
     ) ||
     (
-      LoadProtection() &&
+      GoldBrickProtection() &&
       GoldBricksOS == 85 &&
-      prev(GoldBricksOS) < 85
+      prev(GoldBricksOS) >= 80 &&
+      prev(GoldBricksOS) <= 84
     ) 
   )
 )

@@ -253,7 +253,7 @@ HeroVillainSplitAchievements("The Evil Hero of Gotham", "Save every hostage in t
 
 achievement(
     title = "Master of the Red Bricks",
-    description = "Collect every red brick from all hero and Villain levels",
+    description = "Collect every red brick from all Hero and Villain levels (unlocking via codes not allowed)",
     points = 25,
     trigger = (
         RedBricksCollected == 0x1e &&

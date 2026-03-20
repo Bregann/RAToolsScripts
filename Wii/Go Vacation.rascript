@@ -472,7 +472,7 @@ SchoolAchievement("Skiing Fundamentals", "Ski Controls", "Snow School", 4, SnowS
 SchoolAchievement("Freestyle Ski School", "Ski Tricks", "Snow School", 4, SnowSchoolSkisTricks, 15)
 SchoolAchievement("Snowboarding Basics", "Snowboard Controls", "Snow School", 4, SnowSchoolSnowboardControls, 13)
 SchoolAchievement("Board Acrobatics 101", "Snowboard Tricks", "Snow School", 4, SnowSchoolSnowboardTricks, 15)
-SchoolAchievement("Snowmobile Safety Course", "Snowmobile Controls", "Snow School", 3, SnowSchoolSkisControls, 5)
+SchoolAchievement("Snowmobile Safety Course", "Snowmobile Controls", "Snow School", 3, SnowSchoolSnowmobileControls, 5)
 SchoolAchievement("High-Speed Stunts", "Snowmobile Tricks", "Snow School", 4, SnowSchoolSnowmobileTricks, 16)
 SchoolAchievement("Tubing Techniques", "Snow Tube", "Snow School", 2, SnowSchoolSnowTube, 4)
 
@@ -1084,6 +1084,7 @@ achievement(
   points = 3,
   trigger = (
     IsInGame() &&
+    CurrentScreen() == 0x0024ff00 &&
     any_of(range(1, 8), glass =>
       all_of(Level1Glass, addr => dword_be(addr + ((glass - 1) * OFFSET)) >= 0x08) &&
       prev(any_of(Level1Glass, addr => dword_be(addr + ((glass - 1) * OFFSET)) != 0x08))
@@ -1097,6 +1098,7 @@ achievement(
   points = 5,
   trigger = (
     IsInGame() &&
+    CurrentScreen() == 0x0024ff00 &&
     any_of(range(1, 8), glass =>
       all_of(Level2Glass, addr => dword_be(addr + ((glass - 1) * OFFSET)) >= 0x08) &&
       prev(any_of(Level2Glass, addr => dword_be(addr + ((glass - 1) * OFFSET)) != 0x08))
@@ -1110,6 +1112,7 @@ achievement(
   points = 10,
   trigger = (
     IsInGame() &&
+    CurrentScreen() == 0x0024ff00 &&
     any_of(range(1, 8), glass =>
       all_of(Level3Glass, addr => dword_be(addr + ((glass - 1) * OFFSET)) >= 0x08) &&
       prev(any_of(Level3Glass, addr => dword_be(addr + ((glass - 1) * OFFSET)) != 0x08))

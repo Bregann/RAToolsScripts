@@ -73,13 +73,17 @@ achievement(
     points = 5,
     trigger= (
         InGame() &&
-        once(CurrentQuestion < 0x04 &&
-        bitcount(0x000118) == 0 &&
-        prev(bitcount(0x000118)) == 1) &&
+        once(
+          CurrentQuestion < 0x04 &&
+          bitcount(0x000118) == 0 &&
+          prev(bitcount(0x000118)) == 1
+        ) &&
+        once(
+          CurrentQuestion == 0x0e &&
+          byte(0x007eb7) == 0x00
+        ) &&
         never(byte(0x000124) == 0) &&
-        CurrentQuestion == 0x0e &&
         CorrectAnswerSelected() &&
-        prev(byte(0x007eb7) != 0x08) &&
         AnswerSelected()
     )
 )

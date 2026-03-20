@@ -439,13 +439,13 @@ function SpeedrunLevel(achTitle, levelName, levelTimerAddr, textTime, secs){
   )
 }
 
-SpeedrunLevel("Too Toasty Here!", "Toasty Tavern", 0x10dc2a80, "1 minute and 8 seconds", 68)
-SpeedrunLevel("Speedozer", "Buildozer", 0x10dc362c, "1 minute and 18 seconds", 78)
-SpeedrunLevel("Wrong Gong Rush", "Wrong Gong Rung", 0x10dc3f40, "1 minute and 6 seconds", 66)
-SpeedrunLevel("Dad. What? Dad! What? Head for the Fireplace", "Brunwald Blaze", 0x10dc4d84, "2 minutes and 2 seconds", 122)
-SpeedrunLevel("Café Crasher", "Café Chaos", 0x10dc6390, "1 minute and 22 seconds", 82)
-SpeedrunLevel("Speed Attack", "Mac Attack", 0x10dc75b8, "3 minutes and 2 seconds", 182)
-SpeedrunLevel("Pit Speedrunner", "Pit of Peril", 0x10dc8d10, "1 minute and 20 seconds", 80)
+SpeedrunLevel("Too Toasty Here!", "Toasty Tavern", 0x10dc2a80, "1 minute and 8 seconds", 68.0)
+SpeedrunLevel("Speedozer", "Buildozer", 0x10dc362c, "1 minute and 18 seconds", 78.0)
+SpeedrunLevel("Wrong Gong Rush", "Wrong Gong Rung", 0x10dc3f40, "1 minute and 6 seconds", 66.0)
+SpeedrunLevel("Dad. What? Dad! What? Head for the Fireplace", "Brunwald Blaze", 0x10dc4d84, "2 minutes and 2 seconds", 122.0)
+SpeedrunLevel("Café Crasher", "Café Chaos", 0x10dc6390, "1 minute and 22 seconds", 82.0)
+SpeedrunLevel("Speed Attack", "Mac Attack", 0x10dc75b8, "3 minutes and 2 seconds", 182.0)
+SpeedrunLevel("Pit Speedrunner", "Pit of Peril", 0x10dc8d10, "1 minute and 20 seconds", 80.0)
 // ---------------------------------------- RP ----------------------------------------
 
 LevelIDs = {
