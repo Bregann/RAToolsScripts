@@ -494,13 +494,14 @@ DriftChallenge("Drifting in Madrid", "13,000", "Madrid", 13000, 0, 2, 7, "Bronze
 DriftChallenge("Singapore Sling", "17,000", "Singapore", 17000, 0, 3, 5, "Bronze")
 DriftChallenge("Dubai Drift King", "12,000", "Dubai", 12000, 0, 4, 2, "Bronze")
 
-function ClassChallenge(achTitle, pointsAmountDesc, pointsAmountNum, cupName, carClassName, carClassList, circuitList){
+function ClassChallenge(achTitle, pointsAmountDesc, pointsAmountNum, cupName, carClassName, carClassList, circuitList, cupId){
     achievement(
     title = achTitle,
     description = "Earn " + pointsAmountDesc + " skill points in any circuit race in the " + cupName + " Cup using any " + carClassName + " class car",
     points = 10,
     trigger = (
       IsInGame() &&
+      SelectedCup() == cupId &&
       CurrentScore() >= pointsAmountNum &&
       prev(dword_be(ScorePointer + 0x38)) < pointsAmountNum &&
       any_of(circuitList, cr => 
@@ -512,9 +513,9 @@ function ClassChallenge(achTitle, pointsAmountDesc, pointsAmountNum, cupName, ca
   )
 }
 
-ClassChallenge("Skid Mark Specialist", "70,000", 70000, "Bronze", "C", ClassCCars, BronzeCircuitRaces)
-ClassChallenge("Sideways Certified", "107,000", 107000, "Silver", "B", ClassBCars, SilverCircuitRaces)
-ClassChallenge("Style Icon", "110,000", 110000, "Gold", "A", ClassACars, GoldCircuitRaces)
+ClassChallenge("Skid Mark Specialist", "70,000", 70000, "Bronze", "C", ClassCCars, BronzeCircuitRaces, 0x00)
+ClassChallenge("Sideways Certified", "107,000", 107000, "Silver", "B", ClassBCars, SilverCircuitRaces, 0x01)
+ClassChallenge("Style Icon", "110,000", 110000, "Gold", "A", ClassACars, GoldCircuitRaces, 0x02)
 
 // -------------------- Leaderboards --------------------
 function CircuitRaceLeaderboard(cup, location, cupId, locId, raceId, raceNum){

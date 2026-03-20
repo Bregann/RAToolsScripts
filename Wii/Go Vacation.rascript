@@ -39,6 +39,8 @@ function CalculateOffsetAndReturnAddress(baseAddr){
 }
 
 // -------------------- Variables --------------------
+LocationPointer = dword_be(0x185ea0) & 0x1fffffff
+function RpScreen() => dword_be(LocationPointer + 0x00)
 function CurrentScreen() => dword_be(0x1001eb50)
 function IsInGame() => CurrentScreen() != 0xffffff00
 
@@ -1086,7 +1088,7 @@ achievement(
     IsInGame() &&
     CurrentScreen() == 0x0024ff00 &&
     any_of(range(1, 8), glass =>
-      all_of(Level1Glass, addr => dword_be(addr + ((glass - 1) * OFFSET)) >= 0x08) &&
+      all_of(Level1Glass, addr => dword_be(addr + ((glass - 1) * OFFSET)) >= 0x08 && dword_be(addr + ((glass - 1) * OFFSET)) <= 10) &&
       prev(any_of(Level1Glass, addr => dword_be(addr + ((glass - 1) * OFFSET)) != 0x08))
     )
   )
@@ -1100,7 +1102,7 @@ achievement(
     IsInGame() &&
     CurrentScreen() == 0x0024ff00 &&
     any_of(range(1, 8), glass =>
-      all_of(Level2Glass, addr => dword_be(addr + ((glass - 1) * OFFSET)) >= 0x08) &&
+      all_of(Level2Glass, addr => dword_be(addr + ((glass - 1) * OFFSET)) >= 0x08 && dword_be(addr + ((glass - 1) * OFFSET)) <= 10) &&
       prev(any_of(Level2Glass, addr => dword_be(addr + ((glass - 1) * OFFSET)) != 0x08))
     )
   )
@@ -1114,7 +1116,7 @@ achievement(
     IsInGame() &&
     CurrentScreen() == 0x0024ff00 &&
     any_of(range(1, 8), glass =>
-      all_of(Level3Glass, addr => dword_be(addr + ((glass - 1) * OFFSET)) >= 0x08) &&
+      all_of(Level3Glass, addr => dword_be(addr + ((glass - 1) * OFFSET)) >= 0x08 && dword_be(addr + ((glass - 1) * OFFSET)) <= 10) &&
       prev(any_of(Level3Glass, addr => dword_be(addr + ((glass - 1) * OFFSET)) != 0x08))
     )
   )
@@ -1666,6 +1668,7 @@ Locations = {
   0x00440000: "remodelling the Villa"
 }
 
+rich_presence_conditional_display(!any_of(Locations, loc => loc == RpScreen()), "Player is exploring the beautiful Kawawii Island!")
 rich_presence_display("Player is {0}",
-  rich_presence_lookup("Level", CurrentScreen(), Locations)
+  rich_presence_lookup("Level", RpScreen(), Locations)
 )
