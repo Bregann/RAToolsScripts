@@ -16,6 +16,8 @@ function IsInGame() => dword_be(0x0057aad0) != 0x00
 function CurrentRuleSet() => dword_be(0x1285033c)
 function CurrentRound() => dword_be(GameDataPointer + 0x5184)
 function PlayerMoney() => dword_be(GameDataPointer + 0x09cc)
+ProfileMoney = dword_be(0x12851c54)
+
 
 AiPlayer2Difficulty = dword_be(0x12850570)
 AiPlayer3Difficulty = dword_be(0x12850574)
@@ -128,30 +130,29 @@ achievement(
 )
 
 // -------------------- Unlockables --------------------
-function PurchaseUnlockable(achTitle, itemName, itemType, points, itemPos, itemUnlockAddr){
+function PurchaseUnlockable(achTitle, itemName, itemType, points, itemPos, itemCost){
   achievement(
     title = achTitle,
   description = "Purchase the \"" + itemName + "\" " + itemType + " from the MONOPOLY Streets Store",
   points = points,
   trigger = (
     MenuDataPointer == itemPos &&
-    itemUnlockAddr == 0x02 &&
-    prev(itemUnlockAddr) == 0x00
+    prev(ProfileMoney) - ProfileMoney == itemCost
     )
   )
 }
 
-PurchaseUnlockable("Officer on Board", "Cop Hat", "token", 5, 0x02, dword_be(0x12a7d0ac))
-PurchaseUnlockable("Ironing Out the Money", "Iron", "token", 3, 0x05, dword_be(0x12a7d0c4))
-PurchaseUnlockable("Bag Secured", "Moneybag", "token", 4, 0x06, dword_be(0x12a7d0cc))
+PurchaseUnlockable("Officer on Board", "Cop Hat", "token", 5, 0x02, 20000)
+PurchaseUnlockable("Ironing Out the Money", "Iron", "token", 3, 0x05, 10000)
+PurchaseUnlockable("Bag Secured", "Moneybag", "token", 4, 0x06, 15000)
 
-PurchaseUnlockable("Not Very Useful in the Rain!", "Cardboard Board", "board", 3, 0x02, dword_be(0x12a7d09c))
-PurchaseUnlockable("Brie-lliant Investment", "Cheese Board", "board", 3, 0x03, dword_be(0x12a7d0a4))
-PurchaseUnlockable("Perfect for Winter", "Ice Board", "board", 3, 0x04, dword_be(0x12a7d0dc))
-PurchaseUnlockable("Welcome to the Jungle", "Jungle Board", "board", 3, 0x05, dword_be(0x12a7d0e4))
-PurchaseUnlockable("Monopoly in the Park", "Plaza Board", "board", 3, 0x06, dword_be(0x12a7d0ec))
-PurchaseUnlockable("Warning: Do Not Eat", "Sweet Board", "board", 4, 0x07, dword_be(0x12a7d0f4))
-PurchaseUnlockable("A Famous Board", "Landmark City", "board", 5, 0x08, dword_be(0x12a7d0fc))
+PurchaseUnlockable("Not Very Useful in the Rain!", "Cardboard Board", "board", 3, 0x02, 7000)
+PurchaseUnlockable("Brie-lliant Investment", "Cheese Board", "board", 3, 0x03, 6000)
+PurchaseUnlockable("Perfect for Winter", "Ice Board", "board", 3, 0x04, 8000)
+PurchaseUnlockable("Welcome to the Jungle", "Jungle Board", "board", 3, 0x05, 9000)
+PurchaseUnlockable("Monopoly in the Park", "Plaza Board", "board", 3, 0x06, 5000)
+PurchaseUnlockable("Warning: Do Not Eat", "Sweet Board", "board", 4, 0x07, 10000)
+PurchaseUnlockable("A Famous Board", "Landmark City", "board", 5, 0x08, 25000)
 
 achievement(
   title = "Look at Mii Go!",

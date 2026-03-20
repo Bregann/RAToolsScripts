@@ -30,7 +30,7 @@ function CalculateOffsetAndReturnAddress(baseAddr){
 
 StarsEarned = CalculateOffsetAndReturnAddress(0x1338ec6c)
 BronzeGP = CalculateOffsetAndReturnAddress(0x1338ee98)
-SilverGP = CalculateOffsetAndReturnAddress(0x1338f0b7)
+SilverGP = CalculateOffsetAndReturnAddress(0x1338f0c4)
 GoldGP = CalculateOffsetAndReturnAddress(0x1338f2f0)
 
 RioBronzeP6 = [
@@ -84,7 +84,7 @@ MadridBronzeP6 = [
 
 MadridSilverP6 = [
   0x1338ef84, 0x1338ef85, 0x1338ef86, 0x1338ef91,
-  0x1338ef92, 0x1338ef93, 0x1338ef9c, 0x1338efa8,
+  0x1338ef92, 0x1338ef90, 0x1338ef9c, 0x1338efa8,
   0x1338efb4, 0x1338efb5, 0x1338efb6, 0x1338efc0,
   0x1338efcc, 0x1338efcd, 0x1338efce, 0x1338efd8
 ]
@@ -492,7 +492,7 @@ DriftChallenge("The Samba Slide", "15,000", "Rio de Janeiro", 15000, 1, 0, 2, "S
 DriftChallenge("Drifting in De-Nile", "16,500", "Cairo", 16500, 0, 1, 2, "Bronze")
 DriftChallenge("Drifting in Madrid", "13,000", "Madrid", 13000, 0, 2, 7, "Bronze")
 DriftChallenge("Singapore Sling", "17,000", "Singapore", 17000, 0, 3, 5, "Bronze")
-DriftChallenge("Dubai Drift King", "12,000", "Dubai", 12000, 0, 3, 2, "Bronze")
+DriftChallenge("Dubai Drift King", "12,000", "Dubai", 12000, 0, 4, 2, "Bronze")
 
 function ClassChallenge(achTitle, pointsAmountDesc, pointsAmountNum, cupName, carClassName, carClassList, circuitList){
     achievement(
