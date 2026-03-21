@@ -73,6 +73,17 @@ MonopolyBoards = [
   "monopolyclassicsweet/zones/zone_world1.rpk" // sweet board
 ]
 
+function StartOfGameCheck() {
+  return (
+    IsInGame() &&
+    CurrentRound() == 0x00 &&
+    dword_be(0x0054d74c) == 0x00 &&
+    dword_be(0x0054d7fc) == 0x00 &&
+    dword_be(0x0054d8ac) == 0x00 &&
+    dword_be(0x0054d95c) == 0x00
+  )
+}
+
 // -------------------- Game Wins --------------------
 function GameWonAchievement(achTitle, ruleSet, ruleSetSelected){
   achievement(
@@ -100,32 +111,19 @@ achievement(
   description = "Win a game using the \"Official MONOPOLY\" rule set against three AIs - one on Easy, one on Medium, and one on Hard difficulty",
   points = 10,
   trigger = (
-    PlayerWonGame() &&
-    ( // every possible combo as it's easier than using hits
-      (AiPlayer2Difficulty == 0x01 &&
-      AiPlayer3Difficulty == 0x02 &&
-      AiPlayer4Difficulty == 0x03)
-      ||
-      (AiPlayer2Difficulty == 0x01 &&
-      AiPlayer3Difficulty == 0x03 &&
-      AiPlayer4Difficulty == 0x02)
-      ||
-      (AiPlayer2Difficulty == 0x02 &&
-      AiPlayer3Difficulty == 0x01 &&
-      AiPlayer4Difficulty == 0x03)
-      ||
-      (AiPlayer2Difficulty == 0x02 &&
-      AiPlayer3Difficulty == 0x03 &&
-      AiPlayer4Difficulty == 0x01)
-      ||
-      (AiPlayer2Difficulty == 0x03 &&
-      AiPlayer3Difficulty == 0x01 &&
-      AiPlayer4Difficulty == 0x02)
-      ||
-      (AiPlayer2Difficulty == 0x03 &&
-      AiPlayer3Difficulty == 0x02 &&
-      AiPlayer4Difficulty == 0x01)
-    )
+    once(
+      StartOfGameCheck() &&
+      // all three difficulties are in range [1,3] and all distinct = one of each
+      AiPlayer2Difficulty >= 0x01 && AiPlayer2Difficulty <= 0x03 &&
+      AiPlayer3Difficulty >= 0x01 && AiPlayer3Difficulty <= 0x03 &&
+      AiPlayer4Difficulty >= 0x01 && AiPlayer4Difficulty <= 0x03 &&
+      AiPlayer2Difficulty != AiPlayer3Difficulty &&
+      AiPlayer2Difficulty != AiPlayer4Difficulty &&
+      AiPlayer3Difficulty != AiPlayer4Difficulty
+    ) &&
+    never(dword_be(0x0057aad0) == 0x00) &&
+    CurrentRuleSet() == 0x00 &&
+    trigger_when(PlayerWonGame())
   )
 )
 
@@ -221,23 +219,19 @@ achievement(
   trigger = (
     IsInGame() &&
     CurrentRuleSet() == 0x00 &&
-    trigger_when(TrainsAndUtilityOwners == 0x00) &&
+    trigger_when(
+      dword_be(PropertyPointer + 0x1d4) == 0x00 &&
+      dword_be(PropertyPointer + 0x1f0) == 0x00 &&
+      dword_be(PropertyPointer + 0x1fc) == 0x00 &&
+      dword_be(PropertyPointer + 0x21c) == 0x00 &&
+      dword_be(PropertyPointer + 0x230) == 0x00 &&
+      dword_be(PropertyPointer + 0x24c) == 0x00
+    ) &&
     prev(TrainsAndUtilityOwners) != 0x00
   )
 )
 
 // -------------------- Misc Challenges --------------------
-function StartOfGameCheck() {
-  return (
-    IsInGame() &&
-    CurrentRound() == 0x00 &&
-    dword_be(0x0054d74c) == 0x00 &&
-    dword_be(0x0054d7fc) == 0x00 &&
-    dword_be(0x0054d8ac) == 0x00 &&
-    dword_be(0x0054d95c) == 0x00
-  )
-}
-
 BrownProperty1Owner = dword_be(PropertyPointer + 0x1c4)
 BrownProperty2Owner = dword_be(PropertyPointer + 0x1cc)
 
