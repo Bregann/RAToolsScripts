@@ -1,7 +1,36 @@
 // LEGO Pirates of the Caribbean: The Video Game
 // #ID = 11090
 
-OFFSET = 0x580
+// ---------------------------------------- MEMORY ----------------------------------------
+
+RA_MASK = 0x1FFFFFFF
+
+function ChainPointer(base, offsets, accessor=dword_be)
+{
+    val = base
+    val = val & RA_MASK
+    
+    for i in range(0, length(offsets) - 1)
+    {
+        addr = val + offsets[i]
+        if (i == length(offsets) - 1)
+        {
+            val = accessor(addr)
+        }
+        else
+        {
+            val = dword_be(addr)
+            val = val & RA_MASK
+        }
+    }
+    
+    return val
+}
+
+BasePointer = dword_be(0x108458)
+function SaveData(offset, accessor) => ChainPointer(BasePointer, [0x5394, offset], accessor)
+
+// ---------------------------------------- LEVEL DATA ----------------------------------------
 
 LevelID = {
   0x00: "Port",  // 1
@@ -38,129 +67,100 @@ function IsChapter2() => CurrentLevelID >= 0x07 && CurrentLevelID <= 0x0b
 function IsChapter3() => CurrentLevelID >= 0x0d && CurrentLevelID <= 0x11
 function IsChapter4() => CurrentLevelID >= 0x13 && CurrentLevelID <= 0x17
 
-function Tally(data, offset = 0) {
+// ---------------------------------------- TALLY FUNCTIONS ----------------------------------------
+
+function Tally(offsets) {
   total = 0
-  for item in data{
-      total = total + byte(item + offset)
+  for off in offsets {
+    total = total + SaveData(off, byte)
   }
-  
   return total
 }
 
-function TallyPrev(data, offset = 0) {
+function TallyPrev(offsets) {
   total = 0
-  for item in data{
-      total = total + prev(byte(item + offset))
+  for off in offsets {
+    total = total + prev(SaveData(off, byte))
   }
-  
   return total
 }
 
-function TallyBitcount(data, offset = 0) {
+function TallyBitcount(offsets) {
   total = 0
-  for item in data {
-      total = total + bitcount(item + offset)
+  for off in offsets {
+    total = total + SaveData(off, bitcount)
   }
-  
   return total
 }
 
-function TallyPrevBitcount(data, offset = 0) {
+function TallyPrevBitcount(offsets) {
   total = 0
-  for item in data {
-      total = total + prev(bitcount(item + offset))
+  for off in offsets {
+    total = total + prev(SaveData(off, bitcount))
   }
-  
   return total
 }
 
 // ---------------------------------------- LEVEL PROGRESS ----------------------------------------
-function LevelComplete(achTitle, levelName, type, levelId, levelAddr) {
+
+function LevelComplete(achTitle, levelName, type, levelId, progressOffset) {
   achievement(
     title = achTitle,
-    description = "Complete " + "\"" + levelName + "\"" + " in Story mode",
+    description = "Complete \"" + levelName + "\" in Story mode",
     type = type,
     points = 4,
     trigger = (
       CurrentLevelID == levelId &&
-      ((bit2(levelAddr) == 0x01 && prev(bit2(levelAddr)) == 0x00) ||
-      (bit2(levelAddr + OFFSET) == 0x01 && prev(bit2(levelAddr + OFFSET)) == 0x00))
+      SaveData(progressOffset, bit2) == 0x01 &&
+      prev(SaveData(progressOffset, bit2)) == 0x00
     )
   )
 }
 
-LevelComplete("Sailing Away", LevelID[0x01], "Progression", 0x01, 0x01080b96)
-LevelComplete("Assembling a Crew", LevelID[0x02], "Progression", 0x02, 0x01080baa)
-LevelComplete("It's the Pearl!", LevelID[0x03], "Progression", 0x03, 0x01080bbe)
-LevelComplete("Smuggler's Den", LevelID[0x04], "Progression", 0x04, 0x01080bd2)
-LevelComplete("Island of Death", LevelID[0x05], "Progression", 0x05, 0x01080be6)
+// Curse of the Black Pearl
+LevelComplete("Sailing Away", LevelID[0x01], "Progression", 0x01, 0x1e)
+LevelComplete("Assembling a Crew", LevelID[0x02], "Progression", 0x02, 0x32)
+LevelComplete("It's the Pearl!", LevelID[0x03], "Progression", 0x03, 0x46)
+LevelComplete("Smuggler's Den", LevelID[0x04], "Progression", 0x04, 0x5a)
+LevelComplete("Island of Death", LevelID[0x05], "Progression", 0x05, 0x6e)
 
-LevelComplete("Escaping the Cannibals", LevelID[0x07], "Progression", 0x07, 0x01080c0e)
-LevelComplete("A Visit to Tia Dalma", LevelID[0x08], "Progression", 0x08, 0x01080c22)
-LevelComplete("The Dutchman's Secret", LevelID[0x09], "Progression", 0x09, 0x01080c36)
-LevelComplete("Hunt for the Heart", LevelID[0x0a], "Progression", 0x0a, 0x01080c4a)
-LevelComplete("Kraken Attack", LevelID[0x0b], "Progression", 0x0b, 0x01080c5e)
+// Dead Man's Chest
+LevelComplete("Escaping the Cannibals", LevelID[0x07], "Progression", 0x07, 0x96)
+LevelComplete("A Visit to Tia Dalma", LevelID[0x08], "Progression", 0x08, 0xaa)
+LevelComplete("The Dutchman's Secret", LevelID[0x09], "Progression", 0x09, 0xbe)
+LevelComplete("Hunt for the Heart", LevelID[0x0a], "Progression", 0x0a, 0xd2)
+LevelComplete("Kraken Attack", LevelID[0x0b], "Progression", 0x0b, 0xe6)
 
-LevelComplete("Singapore", LevelID[0x0d], "Progression", 0x0d, 0x01080c86)
-LevelComplete("Davy Jones' Locker", LevelID[0x0e], "Progression", 0x0e, 0x01080c9a)
-LevelComplete("Norrington's Choice", LevelID[0x0f], "Progression", 0x0f, 0x01080cae)
-LevelComplete("A Pirate Reunion", LevelID[0x10], "Progression", 0x10, 0x01080cc2)
-LevelComplete("The Calypso Sea Battle", LevelID[0x11], "Progression", 0x11, 0x01080cd6)
+// At World's End
+LevelComplete("Singapore", LevelID[0x0d], "Progression", 0x0d, 0x10e)
+LevelComplete("Davy Jones' Locker", LevelID[0x0e], "Progression", 0x0e, 0x122)
+LevelComplete("Norrington's Choice", LevelID[0x0f], "Progression", 0x0f, 0x136)
+LevelComplete("A Pirate Reunion", LevelID[0x10], "Progression", 0x10, 0x14a)
+LevelComplete("The Calypso Sea Battle", LevelID[0x11], "Progression", 0x11, 0x15e)
 
-LevelComplete("London Town", LevelID[0x13], "Progression", 0x13, 0x01080cfe)
-LevelComplete("Queen Anne's Revenge", LevelID[0x14], "Progression", 0x14, 0x01080d12)
-LevelComplete("Mermaid Beach", LevelID[0x15], "Progression", 0x15, 0x01080d26)
-LevelComplete("A Spanish Visit", LevelID[0x16], "Progression", 0x16, 0x01080d3a)
-LevelComplete("Finding the Fountain", LevelID[0x17], "Progression", 0x17, 0x01080d4e)
+// On Stranger Tides
+LevelComplete("London Town", LevelID[0x13], "Progression", 0x13, 0x186)
+LevelComplete("Queen Anne's Revenge", LevelID[0x14], "Progression", 0x14, 0x19a)
+LevelComplete("Mermaid Beach", LevelID[0x15], "Progression", 0x15, 0x1ae)
+LevelComplete("A Spanish Visit", LevelID[0x16], "Progression", 0x16, 0x1c2)
+LevelComplete("Finding the Fountain", LevelID[0x17], "Progression", 0x17, 0x1d6)
 
 // ---------------------------------------- TRUE PIRATE ----------------------------------------
-CurseOfBlackPearlTruePirate = [
-  0x01080b90,
-  0x01080ba4,
-  0x01080bb8,
-  0x01080bcc,
-  0x01080be0
-]
 
-DeadMansChestTruePirate = [
-  0x1080c09,
-  0x1080c1d,
-  0x1080c31,
-  0x1080c45,
-  0x1080c59
-]
+CurseOfBlackPearlTruePirate = [0x18, 0x2c, 0x40, 0x54, 0x68]
+DeadMansChestTruePirate = [0x91, 0xa5, 0xb9, 0xcd, 0xe1]
+AtWorldsEndTruePirate = [0x108, 0x11c, 0x130, 0x144, 0x158]
+OnStrangerTidesTruePirate = [0x180, 0x194, 0x1a8, 0x1bc, 0x1d0]
 
-AtWorldsEndTruePirate = [
-  0x1080c80,
-  0x1080c94,
-  0x1080ca8,
-  0x1080cbc,
-  0x1080cd0
-]
-
-OnStrangerTidesTruePirate = [
-  0x1080cf8,
-  0x1080d0c,
-  0x1080d20,
-  0x1080d34,
-  0x1080d48
-]
-
-function TruePirateComplete(achTitle, episodeName, tpData, ChapterProtection){
+function TruePirateComplete(achTitle, episodeName, tpOffsets, ChapterProtection) {
   achievement(
     title = achTitle,
     description = "Reach True Pirate status on every level in the " + episodeName + " episode",
     points = 10,
     trigger = (
-        (
-          ChapterProtection &&
-          Tally(tpData) == 0x05 &&
-          TallyPrev(tpData) == 0x04) ||
-        (
-          ChapterProtection &&
-          Tally(tpData, OFFSET) == 0x05 &&
-          TallyPrev(tpData, OFFSET) == 0x04
-        )
+      ChapterProtection &&
+      measured(Tally(tpOffsets) == 0x05) &&
+      TallyPrev(tpOffsets) == 0x04
     )
   )
 }
@@ -171,54 +171,21 @@ TruePirateComplete("Nine Pieces of Studs", "\"At World's End\"", AtWorldsEndTrue
 TruePirateComplete("Studs of Youth", "\"On Stranger Tides\"", OnStrangerTidesTruePirate, IsChapter4())
 
 // ---------------------------------------- MINI KITS ----------------------------------------
-CurseOfBlackPearlMinikits = [
-  0x1080b93,
-  0x1080ba7,
-  0x1080bbb,
-  0x1080bcf,
-  0x1080be3
-]
 
-DeadMansChestMinikits = [
-  0x1080c0b,
-  0x1080c1f,
-  0x1080c33,
-  0x1080c47,
-  0x1080c5b
-]
+CurseOfBlackPearlMinikits = [0x1b, 0x2f, 0x43, 0x57, 0x6b]
+DeadMansChestMinikits = [0x93, 0xa7, 0xbb, 0xcf, 0xe3]
+AtWorldsEndMinikits = [0x10b, 0x11f, 0x133, 0x147, 0x15b]
+OnStrangerTidesMinikits = [0x183, 0x197, 0x1ab, 0x1bf, 0x1d3]
 
-AtWorldsEndMinikits = [
-  0x1080c83,
-  0x1080c97,
-  0x1080cab,
-  0x1080cbf,
-  0x1080cd3
-]
-
-OnStrangerTidesMinikits = [
-  0x1080cfb,
-  0x1080d0f,
-  0x1080d23,
-  0x1080d37,
-  0x1080d4b
-]
-
-function MinikitsComplete(achTitle, episodeName, mkData, ChapterProtection) {
+function MinikitsComplete(achTitle, episodeName, mkOffsets, ChapterProtection) {
   achievement(
     title = achTitle,
-    description = "Collect all 50 minikits in the " + "\"" + episodeName + "\"" + " episode",
+    description = "Collect all 50 minikits in the \"" + episodeName + "\" episode",
     points = 10,
     trigger = (
-      (
-        ChapterProtection &&
-        Tally(mkData) == 0x32 &&
-        TallyPrev(mkData) < 0x32
-      ) ||
-      (
-        ChapterProtection &&
-        Tally(mkData, OFFSET) == 0x32 &&
-        TallyPrev(mkData, OFFSET) < 0x32
-      )
+      ChapterProtection &&
+      measured(Tally(mkOffsets) == 0x32) &&
+      TallyPrev(mkOffsets) < 0x32
     )
   )
 }
@@ -229,64 +196,25 @@ MinikitsComplete("Nine Pieces of Eight? Try Ten Pieces of Plastic", "At World's 
 MinikitsComplete("Stranger Minikits", "On Stranger Tides", OnStrangerTidesMinikits, IsChapter4())
 
 // ---------------------------------------- COMPASS PIECES ----------------------------------------
-CurseOfBlackPearlCompassPieces = [
-  0x1080b9a,
-  0x1080bae,
-  0x1080bc2,
-  0x1080bd6,
-  0x1080bea
-]
 
-DeadMansChestCompassPieces = [
-  0x1080c12,
-  0x1080c26,
-  0x1080c3a,
-  0x1080c4e,
-  0x1080c62
-]
+CurseOfBlackPearlCompassPieces = [0x22, 0x36, 0x4a, 0x5e, 0x72]
+DeadMansChestCompassPieces = [0x9a, 0xae, 0xc2, 0xd6, 0xea]
+AtWorldsEndCompassPieces = [0x112, 0x126, 0x13a, 0x14e, 0x162]
+OnStrangerTidesCompassPieces = [0x18a, 0x19e, 0x1b2, 0x1c6, 0x1da]
 
-AtWorldsEndCompassPieces = [
-  0x1080c8a,
-  0x1080c9e,
-  0x1080cb2,
-  0x1080cc6,
-  0x1080cda
-]
+RedHatOffsets = [0x689, 0x68a, 0x68b]
 
-OnStrangerTidesCompassPieces = [
-  0x1080d02,
-  0x1080d16,
-  0x1080d2a,
-  0x1080d3e,
-  0x1080d52
-]
+GoldBricks = SaveData(0x6b2, byte)
 
-RedHats = [
-  0x1081201,
-  0x1081202,
-  0x1081203
-]
-
-GoldBricks = byte(0x108122a)
-GoldBricksOS = byte(0x108122a + OFFSET)
-
-function CompassComplete(achTitle, episodeName, compassData, ChapterProtection) {
+function CompassComplete(achTitle, episodeName, compassOffsets, ChapterProtection) {
   achievement(
     title = achTitle,
-    description = "Find all 40 Compass Items in the " + "\"" + episodeName + "\"" + " episode",
+    description = "Find all 40 Compass Items in the \"" + episodeName + "\" episode",
     points = 10,
     trigger = (
-      (
-        ChapterProtection &&
-        TallyBitcount(compassData) == 40 &&
-        TallyPrevBitcount(compassData) < 40
-      ) 
-      ||
-      (
-        ChapterProtection &&
-        TallyBitcount(compassData, OFFSET) == 40 &&
-        TallyPrevBitcount(compassData, OFFSET) < 40
-      )
+      ChapterProtection &&
+      TallyBitcount(compassOffsets) == 40 &&
+      TallyPrevBitcount(compassOffsets) < 40
     )
   )
 }
@@ -294,56 +222,48 @@ function CompassComplete(achTitle, episodeName, compassData, ChapterProtection) 
 CompassComplete("It Points to What You Want Most", "Curse of the Black Pearl", CurseOfBlackPearlCompassPieces, IsChapter1())
 CompassComplete("The Compass Never Lies", "Dead Man's Chest", DeadMansChestCompassPieces, IsChapter2())
 CompassComplete("Path of the Pirate", "At World's End", AtWorldsEndCompassPieces, IsChapter3())
-CompassComplete("Seeker of Legend", "On Stranger Tide", OnStrangerTidesCompassPieces, IsChapter4())
+CompassComplete("Seeker of Legend", "On Stranger Tides", OnStrangerTidesCompassPieces, IsChapter4())
 
 // ---------------------------------------- PURCHASES ----------------------------------------
 
-Characters = [
-  0x1083fee, 0x1083ff0, 0x1083ff1, 0x1083ffa, 0x1083ffb, 0x1083ffc, 0x1083ffd,
-  0x1083ffe, 0x1083fff, 0x1084000, 0x1084001, 0x1084006, 0x1084007, 0x1084008,
-  0x1084009, 0x108400a, 0x108400b, 0x108400c, 0x108400d, 0x108400e, 0x1084010,
-  0x1084011, 0x1084012, 0x1084013, 0x1084014, 0x1084015, 0x1084016, 0x1084017,
-  0x1084018, 0x1084019, 0x108401e, 0x108401f, 0x1084021, 0x1084022, 0x1084023,
-  0x1084024, 0x1084025, 0x108402a, 0x108402b, 0x108402c, 0x1084030, 0x1084037,
-  0x108403b, 0x108403c, 0x108403d, 0x108403e, 0x108403f, 0x1084040, 0x1084041,
-  0x1084042, 0x1084043, 0x1084044, 0x1084045, 0x1084046, 0x1084048, 0x1084049,
-  0x108404a, 0x108404b, 0x108404c, 0x108404d, 0x108404f, 0x1084050, 0x1084051,
-  0x1084059, 0x108405b, 0x1084066, 0x1084067, 0x1084068, 0x108406d, 0x108406f,
-  0x108407b, 0x108407c, 0x108407d, 0x1084083, 0x1084090, 0x10840b6
+CharacterOffsets = [
+  0x3476, 0x3478, 0x3479, 0x3482, 0x3483, 0x3484, 0x3485, 0x3486, 0x3487, 0x3488, 0x3489,
+  0x348e, 0x348f, 0x3490, 0x3491, 0x3492, 0x3493, 0x3494, 0x3495, 0x3496, 0x3498,
+  0x3499, 0x349a, 0x349b, 0x349c, 0x349d, 0x349e, 0x349f, 0x34a0, 0x34a1,
+  0x34a6, 0x34a7, 0x34a9, 0x34aa, 0x34ab, 0x34ac, 0x34ad,
+  0x34b2, 0x34b3, 0x34b4, 0x34b8, 0x34bf,
+  0x34c3, 0x34c4, 0x34c5, 0x34c6, 0x34c7, 0x34c8, 0x34c9, 0x34ca, 0x34cb, 0x34cc, 0x34cd, 0x34ce,
+  0x34d0, 0x34d1, 0x34d2, 0x34d3, 0x34d4, 0x34d5, 0x34d7, 0x34d8, 0x34d9,
+  0x34e1, 0x34e3, 0x34ee, 0x34ef, 0x34f0, 0x34f5, 0x34f7,
+  0x3503, 0x3504, 0x3505, 0x350b,
+  0x3518,
+  0x353e
 ]
 
-function Purchases(achTitle, achDesc, points, data, amount) {
+function Purchases(achTitle, achDesc, points, charOffsets, amount) {
   achievement(
     title = achTitle,
     description = achDesc,
     points = points,
     trigger = (
       (
-        LastLoadedLevelID != 0xffffffff 
+        LastLoadedLevelID != 0xffffffff
         ||
         (
           LastLoadedLevelID != 0x01 &&
           CurrentLevelID != 0x01
         )
-      ) 
-      &&
-      (
-        Tally(data) >= amount &&
-        TallyPrev(data) >= amount - 5 &&
-        TallyPrev(data) < amount
-      ) 
-      ||
-      (
-        Tally(data, OFFSET) >= amount &&
-        TallyPrev(data, OFFSET) >= amount - 5 &&
-        TallyPrev(data, OFFSET) < amount
       )
+      &&
+      measured(Tally(charOffsets) >= amount) &&
+      TallyPrev(charOffsets) >= amount - 5 &&
+      TallyPrev(charOffsets) < amount
     )
   )
 }
 
-Purchases("Plundering Party", "Unlock 50% of the characters in the game", 10, Characters, 38)
-Purchases("Part of the Ship, Part of the Crew", "Unlock 100% of the characters in the game", 10, Characters, 76)
+Purchases("Plundering Party", "Unlock 50% of the characters in the game", 10, CharacterOffsets, 38)
+Purchases("Part of the Ship, Part of the Crew", "Unlock 100% of the characters in the game", 10, CharacterOffsets, 76)
 
 achievement(
   title = "Captain Jack... Now With Rhythm!",
@@ -351,14 +271,8 @@ achievement(
   points = 2,
   trigger = (
     CurrentLevelID == 0x00 &&
-    (
-      prev(byte(0x010840b6)) == 0x00 &&
-      byte(0x010840b6) == 0x01
-    ) ||
-    (
-      prev(byte(0x010840b6 + OFFSET)) == 0x00 &&
-      byte(0x010840b6 + OFFSET) == 0x01
-    )
+    prev(SaveData(0x353e, byte)) == 0x00 &&
+    SaveData(0x353e, byte) == 0x01
   )
 )
 
@@ -368,16 +282,9 @@ achievement(
   description = "Unlock and purchase all 20 Red Hats",
   points = 25,
   trigger = (
-    (
-      LoadProtection() &&
-      TallyBitcount(RedHats) == 20 &&
-      TallyPrevBitcount(RedHats) == 19
-    ) ||
-    (
-      LoadProtection() &&
-      TallyBitcount(RedHats, OFFSET) == 20 &&
-      TallyPrevBitcount(RedHats, OFFSET) == 19
-    )
+    LoadProtection() &&
+    TallyBitcount(RedHatOffsets) == 20 &&
+    TallyPrevBitcount(RedHatOffsets) == 19
   )
 )
 
@@ -386,18 +293,10 @@ achievement(
   description = "Collect all 85 Gold Bricks",
   points = 25,
   trigger = (
-    (
-      GoldBrickProtection() &&
-      GoldBricks == 85 &&
-      prev(GoldBricks) >= 80 &&
-      prev(GoldBricks) <= 84
-    ) ||
-    (
-      GoldBrickProtection() &&
-      GoldBricksOS == 85 &&
-      prev(GoldBricksOS) >= 80 &&
-      prev(GoldBricksOS) <= 84
-    ) 
+    GoldBrickProtection() &&
+    GoldBricks == 85 &&
+    prev(GoldBricks) >= 80 &&
+    prev(GoldBricks) <= 84
   )
 )
 
@@ -406,25 +305,48 @@ achievement(
   description = "Complete the bonus level \"The Ride\"",
   points = 5,
   trigger = (
-    (
-      CurrentLevelID == 0x19 &&
-      bit3(0x01080d76) == 0x01 &&
-      prev(bit3(0x01080d76) == 0x00)
-    ) ||
-    (
-      CurrentLevelID == 0x19 &&
-      bit3(0x01080d76 + OFFSET) == 0x01 &&
-      prev(bit3(0x01080d76 + OFFSET) == 0x00)
-    )
+    CurrentLevelID == 0x19 &&
+    SaveData(0x1fe, bit3) == 0x01 &&
+    prev(SaveData(0x1fe, bit3)) == 0x00
   )
 )
 
-// ------------------------ RP ------------------------
+// ---------------------------------------- RICH PRESENCE ----------------------------------------
+
+AllTruePirateOffsets = [
+  0x18, 0x2c, 0x40, 0x54, 0x68,
+  0x91, 0xa5, 0xb9, 0xcd, 0xe1,
+  0x108, 0x11c, 0x130, 0x144, 0x158,
+  0x180, 0x194, 0x1a8, 0x1bc, 0x1d0
+]
+
+AllMinikitOffsets = [
+  0x1b, 0x2f, 0x43, 0x57, 0x6b,
+  0x93, 0xa7, 0xbb, 0xcf, 0xe3,
+  0x10b, 0x11f, 0x133, 0x147, 0x15b,
+  0x183, 0x197, 0x1ab, 0x1bf, 0x1d3
+]
+
+TotalTruePirate = Tally(AllTruePirateOffsets)
+TotalMinikits = Tally(AllMinikitOffsets)
+TotalCharacters = Tally(CharacterOffsets)
+
 function IsInMainMenu() => (dword_be(0x008102d0) == 0x01 && prior(dword_be(0x008102d0) == 0xffffffff)) || dword_be(0x008102d0) == 0xffffffff
 function IsInPort() => CurrentLevelID == 0x00
+
 rich_presence_conditional_display(IsInMainMenu(), "Captain Jack Sparrow and the crew are preparing to plunder ☠️")
-rich_presence_conditional_display(IsInPort(), "Captain Jack Sparrow and the crew are exploring the port 🏴‍☠️☠️")
-rich_presence_display("Plundering studs in {0} 🏴‍☠️ [gold bricks: {1}]",
+
+rich_presence_conditional_display(IsInPort(), "Exploring the port 🏴‍☠️☠️ [🧱 {0}/85] [🏴‍☠️☠️ {1}/20] [🧩 {2}/200] [👤 {3}/76]",
+    rich_presence_value("GoldBricks", GoldBricks),
+    rich_presence_value("TruePirate", TotalTruePirate),
+    rich_presence_value("Minikits", TotalMinikits),
+    rich_presence_value("Characters", TotalCharacters)
+)
+
+rich_presence_display("Plundering studs in {0} 🏴‍☠️☠️ [🧱 {1}/85] [🏴‍☠️☠️ {2}/20] [🧩 {3}/200] [👤 {4}/76]",
     rich_presence_lookup("Level", CurrentLevelID, LevelID),
-    rich_presence_value("GoldBricks", GoldBricks + GoldBricksOS)
+    rich_presence_value("GoldBricks", GoldBricks),
+    rich_presence_value("TruePirate", TotalTruePirate),
+    rich_presence_value("Minikits", TotalMinikits),
+    rich_presence_value("Characters", TotalCharacters)
 )
