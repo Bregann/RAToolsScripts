@@ -882,8 +882,8 @@ achievement(
   trigger = (
     IsInGame() &&
     any_of(range(1, 8), fish =>
-      sum_of(chartedStuff, addr => byte(addr + ((fish - 1) * OFFSET))) == 40 &&
-      prev(sum_of(chartedStuff, addr => byte(addr + ((fish - 1) * OFFSET)))) < 40
+      sum_of(chartedStuff, addr => bit2(addr + ((fish - 1) * OFFSET))) == 40 &&
+      prev(sum_of(chartedStuff, addr => bit2(addr + ((fish - 1) * OFFSET)))) < 40
     )
   )
 )
