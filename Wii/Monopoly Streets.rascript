@@ -19,14 +19,14 @@ function PlayerMoney() => dword_be(GameDataPointer + 0x09cc)
 ProfileMoney = dword_be(0x12851c54)
 
 
-AiPlayer2Difficulty = dword_be(0x12850570)
-AiPlayer3Difficulty = dword_be(0x12850574)
-AiPlayer4Difficulty = dword_be(0x12850578)
+AiPlayer2Difficulty = dword_be(0x12861648)
+AiPlayer3Difficulty = dword_be(0x1286164c)
+AiPlayer4Difficulty = dword_be(0x12861650)
 
 function IsAgainstAIs(minAiType) => 
-  dword_be(0x12850570) >= minAiType && dword_be(0x12850570) != 0xffffffff && 
-  dword_be(0x12850574) >= minAiType && dword_be(0x12850574) != 0xffffffff &&
-  dword_be(0x12850578) >= minAiType && dword_be(0x12850578) != 0xffffffff
+  AiPlayer2Difficulty >= minAiType && AiPlayer2Difficulty != 0x07 && AiPlayer2Difficulty != 0x00 && 
+  AiPlayer3Difficulty >= minAiType && AiPlayer3Difficulty != 0x07 && AiPlayer3Difficulty != 0x00 &&
+  AiPlayer4Difficulty >= minAiType && AiPlayer4Difficulty != 0x07 && AiPlayer3Difficulty != 0x00
 
 function PlayerWonGame() => 
   IsInGame() && 
@@ -60,6 +60,7 @@ function ptr(base, offsets, accessor=dword_be)
 }
 
 MenuDataPointer = ptr(dword_be(0x00526888), [0x670, 0x30])
+ShopCategoryPointer = ptr(dword_be(0x00526888), [0x670, 0x38])
 
 MonopolyBoards = [
   "monopolybl/zones/zone_world1.rpk", //monopoly city
@@ -140,17 +141,29 @@ function PurchaseUnlockable(achTitle, itemName, itemType, points, itemPos, itemC
   )
 }
 
+function PurchaseBoard(achTitle, itemName, itemType, points, itemCost){
+  achievement(
+    title = achTitle,
+    description = "Purchase the \"" + itemName + "\" " + itemType + " from the MONOPOLY Streets Store",
+    points = points,
+    trigger = (
+      ShopCategoryPointer == 0x01 &&
+      prev(ProfileMoney) - ProfileMoney == itemCost
+    )
+  )
+}
+
 PurchaseUnlockable("Officer on Board", "Cop Hat", "token", 5, 0x02, 20000)
 PurchaseUnlockable("Ironing Out the Money", "Iron", "token", 3, 0x05, 10000)
 PurchaseUnlockable("Bag Secured", "Moneybag", "token", 4, 0x06, 15000)
 
-PurchaseUnlockable("Not Very Useful in the Rain!", "Cardboard Board", "board", 3, 0x02, 7000)
-PurchaseUnlockable("Brie-lliant Investment", "Cheese Board", "board", 3, 0x03, 6000)
-PurchaseUnlockable("Perfect for Winter", "Ice Board", "board", 3, 0x04, 8000)
-PurchaseUnlockable("Welcome to the Jungle", "Jungle Board", "board", 3, 0x05, 9000)
-PurchaseUnlockable("Monopoly in the Park", "Plaza Board", "board", 3, 0x06, 5000)
-PurchaseUnlockable("Warning: Do Not Eat", "Sweet Board", "board", 4, 0x07, 10000)
-PurchaseUnlockable("A Famous Board", "Landmark City", "board", 5, 0x08, 25000)
+PurchaseBoard("Not Very Useful in the Rain!", "Cardboard Board", "board", 3, 7000)
+PurchaseBoard("Brie-lliant Investment", "Cheese Board", "board", 3, 6000)
+PurchaseBoard("Perfect for Winter", "Ice Board", "board", 3, 8000)
+PurchaseBoard("Welcome to the Jungle", "Jungle Board", "board", 3, 9000)
+PurchaseBoard("Monopoly in the Park", "Plaza Board", "board", 3, 5000)
+PurchaseBoard("Warning: Do Not Eat", "Sweet Board", "board", 4, 10000)
+PurchaseBoard("A Famous Board", "Landmark City", "board", 5, 25000)
 
 achievement(
   title = "Look at Mii Go!",
@@ -209,7 +222,7 @@ PropertyHousePurchases("Cheese, Gromit! Cheese!", "Cheese Board", "pink", "Chedd
 PropertyHousePurchases("Bake It Till You Make It", "Sweet Board", "orange", "Chocolate Fudge Cake, Blueberry Muffin & Batternberg Cake", OrangePropertyOwners, OrangePropertyHotels, 15, MonopolyBoards[8])
 PropertyHousePurchases("Whale of a Fortune", "Ice Board", "red", "Penguin Point, Seal Island & Whale Cove", RedPropertyOwners, RedPropertyHotels, 15, MonopolyBoards[5])
 PropertyHousePurchases("Piccadilly Park", "Plaza", "yellow", "Leicester Square, Coventry Street & Piccadilly", YellowPropertyOwners, YellowPropertyHotels, 15, MonopolyBoards[7])
-PropertyHousePurchases("Master of the High Street", "Landmark City", "green", "Regent Street, Oxford Street & Bond Street", GreenPropertyOwners, GreenPropertyHotels, 15, MonopolyBoards[1])
+PropertyHousePurchases("Japanese Infrastructure", "Landmark City", "green", "Osaka, Tokyo and Sapporo", GreenPropertyOwners, GreenPropertyHotels, 15, MonopolyBoards[1])
 PropertyHousePurchases("Dangerous but Adventurous Investments", "Jungle Board", "dark blue", "Explorer's Path & Venom Creek", DarkBluePropertyOwners, DarkBluePropertyHotels, 10, MonopolyBoards[6])
 
 achievement(
@@ -223,11 +236,16 @@ achievement(
       dword_be(PropertyPointer + 0x1d4) == 0x00 &&
       dword_be(PropertyPointer + 0x1f0) == 0x00 &&
       dword_be(PropertyPointer + 0x1fc) == 0x00 &&
-      dword_be(PropertyPointer + 0x21c) == 0x00 &&
+      dword_be(PropertyPointer + 0x224) == 0x00 &&
       dword_be(PropertyPointer + 0x230) == 0x00 &&
       dword_be(PropertyPointer + 0x24c) == 0x00
     ) &&
-    prev(TrainsAndUtilityOwners) != 0x00
+      (prev(dword_be(PropertyPointer + 0x1d4)) != 0x00 ||
+      prev(dword_be(PropertyPointer + 0x1f0)) != 0x00 ||
+      prev(dword_be(PropertyPointer + 0x1fc)) != 0x00 ||
+      prev(dword_be(PropertyPointer + 0x224)) != 0x00 ||
+      prev(dword_be(PropertyPointer + 0x230)) != 0x00 ||
+      prev(dword_be(PropertyPointer + 0x24c)) != 0x00)
   )
 )
 
@@ -357,7 +375,7 @@ achievement(
     IsInGame() &&
     CurrentRuleSet() == 0x05 &&
     PlayerPosition() == 0x14 &&
-    prev(PlayerPosition()) < 0x14
+    prev(PlayerPosition()) != 0x14
   )
 )
 

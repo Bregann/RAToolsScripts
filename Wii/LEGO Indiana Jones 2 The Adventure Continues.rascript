@@ -2,7 +2,7 @@
 // #ID = 11087
 
 function CurrentLevel() => dword_be(0x10db4814)
-function LoadProtection() => CurrentLevel() != 0xfffffff && CurrentLevel() != 0x00000000 && CurrentLevel() != 0x00000033
+function LoadProtection() => dword_be(0x10db4814) != 0xfffffff && dword_be(0x10db4814) != 0x00 && dword_be(0x10db4814) != 0x00000033
 
 // ---------------------------------------- LEVEL PROGRESS ----------------------------------------
 
@@ -428,8 +428,9 @@ function SpeedrunLevel(achTitle, levelName, levelTimerAddr, textTime, secs){
     description = "Complete " + "\"" + levelName + "\"" + " in under " + textTime,
     points = 5,
     trigger = (
-      LoadProtection() && 
+      LoadProtection() &&
       float_be(levelTimerAddr) < secs &&
+      float_be(levelTimerAddr) != 0.00 &&
       (
         prev(float_be(levelTimerAddr)) == 0.0
         ||

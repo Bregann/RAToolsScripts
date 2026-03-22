@@ -285,23 +285,239 @@ function AllStarsEarned(achTitle, locName, cupName, raceDict){
   )
 }
 
-AllStarsEarned("Rio Ruler - Bronze", "Rio de Janeiro", "Bronze", RioBronzeP6)
-AllStarsEarned("Cairo Champion - Bronze", "Cairo", "Bronze", CairoBronzeP6)
-AllStarsEarned("Madrid Master - Bronze", "Madrid", "Bronze", MadridBronzeP6)
-AllStarsEarned("Singapore Superstar - Bronze", "Singapore", "Bronze", SingaporeBronzeP6)
-AllStarsEarned("Dubai Dominator - Bronze", "Dubai", "Bronze", DubaiBronzeP6)
+function AllStarsEarned(
+  achTitle, 
+  locName, 
+  cupName, 
+  circuit1RacePos, circuit1Style, circuit1BestLap, 
+  elim1RacePos, elim1Style, elim1BestLap, 
+  drift, 
+  speed, 
+  elim2RacePos, elim2Style, elim2BestLap, 
+  drag, 
+  circuit2Race, circuit2Style, circuit2BestLap, 
+  time
+  )
+  {
+  achievement(
+    title = achTitle,
+    description = "Earn the maximum amount of stars in every event in " + locName + " in the " + cupName + " Cup",
+    points = 10,
+    trigger = (
+      any_of(range(0, 5), p_id =>
+          CurrentProfile() == p_id &&
+          byte(circuit1RacePos - ((p_id - 5) * OFFSET)) == 0x01 &&
+          byte(circuit1Style - ((p_id - 5) * OFFSET)) == 0x01 &&
+          byte(circuit1BestLap - ((p_id - 5) * OFFSET)) == 0x01 &&
+          byte(elim1RacePos - ((p_id - 5) * OFFSET)) == 0x01 &&
+          byte(elim1Style - ((p_id - 5) * OFFSET)) == 0x01 &&
+          byte(elim1BestLap - ((p_id - 5) * OFFSET)) == 0x01 &&
+          byte(drift - ((p_id - 5) * OFFSET)) == 0x01 &&
+          byte(speed - ((p_id - 5) * OFFSET)) == 0x01 &&
+          byte(elim2RacePos - ((p_id - 5) * OFFSET)) == 0x01 &&
+          byte(elim2Style - ((p_id - 5) * OFFSET)) == 0x01 &&
+          byte(elim2BestLap - ((p_id - 5) * OFFSET)) == 0x01 &&
+          byte(drag - ((p_id - 5) * OFFSET)) == 0x01 &&
+          byte(circuit2Race - ((p_id - 5) * OFFSET)) == 0x01 &&
+          byte(circuit2Style - ((p_id - 5) * OFFSET)) == 0x01 &&
+          byte(circuit2BestLap - ((p_id - 5) * OFFSET)) == 0x01 &&
+          byte(time - ((p_id - 5) * OFFSET)) == 0x01 &&
+        (
+          prev(byte(circuit1RacePos - ((p_id - 5) * OFFSET))) != 0x01 ||
+          prev(byte(circuit1Style - ((p_id - 5) * OFFSET))) != 0x01 ||
+          prev(byte(circuit1BestLap - ((p_id - 5) * OFFSET))) != 0x01 ||
+          prev(byte(elim1RacePos - ((p_id - 5) * OFFSET))) != 0x01 ||
+          prev(byte(elim1Style - ((p_id - 5) * OFFSET))) != 0x01 ||
+          prev(byte(elim1BestLap - ((p_id - 5) * OFFSET))) != 0x01 ||
+          prev(byte(drift - ((p_id - 5) * OFFSET))) != 0x01 ||
+          prev(byte(speed - ((p_id - 5) * OFFSET))) != 0x01 ||
+          prev(byte(elim2RacePos - ((p_id - 5) * OFFSET))) != 0x01 ||
+          prev(byte(elim2Style - ((p_id - 5) * OFFSET))) != 0x01 ||
+          prev(byte(elim2BestLap - ((p_id - 5) * OFFSET))) != 0x01 ||
+          prev(byte(drag - ((p_id - 5) * OFFSET))) != 0x01 ||
+          prev(byte(circuit2Race - ((p_id - 5) * OFFSET))) != 0x01 ||
+          prev(byte(circuit2Style - ((p_id - 5) * OFFSET))) != 0x01 ||
+          prev(byte(circuit2BestLap - ((p_id - 5) * OFFSET))) != 0x01 ||
+          prev(byte(time - ((p_id - 5) * OFFSET))) != 0x01
+        )
+      )
+    )
+  )
+}
 
-AllStarsEarned("Rio Ruler - Silver", "Rio de Janeiro", "Silver", RioSilverP6)
-AllStarsEarned("Cairo Champion - Silver", "Cairo", "Silver", CairoSilverP6)
-AllStarsEarned("Madrid Master - Silver", "Madrid", "Silver", MadridSilverP6)
-AllStarsEarned("Singapore Superstar - Silver", "Singapore", "Silver", SingaporeSilverP6)
-AllStarsEarned("Dubai Dominator - Silver", "Dubai", "Silver", DubaiSilverP6)
 
-AllStarsEarned("Rio Ruler - Gold", "Rio de Janeiro", "Gold", RioGoldP6)
-AllStarsEarned("Cairo Champion - Gold", "Cairo", "Gold", CairoGoldP6)
-AllStarsEarned("Madrid Master - Gold", "Madrid", "Gold", MadridGoldP6)
-AllStarsEarned("Singapore Superstar - Gold", "Singapore", "Gold", SingaporeGoldP6)
-AllStarsEarned("Dubai Dominator - Gold", "Dubai", "Gold", DubaiGoldP6)
+
+AllStarsEarned(
+  "Rio Ruler - Bronze", "Rio de Janeiro", "Bronze",
+  RioBronzeP6[0], RioBronzeP6[1], RioBronzeP6[2],
+  RioBronzeP6[3], RioBronzeP6[4], RioBronzeP6[5],
+  RioBronzeP6[6],
+  RioBronzeP6[7],
+  RioBronzeP6[8], RioBronzeP6[9], RioBronzeP6[10],
+  RioBronzeP6[11],
+  RioBronzeP6[12], RioBronzeP6[13], RioBronzeP6[14],
+  RioBronzeP6[15]
+)
+
+AllStarsEarned(
+  "Rio Ruler - Silver", "Rio de Janeiro", "Silver",
+  RioSilverP6[0], RioSilverP6[1], RioSilverP6[2],
+  RioSilverP6[3], RioSilverP6[4], RioSilverP6[5],
+  RioSilverP6[6],
+  RioSilverP6[7],
+  RioSilverP6[8], RioSilverP6[9], RioSilverP6[10],
+  RioSilverP6[11],
+  RioSilverP6[12], RioSilverP6[13], RioSilverP6[14],
+  RioSilverP6[15]
+)
+
+AllStarsEarned(
+  "Rio Ruler - Gold", "Rio de Janeiro", "Gold",
+  RioGoldP6[0], RioGoldP6[1], RioGoldP6[2],
+  RioGoldP6[3], RioGoldP6[4], RioGoldP6[5],
+  RioGoldP6[6],
+  RioGoldP6[7],
+  RioGoldP6[8], RioGoldP6[9], RioGoldP6[10],
+  RioGoldP6[11],
+  RioGoldP6[12], RioGoldP6[13], RioGoldP6[14],
+  RioGoldP6[15]
+)
+
+
+AllStarsEarned(
+  "Cairo Champion - Bronze", "Cairo", "Bronze",
+  CairoBronzeP6[0], CairoBronzeP6[1], CairoBronzeP6[2],
+  CairoBronzeP6[3], CairoBronzeP6[4], CairoBronzeP6[5],
+  CairoBronzeP6[6],
+  CairoBronzeP6[7],
+  CairoBronzeP6[8], CairoBronzeP6[9], CairoBronzeP6[10],
+  CairoBronzeP6[11],
+  CairoBronzeP6[12], CairoBronzeP6[13], CairoBronzeP6[14],
+  CairoBronzeP6[15]
+)
+AllStarsEarned(
+  "Madrid Master - Bronze", "Madrid", "Bronze",
+  MadridBronzeP6[0], MadridBronzeP6[1], MadridBronzeP6[2],
+  MadridBronzeP6[3], MadridBronzeP6[4], MadridBronzeP6[5],
+  MadridBronzeP6[6],
+  MadridBronzeP6[7],
+  MadridBronzeP6[8], MadridBronzeP6[9], MadridBronzeP6[10],
+  MadridBronzeP6[11],
+  MadridBronzeP6[12], MadridBronzeP6[13], MadridBronzeP6[14],
+  MadridBronzeP6[15]
+)
+AllStarsEarned(
+  "Singapore Superstar - Bronze", "Singapore", "Bronze",
+  SingaporeBronzeP6[0], SingaporeBronzeP6[1], SingaporeBronzeP6[2],
+  SingaporeBronzeP6[3], SingaporeBronzeP6[4], SingaporeBronzeP6[5],
+  SingaporeBronzeP6[6],
+  SingaporeBronzeP6[7],
+  SingaporeBronzeP6[8], SingaporeBronzeP6[9], SingaporeBronzeP6[10],
+  SingaporeBronzeP6[11],
+  SingaporeBronzeP6[12], SingaporeBronzeP6[13], SingaporeBronzeP6[14],
+  SingaporeBronzeP6[15]
+)
+AllStarsEarned(
+  "Dubai Dominator - Bronze", "Dubai", "Bronze",
+  DubaiBronzeP6[0], DubaiBronzeP6[1], DubaiBronzeP6[2],
+  DubaiBronzeP6[3], DubaiBronzeP6[4], DubaiBronzeP6[5],
+  DubaiBronzeP6[6],
+  DubaiBronzeP6[7],
+  DubaiBronzeP6[8], DubaiBronzeP6[9], DubaiBronzeP6[10],
+  DubaiBronzeP6[11],
+  DubaiBronzeP6[12], DubaiBronzeP6[13], DubaiBronzeP6[14],
+  DubaiBronzeP6[15]
+)
+
+AllStarsEarned(
+  "Cairo Champion - Silver", "Cairo", "Silver",
+  CairoSilverP6[0], CairoSilverP6[1], CairoSilverP6[2],
+  CairoSilverP6[3], CairoSilverP6[4], CairoSilverP6[5],
+  CairoSilverP6[6],
+  CairoSilverP6[7],
+  CairoSilverP6[8], CairoSilverP6[9], CairoSilverP6[10],
+  CairoSilverP6[11],
+  CairoSilverP6[12], CairoSilverP6[13], CairoSilverP6[14],
+  CairoSilverP6[15]
+)
+AllStarsEarned(
+  "Madrid Master - Silver", "Madrid", "Silver",
+  MadridSilverP6[0], MadridSilverP6[1], MadridSilverP6[2],
+  MadridSilverP6[3], MadridSilverP6[4], MadridSilverP6[5],
+  MadridSilverP6[6],
+  MadridSilverP6[7],
+  MadridSilverP6[8], MadridSilverP6[9], MadridSilverP6[10],
+  MadridSilverP6[11],
+  MadridSilverP6[12], MadridSilverP6[13], MadridSilverP6[14],
+  MadridSilverP6[15]
+)
+AllStarsEarned(
+  "Singapore Superstar - Silver", "Singapore", "Silver",
+  SingaporeSilverP6[0], SingaporeSilverP6[1], SingaporeSilverP6[2],
+  SingaporeSilverP6[3], SingaporeSilverP6[4], SingaporeSilverP6[5],
+  SingaporeSilverP6[6],
+  SingaporeSilverP6[7],
+  SingaporeSilverP6[8], SingaporeSilverP6[9], SingaporeSilverP6[10],
+  SingaporeSilverP6[11],
+  SingaporeSilverP6[12], SingaporeSilverP6[13], SingaporeSilverP6[14],
+  SingaporeSilverP6[15]
+)
+AllStarsEarned(
+  "Dubai Dominator - Silver", "Dubai", "Silver",
+  DubaiSilverP6[0], DubaiSilverP6[1], DubaiSilverP6[2],
+  DubaiSilverP6[3], DubaiSilverP6[4], DubaiSilverP6[5],
+  DubaiSilverP6[6],
+  DubaiSilverP6[7],
+  DubaiSilverP6[8], DubaiSilverP6[9], DubaiSilverP6[10],
+  DubaiSilverP6[11],
+  DubaiSilverP6[12], DubaiSilverP6[13], DubaiSilverP6[14],
+  DubaiSilverP6[15]
+)
+
+AllStarsEarned(
+  "Cairo Champion - Gold", "Cairo", "Gold",
+  CairoGoldP6[0], CairoGoldP6[1], CairoGoldP6[2],
+  CairoGoldP6[3], CairoGoldP6[4], CairoGoldP6[5],
+  CairoGoldP6[6],
+  CairoGoldP6[7],
+  CairoGoldP6[8], CairoGoldP6[9], CairoGoldP6[10],
+  CairoGoldP6[11],
+  CairoGoldP6[12], CairoGoldP6[13], CairoGoldP6[14],
+  CairoGoldP6[15]
+)
+AllStarsEarned(
+  "Madrid Master - Gold", "Madrid", "Gold",
+  MadridGoldP6[0], MadridGoldP6[1], MadridGoldP6[2],
+  MadridGoldP6[3], MadridGoldP6[4], MadridGoldP6[5],
+  MadridGoldP6[6],
+  MadridGoldP6[7],
+  MadridGoldP6[8], MadridGoldP6[9], MadridGoldP6[10],
+  MadridGoldP6[11],
+  MadridGoldP6[12], MadridGoldP6[13], MadridGoldP6[14],
+  MadridGoldP6[15]
+)
+AllStarsEarned(
+  "Singapore Superstar - Gold", "Singapore", "Gold",
+  SingaporeGoldP6[0], SingaporeGoldP6[1], SingaporeGoldP6[2],
+  SingaporeGoldP6[3], SingaporeGoldP6[4], SingaporeGoldP6[5],
+  SingaporeGoldP6[6],
+  SingaporeGoldP6[7],
+  SingaporeGoldP6[8], SingaporeGoldP6[9], SingaporeGoldP6[10],
+  SingaporeGoldP6[11],
+  SingaporeGoldP6[12], SingaporeGoldP6[13], SingaporeGoldP6[14],
+  SingaporeGoldP6[15]
+)
+AllStarsEarned(
+  "Dubai Dominator - Gold", "Dubai", "Gold",
+  DubaiGoldP6[0], DubaiGoldP6[1], DubaiGoldP6[2],
+  DubaiGoldP6[3], DubaiGoldP6[4], DubaiGoldP6[5],
+  DubaiGoldP6[6],
+  DubaiGoldP6[7],
+  DubaiGoldP6[8], DubaiGoldP6[9], DubaiGoldP6[10],
+  DubaiGoldP6[11],
+  DubaiGoldP6[12], DubaiGoldP6[13], DubaiGoldP6[14],
+  DubaiGoldP6[15]
+)
 
 BronzeCircuitRaces = {
   0: ["Bronze", "Rio de Janeiro", 0x00, 0x00, 0x00, 1],

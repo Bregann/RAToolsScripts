@@ -42,7 +42,7 @@ function CalculateOffsetAndReturnAddress(baseAddr){
 LocationPointer = dword_be(0x185ea0) & 0x1fffffff
 function RpScreen() => dword_be(LocationPointer + 0x00)
 function CurrentScreen() => dword_be(0x1001eb50)
-function IsInGame() => CurrentScreen() != 0xffffff00
+function IsInGame() => CurrentScreen() != 0xffffff00 && CurrentScreen() != 0x01fe01fe
 
 TimerRaceStatus = ChainPointer(dword_be(0x00a50808), [0x90, 0x24, 0x1c0])
 ChallengeTimer = ChainPointer(dword_be(0x00a50808), [0x90, 0x24, 0x42c])
