@@ -205,7 +205,7 @@ SilverKeyAchievement("Heavy Hitter", 5, CalculateOffsetAndReturnAddress(0x1003cf
 
 SilverKeyAchievement("Putt-Putt Professional", 5, CalculateOffsetAndReturnAddress(0x1003cfd9), "Mini Golf")
 
-SilverKeyAchievement("Airbound Artist", 5, CalculateOffsetAndReturnAddress(0x1003cfd0), "Halfpipe")
+SilverKeyAchievement("Airbound Artist", 5, CalculateOffsetAndReturnAddress(0x1003cfde), "Halfpipe")
 
 
 SilverKeyAchievement("Snow Sniper", 5, CalculateOffsetAndReturnAddress(0x1003cfe7), "Snowball Fight")
@@ -1072,52 +1072,52 @@ Level1Glass = [
 
 Level2Glass = [
   0x1003c938, 0x1003c944, 0x1003c950,
-  0x1003c958, 0x1003c964
+  0x1003c95c, 0x1003c968
 ]
 
 Level3Glass = [
   0x1003c93c, 0x1003c948, 0x1003c954,
-  0x1003c958, 0x1003c964
+  0x1003c960, 0x1003c96c
 ]
 
 achievement(
   title = "Glass Beginner",
-  description = "Reach Pro rank on all of the songs on Level 1 difficulty in the \"Glass Harp\" minigame",
+  description = "Reach Pro rank or higher on all of the songs on Level 1 difficulty in the \"Glass Harp\" minigame",
   points = 3,
   trigger = (
     IsInGame() &&
     CurrentScreen() == 0x0024ff00 &&
     any_of(range(1, 8), glass =>
-      all_of(Level1Glass, addr => dword_be(addr + ((glass - 1) * OFFSET)) >= 0x08 && dword_be(addr + ((glass - 1) * OFFSET)) <= 10) &&
-      prev(any_of(Level1Glass, addr => dword_be(addr + ((glass - 1) * OFFSET)) != 0x08))
+      all_of(Level1Glass, addr => dword_be(addr + ((glass - 1) * OFFSET)) >= 0x08 && dword_be(addr + ((glass - 1) * OFFSET)) <= 13) &&
+      prev(any_of(Level1Glass, addr => dword_be(addr + ((glass - 1) * OFFSET)) < 0x08))
     )
   )
 )
 
 achievement(
   title = "Glass Harmony",
-  description = "Reach Pro rank on all of the songs on Level 2 difficulty in the \"Glass Harp\" minigame",
+  description = "Reach Pro rank or higher on all of the songs on Level 2 difficulty in the \"Glass Harp\" minigame",
   points = 5,
   trigger = (
     IsInGame() &&
     CurrentScreen() == 0x0024ff00 &&
     any_of(range(1, 8), glass =>
-      all_of(Level2Glass, addr => dword_be(addr + ((glass - 1) * OFFSET)) >= 0x08 && dword_be(addr + ((glass - 1) * OFFSET)) <= 10) &&
-      prev(any_of(Level2Glass, addr => dword_be(addr + ((glass - 1) * OFFSET)) != 0x08))
+      all_of(Level2Glass, addr => dword_be(addr + ((glass - 1) * OFFSET)) >= 0x08 && dword_be(addr + ((glass - 1) * OFFSET)) <= 13) &&
+      prev(any_of(Level2Glass, addr => dword_be(addr + ((glass - 1) * OFFSET)) < 0x08))
     )
   )
 )
 
 achievement(
   title = "The Master of Glass",
-  description = "Reach Pro rank on all of the songs on Level 3 difficulty in the \"Glass Harp\" minigame",
+  description = "Reach Pro rank or higher on all of the songs on Level 3 difficulty in the \"Glass Harp\" minigame",
   points = 10,
   trigger = (
     IsInGame() &&
     CurrentScreen() == 0x0024ff00 &&
     any_of(range(1, 8), glass =>
-      all_of(Level3Glass, addr => dword_be(addr + ((glass - 1) * OFFSET)) >= 0x08 && dword_be(addr + ((glass - 1) * OFFSET)) <= 10) &&
-      prev(any_of(Level3Glass, addr => dword_be(addr + ((glass - 1) * OFFSET)) != 0x08))
+      all_of(Level3Glass, addr => dword_be(addr + ((glass - 1) * OFFSET)) >= 0x08 && dword_be(addr + ((glass - 1) * OFFSET)) <= 13) &&
+      prev(any_of(Level3Glass, addr => dword_be(addr + ((glass - 1) * OFFSET)) < 0x08))
     )
   )
 )

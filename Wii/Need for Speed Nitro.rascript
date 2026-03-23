@@ -183,7 +183,6 @@ ClassACars = {
     0x18: "Lamborghini Gallardo",
     0x19: "Dodge Challenger",
     0x1b: "Pagani Zonda R",
-    0x1e: "Nissan Skyline GT-R"
 }
 
 ClassBCars = {
@@ -196,7 +195,8 @@ ClassBCars = {
   0x1c: "Ford Escort RS Cosworth",
   0x1d: "Mitsubishi Lancer Evolution",
   0x1f: "Porsche Cayman S",
-  0x21: "Porsche Cayenne Turbo S"
+  0x21: "Porsche Cayenne Turbo S",
+  0x1e: "Nissan Skyline GT-R"
 }
 
 ClassCCars = {
