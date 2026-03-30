@@ -24,9 +24,9 @@ AiPlayer3Difficulty = dword_be(0x1286164c)
 AiPlayer4Difficulty = dword_be(0x12861650)
 
 function IsAgainstAIs(minAiType) => 
-  AiPlayer2Difficulty >= minAiType && AiPlayer2Difficulty != 0x07 && AiPlayer2Difficulty != 0x00 && 
-  AiPlayer3Difficulty >= minAiType && AiPlayer3Difficulty != 0x07 && AiPlayer3Difficulty != 0x00 &&
-  AiPlayer4Difficulty >= minAiType && AiPlayer4Difficulty != 0x07 && AiPlayer3Difficulty != 0x00
+  AiPlayer2Difficulty >= minAiType && AiPlayer2Difficulty != 0x07 && AiPlayer2Difficulty != 0x00  && AiPlayer2Difficulty != 0x05 && 
+  AiPlayer3Difficulty >= minAiType && AiPlayer3Difficulty != 0x07 && AiPlayer3Difficulty != 0x00 && AiPlayer3Difficulty != 0x05 &&
+  AiPlayer4Difficulty >= minAiType && AiPlayer4Difficulty != 0x07 && AiPlayer4Difficulty != 0x00 && AiPlayer4Difficulty != 0x05
 
 function PlayerWonGame() => 
   IsInGame() && 
@@ -659,6 +659,7 @@ SweetBoardPosition = {
 
 // we ignore this mess because why loop when you can copy paste
 rich_presence_conditional_display(!IsInGame(), "Browsing the menus")
+
 rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[0]), "Playing on the Monopoly City Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
   rich_presence_lookup("Ruleset", CurrentRuleSet(), RuleSets),
   rich_presence_lookup("Square", PlayerPosition(), ClassicBoardPosition),

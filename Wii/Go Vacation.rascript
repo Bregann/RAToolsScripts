@@ -96,11 +96,11 @@ BadgeAchievement("Gravity Defier", "Halfpipe", CalculateOffsetAndReturnAddress(0
 BadgeAchievement("Winter Warfare", "Snowball Fight", CalculateOffsetAndReturnAddress(0x1003d0e8))
 BadgeAchievement("Leader of the Pack", "Dog Sled", CalculateOffsetAndReturnAddress(0x1003d0e5))
 BadgeAchievement("Alpine Racer", "Snow Races", CalculateOffsetAndReturnAddress(0x1003d0df))
-BadgeAchievement("Perfect Routine", "Trick Challenge", CalculateOffsetAndReturnAddress(0x1003d0e0))
+BadgeAchievement("Perfect Routine", "Trick Challenge", CalculateOffsetAndReturnAddress(0x1003d0e3))
 BadgeAchievement("Slippery Slope", "Snow Tubing", CalculateOffsetAndReturnAddress(0x1003d0e4))
 BadgeAchievement("Engine on Ice", "Snowmobile Races", CalculateOffsetAndReturnAddress(0x1003d0e2))
 BadgeAchievement("Bumpy Business", "Mogul", CalculateOffsetAndReturnAddress(0x1003d0e1))
-BadgeAchievement("Ice-Cold Style", "Snow Tricks", CalculateOffsetAndReturnAddress(0x1003d0e3))
+BadgeAchievement("Ice-Cold Style", "Snow Tricks", CalculateOffsetAndReturnAddress(0x1003d0e0))
 BadgeAchievement("Do You Want to Build a Snowman?", "Snowman Making", CalculateOffsetAndReturnAddress(0x1003d0e6))
 BadgeAchievement("Leap of Faith", "Ski Jumping", CalculateOffsetAndReturnAddress(0x1003d0e9))
 BadgeAchievement("Here Fishy Fishy!", "Ice Fishing", CalculateOffsetAndReturnAddress(0x1003d0e7))
@@ -463,19 +463,19 @@ SchoolAchievement("Shredding the Waves", "Normal Surfing Tricks", "Marine School
 SchoolAchievement("Tunnel Vision", "Tube Surfing Controls", "Marine School", 3, MarineSchoolTubeSurfingControls, 8)
 SchoolAchievement("Tube Trickster", "Tube Surfing Tricks", "Marine School", 3, MarineSchoolTubeSurfingTricks, 7)
 
-SchoolAchievement("Walking in the City", "Walk", "City School", 2, CitySchoolWalking, 4)
-SchoolAchievement("Roller Ready", "Inline Skate Controls", "City School", 3, CitySchoolInlineSkatesControls, 7)
+SchoolAchievement("Walking in the City", "Walk", "City School", 2, CitySchoolWalking, 3)
+SchoolAchievement("Roller Ready", "Inline Skate Controls", "City School", 3, CitySchoolInlineSkatesControls, 9)
 SchoolAchievement("Inline Trick Master", "Inline Skate Tricks", "City School", 4, CitySchoolInlineSkatesTricks, 15)
 SchoolAchievement("Board Basic Training", "Skateboard Controls", "City School", 3, CitySchoolSkateboardControls, 9)
 SchoolAchievement("Kickflip Classroom", "Skateboard Tricks", "City School", 4, CitySchoolSkateboardTricks, 16)
 
-SchoolAchievement("Winter Walking", "Walk", "Snow School", 2, CitySchoolWalking, 3)
+SchoolAchievement("Winter Walking", "Walk", "Snow School", 2, SnowSchoolWalking, 3)
 SchoolAchievement("Skiing Fundamentals", "Ski Controls", "Snow School", 4, SnowSchoolSkisControls, 13)
 SchoolAchievement("Freestyle Ski School", "Ski Tricks", "Snow School", 4, SnowSchoolSkisTricks, 15)
 SchoolAchievement("Snowboarding Basics", "Snowboard Controls", "Snow School", 4, SnowSchoolSnowboardControls, 13)
 SchoolAchievement("Board Acrobatics 101", "Snowboard Tricks", "Snow School", 4, SnowSchoolSnowboardTricks, 15)
 SchoolAchievement("Snowmobile Safety Course", "Snowmobile Controls", "Snow School", 3, SnowSchoolSnowmobileControls, 5)
-SchoolAchievement("High-Speed Stunts", "Snowmobile Tricks", "Snow School", 4, SnowSchoolSnowmobileTricks, 16)
+SchoolAchievement("High-Speed Stunts", "Snowmobile Tricks", "Snow School", 4, SnowSchoolSnowmobileTricks, 13)
 SchoolAchievement("Tubing Techniques", "Snow Tube", "Snow School", 2, SnowSchoolSnowTube, 4)
 
 SchoolAchievement("Alpine Mobility", "Walk/Swim", "Mountain School", 2, MountainSchoolWalkingSwimming, 4)
@@ -504,8 +504,8 @@ function BalloonHintAchievement(achTitle, hintName, points, baseAddresses, targe
     points = points,
     trigger = (
       IsInGame() &&
-      sum_of(baseAddresses, addr => byte(addr)) == targetCount &&
-      prev(sum_of(baseAddresses, addr => byte(addr))) < targetCount
+      sum_of(baseAddresses, addr => bit7(addr)) == targetCount &&
+      prev(sum_of(baseAddresses, addr => bit7(addr))) < targetCount
     )
   )
 }
@@ -1089,8 +1089,11 @@ achievement(
     CurrentScreen() == 0x0024ff00 &&
     any_of(range(1, 8), glass =>
       all_of(Level1Glass, addr => dword_be(addr + ((glass - 1) * OFFSET)) >= 0x08 && dword_be(addr + ((glass - 1) * OFFSET)) <= 13) &&
-      prev(any_of(Level1Glass, addr => dword_be(addr + ((glass - 1) * OFFSET)) < 0x08))
-    )
+      (
+        prev(any_of(Level1Glass, addr => dword_be(addr + ((glass - 1) * OFFSET)) < 0x08)) 
+        ||
+        prev(any_of(Level1Glass, addr => dword_be(addr + ((glass - 1) * OFFSET)) == 0xfffffffc))
+      )    )
   )
 )
 
@@ -1103,8 +1106,11 @@ achievement(
     CurrentScreen() == 0x0024ff00 &&
     any_of(range(1, 8), glass =>
       all_of(Level2Glass, addr => dword_be(addr + ((glass - 1) * OFFSET)) >= 0x08 && dword_be(addr + ((glass - 1) * OFFSET)) <= 13) &&
-      prev(any_of(Level2Glass, addr => dword_be(addr + ((glass - 1) * OFFSET)) < 0x08))
-    )
+      (
+        prev(any_of(Level2Glass, addr => dword_be(addr + ((glass - 1) * OFFSET)) < 0x08)) 
+        ||
+        prev(any_of(Level2Glass, addr => dword_be(addr + ((glass - 1) * OFFSET)) == 0xfffffffc))
+      )    )
   )
 )
 
@@ -1117,7 +1123,11 @@ achievement(
     CurrentScreen() == 0x0024ff00 &&
     any_of(range(1, 8), glass =>
       all_of(Level3Glass, addr => dword_be(addr + ((glass - 1) * OFFSET)) >= 0x08 && dword_be(addr + ((glass - 1) * OFFSET)) <= 13) &&
-      prev(any_of(Level3Glass, addr => dword_be(addr + ((glass - 1) * OFFSET)) < 0x08))
+      (
+        prev(any_of(Level3Glass, addr => dword_be(addr + ((glass - 1) * OFFSET)) < 0x08)) 
+        ||
+        prev(any_of(Level3Glass, addr => dword_be(addr + ((glass - 1) * OFFSET)) == 0xfffffffc))
+      )
     )
   )
 )
@@ -1200,11 +1210,17 @@ achievement(
   description = "Reach a total score of 240 or higher across all 5 bowling stages in the \"Snow Tubing\" minigame",
   points = 10,
   trigger = (
-    IsInGame() &&
+      IsInGame() &&
+      (
+        CurrentScreen() == 0x003a0100 ||
+        CurrentScreen() == 0x003a0101 ||
+        CurrentScreen() == 0x003a0102 ||
+        CurrentScreen() == 0x003a0103 ||
+        CurrentScreen() == 0x003a0104
+      ) &&
       any_of(range(1, 8), bowl =>
-      all_of(BowlingLevels, addr => dword_be(addr + ((bowl - 1) * OFFSET)) != 0xfffffffc) &&
       sum_of(BowlingLevels, addr => dword_be(addr + ((bowl - 1) * OFFSET))) >= 960 &&
-      sum_of(BowlingLevels, addr => prev(dword_be(addr + ((bowl - 1) * OFFSET)))) < 960
+      all_of(BowlingLevels, addr => dword_be(addr + ((bowl - 1) * OFFSET)) != 0xfffffffc)
     )
   )
 )

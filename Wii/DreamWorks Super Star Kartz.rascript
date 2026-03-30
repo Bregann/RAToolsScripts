@@ -335,19 +335,19 @@ function CharacterAddress() => 0x00584268
 function CurrentPosition() => dword_be(RaceDataPointer + 0x24)
 
 rich_presence_conditional_display(!IsInGame(), "Browsing the menus")
-rich_presence_conditional_display(ascii_string_equals(CharacterAddress(), "Shrek_Swamp_Night.wad"), "{0} is racing in Shrek's Swamp (Night) on {1} mode [{2} place] [lap: {3}]",
+rich_presence_conditional_display(ascii_string_equals(CurrentLevel(), "Shrek_Swamp_Night.wad"), "{0} is racing in Shrek's Swamp (Night) on {1} mode [{2} place] [lap: {3}]",
   rich_presence_ascii_string_lookup("Character", CharacterAddress(), CharacterAscii),
   rich_presence_lookup("Mode", CurrentMode(), Modes),
   rich_presence_lookup("Placement", CurrentPosition(), Placement),
   rich_presence_value("Lap", CurrentLap())
 )
-rich_presence_conditional_display(ascii_string_equals(CharacterAddress(), "IsleOfBerk_Night.wad"), "{0} is racing in Island Of Berk (Night) on {1} mode [{2} place] [lap: {3}]",
+rich_presence_conditional_display(ascii_string_equals(CurrentLevel(), "IsleOfBerk_Night.wad"), "{0} is racing in Island Of Berk (Night) on {1} mode [{2} place] [lap: {3}]",
   rich_presence_ascii_string_lookup("Character", CharacterAddress(), CharacterAscii),
   rich_presence_lookup("Mode", CurrentMode(), Modes),
   rich_presence_lookup("Placement", CurrentPosition(), Placement),
   rich_presence_value("Lap", CurrentLap())
 )
-rich_presence_conditional_display(ascii_string_equals(CharacterAddress(), "Africa_Night.wad"), "{0} is racing in Africa (Night) on {1} mode [{2} place] [lap: {3}]",
+rich_presence_conditional_display(ascii_string_equals(CurrentLevel(), "Africa_Night.wad"), "{0} is racing in Africa (Night) on {1} mode [{2} place] [lap: {3}]",
   rich_presence_ascii_string_lookup("Character", CharacterAddress(), CharacterAscii),
   rich_presence_lookup("Mode", CurrentMode(), Modes),
   rich_presence_lookup("Placement", CurrentPosition(), Placement),
