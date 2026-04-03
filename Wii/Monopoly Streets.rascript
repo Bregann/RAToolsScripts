@@ -62,6 +62,13 @@ function ptr(base, offsets, accessor=dword_be)
 MenuDataPointer = ptr(dword_be(0x00526888), [0x670, 0x30])
 ShopCategoryPointer = ptr(dword_be(0x00526888), [0x670, 0x38])
 
+SaveGameSlot = dword_be(0x1284f2f8)
+SaveGame1ModeAddr = 0x12850864
+SaveGame2ModeAddr = 0x12850ea8
+SaveGame3ModeAddr = 0x128514ec
+
+function IsLoadedGame() => CurrentRuleSet() >= 0x13
+
 MonopolyBoards = [
   "monopolybl/zones/zone_world1.rpk", //monopoly city
   "monopolyworld/zones/zone_world1.rpk", // landmark city
@@ -86,6 +93,8 @@ function StartOfGameCheck() {
 }
 
 // -------------------- Game Wins --------------------
+SaveGameModeNamesList = ["MonoClassic", "SpeedDie", "FastGame", "BullMarket", "Jackpot", "FastDeal"]
+
 function GameWonAchievement(achTitle, ruleSet, ruleSetSelected){
   achievement(
     title = achTitle,
@@ -95,7 +104,14 @@ function GameWonAchievement(achTitle, ruleSet, ruleSetSelected){
     trigger = (
       PlayerWonGame() &&
       IsAgainstAIs(0x01) &&
-      CurrentRuleSet() == ruleSetSelected
+      (
+        (!IsLoadedGame() && CurrentRuleSet() == ruleSetSelected) ||
+        (IsLoadedGame() && (
+          (SaveGameSlot == 0x00 && ascii_string_equals(SaveGame1ModeAddr, SaveGameModeNamesList[ruleSetSelected])) ||
+          (SaveGameSlot == 0x01 && ascii_string_equals(SaveGame2ModeAddr, SaveGameModeNamesList[ruleSetSelected])) ||
+          (SaveGameSlot == 0x02 && ascii_string_equals(SaveGame3ModeAddr, SaveGameModeNamesList[ruleSetSelected]))
+        ))
+      )
     )
   )
 }
@@ -658,59 +674,247 @@ SweetBoardPosition = {
 }
 
 // we ignore this mess because why loop when you can copy paste
+SavedRuleSets = {
+  "MonoClassic": "Official MONOPOLY",
+  "SpeedDie":    "Speed Die",
+  "FastGame":    "Short Game",
+  "BullMarket":  "Bull Market",
+  "Jackpot":     "Jackpot",
+  "FastDeal":    "Fast Deal"
+}
+
 rich_presence_conditional_display(!IsInGame(), "Browsing the menus")
 
-rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[0]), "Playing on the Monopoly City Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
+// Monopoly City Board
+rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[0]) && !IsLoadedGame(), "Playing on the Monopoly City Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
   rich_presence_lookup("Ruleset", CurrentRuleSet(), RuleSets),
   rich_presence_lookup("Square", PlayerPosition(), ClassicBoardPosition),
   rich_presence_value("Round", CurrentRound() + 1),
   rich_presence_value("Money", PlayerMoney())
 )
-rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[1]), "Playing on the Landmark City Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
+rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[0]) && IsLoadedGame() && SaveGameSlot == 0x00, "Playing on the Monopoly City Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
+  rich_presence_ascii_string_lookup("SavedRuleset", SaveGame1ModeAddr, SavedRuleSets),
+  rich_presence_lookup("Square", PlayerPosition(), ClassicBoardPosition),
+  rich_presence_value("Round", CurrentRound() + 1),
+  rich_presence_value("Money", PlayerMoney())
+)
+rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[0]) && IsLoadedGame() && SaveGameSlot == 0x01, "Playing on the Monopoly City Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
+  rich_presence_ascii_string_lookup("SavedRuleset", SaveGame2ModeAddr, SavedRuleSets),
+  rich_presence_lookup("Square", PlayerPosition(), ClassicBoardPosition),
+  rich_presence_value("Round", CurrentRound() + 1),
+  rich_presence_value("Money", PlayerMoney())
+)
+rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[0]) && IsLoadedGame() && SaveGameSlot == 0x02, "Playing on the Monopoly City Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
+  rich_presence_ascii_string_lookup("SavedRuleset", SaveGame3ModeAddr, SavedRuleSets),
+  rich_presence_lookup("Square", PlayerPosition(), ClassicBoardPosition),
+  rich_presence_value("Round", CurrentRound() + 1),
+  rich_presence_value("Money", PlayerMoney())
+)
+
+// Landmark City Board
+rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[1]) && !IsLoadedGame(), "Playing on the Landmark City Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
   rich_presence_lookup("Ruleset", CurrentRuleSet(), RuleSets),
   rich_presence_lookup("Square", PlayerPosition(), ClassicBoardPosition),
   rich_presence_value("Round", CurrentRound() + 1),
   rich_presence_value("Money", PlayerMoney())
 )
-rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[2]), "Playing on the Classic Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
+rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[1]) && IsLoadedGame() && SaveGameSlot == 0x00, "Playing on the Landmark City Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
+  rich_presence_ascii_string_lookup("SavedRuleset", SaveGame1ModeAddr, SavedRuleSets),
+  rich_presence_lookup("Square", PlayerPosition(), ClassicBoardPosition),
+  rich_presence_value("Round", CurrentRound() + 1),
+  rich_presence_value("Money", PlayerMoney())
+)
+rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[1]) && IsLoadedGame() && SaveGameSlot == 0x01, "Playing on the Landmark City Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
+  rich_presence_ascii_string_lookup("SavedRuleset", SaveGame2ModeAddr, SavedRuleSets),
+  rich_presence_lookup("Square", PlayerPosition(), ClassicBoardPosition),
+  rich_presence_value("Round", CurrentRound() + 1),
+  rich_presence_value("Money", PlayerMoney())
+)
+rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[1]) && IsLoadedGame() && SaveGameSlot == 0x02, "Playing on the Landmark City Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
+  rich_presence_ascii_string_lookup("SavedRuleset", SaveGame3ModeAddr, SavedRuleSets),
+  rich_presence_lookup("Square", PlayerPosition(), ClassicBoardPosition),
+  rich_presence_value("Round", CurrentRound() + 1),
+  rich_presence_value("Money", PlayerMoney())
+)
+
+// Classic Board
+rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[2]) && !IsLoadedGame(), "Playing on the Classic Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
   rich_presence_lookup("Ruleset", CurrentRuleSet(), RuleSets),
   rich_presence_lookup("Square", PlayerPosition(), ClassicBoardPosition),
   rich_presence_value("Round", CurrentRound() + 1),
   rich_presence_value("Money", PlayerMoney())
 )
-rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[3]), "Playing on the Cardboard Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
+rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[2]) && IsLoadedGame() && SaveGameSlot == 0x00, "Playing on the Classic Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
+  rich_presence_ascii_string_lookup("SavedRuleset", SaveGame1ModeAddr, SavedRuleSets),
+  rich_presence_lookup("Square", PlayerPosition(), ClassicBoardPosition),
+  rich_presence_value("Round", CurrentRound() + 1),
+  rich_presence_value("Money", PlayerMoney())
+)
+rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[2]) && IsLoadedGame() && SaveGameSlot == 0x01, "Playing on the Classic Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
+  rich_presence_ascii_string_lookup("SavedRuleset", SaveGame2ModeAddr, SavedRuleSets),
+  rich_presence_lookup("Square", PlayerPosition(), ClassicBoardPosition),
+  rich_presence_value("Round", CurrentRound() + 1),
+  rich_presence_value("Money", PlayerMoney())
+)
+rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[2]) && IsLoadedGame() && SaveGameSlot == 0x02, "Playing on the Classic Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
+  rich_presence_ascii_string_lookup("SavedRuleset", SaveGame3ModeAddr, SavedRuleSets),
+  rich_presence_lookup("Square", PlayerPosition(), ClassicBoardPosition),
+  rich_presence_value("Round", CurrentRound() + 1),
+  rich_presence_value("Money", PlayerMoney())
+)
+
+// Cardboard Board
+rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[3]) && !IsLoadedGame(), "Playing on the Cardboard Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
+  rich_presence_lookup("Ruleset", CurrentRuleSet(), RuleSets),
+  rich_presence_lookup("CardboardSquare", PlayerPosition(), CardboardBoardPosition),
+  rich_presence_value("Round", CurrentRound() + 1),
+  rich_presence_value("Money", PlayerMoney())
+)
+rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[3]) && IsLoadedGame() && SaveGameSlot == 0x00, "Playing on the Cardboard Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
+  rich_presence_ascii_string_lookup("SavedRuleset", SaveGame1ModeAddr, SavedRuleSets),
+  rich_presence_lookup("CardboardSquare", PlayerPosition(), CardboardBoardPosition),
+  rich_presence_value("Round", CurrentRound() + 1),
+  rich_presence_value("Money", PlayerMoney())
+)
+rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[3]) && IsLoadedGame() && SaveGameSlot == 0x01, "Playing on the Cardboard Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
+  rich_presence_ascii_string_lookup("SavedRuleset", SaveGame2ModeAddr, SavedRuleSets),
+  rich_presence_lookup("CardboardSquare", PlayerPosition(), CardboardBoardPosition),
+  rich_presence_value("Round", CurrentRound() + 1),
+  rich_presence_value("Money", PlayerMoney())
+)
+rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[3]) && IsLoadedGame() && SaveGameSlot == 0x02, "Playing on the Cardboard Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
+  rich_presence_ascii_string_lookup("SavedRuleset", SaveGame3ModeAddr, SavedRuleSets),
+  rich_presence_lookup("CardboardSquare", PlayerPosition(), CardboardBoardPosition),
+  rich_presence_value("Round", CurrentRound() + 1),
+  rich_presence_value("Money", PlayerMoney())
+)
+
+// Cheeseboard Board
+rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[4]) && !IsLoadedGame(), "Playing on the Cheeseboard Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
+  rich_presence_lookup("Ruleset", CurrentRuleSet(), RuleSets),
+  rich_presence_lookup("CheeseSquare", PlayerPosition(), CheeseBoardPosition),
+  rich_presence_value("Round", CurrentRound() + 1),
+  rich_presence_value("Money", PlayerMoney())
+)
+rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[4]) && IsLoadedGame() && SaveGameSlot == 0x00, "Playing on the Cheeseboard Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
+  rich_presence_ascii_string_lookup("SavedRuleset", SaveGame1ModeAddr, SavedRuleSets),
+  rich_presence_lookup("CheeseSquare", PlayerPosition(), CheeseBoardPosition),
+  rich_presence_value("Round", CurrentRound() + 1),
+  rich_presence_value("Money", PlayerMoney())
+)
+rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[4]) && IsLoadedGame() && SaveGameSlot == 0x01, "Playing on the Cheeseboard Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
+  rich_presence_ascii_string_lookup("SavedRuleset", SaveGame2ModeAddr, SavedRuleSets),
+  rich_presence_lookup("CheeseSquare", PlayerPosition(), CheeseBoardPosition),
+  rich_presence_value("Round", CurrentRound() + 1),
+  rich_presence_value("Money", PlayerMoney())
+)
+rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[4]) && IsLoadedGame() && SaveGameSlot == 0x02, "Playing on the Cheeseboard Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
+  rich_presence_ascii_string_lookup("SavedRuleset", SaveGame3ModeAddr, SavedRuleSets),
+  rich_presence_lookup("CheeseSquare", PlayerPosition(), CheeseBoardPosition),
+  rich_presence_value("Round", CurrentRound() + 1),
+  rich_presence_value("Money", PlayerMoney())
+)
+
+// Ice Board
+rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[5]) && !IsLoadedGame(), "Playing on the Ice Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
+  rich_presence_lookup("Ruleset", CurrentRuleSet(), RuleSets),
+  rich_presence_lookup("IceSquare", PlayerPosition(), IceBoardPosition),
+  rich_presence_value("Round", CurrentRound() + 1),
+  rich_presence_value("Money", PlayerMoney())
+)
+rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[5]) && IsLoadedGame() && SaveGameSlot == 0x00, "Playing on the Ice Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
+  rich_presence_ascii_string_lookup("SavedRuleset", SaveGame1ModeAddr, SavedRuleSets),
+  rich_presence_lookup("IceSquare", PlayerPosition(), IceBoardPosition),
+  rich_presence_value("Round", CurrentRound() + 1),
+  rich_presence_value("Money", PlayerMoney())
+)
+rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[5]) && IsLoadedGame() && SaveGameSlot == 0x01, "Playing on the Ice Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
+  rich_presence_ascii_string_lookup("SavedRuleset", SaveGame2ModeAddr, SavedRuleSets),
+  rich_presence_lookup("IceSquare", PlayerPosition(), IceBoardPosition),
+  rich_presence_value("Round", CurrentRound() + 1),
+  rich_presence_value("Money", PlayerMoney())
+)
+rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[5]) && IsLoadedGame() && SaveGameSlot == 0x02, "Playing on the Ice Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
+  rich_presence_ascii_string_lookup("SavedRuleset", SaveGame3ModeAddr, SavedRuleSets),
+  rich_presence_lookup("IceSquare", PlayerPosition(), IceBoardPosition),
+  rich_presence_value("Round", CurrentRound() + 1),
+  rich_presence_value("Money", PlayerMoney())
+)
+
+// Jungle Board
+rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[6]) && !IsLoadedGame(), "Playing on the Jungle Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
+  rich_presence_lookup("Ruleset", CurrentRuleSet(), RuleSets),
+  rich_presence_lookup("JungleSquare", PlayerPosition(), JungleBoardPosition),
+  rich_presence_value("Round", CurrentRound() + 1),
+  rich_presence_value("Money", PlayerMoney())
+)
+rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[6]) && IsLoadedGame() && SaveGameSlot == 0x00, "Playing on the Jungle Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
+  rich_presence_ascii_string_lookup("SavedRuleset", SaveGame1ModeAddr, SavedRuleSets),
+  rich_presence_lookup("JungleSquare", PlayerPosition(), JungleBoardPosition),
+  rich_presence_value("Round", CurrentRound() + 1),
+  rich_presence_value("Money", PlayerMoney())
+)
+rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[6]) && IsLoadedGame() && SaveGameSlot == 0x01, "Playing on the Jungle Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
+  rich_presence_ascii_string_lookup("SavedRuleset", SaveGame2ModeAddr, SavedRuleSets),
+  rich_presence_lookup("JungleSquare", PlayerPosition(), JungleBoardPosition),
+  rich_presence_value("Round", CurrentRound() + 1),
+  rich_presence_value("Money", PlayerMoney())
+)
+rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[6]) && IsLoadedGame() && SaveGameSlot == 0x02, "Playing on the Jungle Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
+  rich_presence_ascii_string_lookup("SavedRuleset", SaveGame3ModeAddr, SavedRuleSets),
+  rich_presence_lookup("JungleSquare", PlayerPosition(), JungleBoardPosition),
+  rich_presence_value("Round", CurrentRound() + 1),
+  rich_presence_value("Money", PlayerMoney())
+)
+
+// Plaza Board
+rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[7]) && !IsLoadedGame(), "Playing on the Plaza Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
   rich_presence_lookup("Ruleset", CurrentRuleSet(), RuleSets),
   rich_presence_lookup("Square", PlayerPosition(), ClassicBoardPosition),
   rich_presence_value("Round", CurrentRound() + 1),
   rich_presence_value("Money", PlayerMoney())
 )
-rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[4]), "Playing on the Cheeseboard Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
-  rich_presence_lookup("Ruleset", CurrentRuleSet(), RuleSets),
+rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[7]) && IsLoadedGame() && SaveGameSlot == 0x00, "Playing on the Plaza Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
+  rich_presence_ascii_string_lookup("SavedRuleset", SaveGame1ModeAddr, SavedRuleSets),
   rich_presence_lookup("Square", PlayerPosition(), ClassicBoardPosition),
   rich_presence_value("Round", CurrentRound() + 1),
   rich_presence_value("Money", PlayerMoney())
 )
-rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[5]), "Playing on the Ice Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
-  rich_presence_lookup("Ruleset", CurrentRuleSet(), RuleSets),
+rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[7]) && IsLoadedGame() && SaveGameSlot == 0x01, "Playing on the Plaza Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
+  rich_presence_ascii_string_lookup("SavedRuleset", SaveGame2ModeAddr, SavedRuleSets),
   rich_presence_lookup("Square", PlayerPosition(), ClassicBoardPosition),
   rich_presence_value("Round", CurrentRound() + 1),
   rich_presence_value("Money", PlayerMoney())
 )
-rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[6]), "Playing on the Jungle Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
-  rich_presence_lookup("Ruleset", CurrentRuleSet(), RuleSets),
+rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[7]) && IsLoadedGame() && SaveGameSlot == 0x02, "Playing on the Plaza Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
+  rich_presence_ascii_string_lookup("SavedRuleset", SaveGame3ModeAddr, SavedRuleSets),
   rich_presence_lookup("Square", PlayerPosition(), ClassicBoardPosition),
   rich_presence_value("Round", CurrentRound() + 1),
   rich_presence_value("Money", PlayerMoney())
 )
-rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[6]), "Playing on the Plaza Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
+
+// Sweet Board
+rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[8]) && !IsLoadedGame(), "Playing on the Sweet Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
   rich_presence_lookup("Ruleset", CurrentRuleSet(), RuleSets),
-  rich_presence_lookup("Square", PlayerPosition(), ClassicBoardPosition),
+  rich_presence_lookup("SweetSquare", PlayerPosition(), SweetBoardPosition),
   rich_presence_value("Round", CurrentRound() + 1),
   rich_presence_value("Money", PlayerMoney())
 )
-rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[6]), "Playing on the Sweet Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
-  rich_presence_lookup("Ruleset", CurrentRuleSet(), RuleSets),
-  rich_presence_lookup("Square", PlayerPosition(), ClassicBoardPosition),
+rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[8]) && IsLoadedGame() && SaveGameSlot == 0x00, "Playing on the Sweet Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
+  rich_presence_ascii_string_lookup("SavedRuleset", SaveGame1ModeAddr, SavedRuleSets),
+  rich_presence_lookup("SweetSquare", PlayerPosition(), SweetBoardPosition),
+  rich_presence_value("Round", CurrentRound() + 1),
+  rich_presence_value("Money", PlayerMoney())
+)
+rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[8]) && IsLoadedGame() && SaveGameSlot == 0x01, "Playing on the Sweet Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
+  rich_presence_ascii_string_lookup("SavedRuleset", SaveGame2ModeAddr, SavedRuleSets),
+  rich_presence_lookup("SweetSquare", PlayerPosition(), SweetBoardPosition),
+  rich_presence_value("Round", CurrentRound() + 1),
+  rich_presence_value("Money", PlayerMoney())
+)
+rich_presence_conditional_display(ascii_string_equals(0x0060e56d, MonopolyBoards[8]) && IsLoadedGame() && SaveGameSlot == 0x02, "Playing on the Sweet Board with the {0} rule set, currently standing on space {1} [Round: {2}] [Money: {3}]",
+  rich_presence_ascii_string_lookup("SavedRuleset", SaveGame3ModeAddr, SavedRuleSets),
+  rich_presence_lookup("SweetSquare", PlayerPosition(), SweetBoardPosition),
   rich_presence_value("Round", CurrentRound() + 1),
   rich_presence_value("Money", PlayerMoney())
 )
