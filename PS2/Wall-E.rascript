@@ -341,7 +341,7 @@ ArtifactFound("WALL-E Play Time", "Unlock the doll artifact", DollArtifactFound,
 ArtifactFound("Ooh Pretty", "Unlock the flare artifact", FireworkArtifactFound, Shipyard)
 ArtifactFound("If You like It Put a Ring on It", "Unlock the ring artifact", RingArtifactFound, Shipyard)
 ArtifactFound("A Budding Artist", "Unlock the paint artifact", PaintTubeArtifactFound, Shipyard)
-ArtifactFound("Hammer Time!", "Unlock the hammer artifiact", HammerArtifactFound, LifeOnTheAxiom)
+ArtifactFound("Hammer Time!", "Unlock the hammer artifact", HammerArtifactFound, LifeOnTheAxiom)
 ArtifactFound("Woof Woof", "Unlock the dog artifact", ToyDogArtifactFound, RobotRescue)
 ArtifactFound("Abosolutely Quackers", "Unlock the rubber duck artifact", RubberDuckArtifactFound, RobotRescue)
 ArtifactFound("Eye Can See You", "Unlock the drooping eyes artifact", DroopingEyesArtifactFound, HumanHighway)
