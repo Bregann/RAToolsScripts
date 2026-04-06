@@ -9,7 +9,7 @@ function Location() => dword_be(0x00403e2c)
 function ProgressionAchievement(achTitle, championName, progressionHex){
   achievement(
     title = achTitle,
-    description = "Defeat the " + "\"" + championName + "\"" + " gladiator in the Colosseum in story mode",
+    description = "Defeat the " + "\"" + championName + "\"" + " gladiator in the Colosseum in Story mode",
     points = 5,
     type = "PROGRESSION",
     trigger = (
@@ -31,7 +31,7 @@ ProgressionAchievement("Arrow to the Knee", "Sagittarii", 0x19)
 
 achievement(
   title = "The Colosseum Conqueror",
-  description = "Defeat the " + "\"" + "Champion of Champions" + "\"" + " in the Colosseum in story mode",
+  description = "Defeat the " + "\"" + "Champion of Champions" + "\"" + " in the Colosseum in Story mode",
   points = 5,
   type = "WIN_CONDITION",
   trigger = (
@@ -87,7 +87,7 @@ achievement(
 
 achievement(
   title = "Sewer Escape",
-  description = "Talk with Cornelia after navigating through the sewers",
+  description = "Talk to Cornelia after navigating through the sewers",
   points = 2,
   trigger = (
     IsInGame() &&
@@ -227,7 +227,7 @@ achievement(
 
 achievement(
   title = "One Wise Roman",
-  description = "Complete the " + "\"" + "Quiz" + "\"" + " minigame in Minigames mode getting every question correct",
+  description = "Complete the " + "\"" + "Quiz" + "\"" + " minigame in Minigames mode after getting every question correct",
   points = 5,
   trigger = (
     once(
