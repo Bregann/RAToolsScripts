@@ -237,7 +237,8 @@ CharacterOffsets = [
   0x34e1, 0x34e3, 0x34ee, 0x34ef, 0x34f0, 0x34f5, 0x34f7,
   0x3503, 0x3504, 0x3505, 0x350b,
   0x3518,
-  0x353e
+  0x353e,
+  0x33FE, 0x348A, 0x34A5, 0x34b5
 ]
 
 function Purchases(achTitle, achDesc, points, charOffsets, amount) {
@@ -262,8 +263,8 @@ function Purchases(achTitle, achDesc, points, charOffsets, amount) {
   )
 }
 
-Purchases("Plundering Party", "Unlock 50% of the characters in the game", 10, CharacterOffsets, 38)
-Purchases("Part of the Ship, Part of the Crew", "Unlock 100% of the characters in the game", 10, CharacterOffsets, 76)
+Purchases("Plundering Party", "Unlock 50% of the characters in the game", 10, CharacterOffsets, 40)
+Purchases("Part of the Ship, Part of the Crew", "Unlock 100% of the characters in the game", 10, CharacterOffsets, 80)
 
 achievement(
   title = "Captain Jack... Now With Rhythm!",
@@ -336,14 +337,14 @@ function IsInPort() => CurrentLevelID == 0x00
 
 rich_presence_conditional_display(IsInMainMenu(), "Captain Jack Sparrow and the crew are preparing to plunder ☠️")
 
-rich_presence_conditional_display(IsInPort(), "Exploring the port 🏴‍☠️☠️ [🧱 {0}/85] [🏴‍☠️☠️ {1}/20] [🧩 {2}/200] [👤 {3}/76]",
+rich_presence_conditional_display(IsInPort(), "Exploring the port 🏴‍☠️☠️ [🧱 {0}/85] [🏴‍☠️☠️ {1}/20] [🧩 {2}/200] [👤 {3}/80]",
     rich_presence_value("GoldBricks", GoldBricks),
     rich_presence_value("TruePirate", TotalTruePirate),
     rich_presence_value("Minikits", TotalMinikits),
     rich_presence_value("Characters", TotalCharacters)
 )
 
-rich_presence_display("Plundering studs in {0} 🏴‍☠️☠️ [🧱 {1}/85] [🏴‍☠️☠️ {2}/20] [🧩 {3}/200] [👤 {4}/76]",
+rich_presence_display("Plundering studs in {0} 🏴‍☠️☠️ [🧱 {1}/85] [🏴‍☠️☠️ {2}/20] [🧩 {3}/200] [👤 {4}/80]",
     rich_presence_lookup("Level", CurrentLevelID, LevelID),
     rich_presence_value("GoldBricks", GoldBricks),
     rich_presence_value("TruePirate", TotalTruePirate),

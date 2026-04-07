@@ -232,10 +232,12 @@ achievement(
   trigger = (
     once(
       Location() == 0x00 &&
-      Minigame() == 0x19 &&
-      MinigamePoints == 0
+      Minigame() == 0x0a &&
+      MinigamePoints == 0 &&
+      byte(0x00404719) <= 1
     ) &&
     never(
+      Minigame() != 0x0a ||
       MinigamePoints < prev(MinigamePoints) || 
       MinigamePoints > 1000000 // the minigame points will never be this high but when in a minus value it overflows...
     ) &&
