@@ -4,6 +4,8 @@
 function IsInGame() => dword_be(0x00403e2c) != 0x00
 function Minigame() => dword_be(0x00318c88)
 function Location() => dword_be(0x00403e2c)
+
+function FromMinigameMode() => prior(dword_be(0x00318c88)) != 0x00
 // -------------------- Progression --------------------
 
 function ProgressionAchievement(achTitle, championName, progressionHex){
@@ -164,7 +166,7 @@ function MinigameAchievement(achTitle, pointsAmount, minigameName, minigameId){
         MinigameMins > 0 ||
         MinigameSecs > 0
       ) &&
-      Location() == 0x00 &&
+      FromMinigameMode() &&
       trigger_when(
         MinigamePoints >= pointsAmount &&
         prev(MinigamePoints) < pointsAmount &&
@@ -179,7 +181,7 @@ function MinigameLeaderboard(minigameName, minigameId){
     title = minigameName + " Minigame",
     description = "Earn the highest amount of points in the minigame in Minigames mode",
     start = (
-      Location() == 0x00 &&
+      FromMinigameMode() &&
       Minigame() == minigameId &&
       (
         MinigameSecs > 0 ||
@@ -207,7 +209,7 @@ achievement(
   points = 5,
   trigger = (
     once(
-      Location() == 0x00 &&
+      FromMinigameMode() &&
       Minigame() == 0x19 &&
       MinigameMins == 1 &&
       MinigameSecs == 30 &&
@@ -231,7 +233,7 @@ achievement(
   points = 5,
   trigger = (
     once(
-      Location() == 0x00 &&
+      FromMinigameMode() &&
       Minigame() == 0x0a &&
       MinigamePoints == 0 &&
       byte(0x00404719) <= 1
@@ -253,7 +255,7 @@ achievement(
   description = "Score 300 points or higher in the " + "\"" + "Bestiarii" + "\"" + " minigame in Minigames mode",
   points = 5,
   trigger = (
-    Location() == 0x00 &&
+    FromMinigameMode() &&
     Minigame() == 0x17 &&
     trigger_when(
       MinigamePoints >= 300 &&

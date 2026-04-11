@@ -236,6 +236,7 @@ function GPWon(achTitle, type, cupName, gpDict){
     points = 5,
     type = type,
     trigger = (
+      IsInGame() &&
       any_of(gpDict, addr => 
         CurrentProfile() == addr &&
         byte(gpDict[addr]) == 1 &&
@@ -272,6 +273,7 @@ function AllStarsEarned(achTitle, locName, cupName, raceDict){
     points = 10,
     // confusing maths stuff lol
     trigger = (
+      IsInGame() &&
       any_of(range(0, 5), p_id =>
         CurrentProfile() == p_id && 
         sum_of(raceDict, addr => 
@@ -304,6 +306,7 @@ function AllStarsEarned(
     description = "Earn the maximum amount of stars in every event in " + locName + " in the " + cupName + " Cup",
     points = 10,
     trigger = (
+      IsInGame() &&
       any_of(range(0, 5), p_id =>
           CurrentProfile() == p_id &&
           byte(circuit1RacePos - ((p_id - 5) * OFFSET)) == 0x01 &&
