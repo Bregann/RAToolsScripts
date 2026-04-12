@@ -176,3 +176,21 @@ leaderboard(
   ),
   value = Jackpot()
 )
+
+// -------------------- RP --------------------
+function IsLoading() => dword_be(0x104418a0) == 0x00 || dword_be(0x104418a0) == 0xffffffff
+
+Names = {
+
+}
+
+function Fallback() => "£"
+
+rich_presence_conditional_display(IsLoading(), "Booting up Golden Balls...")
+rich_presence_conditional_display(dword_be(0x104418a0) == 0x01, "Browsing the Menus")
+rich_presence_conditional_display(
+  dword_be(0x104418a0) == 0x02 && dword_be(0x10440d50) == 0x00, 
+  "In game against {0}, {1}, {2}",
+  rich_presence_lookup("PlayerNames", dword_be(), Names)
+)
+rich_presence_display("temp")
