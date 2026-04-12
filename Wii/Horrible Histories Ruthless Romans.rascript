@@ -6,8 +6,8 @@ function Minigame() => dword_be(0x00318c88)
 function Location() => dword_be(0x00403e2c)
 
 function FromMinigameMode() => prior(dword_be(0x00318c88)) != 0x00
-// -------------------- Progression --------------------
 
+// -------------------- Progression --------------------
 function ProgressionAchievement(achTitle, championName, progressionHex){
   achievement(
     title = achTitle,
