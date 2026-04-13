@@ -41,7 +41,11 @@ function EndingAchievement(achTitle, achDesc, achType, playerOpt, aiOpt){
     trigger = (
       IsInGame() &&
       dword_be(0x10441180) == playerOpt &&
-      dword_be(0x10441188) == aiOpt &&
+      (
+        dword_be(0x10441184) == aiOpt ||
+        dword_be(0x10441188) == aiOpt ||
+        dword_be(0x1044118c) == aiOpt
+      ) &&
       prev(dword_be(0x10441180)) == 0xffffffff
     )
   )
@@ -55,7 +59,7 @@ EndingAchievement("Total Betrayal", "Lose the final jackpot after choosing the s
 // -------------------- Challenges --------------------
 achievement(
   title = "Killing the Killers",
-  description = "Fill the final five jackpot slots using only cash balls",
+  description = "Fill the final five jackpot slots using only cash balls and no killer balls",
   points = 5,
   trigger = (
     IsInGame() &&
@@ -80,20 +84,24 @@ achievement(
       HonestyLockedIn() == 0x01
     ) &&
     never(
+      !IsInGame() 
+      ||
       (
+        dword_be(0x10525e00) == 0xffffffff &&
         (
-          HonestySelected() == 0x00 
+          dword_be(0x10525de0) == 0x00 
           || 
-          HonestySelected() == 0xffffffff
-        ) 
-        &&
-        HonestyLockedIn() == 0xffffffff
-      ) ||
-      !IsInGame()
+          dword_be(0x10525de0) == 0xffffffff
+        )
+      )
     ) &&
     trigger_when(
       dword_be(0x10441180) == 0x01 &&
-      dword_be(0x10441188) == 0x00 &&
+      (
+        dword_be(0x10441184) == 0x00 ||
+        dword_be(0x10441188) == 0x00 ||
+        dword_be(0x1044118c) == 0x00
+      ) &&
       prev(dword_be(0x10441180)) == 0xffffffff
     )
   )
@@ -110,21 +118,27 @@ achievement(
       HonestyLockedIn() == 0x01
     ) &&
     never(
+      !IsInGame() 
+      ||
       (
+        dword_be(0x10525e00) == 0xffffffff &&
         (
-          HonestySelected() != 0x00 
+          dword_be(0x10525de0) == 0x01 
           || 
-          HonestySelected() != 0xffffffff
-        ) 
-        &&
-        HonestyLockedIn() == 0xffffffff
-      ) ||
-      !IsInGame()
+          dword_be(0x10525de0) == 0x02 
+          || 
+          dword_be(0x10525de0) == 0x03
+        )
+      )
     ) 
     &&
     trigger_when(
       dword_be(0x10441180) == 0x00 &&
-      dword_be(0x10441188) == 0x00 &&
+      (
+        dword_be(0x10441184) == 0x00 ||
+        dword_be(0x10441188) == 0x00 ||
+        dword_be(0x1044118c) == 0x00
+      ) &&
       prev(dword_be(0x10441180)) == 0xffffffff
     )
   )
@@ -138,7 +152,11 @@ achievement(
     IsInGame() &&
     Jackpot() >= 20000 &&
     dword_be(0x10441180) == 0x01 &&
-    dword_be(0x10441188) == 0x00 &&
+    (
+      dword_be(0x10441184) == 0x00 ||
+      dword_be(0x10441188) == 0x00 ||
+      dword_be(0x1044118c) == 0x00
+    ) &&
     prev(dword_be(0x10441180)) == 0xffffffff
   )
 )
@@ -155,7 +173,11 @@ leaderboard(
   submit = (
     prev(dword_be(0x10441180)) == 0xffffffff &&
     dword_be(0x10441180) == 0x00 &&
-    dword_be(0x10441188) == 0x00
+    (
+      dword_be(0x10441184) == 0x00 ||
+      dword_be(0x10441188) == 0x00 ||
+      dword_be(0x1044118c) == 0x00
+    )
   ),
   value = Jackpot()
 )
@@ -172,7 +194,11 @@ leaderboard(
   submit = (
     prev(dword_be(0x10441180)) == 0xffffffff &&
     dword_be(0x10441180) == 0x01 &&
-    dword_be(0x10441188) == 0x00
+    (
+      dword_be(0x10441184) == 0x00 ||
+      dword_be(0x10441188) == 0x00 ||
+      dword_be(0x1044118c) == 0x00
+    )
   ),
   value = Jackpot()
 )
@@ -181,7 +207,25 @@ leaderboard(
 function IsLoading() => dword_be(0x104418a0) == 0x00 || dword_be(0x104418a0) == 0xffffffff
 
 Names = {
-
+  0x01: "Ron",
+  0x02: "Guy",
+  0x03: "Toby",
+  0x04: "Reginald",
+  0x05: "Sylvester",
+  0x06: "Mo",
+  0x07: "Sam",
+  0x08: "Sanjiev",
+  0x09: "Amy",
+  0x0a: "Yvonne",
+  0x0b: "Jamie",
+  0x0c: "Tammy",
+  0x0d: "Sylvia",
+  0x0e: "Rose",
+  0x0f: "Estelle",
+  0x10: "Philippe",
+  0x11: "Ken",
+  0x12: "Naomi",
+  0x13: "Kim"
 }
 
 function Fallback() => "£"
@@ -189,8 +233,14 @@ function Fallback() => "£"
 rich_presence_conditional_display(IsLoading(), "Booting up Golden Balls...")
 rich_presence_conditional_display(dword_be(0x104418a0) == 0x01, "Browsing the Menus")
 rich_presence_conditional_display(
-  dword_be(0x104418a0) == 0x02 && dword_be(0x10440d50) == 0x00, 
-  "In game against {0}, {1}, {2}",
-  rich_presence_lookup("PlayerNames", dword_be(), Names)
+  dword_be(0x104418a0) == 0x02 && dword_be(0x104411c0) == 0x01, 
+  "In a one player game of Golden Balls against {0}, {1} & {2}",
+  rich_presence_lookup("PlayerNames", dword_be(0x10442264), Names),
+  rich_presence_lookup("PlayerNames", dword_be(0x10442268), Names),
+  rich_presence_lookup("PlayerNames", dword_be(0x1044226c), Names)
 )
-rich_presence_display("temp")
+rich_presence_conditional_display(
+  dword_be(0x104418a0) == 0x02 && dword_be(0x104411c0) == 0x01, 
+  "In a two player game of Golden Balls"
+)
+rich_presence_display("Playing Golden Balls")
