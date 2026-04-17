@@ -1,11 +1,38 @@
 // Golden Balls
 // #ID = 35164
 
+RA_MASK = 0x1FFFFFFF
+
+function ChainPointer(base, offsets, accessor=dword_be)
+{
+    val = base
+    val = val & RA_MASK
+    
+    for i in range(0, length(offsets) - 1)
+    {
+        addr = val + offsets[i]
+        if (i == length(offsets) - 1)
+        {
+            val = accessor(addr)
+        }
+        else
+        {
+            val = dword_be(addr)
+            val = val & RA_MASK
+        }
+    }
+    
+    return val
+}
+
 function IsInGame() => dword_be(0x104418a0) == 0x02 && dword_be(0x104411c0) == 0x01
 function PlayersLeft() => dword_be(0x104424e0)
-function HonestyLockedIn() => dword_be(0x10525e00)
-function HonestySelected() => dword_be(0x10525de0)
-function Jackpot() => dword_be(0x10523980)
+
+HonestyPointer = dword_be(0x0020abcc) & 0x1fffffff
+function HonestySelected() => dword_be(HonestyPointer + 0x1ad0)
+function HonestyLockedIn() => dword_be(HonestyPointer + 0x1af0)
+
+function Jackpot() => ChainPointer(dword_be(0x0020a664), [0x98C, 0x00])
 
 // -------------------- Progression --------------------
 achievement(
@@ -57,19 +84,27 @@ EndingAchievement("What a Waste of Time!", "Finish the game with no winnings aft
 EndingAchievement("Total Betrayal", "Lose the final jackpot after choosing the split ball while your opponent chooses the steal ball", "", 0x00, 0x01)
 
 // -------------------- Challenges --------------------
+function BallsSelected() => ChainPointer(dword_be(0x0020a664), [0x1664, 0x00])
+
+function Ball1() => ChainPointer(dword_be(0x0020a664), [0x167C, 0x00])
+function Ball2() => ChainPointer(dword_be(0x0020a664), [0x167C, 0x04])
+function Ball3() => ChainPointer(dword_be(0x0020a664), [0x167C, 0x08])
+function Ball4() => ChainPointer(dword_be(0x0020a664), [0x167C, 0x0c])
+function Ball5() => ChainPointer(dword_be(0x0020a664), [0x167C, 0x10])
+
 achievement(
   title = "Killing the Killers",
   description = "Fill the final five jackpot slots using only cash balls and no killer balls",
   points = 5,
   trigger = (
     IsInGame() &&
-    dword_be(0x10525680) == 0x05 &&
-    prev(dword_be(0x10525680)) == 0x04 &&
-    dword_be(0x105256a0) != 0x00 &&
-    dword_be(0x105256a4) != 0x00 &&
-    dword_be(0x105256a8) != 0x00 &&
-    dword_be(0x105256ac) != 0x00 &&
-    dword_be(0x105256b0) != 0x00
+    BallsSelected() == 0x05 &&
+    prev(BallsSelected()) == 0x04 &&
+    Ball1() != 0x00 &&
+    Ball2() != 0x00 &&
+    Ball3() != 0x00 &&
+    Ball4() != 0x00 &&
+    Ball5() != 0x00
   )
 )
 
@@ -87,11 +122,11 @@ achievement(
       !IsInGame() 
       ||
       (
-        dword_be(0x10525e00) == 0xffffffff &&
+        HonestyLockedIn() == 0xffffffff &&
         (
-          dword_be(0x10525de0) == 0x00 
+          HonestySelected() == 0x00 
           || 
-          dword_be(0x10525de0) == 0xffffffff
+          HonestySelected() == 0xffffffff
         )
       )
     ) &&
@@ -108,7 +143,7 @@ achievement(
 )
 
 achievement(
-  title = "Honesty is the Best Policy",
+  title = "Honesty Is the Best Policy",
   description = "Split the jackpot after telling the truth in every previous round",
   points = 5,
   trigger = (
@@ -121,13 +156,13 @@ achievement(
       !IsInGame() 
       ||
       (
-        dword_be(0x10525e00) == 0xffffffff &&
+        HonestyLockedIn() == 0xffffffff &&
         (
-          dword_be(0x10525de0) == 0x01 
+          HonestySelected() == 0x01 
           || 
-          dword_be(0x10525de0) == 0x02 
+          HonestySelected() == 0x02 
           || 
-          dword_be(0x10525de0) == 0x03
+          HonestySelected() == 0x03
         )
       )
     ) 
@@ -207,6 +242,7 @@ leaderboard(
 function IsLoading() => dword_be(0x104418a0) == 0x00 || dword_be(0x104418a0) == 0xffffffff
 
 Names = {
+  0x00: "Steve",
   0x01: "Ron",
   0x02: "Guy",
   0x03: "Toby",
