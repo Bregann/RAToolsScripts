@@ -29,8 +29,8 @@ function IsInGame() => dword_be(0x104418a0) == 0x02 && dword_be(0x104411c0) == 0
 function PlayersLeft() => dword_be(0x104424e0)
 
 HonestyPointer = dword_be(0x0020abcc) & 0x1fffffff
-function HonestySelected() => dword_be(HonestyPointer + 0x1ad0)
-function HonestyLockedIn() => dword_be(HonestyPointer + 0x1af0)
+function HonestySelected() => ChainPointer(dword_be(0x0020a664), [0x1A9C, 0x00])
+function HonestyLockedIn() => ChainPointer(dword_be(0x0020a664), [0x1AB4, 0x00])
 
 function Jackpot() => ChainPointer(dword_be(0x0020a664), [0x98C, 0x00])
 
