@@ -5,6 +5,7 @@
 // -------------------- Progression --------------------
 function InTourProgression(tour) => prior(dword_be(0x005958a8)) == tour && prior(dword_be(0x00595880)) != 0
 function IsInGame(gameId) => tbyte(0x00473dd2) == gameId
+function PlayerAntiCheat() => byte(0x00383101) != 0xff && byte(0x00383102) != 0xff && byte(0x00383103) != 0xff
 
 PlayerMoney = dword_be(0x005958cc)
 
@@ -126,7 +127,7 @@ achievement(
   points = 5,
   trigger = (
     IsInGame(0x200) &&
-    TunaTossingScore >= 209.99
+    TunaTossingScore >= 209.99 &&
     prev(TunaTossingScore) < 209.99
   )
 )
@@ -137,8 +138,8 @@ achievement(
   points = 10,
   trigger = (
     IsInGame(0x600) &&
-    LogCuttingScore == 35
-    prev(LogCuttingScore) = 34
+    LogCuttingScore == 35 &&
+    prev(LogCuttingScore) == 34
   )
 )
 
@@ -166,12 +167,33 @@ achievement(
   )
 )
 
+P1LawnmowerScore = dword_be(0x00595500)
+P2LawnmowerScore = dword_be(0x00595504)
+P3LawnmowerScore = dword_be(0x00595508)
+P4LawnmowerScore = dword_be(0x0059550c)
+LawnmowerFrames = dword_be(0x005954f0)
+
 achievement(
   title = "Mowing Away the Competition",
   description = "Win a match in Greenhenge in the \"Lawnmower Racing\" game mode without losing any points",
-  points = 5,
+  points = 10,
   trigger = (
     IsInGame(0x100) &&
+    PlayerAntiCheat() &&
+    once(
+      dword_be(LawnmowerFrames) == 2700
+    ) &&
+    never(
+      dword_be(P1LawnmowerScore) < prev(dword_be(P1LawnmowerScore)) ||
+      tbyte(0x00473dd2) != 0x100
+    ) &&
+    trigger_when(
+      dword_be(LawnmowerFrames) == 0 &&
+      prev(dword_be(LawnmowerFrames)) == 1 &&
+      P1LawnmowerScore > P2LawnmowerScore &&
+      P1LawnmowerScore > P3LawnmowerScore &&
+      P1LawnmowerScore > P4LawnmowerScore
+    )
   )
 )
 
@@ -181,6 +203,9 @@ achievement(
   points = 10,
   trigger = (
     IsInGame(0x500) &&
+    PlayerAntiCheat() &&
+    dword_be(0x0059550c) == 0x07 &&
+    prev(dword_be(0x0059550c)) == 0x06
   )
 )
 
@@ -190,5 +215,7 @@ achievement(
   points = 10,
   trigger = (
     IsInGame(0x800) &&
+    dword_be(0x005954a8) >= 13000 &&
+    prev(dword_be(0x005954a8)) < 13000
   )
 )
