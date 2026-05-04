@@ -4,8 +4,9 @@
 
 // -------------------- Progression --------------------
 function InTourProgression(tour) => prior(dword_be(0x005958a8)) == tour && prior(dword_be(0x00595880)) != 0
-function IsInGame(gameId) => tbyte(0x00473dd2) == gameId
-function PlayerAntiCheat() => byte(0x00383101) != 0xff && byte(0x00383102) != 0xff && byte(0x00383103) != 0xff
+function IsInGame(gameId) => word(0x00473dd2) == gameId
+function SubMinigame(sub) => word(0x00473dd4) == sub
+function PlayerAntiCheat() => byte(0x00383101) == 0xff && byte(0x00383102) == 0xff && byte(0x00383103) == 0xff
 
 PlayerMoney = dword_be(0x005958cc)
 
@@ -162,7 +163,7 @@ achievement(
   trigger = (
     IsInGame(0x900) &&
     dword_be(0x00595484) == 0x00 &&
-    all_of(CheeseSections, cs => dword_be(cs) != 0xffffffff) &&
+    all_of(CheeseSections, cs => dword_be(cs) != 0xffffffff && dword_be(cs) != 0x00) &&
     any_of(CheeseSections, cs => prev(dword_be(cs)) == 0xffffffff)
   )
 )
@@ -179,17 +180,18 @@ achievement(
   points = 10,
   trigger = (
     IsInGame(0x100) &&
+    SubMinigame(0x100) &&
     PlayerAntiCheat() &&
     once(
-      dword_be(LawnmowerFrames) == 2700
+      LawnmowerFrames == 2700
     ) &&
     never(
-      dword_be(P1LawnmowerScore) < prev(dword_be(P1LawnmowerScore)) ||
-      tbyte(0x00473dd2) != 0x100
+      P1LawnmowerScore < prev(dword_be(0x00595500)) ||
+      word(0x00473dd2) != 0x100
     ) &&
     trigger_when(
-      dword_be(LawnmowerFrames) == 0 &&
-      prev(dword_be(LawnmowerFrames)) == 1 &&
+      LawnmowerFrames == 0 &&
+      prev(dword_be(0x005954f0)) == 1 &&
       P1LawnmowerScore > P2LawnmowerScore &&
       P1LawnmowerScore > P3LawnmowerScore &&
       P1LawnmowerScore > P4LawnmowerScore
@@ -219,3 +221,24 @@ achievement(
     prev(dword_be(0x005954a8)) < 13000
   )
 )
+
+function MenuCheck() => dword_be(0x0034e778) == 0x00
+
+rich_presence_conditional_display(IsInGame(0x400) && MenuCheck(),"Player is jumping in a game of Fierljeppen!")
+rich_presence_conditional_display(IsInGame(0x200) && SubMinigame(0x000) && MenuCheck(),"Player is tossing some tuna at Pandaful Beach!")
+rich_presence_conditional_display(IsInGame(0x200) && SubMinigame(0x100) && MenuCheck(),"Player is tossing some tuna at Unvirtual Studio!")
+rich_presence_conditional_display(IsInGame(0x000) && SubMinigame(0x000) && MenuCheck(),"Player is racing furniture in Seaside Hill!")
+rich_presence_conditional_display(IsInGame(0x000) && SubMinigame(0x000) && MenuCheck(),"Player is racing furniture in Rockyroad Valley!")
+rich_presence_conditional_display(IsInGame(0x700) && SubMinigame(0x000) && MenuCheck(),"Player is doing some extreme ironing in Boundless Sky!")
+rich_presence_conditional_display(IsInGame(0x700) && SubMinigame(0x100) && MenuCheck(),"Player is doing some extreme ironing in Lava Splashdown!")
+rich_presence_conditional_display(IsInGame(0x600) && MenuCheck(),"Player is chopping some logs in Chipchop Woods!")
+rich_presence_conditional_display(IsInGame(0x900) && MenuCheck(),"Player is rolling some cheese in Le Fromage Circus!")
+rich_presence_conditional_display(IsInGame(0x100) && SubMinigame(0x000) && MenuCheck(),"Player is racing their lawnmower in Weedwhacked Farm!")
+rich_presence_conditional_display(IsInGame(0x100) && SubMinigame(0x100) && MenuCheck(),"Player is competing in a battle on top of Greenhenge!")
+rich_presence_conditional_display(IsInGame(0x100) && SubMinigame(0x100) && MenuCheck(),"Player is competing in a battle on top of Greenhenge!")
+rich_presence_conditional_display(IsInGame(0x100) && MenuCheck(),"Player is boxing in the Card Shark Arena!")
+rich_presence_conditional_display(IsInGame(0x300) && MenuCheck(),"Player is playing a round of golf in Snowman Way!")
+rich_presence_conditional_display(IsInGame(0x800) && SubMinigame(0x000) && MenuCheck(),"Player is sliding around in the mud in Mud Slide Alley!")
+rich_presence_conditional_display(IsInGame(0x800) && SubMinigame(0x100) && MenuCheck(),"Player is sliding around in the mud in Mudarama Theatre!")
+rich_presence_conditional_display(dword_be(0x0034e778) == 0x01, "Browsing the menus")
+rich_presence_display("Playing Wacky World of Sports")
