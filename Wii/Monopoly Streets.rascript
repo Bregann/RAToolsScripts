@@ -170,16 +170,16 @@ function PurchaseBoard(achTitle, itemName, itemType, points, itemCost){
 }
 
 PurchaseUnlockable("Officer on Board", "Cop Hat", "token", 5, 0x02, 20000)
-PurchaseUnlockable("Ironing Out the Money", "Iron", "token", 3, 0x05, 10000)
-PurchaseUnlockable("Bag Secured", "Moneybag", "token", 4, 0x06, 15000)
+PurchaseUnlockable("Ironing Out the Money", "Iron", "token", 4, 0x05, 10000)
+PurchaseUnlockable("Bag Secured", "Moneybag", "token", 5, 0x06, 15000)
 
-PurchaseBoard("Not Very Useful in the Rain!", "Cardboard Board", "board", 3, 7000)
-PurchaseBoard("Brie-lliant Investment", "Cheese Board", "board", 3, 6000)
-PurchaseBoard("Perfect for Winter", "Ice Board", "board", 3, 8000)
-PurchaseBoard("Welcome to the Jungle", "Jungle Board", "board", 3, 9000)
-PurchaseBoard("Monopoly in the Park", "Plaza Board", "board", 3, 5000)
-PurchaseBoard("Warning: Do Not Eat", "Sweet Board", "board", 4, 10000)
-PurchaseBoard("A Famous Board", "Landmark City", "board", 5, 25000)
+PurchaseBoard("Not Very Useful in the Rain!", "Cardboard Board", "board", 4, 7000)
+PurchaseBoard("Brie-lliant Investment", "Cheese Board", "board", 4, 6000)
+PurchaseBoard("Perfect for Winter", "Ice Board", "board", 4, 8000)
+PurchaseBoard("Welcome to the Jungle", "Jungle Board", "board", 4, 9000)
+PurchaseBoard("Monopoly in the Park", "Plaza Board", "board", 4, 5000)
+PurchaseBoard("Warning: Do Not Eat", "Sweet Board", "board", 5, 10000)
+PurchaseBoard("A Famous Board", "Landmark City", "board", 10, 25000)
 
 achievement(
   title = "Look at Mii Go!",
@@ -198,7 +198,7 @@ function PropertyHousePurchases(achTitle, boardName, boardColourGroup, propertyN
   achievement(
     title = achTitle,
     description = "On the \"" + boardName + "\" board using the \"Official MONOPOLY\" rule set, own a Hotel on " + propertyNames,
-    points = 5,
+    points = 10,
     trigger = (
       IsInGame() &&
       CurrentRuleSet() == 0x00 &&
@@ -244,7 +244,7 @@ PropertyHousePurchases("Dangerous but Adventurous Investments", "Jungle Board", 
 achievement(
   title = "Master of Infrastructure",
   description = "Playing on the \"Official MONOPOLY\" rule set, own all four train stations and both utilities in a single game",
-  points = 5,
+  points = 10,
   trigger = (
     IsInGame() &&
     CurrentRuleSet() == 0x00 &&
@@ -337,7 +337,7 @@ AllProperties = [
 achievement(
   title = "The Best Bull Market Trader",
   description = "In a single session on Medium difficulty or higher, win a game of \"Bull Market\" without winning any properties during the initial bidding",
-  points = 10,
+  points = 25,
   trigger = (
     once(
       all_of(AllProperties, x => x != 0x00 && x != 0xffffffff) &&
@@ -354,7 +354,7 @@ achievement(
 achievement(
   title = "Hit the Jackpot",
   description = "In a single session on Medium difficulty or higher, win a game of \"Jackpot\" without owning a full colour set - Owning the train stations and utilities is allowed",
-  points = 10,
+  points = 25,
   trigger = (
     once(
       StartOfGameCheck()
@@ -386,7 +386,7 @@ achievement(
 achievement(
   title = "Quick Cash",
   description = "Using the \"Fast Deal\" rule set, land on the Free Parking space to earn $200",
-  points = 2,
+  points = 3,
   trigger = (
     IsInGame() &&
     CurrentRuleSet() == 0x05 &&
@@ -398,7 +398,7 @@ achievement(
 achievement(
   title = "You're Under Arrest!",
   description = "Land on the \"Go To Jail\" space and get sent to jail",
-  points = 2,
+  points = 3,
   trigger = (
     IsInGame() &&
     PlayerPosition() == 0x1e
