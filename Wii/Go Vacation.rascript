@@ -1252,7 +1252,7 @@ SpeedrunTimeAchievement("Snowmobile Speeder 5", "Complete Stage 5 of the \"Snowm
 ScoreLeaderboard("Mogul", 0x1003cab8)
 
 ScoreLeaderboard("Snow Tricks - Halfpipe Tricks", 0x1003cab4)
-ScoreLeaderboard("Snow Tricks - Slopestyle", 0x1003cab8)
+ScoreLeaderboard("Snow Tricks - Slopestyle", 0x1003cab0)
 
 RankAchievement("Snowy Halfpipe Hero", "Snow Tricks - Halfpipe Tricks", CalculateOffsetAndReturnAddress(0x1003cbab), 0x04)
 RankAchievement("Skilful Slopestyle Snow Trickster", "Snow Tricks - Slopestyle", CalculateOffsetAndReturnAddress(0x1003cbaa), 0x04)

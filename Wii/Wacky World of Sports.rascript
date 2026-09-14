@@ -86,7 +86,7 @@ function PurchaseAchievement(achTitle, categoryName, points, shopStuff, shopStuf
     trigger = (
       shopStuff == shopStuffAmount &&
       prev(shopStuff) == shopStuffAmount - 1 &&
-      PlayerMoney == prior(PlayerMoney - 100)
+      PlayerMoney < prior(PlayerMoney)
     )
   )
 }
@@ -145,7 +145,7 @@ achievement(
 )
 
 CheeseSections = [
-  0x0059551c, 0x00595520, 0x00595524, 0x00595528, 0x0059552c, 0x00595530, 
+  0x00595520, 0x00595524, 0x00595528, 0x0059552c, 0x00595530, 
   0x00595534, 0x00595538, 0x0059553c, 0x00595540, 0x00595544, 0x00595548, 
   0x0059554c, 0x00595550, 0x00595554, 0x00595558, 0x0059555c, 0x00595560, 
   0x00595564, 0x00595568, 0x0059556c, 0x00595570, 0x00595574, 0x00595578, 
