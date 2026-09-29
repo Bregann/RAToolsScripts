@@ -118,7 +118,7 @@ Episode11RaceIds = [
 ]
 
 Episode12RaceIds = [
-  0x00c75560,
+  0x00c762f8,
   0x00c76390,
   0x00c76430,
   0x00c764d0,
