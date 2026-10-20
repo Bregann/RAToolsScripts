@@ -77,9 +77,9 @@ Arenas = [
   "the Studio",
   "the Melting Pot",
   "the Acid Bath",
-  "Deep Freeze",
-  "Desert Storm",
-  "Red Planet Rumble"
+  "the Deep Freeze",
+  "the Desert Storm",
+  "the Red Planet Rumble"
 ]
 
 function ArenaWin(modeId, arenaId, minDifficulty, maxDifficulty) => NoCheats() && CurrentMode() == modeId &&
@@ -93,7 +93,7 @@ function TournamentWin(minDifficulty, maxDifficulty) => NoCheats() && CurrentMod
 function GauntletBronze(achTitle, challengeId) {
   achievement(
     title = achTitle,
-    description = "Complete " + Challenges[challengeId] + " on Bronze in the Gauntlet",
+    description = "Complete " + Challenges[challengeId] + " in Gauntlet mode on Bronze difficulty",
     points = 5,
     type = "progression",
     trigger = GauntletWin(challengeId, 0, 0)
@@ -104,7 +104,7 @@ function GauntletBronze(achTitle, challengeId) {
 function GauntletGold(achTitle, challengeId) {
   achievement(
     title = achTitle,
-    description = "Complete " + Challenges[challengeId] + " on Gold in the Gauntlet",
+    description = "Complete " + Challenges[challengeId] + " in Gauntlet mode on Gold difficulty",
     points = 10,
     trigger = GauntletWin(challengeId, 2, 2)
   )
@@ -114,15 +114,23 @@ function GauntletGold(achTitle, challengeId) {
 function ArenaGold(achTitle, modeName, modeId, arenaId) {
   achievement(
     title = achTitle,
-    description = "Win " + modeName + " on Gold in " + Arenas[arenaId],
+    description = "Win " + modeName + " mode on Gold difficulty in " + Arenas[arenaId] + " arena",
     points = 10,
     trigger = ArenaWin(modeId, arenaId, 2, 2)
   )
 }
 
 achievement(
+    title = "Bronze Champion",
+    description = "Win Tournament mode on Bronze difficulty",
+    points = 10,
+    type = "progression",
+    trigger = TournamentWin(0, 0)
+)
+
+achievement(
   title = "Studio Survivor",
-  description = "Win Bash 'n' Dash on Bronze in the Studio",
+  description = "Win Bash 'n' Dash mode on Bronze difficulty in the Studio arena",
   points = 5,
   type = "progression",
   trigger = ArenaWin(1, 0, 0, 0)
@@ -130,7 +138,7 @@ achievement(
 
 achievement(
   title = "Studio Mayhem",
-  description = "Win Mayhem on Bronze in the Studio",
+  description = "Win Mayhem mode on Bronze difficulty in the Studio arena",
   points = 5,
   type = "progression",
   trigger = ArenaWin(2, 0, 0, 0)
@@ -143,25 +151,17 @@ GauntletBronze("Push and Shove", 3)        // Sumo Basho
 GauntletBronze("Taking Out the Trash", 4)  // Dump
 GauntletBronze("Dropping In", 5)           // Drop Zone
 
-achievement(
-    title = "Bronze Champion",
-    description = "Win the Bronze Tournament",
-    points = 10,
-    type = "win_condition",
-    trigger = TournamentWin(0, 0)
-)
-
 // ==================== Difficulty ====================
 achievement(
   title = "Silver Champion",
-  description = "Win the Tournament on Silver or higher",
+  description = "Win Tournament mode on Silver difficulty",
   points = 10,
-  trigger = TournamentWin(1, 2)
+  trigger = TournamentWin(1, 1)
 )
 
 achievement(
   title = "Grand Champion",
-  description = "Win the Tournament on Gold",
+  description = "Win Tournament mode on Gold difficulty",
   points = 25,
   trigger = TournamentWin(2, 2)
 )
