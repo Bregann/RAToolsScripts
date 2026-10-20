@@ -1028,7 +1028,7 @@ achievement(
   trigger = (
     IsInGame() &&
     any_of(range(1, 8), dance =>
-      sum_of(Level2Dance, addr => byte(addr + ((dance - 1) * OFFSET))) == 5 &&
+      measured(sum_of(Level2Dance, addr => byte(addr + ((dance - 1) * OFFSET))) == 5) &&
       prev(sum_of(Level2Dance, addr => byte(addr + ((dance - 1) * OFFSET)))) < 5
     )
   )
@@ -1041,7 +1041,7 @@ achievement(
   trigger = (
     IsInGame() &&
     any_of(range(1, 8), dance =>
-      sum_of(Level3Dance, addr => byte(addr + ((dance - 1) * OFFSET))) == 5 &&
+      measured(sum_of(Level3Dance, addr => byte(addr + ((dance - 1) * OFFSET))) == 5) &&
       prev(sum_of(Level3Dance, addr => byte(addr + ((dance - 1) * OFFSET)))) < 5
     )
   )
