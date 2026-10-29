@@ -2,16 +2,16 @@
 // #ID = 5285
 
 // ==================== Memory ====================
-function CurrentMode() => word(0x026d20)
-function Difficulty() => word(0x026cd4)
-function CurrentArena() => word(0x026b6c)
-function GauntletChallenge() => word(0x027258)
+function CurrentMode() => byte(0x026d20)
+function Difficulty() => byte(0x026cd4)
+function CurrentArena() => byte(0x026b6c)
+function GauntletChallenge() => byte(0x027258)
 function TournamentRound() => byte(0x027855)
-function WinFlag() => word(0x00cc6c)
-function InFight() => word(0x00ccdc) == 1
+function WinFlag() => byte(0x00cc6c)
+function InFight() => byte(0x00ccdc) == 1
 function GameState() => byte(0x0274aa)  // 0 loading / results, 1 in game, 2 menus
 function DamageMeter() => dword(0x020568)
-function MenuState() => word(0x0276d0)
+function MenuState() => byte(0x0276d0)
 // Pausing sets GameState to the menu value, so count the pause screens as in game too
 function Paused() => MenuState() == 41 || MenuState() == 42 || MenuState() == 10  // pause menu, pause options, quit / restart confirm
 function InGame() => GameState() == 1 || Paused()
@@ -41,8 +41,8 @@ function PrizeCount(ids) => sum_of(ids, id => PrizeBit(id))
 
 // Blocks cheats, the developer menu unlocks and multiplayer
 function NoCheats() => (
-    unless(word(0x027650) != 0) &&   // invincibility
-    unless(word(0x0271a8) > 1) &&    // multiplayer
+    unless(byte(0x027650) != 0) &&   // invincibility
+    unless(byte(0x0271a8) > 1) &&    // multiplayer
     unless(dword(0x0276f0) != 0) &&  // session-only prize unlocks (cheats)
     unless(dword(0x0276f4) != 0) &&
     unless(word(0x0276f8) != 0) &&
@@ -137,7 +137,7 @@ achievement(
 )
 
 achievement(
-  title = "Studio Mayhem",
+  title = "Mayhem in the Studio",
   description = "Win Mayhem mode on Bronze difficulty in the Studio arena",
   points = 5,
   type = "progression",
@@ -147,9 +147,9 @@ achievement(
 GauntletBronze("Weaving Through", 0)       // Slalom
 GauntletBronze("Strike!", 1)               // Skittles
 GauntletBronze("Leap of Faith", 2)         // Long Jump
-GauntletBronze("Push and Shove", 3)        // Sumo Basho
+GauntletBronze("Pushing the Competition", 3)        // Sumo Basho
 GauntletBronze("Taking Out the Trash", 4)  // Dump
-GauntletBronze("Dropping In", 5)           // Drop Zone
+GauntletBronze("Barrel Basher", 5)           // Drop Zone
 
 // ==================== Difficulty ====================
 achievement(
@@ -167,19 +167,19 @@ achievement(
 )
 
 // Bash 'n' Dash on Gold, every arena
-ArenaGold("Studio Survivor Gold", "Bash 'n' Dash", 1, 0)
-ArenaGold("Melting Point", "Bash 'n' Dash", 1, 1)
-ArenaGold("Acid Test", "Bash 'n' Dash", 1, 2)
+ArenaGold("Studio Survivor Champion", "Bash 'n' Dash", 1, 0)
+ArenaGold("Master of the Lava", "Bash 'n' Dash", 1, 1)
+ArenaGold("Toxic Champion", "Bash 'n' Dash", 1, 2)
 ArenaGold("Cold Survivor", "Bash 'n' Dash", 1, 3)
 ArenaGold("Weathered the Storm", "Bash 'n' Dash", 1, 4)
-ArenaGold("Red Planet Survivor", "Bash 'n' Dash", 1, 5)
+ArenaGold("Red Planet Robot Destroyer", "Bash 'n' Dash", 1, 5)
 
 // Mayhem on Gold, every arena
-ArenaGold("Studio Mayhem Gold", "Mayhem", 2, 0)
-ArenaGold("Pot of Gold", "Mayhem", 2, 1)
-ArenaGold("Acid Reflux", "Mayhem", 2, 2)
+ArenaGold("Master of Mayhem", "Mayhem", 2, 0)
+ArenaGold("Hotting up in Here", "Mayhem", 2, 1)
+ArenaGold("Acidic Winner", "Mayhem", 2, 2)
 ArenaGold("Deep Freeze Domination", "Mayhem", 2, 3)
-ArenaGold("Desert Dominator", "Mayhem", 2, 4)
+ArenaGold("Too Hot to Handle", "Mayhem", 2, 4)
 ArenaGold("Martian Mayhem", "Mayhem", 2, 5)
 
 // Gauntlet on Gold, every challenge
@@ -275,6 +275,6 @@ rich_presence_conditional_display(InGame() && CurrentMode() == 0,
 rich_presence_conditional_display(InGame() && CurrentMode() == 3,
     "Gauntlet: {0} ({1}) · {2} · {3} left", ChallengeName, Level, Robot, Clock)
 rich_presence_conditional_display(InGame(),
-    "{0} {1} in {2} · {3} · {4} left · health {5}%", Mode, Level, ArenaName, Robot, Clock, Health)
+    "Battling in {0} mode {1} in level {2} · {3} · {4} left · health {5}%", Mode, Level, ArenaName, Robot, Clock, Health)
 
-rich_presence_display("In the menus · {0}/75 prizes unlocked", Prizes)
+rich_presence_display("In the menus · {0}/75 spoils of war unlocked", Prizes)

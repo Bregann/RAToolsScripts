@@ -69,6 +69,18 @@ SaveGame3ModeAddr = 0x128514ec
 
 function IsLoadedGame() => CurrentRuleSet() >= 0x13
 
+SaveGameModeNamesList = ["MonoClassic", "SpeedDie", "FastGame", "BullMarket", "Jackpot", "FastDeal"]
+
+// checks the rule set for both new games and games loaded from a save slot
+function IsPlayingRuleSet(ruleSet) => (
+  (!IsLoadedGame() && CurrentRuleSet() == ruleSet) ||
+  (IsLoadedGame() && (
+    (SaveGameSlot == 0x00 && ascii_string_equals(SaveGame1ModeAddr, SaveGameModeNamesList[ruleSet])) ||
+    (SaveGameSlot == 0x01 && ascii_string_equals(SaveGame2ModeAddr, SaveGameModeNamesList[ruleSet])) ||
+    (SaveGameSlot == 0x02 && ascii_string_equals(SaveGame3ModeAddr, SaveGameModeNamesList[ruleSet]))
+  ))
+)
+
 MonopolyBoards = [
   "monopolybl/zones/zone_world1.rpk", //monopoly city
   "monopolyworld/zones/zone_world1.rpk", // landmark city
@@ -93,8 +105,6 @@ function StartOfGameCheck() {
 }
 
 // -------------------- Game Wins --------------------
-SaveGameModeNamesList = ["MonoClassic", "SpeedDie", "FastGame", "BullMarket", "Jackpot", "FastDeal"]
-
 function GameWonAchievement(achTitle, ruleSet, ruleSetSelected){
   achievement(
     title = achTitle,
@@ -104,14 +114,7 @@ function GameWonAchievement(achTitle, ruleSet, ruleSetSelected){
     trigger = (
       PlayerWonGame() &&
       IsAgainstAIs(0x01) &&
-      (
-        (!IsLoadedGame() && CurrentRuleSet() == ruleSetSelected) ||
-        (IsLoadedGame() && (
-          (SaveGameSlot == 0x00 && ascii_string_equals(SaveGame1ModeAddr, SaveGameModeNamesList[ruleSetSelected])) ||
-          (SaveGameSlot == 0x01 && ascii_string_equals(SaveGame2ModeAddr, SaveGameModeNamesList[ruleSetSelected])) ||
-          (SaveGameSlot == 0x02 && ascii_string_equals(SaveGame3ModeAddr, SaveGameModeNamesList[ruleSetSelected]))
-        ))
-      )
+      IsPlayingRuleSet(ruleSetSelected)
     )
   )
 }
@@ -201,7 +204,7 @@ function PropertyHousePurchases(achTitle, boardName, boardColourGroup, propertyN
     points = 10,
     trigger = (
       IsInGame() &&
-      CurrentRuleSet() == 0x00 &&
+      IsPlayingRuleSet(0x00) &&
       ascii_string_equals(0x0060e56d, boardAscii) &&
       trigger_when(propertyOwnerAddrs == 0x00 &&
       propertyHotelAddrs == houseCount) &&
