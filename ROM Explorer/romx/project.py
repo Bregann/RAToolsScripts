@@ -62,16 +62,31 @@ class Project:
         Path(out_file).write_text(json.dumps(out, indent=1, ensure_ascii=False), encoding='utf-8')
         return len(out)
 
-SIZE_RX = re.compile(r'\[\s*(8|16|24|32)[- ]?bit[^\]]*\]|\[\s*(\d+)\s*bytes?\s*\]|\[\s*(0x[0-9a-f]+)\s*bytes?\s*\]', re.I)
+# Size / type tags people put in code notes, in [] or (): [8-bit], (16-bit BE), [Bitflag], (Bitfield), [Flags],
+# [u32], [Word], [Float], [4 bytes], [0x10 bytes], [BCD], [ASCII] ...
+TAG_RX = re.compile(r'[\[(]\s*([^\])]{1,40}?)\s*[\])]')
+def tag_size(t):
+    """Size in bytes a tag means, or None if the bracket isn't a size/type tag."""
+    t = t.lower().strip()
+    m = re.search(r'\b(8|16|24|32|64)\s*-?\s*bits?\b', t) or re.fullmatch(r'[us](8|16|24|32|64)', t)
+    if m: return int(m.group(1)) // 8
+    m = re.search(r'\b(0x[0-9a-f]+|\d+)\s*bytes?\b', t)
+    if m: return int(m.group(1), 0)
+    if re.search(r'\b(bit\s*(flags?|fields?|masks?|count)|flags?|bits|bitwise|bool(ean)?|byte|bcd|lower4|upper4|nibble|ascii|char)\b', t): return 1
+    if re.search(r'\b(word|short|half)\b', t) and 'dword' not in t: return 2
+    if re.search(r'\b(dword|long|int|float|pointer|ptr|address)\b', t): return 4
+    if re.search(r'\b(double|qword)\b', t): return 8
+    return None
+
 def note_to_label(text):
     """First line of a code note -> a short CamelCase name, and the size if the note gives one."""
-    first = text.splitlines()[0]
-    size = 1
-    m = SIZE_RX.search(first)
-    if m:
-        size = int(m.group(1)) // 8 if m.group(1) else int(m.group(2) or m.group(3), 0)
-    first = SIZE_RX.sub('', first)
-    first = re.split(r'[:=(]', first)[0]
+    first = text.splitlines()[0] if text else ''
+    size = 1; found = False
+    for m in TAG_RX.finditer(first):
+        z = tag_size(m.group(1))
+        if z and not found: size = z; found = True
+    first = TAG_RX.sub(lambda m: '' if tag_size(m.group(1)) else m.group(0), first)
+    first = next((x for x in re.split(r'[:=(]', first) if re.search(r'[A-Za-z0-9]', x)), '')
     words = re.findall(r'[A-Za-z0-9]+', first)[:5]
     name = ''.join(w[:1].upper() + w[1:] for w in words) or 'Note'
     if name[0].isdigit(): name = 'N' + name

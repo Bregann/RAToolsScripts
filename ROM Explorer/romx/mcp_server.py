@@ -259,7 +259,9 @@ def t_send_notes(args):
                 f'{c("new")} labels aren\'t on RA yet, {c("changed")} differ from RA, {c("same")} are the same.\n'
                 + '\n'.join(f'- {r["status"]}: 0x{r["ra"]:06X} {r["note"].splitlines()[0][:90]}' for r in rows if r['status'] != 'same')
                 + '\nCall again with confirm true to write them (ask the user first; the emulator should be closed).')
-    r = SV.ranotes_write({'id': pid, 'dir': info['dir'], 'include': ['new', 'changed'] if args.get('include_changed') else ['new']})
+    b = {'id': pid, 'dir': info['dir'], 'include': ['new', 'changed', 'same'] if args.get('addresses') else (['new', 'changed'] if args.get('include_changed') else ['new'])}
+    if args.get('addresses'): b['addresses'] = [num(a) for a in args['addresses']]
+    r = SV.ranotes_write(b)
     return f'Added {r["written"]} unpublished code notes to {r["file"]} (backup next to it). They show in RAIntegration\'s Code Notes window next time the game is loaded, ready to publish.'
 
 def t_list_states(args):
@@ -558,6 +560,7 @@ TOOLS = [
     (tool('export_code_notes', 'All labels as code-note text, by address.'), t_export_notes),
     (tool('send_notes_to_ra', 'Add the project\'s labels to RAIntegration as unpublished code notes (RACache\\Data\\<game id>-User.txt), so they can be published from the emulator\'s Code Notes window. Without confirm it only shows what would be written.',
           {'folder': S_('RACache\\Data folder (default: the emulator that has this game)'), 'include_changed': {'type': 'boolean', 'description': 'Also replace notes that differ from the published ones'},
+           'addresses': {'type': 'array', 'items': {'type': 'string'}, 'description': 'Only these RA addresses (default: every label not on RA yet)'},
            'confirm': {'type': 'boolean', 'description': 'Actually write (ask the user first)'}}), t_send_notes),
     (tool('list_save_states', 'Save states attached to the project, and recent state files in the save state folders that could be added.'), t_list_states),
     (tool('add_save_state', 'Attach a save state file (or raw RAM dump) of this game to the project.', {'path': S_('Full path'), 'name': S_('Short name'), 'note': S_('What is going on in it, e.g. 3 lives')}, ['path']), t_add_state),

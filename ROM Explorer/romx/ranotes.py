@@ -23,7 +23,8 @@ def note_text(label, enums):
     size = label.get('size', 1)
     tag = {1: '[8-bit]', 2: '[16-bit]', 3: '[24-bit]', 4: '[32-bit]'}.get(size, f'[{size} bytes]')
     first = note.splitlines()[0] if note else ''
-    has_tag = bool(re.match(r'\s*\[', first))
+    from .project import TAG_RX, tag_size
+    has_tag = any(tag_size(m.group(1)) for m in TAG_RX.finditer(first))   # [8-bit], (16-bit BE), [Bitfield] ...
     lines = [note if has_tag else (f'{tag} {label["name"]}' + (f' - {note}' if note and '\n' not in note else ''))]
     if note and not has_tag and '\n' in note: lines.append(note)
     vals = enums.get(label['name']) or {}

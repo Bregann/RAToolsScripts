@@ -27,13 +27,13 @@
    "ra": 52332,
    "size": 2,
    "name": "WinFlag",
-   "note": "1 = fight won (set on the frame you win)"
+   "note": "[8-bit] Game won\r\n0x01 = Won"
   },
   {
    "ra": 52344,
    "size": 1,
    "name": "ClockSeconds",
-   "note": "Fight clock, seconds"
+   "note": "[8-bit] Timer (seconds)"
   },
   {
    "ra": 52348,
@@ -51,7 +51,7 @@
    "ra": 52420,
    "size": 1,
    "name": "ClockMinutes",
-   "note": "Fight clock, minutes"
+   "note": "[8-bit] Timer minutes"
   },
   {
    "ra": 52432,
@@ -63,13 +63,13 @@
    "ra": 52436,
    "size": 2,
    "name": "LoseFlag",
-   "note": "Set when you fail / lose (e.g. the Gauntlet clock runs out). WinFlag + LoseFlag both 0 = still going; the clock stops when either is set."
+   "note": "[8-bit] Game lost\r\n0x01 = Lost"
   },
   {
    "ra": 52444,
    "size": 2,
    "name": "InFight",
-   "note": "1 in fight, 2 fight over (stays set after quitting)"
+   "note": "[8-bit] In game\r\n0x00 = No\r\n0x01 = Yes"
   },
   {
    "ra": 53264,
@@ -78,10 +78,136 @@
    "note": "Robot slots, 0x698 bytes each. Slot 0 = you. Flags dword at +0 (bit31 active, bit24 house robot, bit21 eliminated, bit17 in pit), X/Y/Z at +8/+C/+10, health +0x658, max health +0x660"
   },
   {
+   "ra": 53298,
+   "size": 1,
+   "name": "BitflagPlayerRobotFlags",
+   "note": "[Bitflag] Player robot flags\r\nbit1 = fallen into the pit\r\nbit3 = set on every robot in a fight (competitor?)\r\nbit5 = eliminated",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 53299,
+   "size": 1,
+   "name": "BitflagPlayerRobotFlags_D033",
+   "note": "[Bitflag] Player robot flags\r\nbit0 = house robot\r\nbit7 = slot active",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 54888,
+   "size": 4,
+   "name": "PlayerHealth",
+   "note": "[32-bit] Player health",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 54896,
+   "size": 4,
+   "name": "MaxPlayerHealth",
+   "note": "[32-bit] Max player health",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 54954,
+   "size": 1,
+   "name": "BitflagRobot1Flags",
+   "note": "[Bitflag] Robot 1 flags\r\nbit1 = fallen into the pit\r\nbit3 = set on every robot in a fight (competitor?)\r\nbit5 = eliminated",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 54955,
+   "size": 1,
+   "name": "BitflagRobot1Flags_D6AB",
+   "note": "[Bitflag] Robot 1 flags\r\nbit0 = house robot\r\nbit7 = slot active",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 56642,
+   "size": 1,
+   "name": "BitflagRobot2Flags",
+   "note": "[Bitflag] Robot 2 flags\r\nbit1 = fallen into the pit\r\nbit3 = set on every robot in a fight (competitor?)\r\nbit5 = eliminated",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 56643,
+   "size": 1,
+   "name": "BitflagRobot2Flags_DD43",
+   "note": "[Bitflag] Robot 2 flags\r\nbit0 = house robot\r\nbit7 = slot active",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 58330,
+   "size": 1,
+   "name": "BitflagRobot3Flags",
+   "note": "[Bitflag] Robot 3 flags\r\nbit1 = fallen into the pit\r\nbit3 = set on every robot in a fight (competitor?)\r\nbit5 = eliminated",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 58331,
+   "size": 1,
+   "name": "BitflagRobot3Flags_E3DB",
+   "note": "[Bitflag] Robot 3 flags\r\nbit0 = house robot\r\nbit7 = slot active",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 60018,
+   "size": 1,
+   "name": "BitflagRobot4Flags",
+   "note": "[Bitflag] Robot 4 flags\r\nbit1 = fallen into the pit\r\nbit3 = set on every robot in a fight (competitor?)\r\nbit5 = eliminated",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 60019,
+   "size": 1,
+   "name": "BitflagRobot4Flags_EA73",
+   "note": "[Bitflag] Robot 4 flags\r\nbit0 = house robot\r\nbit7 = slot active",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 61706,
+   "size": 1,
+   "name": "BitflagRobot5Flags",
+   "note": "[Bitflag] Robot 5 flags\r\nbit1 = fallen into the pit\r\nbit3 = set on every robot in a fight (competitor?)\r\nbit5 = eliminated",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 61707,
+   "size": 1,
+   "name": "BitflagRobot5Flags_F10B",
+   "note": "[Bitflag] Robot 5 flags\r\nbit0 = house robot\r\nbit7 = slot active",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 63394,
+   "size": 1,
+   "name": "BitflagRobot6Flags",
+   "note": "[Bitflag] Robot 6 flags\r\nbit1 = fallen into the pit\r\nbit3 = set on every robot in a fight (competitor?)\r\nbit5 = eliminated",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 63395,
+   "size": 1,
+   "name": "BitflagRobot6Flags_F7A3",
+   "note": "[Bitflag] Robot 6 flags\r\nbit0 = house robot\r\nbit7 = slot active",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 65082,
+   "size": 1,
+   "name": "BitflagRobot7Flags",
+   "note": "[Bitflag] Robot 7 flags\r\nbit1 = fallen into the pit\r\nbit3 = set on every robot in a fight (competitor?)\r\nbit5 = eliminated",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 65083,
+   "size": 1,
+   "name": "BitflagRobot7Flags_FE3B",
+   "note": "[Bitflag] Robot 7 flags\r\nbit0 = house robot\r\nbit7 = slot active",
+   "from": "ra-notes"
+  },
+  {
    "ra": 132456,
    "size": 4,
    "name": "DamageMeter",
-   "note": "Damage meter bars (10 = full)"
+   "note": "[8-bit] Damage bars left\r\n0x0a = max"
   },
   {
    "ra": 138416,
@@ -93,61 +219,68 @@
    "ra": 158572,
    "size": 2,
    "name": "CurrentArena",
-   "note": "0 Studio, 1 Melting Pot, 2 Acid Bath, 3 Deep Freeze, 4 Desert Storm, 5 Red Planet Rumble"
+   "note": "[8-bit] Current arena\r\n0x00 = Studio\r\n0x01 = Melting Pot\r\n0x02 = Acid Bath\r\n0x03 = Deep Freeze\r\n0x04 = Desert Storm\r\n0x05 = Red Planet Rumble"
   },
   {
    "ra": 158932,
    "size": 2,
    "name": "Difficulty",
-   "note": "0 Bronze, 1 Silver, 2 Gold"
+   "note": "[8-bit] Difficulty \r\n0x00 = Bronze\r\n0x01 = Silver\r\n0x02 = Gold"
   },
   {
    "ra": 159008,
    "size": 2,
    "name": "CurrentMode",
-   "note": "0 Tournament, 1 Bash 'n' Dash, 2 Mayhem, 3 Gauntlet, 4 Multiplayer/Spoils, 5 Quickstart"
+   "note": "[8-bit] Current mode\r\n0x00 = Tournament\r\n0x01 = Bash 'N' Dash\r\n0x02 = Mayhem\r\n0x03 = Gauntlet"
+  },
+  {
+   "ra": 159312,
+   "size": 1,
+   "name": "TournumentMenuOption",
+   "note": "[8-bit] Tournument menu option",
+   "from": "ra-notes"
   },
   {
    "ra": 159504,
    "size": 2,
    "name": "DifficultyCursor",
-   "note": "Difficulty select cursor"
+   "note": "[8-bit] Gauntlet menu option"
   },
   {
    "ra": 160168,
    "size": 2,
    "name": "PlayerCount",
-   "note": "Players; > 1 = multiplayer"
+   "note": "[8-bit] Number of players"
   },
   {
    "ra": 160344,
    "size": 2,
    "name": "GauntletChallenge",
-   "note": "0 Slalom, 1 Skittles, 2 Long Jump, 3 Sumo Basho, 4 Dump, 5 Drop Zone"
+   "note": "[8-bit] Gauntlet option selected\r\n0x00 = Slalom\r\n0x01 = Skittles\r\n0x02 = Long jump\r\n0x03 = Sumo Basho\r\n0x04 = Dump\r\n0x05 = Drop Zone"
   },
   {
    "ra": 160938,
    "size": 1,
    "name": "GameState",
-   "note": "0 loading/results, 1 in game, 2 menus (also while paused)"
+   "note": "[8-bit] Game state\r\n0x00 = Loading\r\n0x01 = In game\r\n0x02 = In menus"
   },
   {
    "ra": 161360,
    "size": 2,
    "name": "InvincibilityCheat",
-   "note": "Non-zero = invincibility cheat on"
+   "note": "[8-bit] Invisibility cheat"
   },
   {
    "ra": 161488,
    "size": 2,
    "name": "MenuState",
-   "note": "Current screen id, run by ScreenManager (each screen returns the next id). Seen live: 3 language select, 4 after language, 14 single player menu, 40 Gauntlet challenge select, 22 difficulty select, 25 robot select, 11 in game, 41 pause, 42 pause options, 10 quit/restart confirm."
+   "note": "[8-bit] Current screen?\r\n0x01 = Booting\r\n0x02 = Booting\r\n0x04 = Booting\r\n0x05 = Booting\r\n0x06 = Booting\r\n0x07 = Booting\r\n0x08 = Booting\r\n0x09 = Press Start\r\n0x0b = Main Menu\r\n0x0c = Quickstart"
   },
   {
    "ra": 161520,
    "size": 11,
    "name": "SessionPrizeCheats",
-   "note": "Prizes unlocked by cheat for this session only, 1 bit per prize"
+   "note": "[128-bit] Prizes unlocked by cheats"
   },
   {
    "ra": 161536,
@@ -165,25 +298,193 @@
    "ra": 161564,
    "size": 11,
    "name": "PrizeBits",
-   "note": "81 prizes, 1 bit each. 75-80 = Gold parts (multiplayer only)"
+   "note": "[Bitflag] Workshop parts unlocked\r\nbit0 = Rollover Chassis (Bronze Tournament won)\r\nbit1 = Track Traction (Bash n Dash Studio Bronze won)\r\nbit2 = 12V, 650W\r\nbit3 = 24V, 650W  (Bash n Dash Melting Pot Bronze won)\r\nbit4 - 36V, 650W\r\nbit5 = 48V, 650W\r\nbit6 = Titanium\r\nbit7 = Aluminium"
+  },
+  {
+   "ra": 161565,
+   "size": 1,
+   "name": "BitflagWorkshopPartsUnlocked",
+   "note": "[Bitflag] Workshop parts unlocked\r\nbit0 = Medium Flipper\r\nbit1 = Medium axe (Bash n Dash Melting Pot Bronze won)\r\nbit2 = Medium Lance\r\nbit3 = Medium drill\r\nbit4 = Medium Spikes\r\nbit5 = Medium Claw\r\nbit6 = Medium Saw (Mayhem Deep Freeze Bronze won)\r\nbit7 = Medium pincers",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 161566,
+   "size": 1,
+   "name": "BitflagUnlocks",
+   "note": "[Bitflag] Unlocks\r\nbit0 = Medium Disc\r\nbit1 = Medium Srimech\r\nbit2 = Stelath Camouflage\r\nbit3 = CPZ Evasion\r\nbit4 = Thermidor II\r\nbit5 = Tornado\r\nbit6 = Wheely Big Cheese\r\nbit7 = Deep Freeze",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 161567,
+   "size": 1,
+   "name": "BitflagWorkshopPartsUnlocked_2771F",
+   "note": "[Bitflag] Workshop parts unlocked\r\nbit0 = Melting Pot arena unlocked (Bash n Dash Studio Bronze won)\r\nbit1 = 6 Wheel Traction (Silver Tournament won)\r\nbit2 = 12V, 750W\r\nbit3 = 24V, 750W (Bash n Dash Melting Pot Silver won)\r\nbit4 = 36V, 750W (Mayhem Studio Silver won)\r\nbit5 = 48V, 750W\r\nbit6 = Perspex\r\nbit7 = Polycarbonate",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 161568,
+   "size": 1,
+   "name": "BitflagWorkshopPartsUnlocked_27720",
+   "note": "[Bitflag] Workshop parts unlocked\r\nbit0 = Heavy Flipper unlocked (Bash n Dash Studio Silver won)\r\nbit1 = Heavy Spikes\r\nbit2 = Heavy Pincers\r\nbit3 = Heavy Drill (Mayhem Inferno Pot Silver won)\r\nbit4 = Heavy Axe\r\nbit5 = Heavy Claw\r\nbit6 = Heavy Saw\r\nbit7 = Heavy Lance",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 161569,
+   "size": 1,
+   "name": "BitflagUnlocks_27721",
+   "note": "[Bitflag] Unlocks\r\nbit0 = Heavy Disc\r\nbit1 = Heavy Srimech\r\nbit2 = Berserk\r\nbit3 = Thunder Charge (Bash n Dash Studio Silver won)\r\nbit4 = Automatic Opponent Lock-on\r\nbit5 = Hypno-disc (Bash n Dash Melting Pot Silver won)\r\nbit6 = Chaos 2 unlocked\r\nbit7 = Pussycat (Mayhem Deep Freeze Silver won)",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 161570,
+   "size": 1,
+   "name": "BitflagUnlocks_27722",
+   "note": "[Bitflag] Unlocks\r\nbit0 = Desert Storm\r\nbit1 = Acid Bath\r\nbit2 = 12V, 800W  (Bash n Dash Studio Gold won)\r\nbit3 = 24V, 800W  (Bash n Dash Melting Pot Gold won)\r\nbit4 = 36V, 800W (Mayhem Deep Freeze gold won)\r\nbit5 = 48V, 800w\r\nbit6 = Steel\r\nbit7 = Kevlar",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 161571,
+   "size": 1,
+   "name": "BitflagWorkshopPartsUnlocked_27723",
+   "note": "[Bitflag] Workshop parts unlocked\r\nbit0 = X Heavy Flipper\r\nbit1 = X Heavy Disc\r\nbit2 = X Heavy Lance (Mayhem Inferno Pot Gold won)\r\nbit3 = X Heavy Drill unlocked\r\nbit4 = X Heavy Spikes\r\nbit5 = X Heavy Claw\r\nbit6 = X Heavy Saw\r\nbit7 = X Heavy Pincers",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 161572,
+   "size": 1,
+   "name": "BitflagWorkshopPartsUnlocked_27724",
+   "note": "[Bitflag] Workshop parts unlocked\r\nbit0 = X Heavy Axe\r\nbit2 = Strike Attack (Gold Tournament won)\r\nbit3 = Razer (Mayhem Studio Gold won)\r\nbit4 = Tricerabot 3.0  (Bash n Dash Melting Pot Gold won)\r\nbit5 = Rosie The Riverter II\r\nbit6 = Propeller-Head\r\nbit7 = Destructive Criticism",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 161573,
+   "size": 1,
+   "name": "BitflagWorkshopPartsUnlocked_27725",
+   "note": "[Bitflag] Workshop parts unlocked\r\nbit0 = Panzer MK4\r\nbit1 = Red Planet Rumble\r\nbit2 = Arena Editor\r\nbit4 = Gold Traction (Gold Tournament won)",
+   "from": "ra-notes"
   },
   {
    "ra": 161575,
    "size": 6,
    "name": "MayhemProgress",
-   "note": "Best medal per arena (3 = Gold)"
+   "note": "[8-bit] Mayhem - Studio progress\r\n0x00 = Bronze\r\n0x01 = Silver\r\n0x02 = Gold\r\n0x03 = Gold cleared"
+  },
+  {
+   "ra": 161576,
+   "size": 1,
+   "name": "MayhemMeltingPotProgress",
+   "note": "[8-bit] Mayhem - Melting Pot progress\r\n0x00 = Bronze\r\n0x01 = Silver\r\n0x02 = Gold\r\n0x03 = Gold cleared",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 161577,
+   "size": 1,
+   "name": "MayhemAcidBathProgress",
+   "note": "[8-bit] Mayhem - Acid Bath progress\r\n0x00 = Bronze\r\n0x01 = Silver\r\n0x02 = Gold\r\n0x03 = Gold cleared",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 161578,
+   "size": 1,
+   "name": "MayhemDeepFreezeProgress",
+   "note": "[8-bit] Mayhem - Deep Freeze progress\r\n0x00 = Bronze\r\n0x01 = Silver\r\n0x02 = Gold\r\n0x03 = Gold cleared",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 161579,
+   "size": 1,
+   "name": "MayhemDesertStormProgress",
+   "note": "[8-bit] Mayhem - Desert Storm progress\r\n0x00 = Bronze\r\n0x01 = Silver\r\n0x02 = Gold\r\n0x03 = Gold cleared",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 161580,
+   "size": 1,
+   "name": "MayhemRedPlanetRumbleProgress",
+   "note": "[8-bit] Mayhem - Red Planet Rumble progress\r\n0x00 = Bronze\r\n0x01 = Silver\r\n0x02 = Gold\r\n0x03 = Gold cleared",
+   "from": "ra-notes"
   },
   {
    "ra": 161581,
    "size": 6,
    "name": "BashProgress",
-   "note": "Best medal per arena (3 = Gold)"
+   "note": "[8-bit] Bash 'n' Dash - Studio progress\r\n0x00 = Bronze\r\n0x01 = Silver\r\n0x02 = Gold\r\n0x03 = Gold cleared"
+  },
+  {
+   "ra": 161582,
+   "size": 1,
+   "name": "BashNDashMeltingPot",
+   "note": "[8-bit] Bash 'n' Dash - Melting Pot progress\r\n0x00 = Bronze\r\n0x01 = Silver\r\n0x02 = Gold\r\n0x03 = Gold cleared",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 161583,
+   "size": 1,
+   "name": "BashNDashAcidBath",
+   "note": "[8-bit] Bash 'n' Dash - Acid Bath progress\r\n0x00 = Bronze\r\n0x01 = Silver\r\n0x02 = Gold\r\n0x03 = Gold cleared",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 161584,
+   "size": 1,
+   "name": "BashNDashDeepFreeze",
+   "note": "[8-bit] Bash 'n' Dash - Deep Freeze -  progress\r\n0x00 = Bronze\r\n0x01 = Silver\r\n0x02 = Gold\r\n0x03 = Gold cleared",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 161585,
+   "size": 1,
+   "name": "BashNDashDesertStorm",
+   "note": "[8-bit] Bash 'n' Dash - Desert Storm -  progress\r\n0x00 = Bronze\r\n0x01 = Silver\r\n0x02 = Gold\r\n0x03 = Gold cleared",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 161586,
+   "size": 1,
+   "name": "BashNDashRedPlanet",
+   "note": "[8-bit] Bash 'n' Dash - Red Planet Rumble -  progress\r\n0x00 = Bronze\r\n0x01 = Silver\r\n0x02 = Gold\r\n0x03 = Gold cleared",
+   "from": "ra-notes"
   },
   {
    "ra": 161587,
    "size": 6,
    "name": "GauntletProgress",
-   "note": "Best medal per challenge (3 = Gold)"
+   "note": "[8-bit] Slalom challenges progress\r\n0x00 = Bronze\r\n0x01 = Silver\r\n0x02 = Gold\r\n0x03 = Gold cleared"
+  },
+  {
+   "ra": 161588,
+   "size": 1,
+   "name": "SkittlesChallengesProgress",
+   "note": "[8-bit] Skittles challenges progress\r\n0x00 = Bronze\r\n0x01 = Silver\r\n0x02 = Gold\r\n0x03 = Gold cleared",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 161589,
+   "size": 1,
+   "name": "LongJumpChallengesProgress",
+   "note": "[8-bit] Long Jump challenges progress\r\n0x00 = Bronze\r\n0x01 = Silver\r\n0x02 = Gold\r\n0x03 = Gold cleared",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 161590,
+   "size": 1,
+   "name": "SumoBashoChallengesProgress",
+   "note": "[8-bit] Sumo Basho challenges progress\r\n0x00 = Bronze\r\n0x01 = Silver\r\n0x02 = Gold\r\n0x03 = Gold cleared",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 161591,
+   "size": 1,
+   "name": "DumpProgress",
+   "note": "[8-bit] Dump progress\r\n0x00 = Bronze\r\n0x01 = Silver\r\n0x02 = Gold\r\n0x03 = Gold cleared",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 161592,
+   "size": 1,
+   "name": "DropZoneChallengesProgress",
+   "note": "[8-bit] Drop Zone challenges progress\r\n0x00 = Bronze\r\n0x01 = Silver\r\n0x02 = Gold\r\n0x03 = Gold cleared",
+   "from": "ra-notes"
   },
   {
    "ra": 161716,
@@ -195,19 +496,26 @@
    "ra": 161877,
    "size": 1,
    "name": "TournamentRound",
-   "note": "0 Heats, 1 QF, 2 SF, 3 Final"
+   "note": "[8-bit] Tornament round\r\n0x00 = Heats\r\n0x01 = Quarter Finals\r\n0x02 = Semi Finals\r\n0x03 = Finals\r\n0xff = End"
   },
   {
    "ra": 161880,
    "size": 1,
    "name": "TournamentRobot",
-   "note": "Your robot in the Tournament (0-16 roster, 17-21 custom)"
+   "note": "[8-bit] Tournament player robot"
   },
   {
    "ra": 161881,
    "size": 4,
    "name": "TournamentOpponents",
    "note": "Opponent per round"
+  },
+  {
+   "ra": 161908,
+   "size": 1,
+   "name": "LanguageSelected",
+   "note": "[8-bit] Language selected",
+   "from": "ra-notes"
   },
   {
    "ra": 162048,
@@ -225,7 +533,7 @@
    "ra": 162876,
    "size": 1,
    "name": "SelectedRobot",
-   "note": "Robot select cursor"
+   "note": "[8-bit] Current robot"
   },
   {
    "ra": 162992,
@@ -315,11 +623,9 @@
  "enums": {
   "CurrentMode": {
    "0": "Tournament",
-   "1": "Bash 'n' Dash",
+   "1": "Bash 'N' Dash",
    "2": "Mayhem",
-   "3": "Gauntlet",
-   "4": "Multiplayer",
-   "5": "Quickstart"
+   "3": "Gauntlet"
   },
   "Difficulty": {
    "0": "Bronze",
@@ -337,40 +643,155 @@
   "GauntletChallenge": {
    "0": "Slalom",
    "1": "Skittles",
-   "2": "Long Jump",
+   "2": "Long jump",
    "3": "Sumo Basho",
    "4": "Dump",
    "5": "Drop Zone"
   },
   "GameState": {
-   "0": "loading/results",
-   "1": "in game",
-   "2": "menus"
+   "0": "Loading",
+   "1": "In game",
+   "2": "In menus"
   },
   "MenuState": {
-   "3": "language select",
-   "10": "quit/restart confirm",
-   "11": "in game",
-   "14": "single player menu",
-   "22": "difficulty select",
-   "25": "robot select",
-   "40": "Gauntlet challenge select",
-   "41": "pause menu",
-   "42": "pause options"
+   "1": "Booting",
+   "2": "Booting",
+   "4": "Booting",
+   "5": "Booting",
+   "6": "Booting",
+   "7": "Booting",
+   "8": "Booting",
+   "9": "Press Start",
+   "11": "Main Menu",
+   "12": "Quickstart"
   },
   "TournamentRound": {
    "0": "Heats",
    "1": "Quarter Finals",
    "2": "Semi Finals",
-   "3": "Final"
+   "3": "Finals",
+   "255": "End"
   },
   "WinFlag": {
-   "0": "not won",
-   "1": "won"
+   "1": "Won"
   },
   "InFight": {
-   "1": "fighting",
-   "2": "fight over"
+   "0": "No",
+   "1": "Yes"
+  },
+  "MayhemMeltingPotProgress": {
+   "0": "Bronze",
+   "1": "Silver",
+   "2": "Gold",
+   "3": "Gold cleared"
+  },
+  "MayhemAcidBathProgress": {
+   "0": "Bronze",
+   "1": "Silver",
+   "2": "Gold",
+   "3": "Gold cleared"
+  },
+  "MayhemDeepFreezeProgress": {
+   "0": "Bronze",
+   "1": "Silver",
+   "2": "Gold",
+   "3": "Gold cleared"
+  },
+  "MayhemDesertStormProgress": {
+   "0": "Bronze",
+   "1": "Silver",
+   "2": "Gold",
+   "3": "Gold cleared"
+  },
+  "MayhemRedPlanetRumbleProgress": {
+   "0": "Bronze",
+   "1": "Silver",
+   "2": "Gold",
+   "3": "Gold cleared"
+  },
+  "BashNDashMeltingPot": {
+   "0": "Bronze",
+   "1": "Silver",
+   "2": "Gold",
+   "3": "Gold cleared"
+  },
+  "BashNDashAcidBath": {
+   "0": "Bronze",
+   "1": "Silver",
+   "2": "Gold",
+   "3": "Gold cleared"
+  },
+  "BashNDashDeepFreeze": {
+   "0": "Bronze",
+   "1": "Silver",
+   "2": "Gold",
+   "3": "Gold cleared"
+  },
+  "BashNDashDesertStorm": {
+   "0": "Bronze",
+   "1": "Silver",
+   "2": "Gold",
+   "3": "Gold cleared"
+  },
+  "BashNDashRedPlanet": {
+   "0": "Bronze",
+   "1": "Silver",
+   "2": "Gold",
+   "3": "Gold cleared"
+  },
+  "SkittlesChallengesProgress": {
+   "0": "Bronze",
+   "1": "Silver",
+   "2": "Gold",
+   "3": "Gold cleared"
+  },
+  "LongJumpChallengesProgress": {
+   "0": "Bronze",
+   "1": "Silver",
+   "2": "Gold",
+   "3": "Gold cleared"
+  },
+  "SumoBashoChallengesProgress": {
+   "0": "Bronze",
+   "1": "Silver",
+   "2": "Gold",
+   "3": "Gold cleared"
+  },
+  "DumpProgress": {
+   "0": "Bronze",
+   "1": "Silver",
+   "2": "Gold",
+   "3": "Gold cleared"
+  },
+  "DropZoneChallengesProgress": {
+   "0": "Bronze",
+   "1": "Silver",
+   "2": "Gold",
+   "3": "Gold cleared"
+  },
+  "LoseFlag": {
+   "1": "Lost"
+  },
+  "DamageMeter": {
+   "10": "max"
+  },
+  "MayhemProgress": {
+   "0": "Bronze",
+   "1": "Silver",
+   "2": "Gold",
+   "3": "Gold cleared"
+  },
+  "BashProgress": {
+   "0": "Bronze",
+   "1": "Silver",
+   "2": "Gold",
+   "3": "Gold cleared"
+  },
+  "GauntletProgress": {
+   "0": "Bronze",
+   "1": "Silver",
+   "2": "Gold",
+   "3": "Gold cleared"
   }
  }
 }

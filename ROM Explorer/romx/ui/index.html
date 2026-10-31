@@ -166,6 +166,15 @@ h1{font-family:var(--display);font-stretch:80%;font-weight:800;font-size:1.9rem;
 @keyframes showlate{from{visibility:hidden}to{visibility:visible}}
 @media (prefers-reduced-motion:reduce){#explorer.busy::before{animation:showlate 0s .12s both}}
 .btn[aria-busy="true"]{white-space:nowrap}
+.row .n.wt{display:flex;align-items:baseline;gap:6px}.row .n.wt .nn{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.rtag{flex:none;font:600 .66rem var(--mono);padding:1px 6px;border-radius:999px;background:var(--accent-soft);color:var(--navy);border:1px solid var(--line);vertical-align:2px;white-space:nowrap}
+.nview{display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+.ntag{font:600 .74rem var(--mono);padding:2px 8px;border-radius:999px;background:var(--accent-soft);color:var(--navy);border:1px solid var(--line)}
+.vtab{border-collapse:separate;border-spacing:0;min-width:260px;max-width:100%;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fffdf8}
+.vtab th{text-align:left;font:700 .76rem var(--body);color:var(--muted);background:var(--raised);padding:5px 12px;border-bottom:1px solid var(--line)}
+.vtab td{padding:5px 12px;border-bottom:1px solid var(--line);font-size:.9rem}
+.vtab tr:last-child td{border-bottom:0}
+.vtab td.mono{font-weight:600;color:var(--navy);white-space:nowrap;width:1%}
 .joblog{position:fixed;inset:0;background:rgba(43,44,56,.28);display:grid;place-items:center;z-index:50;padding:16px}
 .jcard{width:min(640px,100%);background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:10px;box-shadow:0 10px 30px rgba(43,44,56,.25)}
 .jcard h3{margin:0;font-size:1.05rem;color:var(--navy)}
@@ -391,7 +400,8 @@ function renderList(){
   if(view==='known'){
     rows=[...D.labels].sort((x,y)=>(!!x.builtin-!!y.builtin)||x.ra-y.ra).filter(l=>match(q,l.name,l.note,hex(l.ra),hex(l.bus,8))).map(l=>{
       const m0=l.match??l.ra; const n=refsIn(m0,m0+l.size);
-      return row(`ra-${hex(l.ra).slice(2)}`,hex(l.ra),l.name,false,n?`${n} refs`:'via base',l.note,sel&&sel.k==='ra'&&sel.a===l.ra)});
+      const d=String(l.note||'').replace(TAG_RX,(m,t)=>tagKind(t)?'':m).replace(/^\s*[-:|]\s*/,'').trim();
+      return row(`ra-${hex(l.ra).slice(2)}`,hex(l.ra),l.name,false,n?`${n} refs`:'via base',d,sel&&sel.k==='ra'&&sel.a===l.ra,labelTag(l))});
   } else if(view==='funcs'){
     const fs=D.funcs.filter(f=>match(q,f.name,f.note,hex(f.a,8),faBus(f.a),fa(f.a)));
     fs.sort((a,b)=>(a.name.startsWith('sub_')-b.name.startsWith('sub_'))||a.a-b.a);
@@ -410,7 +420,7 @@ function renderList(){
   L.innerHTML=rows.join('')||(view==='known'&&!D.labels.length?'<div class="status">No labelled addresses yet. Import your RetroAchievements code notes from <b>Project &amp; notes</b>, or open any address under <b>All RAM refs</b> and label it.</div>':'<div class="status">Nothing matches that search.</div>');
   L.querySelectorAll('[data-h]').forEach(e=>{e.onclick=()=>location.hash=e.dataset.h;e.onkeydown=ev=>{if(ev.key==='Enter')location.hash=e.dataset.h}});
 }
-function row(h,a,n,unk,c,d,cur){return `<div class="row" role="listitem" tabindex="0" data-h="${h}" aria-current="${!!cur}"><span class="a">${a}</span><span class="n${unk?' unk':''}">${esc(n)}</span><span class="c">${esc(c)}</span>${d?`<span class="d">${esc(d)}</span>`:''}</div>`}
+function row(h,a,n,unk,c,d,cur,tag){return `<div class="row" role="listitem" tabindex="0" data-h="${h}" aria-current="${!!cur}"><span class="a">${a}</span><span class="n${unk?' unk':''}${tag?' wt':''}">${tag?`<span class="nn">${esc(n)}</span><span class="rtag">${esc(tag)}</span>`:esc(n)}</span><span class="c">${esc(c)}</span>${d?`<span class="d">${esc(d)}</span>`:''}</div>`}
 
 
 
@@ -605,23 +615,42 @@ function projPanel(){
     <pre class="glog" id="g-log" hidden></pre>`:`<p class="note empty">Ghidra decompiling isn't set up for ${esc(D.platform)} games yet.</p>`}</div>
   <div class="kv"><span>Project file <b>${esc(PID)}.romx.json</b></span><span>Game file <b>${esc(p.rom||'')}</b></span></div>`;
 }
+let RASEL=null, RAFILTER='new';
 function drawRaNotes(info){
   const box=$('#ra-out'); if(!box) return;
   if(!info.game_id){box.innerHTML='<p class="note empty">Set the RetroAchievements game ID above first.</p>';return}
   if(!info.dirs.length){box.innerHTML='<p class="note empty">No RACache folders found. Run Scan on the Setup page, or add your emulator folders in Settings.</p>';return}
-  const st={new:'Not on RA yet',changed:'Differs from RA',same:'Same as RA'};
-  const n=k=>info.rows.filter(r=>r.status===k).length;
+  const ST_={new:'Not on RA yet',changed:'Differs from RA',same:'Same as RA'};
+  if(!RASEL||RASEL.dir!==info.dir) RASEL={dir:info.dir,picked:new Set(info.rows.filter(r=>r.status==='new'&&!r.local).map(r=>r.ra))};   // new ones ticked to start with
+  const count=k=>info.rows.filter(r=>k==='all'||(k==='local'?r.local:r.status===k)).length;
+  const filters=[['new','Not on RA yet'],['changed','Differs from RA'],['same','Same as RA'],['local','Already unpublished'],['all','All']];
+  const shown=()=>info.rows.filter(r=>(RAFILTER==='all'||(RAFILTER==='local'?r.local:r.status===RAFILTER))&&(!$('#ra-q')||!$('#ra-q').value||(r.name+' '+r.note+' '+hex(r.ra)).toLowerCase().includes($('#ra-q').value.toLowerCase())));
   box.innerHTML=`<div class="sline"><label>Emulator <select id="ra-dir">${info.dirs.map(d=>`<option value="${esc(d)}" ${d===info.dir?'selected':''}>${esc(d.replace(/[\\/]RACache[\\/]Data$/,''))}${info.used.includes(d)?' (has this game)':''}</option>`).join('')}</select></label></div>
-    <p class="note small"><b>${n('new')}</b> not on RA yet · <b>${n('changed')}</b> different from RA · <b>${n('same')}</b> already the same</p>
-    <details><summary class="small" style="cursor:pointer">See the notes</summary><table class="stbl">${info.rows.map(r=>`<tr><td class="mono">${hex(r.ra)}</td><td>${esc(r.name)}</td><td class="small">${st[r.status]}${r.local?' · already unpublished':''}</td><td class="small mono" style="white-space:pre-wrap">${esc(r.note)}</td></tr>`).join('')}</table></details>
-    <div class="factions"><button class="btn primary" id="ra-send" ${n('new')?'':'disabled'}>Add ${n('new')} new note${n('new')===1?'':'s'}</button>
-      <label class="tick"><input type="checkbox" id="ra-changed" ${n('changed')?'':'disabled'}> Also replace the ${n('changed')} that differ from RA</label></div>
+    <div class="sline" role="tablist" aria-label="Show">${filters.map(([k,t])=>`<button class="tab ra-f" data-f="${k}" aria-selected="${RAFILTER===k}">${t} <span class="small">${count(k)}</span></button>`).join('')}
+      <input type="search" id="ra-q" placeholder="Filter by name, address or note" aria-label="Filter notes" style="flex:1 1 200px"></div>
+    <div class="sres"><table class="stbl" id="ra-table"></table></div>
+    <div class="factions"><button class="btn primary" id="ra-send"></button><button class="btn" id="ra-none" type="button">Untick all</button></div>
     <p class="fmsg" id="ra-msg" role="status"></p>`;
+  const table=()=>{const rows=shown(), allOn=rows.length&&rows.every(r=>RASEL.picked.has(r.ra));
+    $('#ra-table').innerHTML=`<tr><th><input type="checkbox" id="ra-all" ${allOn?'checked':''} aria-label="Tick all shown"></th><th>Address</th><th>Status</th><th>Your note</th>${rows.some(r=>r.status==='changed')?'<th>On RA now</th>':''}</tr>`+
+      (rows.length?rows.map(r=>`<tr><td><input type="checkbox" class="ra-pick" data-ra="${r.ra}" ${RASEL.picked.has(r.ra)?'checked':''} aria-label="Send ${esc(r.name)}"></td>
+        <td class="mono">${hex(r.ra)}<div class="small">${esc(r.name)}</div></td><td class="small">${ST_[r.status]}${r.local?'<br>already unpublished':''}</td>
+        <td class="small mono" style="white-space:pre-wrap">${esc(r.note)}</td>${rows.some(x=>x.status==='changed')?`<td class="small mono" style="white-space:pre-wrap;color:var(--muted)">${r.status==='changed'?esc(r.published||''):''}</td>`:''}</tr>`).join('')
+      :'<tr><td colspan="5" class="note empty">Nothing here.</td></tr>');
+    $('#ra-all').onchange=e=>{rows.forEach(r=>e.target.checked?RASEL.picked.add(r.ra):RASEL.picked.delete(r.ra));table();btn()};
+    box.querySelectorAll('.ra-pick').forEach(c=>c.onchange=()=>{const a=+c.dataset.ra;c.checked?RASEL.picked.add(a):RASEL.picked.delete(a);btn();$('#ra-all').checked=shown().every(r=>RASEL.picked.has(r.ra))});
+  };
+  const btn=()=>{const n=RASEL.picked.size,b=$('#ra-send');b.disabled=!n;
+    const ch=info.rows.filter(r=>RASEL.picked.has(r.ra)&&r.status==='changed').length;
+    b.textContent=n?`Add ${n} selected note${n===1?'':'s'}${ch?` (${ch} will replace what's on RA)`:''}`:'Tick the notes to add'};
+  box.querySelectorAll('.ra-f').forEach(t=>t.onclick=()=>{RAFILTER=t.dataset.f;box.querySelectorAll('.ra-f').forEach(x=>x.setAttribute('aria-selected',x===t));table()});
+  $('#ra-q').oninput=table;
+  $('#ra-none').onclick=()=>{RASEL.picked.clear();table();btn()};
   $('#ra-dir').onchange=()=>api(`/api/ranotes?id=${encodeURIComponent(PID)}&dir=${encodeURIComponent($('#ra-dir').value)}`).then(drawRaNotes);
-  const upd=()=>{const c=$('#ra-changed').checked,k=n('new')+(c?n('changed'):0),b=$('#ra-send');b.disabled=!k;b.textContent=`Add ${k} note${k===1?'':'s'}`};
-  $('#ra-changed').onchange=upd;
-  $('#ra-send').onclick=async()=>{const inc=['new'].concat($('#ra-changed').checked?['changed']:[]);
-    try{const r=await api('/api/ranotes/write',{id:PID,dir:$('#ra-dir').value,include:inc});drawRaNotes(r.info);$('#ra-msg').textContent=`Added ${r.written} unpublished note${r.written===1?'':'s'} to ${r.file}. A backup of the old file is next to it.`}catch(e){$('#ra-msg').textContent=e.message}};
+  $('#ra-send').onclick=async()=>{const addrs=[...RASEL.picked];
+    try{const r=await api('/api/ranotes/write',{id:PID,dir:$('#ra-dir').value,include:['new','changed','same'],addresses:addrs});RASEL.picked.clear();drawRaNotes(r.info);
+      $('#ra-msg').textContent=`Added ${r.written} unpublished note${r.written===1?'':'s'} to ${r.file}. A backup of the old file is next to it.`}catch(e){$('#ra-msg').textContent=e.message}};
+  table(); btn();
 }
 function wireProj(){
   api(`/api/ranotes?id=${encodeURIComponent(PID)}`).then(drawRaNotes).catch(e=>{const b=$('#ra-out');if(b)b.innerHTML=`<p class="note empty">${esc(e.message)}</p>`});
@@ -857,6 +886,61 @@ function renderDetail(){
   P.querySelectorAll('[data-jump]').forEach(a=>a.onclick=()=>{const box=P.querySelector('#codebox');const t=box.querySelector('#j-'+a.dataset.jump);if(t){box.scrollTop=t.offsetTop-8;t.classList.add('flash');setTimeout(()=>t.classList.remove('flash'),900)}});
   const hit=P.querySelector('.hit'); if(hit){const box=hit.closest('.code');box.scrollTop=hit.offsetTop-box.clientHeight/2}
 }
+// A code note split into its parts: the description, a table of values (0x00 = Bronze) and a table of bits (bit0 = ...)
+const VAL_RX=/^\s*(0x[0-9a-f]+|-?\d+)\s*(?:=|:|-|\u2192|->)\s*(.+)$/i, BIT_RX=/^\s*(?:bit\s*|b)(\d+)\s*(?:=|:|-)\s*(.+)$/i;
+// Size / type tags people write in notes, in [] or (): [8-bit], (16-bit BE), [Bitflag], (Bitfield), [Flags], [u16], [Word], [Float]...
+const TAG_RX=/[\[(]\s*([^\])]{1,40}?)\s*[\])]/g;
+function tagKind(t){
+  t=t.toLowerCase().trim(); let m;
+  if((m=t.match(/\b(8|16|24|32|64)\s*-?\s*bits?\b/))||(m=t.match(/^[us](8|16|24|32|64)$/))) return {size:+m[1]/8,label:`${m[1]}-bit${/\bbe\b|big/.test(t)?' BE':''}${/float/.test(t)?' float':''}`};
+  if((m=t.match(/\b(0x[0-9a-f]+|\d+)\s*bytes?\b/))) return {size:Number(m[1]),label:`${Number(m[1])} bytes`};
+  if(/\bbit\s*(flags?|fields?|masks?)\b|\bflags?\b|\bbits\b|\bbitwise\b/.test(t)) return {size:1,label:'Bitflags'};
+  if(/\bbit\s*count\b/.test(t)) return {size:1,label:'Bitcount'};
+  if(/\b(bool|boolean)\b/.test(t)) return {size:1,label:'Bool'};
+  if(/\b(lower4|upper4|nibble)\b/.test(t)) return {size:1,label:t.includes('upper')?'Upper 4 bits':t.includes('lower')?'Lower 4 bits':'Nibble'};
+  if(/\bbcd\b/.test(t)) return {size:1,label:'BCD'};
+  if(/\b(ascii|char|text|string)\b/.test(t)) return {size:1,label:'Text'};
+  if(/\bbyte\b/.test(t)) return {size:1,label:'8-bit'};
+  if(/\bdword\b|\blong\b/.test(t)) return {size:4,label:'32-bit'};
+  if(/\b(word|short|half)\b/.test(t)) return {size:2,label:'16-bit'};
+  if(/\bfloat\b/.test(t)) return {size:4,label:'Float'};
+  if(/\bdouble\b/.test(t)) return {size:8,label:'Double'};
+  if(/\b(pointer|ptr)\b/.test(t)) return {size:4,label:'Pointer'};
+  return null;
+}
+function labelTag(l){   // what to show next to a label: the type from its note, or its size
+  const first=String(l.note||'').split(/\r?\n/)[0];
+  for(const m of first.matchAll(TAG_RX)){const k=tagKind(m[1]);if(k)return k.label}
+  const z=l.size||1; return z<=4&&z!==3?`${z*8}-bit`:`${z} bytes`;
+}
+function noteParts(text){
+  // notes pasted on one line ("... 0x00 = Bronze 0x01 = Silver") get split before each value or bit
+  let lines=String(text||'').replace(/\r\n?/g,'\n').split('\n');
+  lines=lines.flatMap(x=>{const n=(x.match(/(?:^|\s)(?:0x[0-9a-f]+|bit\s*\d+)\s*=/gi)||[]).length;return n>1?x.split(/\s+(?=(?:0x[0-9a-f]+|bit\s*\d+)\s*=)/i):[x]});
+  const desc=[],vals=[],bits=[];
+  for(const x of lines){let m;
+    if((m=x.match(BIT_RX))) bits.push([+m[1],m[2].trim()]);
+    else if((m=x.match(VAL_RX))&&(vals.length||desc.length)) vals.push([m[1],m[2].trim()]);
+    else if(x.trim()) desc.push(x.trim());}
+  return {desc,vals,bits};
+}
+function noteView(l){
+  const P=noteParts(l.note), en=(D.enums&&D.enums[l.name])||{};
+  // value names set in ROM Explorer that the note doesn't list
+  const have=new Set(P.vals.map(([k])=>Number(k)));
+  Object.entries(en).forEach(([k,v])=>{const n=Number(k);if(!have.has(n))P.vals.push(['0x'+n.toString(16).padStart(2,'0'),v])});
+  P.vals.sort((a,b)=>Number(a[0])-Number(b[0]));
+  const w=Math.max(2,(l.size||1)*2), fmt=k=>{const n=Number(k);return isNaN(n)?k:'0x'+n.toString(16).toUpperCase().padStart(Math.min(w,8),'0')};
+  // pull the type tags out of the first line ([8-bit], (Bitfield) ...) and show them as badges
+  const tags=[]; const first=(P.desc[0]||'').replace(TAG_RX,(m,t)=>{const k=tagKind(t);if(k){tags.push(t.trim());return ''}return m}).replace(/^\s*[-:|]\s*/,'').trim();
+  if(!tags.length) tags.push(labelTag(l));
+  return `<div class="nview">
+    <div class="sline">${tags.map(t=>`<span class="ntag">${esc(t)}</span>`).join('')}</div>
+    ${P.desc.length?`<p class="note">${esc(first||'')}${P.desc.slice(1).map(x=>'<br>'+esc(x)).join('')}</p>`:''}
+    ${P.vals.length?`<table class="vtab" aria-label="Values"><tr><th>Value</th><th>Means</th></tr>${P.vals.map(([k,v])=>`<tr><td class="mono">${esc(fmt(k))}</td><td>${esc(v)}</td></tr>`).join('')}</table>`:''}
+    ${P.bits.length?`<table class="vtab" aria-label="Bits"><tr><th>Bit</th><th>Means</th></tr>${P.bits.sort((a,b)=>a[0]-b[0]).map(([k,v])=>`<tr><td class="mono">bit ${k} <span class="small">(0x${(1<<k).toString(16).toUpperCase().padStart(2,'0')})</span></td><td>${esc(v)}</td></tr>`).join('')}</table>`:''}
+  </div>`;
+}
 function addrDetail(r){
   const l=D.labels.find(x=>x.ra===r); const a=addrByRa.get(r);
   const busA=l?l.bus:(a?a.bus:r);
@@ -875,7 +959,7 @@ function addrDetail(r){
     <div class="frow"><label for="e-vals">Value names</label><textarea id="e-vals" rows="3" placeholder="0 = Bronze&#10;1 = Silver&#10;2 = Gold">${esc(vals)}</textarea><span class="hint">One per line. Comparisons in the code then read "If Difficulty is 2 (Gold)".</span></div>
     <div class="factions"><button class="btn primary" type="submit">Save label</button><button class="btn" type="button" id="edit-cancel">Cancel</button>${l?'<button class="btn danger" type="button" id="edit-del">Remove label</button>':''}<span class="fmsg" id="e-msg" role="status"></span></div>
   </form>
-  <p class="note${l?'':' empty'}">${l?esc(l.note):'No label yet. Name it and every reference in the code will use the name.'}</p>
+  ${l?noteView(l):'<p class="note empty">No label yet. Name it and every reference in the code will use the name.</p>'}
   ${SL&&SL.states.length?`<div id="svals" data-ra="${r}" data-size="${l?Math.min(4,l.size===3?4:l.size):1}"><p class="label">In your save states</p><p class="note empty">Reading…</p></div>`:''}
   <div><p class="label">Code that touches it (${xs.length})</p>
   ${xs.length?`<div class="xr">${xs.slice(0,300).map(([x,t])=>`<span class="rw ${t[2].split('+')[0]}">${t[2]==='base+off'?'BASE':t[2]}</span><span>${x.label&&x.ra!==r?esc(x.label):hex(x.ra)}</span>${fnLink(t[0],t[1])}`).join('')}</div>`
