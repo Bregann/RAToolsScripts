@@ -1,0 +1,4 @@
+# ROM Explorer: the analysis cache and save-state RAM copies are big and can be rebuilt
+Work/
+Projects/*.states/
+__pycache__/

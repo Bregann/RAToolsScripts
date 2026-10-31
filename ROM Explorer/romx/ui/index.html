@@ -1,0 +1,931 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ROM Explorer</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,700&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: a debugger-style split — index list on the left, detail pane on the right, stacked on phones */
+:root{
+  /* Game Boy shell cream and PlayStation grey; Game Boy navy lettering, A/B-button berry for actions, PlayStation symbol colours for read/write/pointer */
+  --bg:#e3ded2; --panel:#f5f2ea; --raised:#ece8dd; --ink:#2b2c38; --muted:#6c675d; --line:#c7c0b0;
+  --accent:#2f3580; --accent-soft:#e2e1ee; --gold:#9c2b5e; --gold-ink:#fbf5ef; --read:#1f7f55; --write:#c0333d; --ptr:#3657a6; --hit:#f6e7a8;
+  --grey:#b9b7b2; --grey-2:#a6a4a0; --navy:#2f3580; --berry:#9c2b5e;
+  --display:"Atkinson Hyperlegible",system-ui,sans-serif; --body:"Atkinson Hyperlegible",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace; color-scheme:light;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.45}
+.wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:18px 32px;max-width:1400px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+header{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:end;justify-content:space-between}
+h1{font-family:var(--display);font-stretch:80%;font-weight:800;font-size:1.9rem;letter-spacing:.01em;margin:0;text-wrap:balance}
+.rom{font-family:var(--mono);font-size:.8rem;color:var(--muted)}
+.stats{display:flex;gap:16px;flex-wrap:wrap;font-size:.85rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.stats b{color:var(--ink);font-family:var(--mono)}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.tabs{display:flex;gap:4px;flex-wrap:wrap}
+.tab{font:600 .82rem var(--body);text-transform:uppercase;letter-spacing:.06em;border:1px solid var(--line);background:var(--panel);color:var(--muted);padding:6px 11px;border-radius:4px;cursor:pointer}
+.tab[aria-selected="true"]{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+.tab:focus-visible,.row:focus-visible,.chip:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+#q{flex:1;min-width:0;max-width:420px;font:400 .9rem var(--mono);padding:7px 10px;border:1px solid var(--line);border-radius:4px;background:var(--panel);color:var(--ink)}
+.split{display:grid;grid-template-columns:minmax(260px,360px) minmax(0,1fr);gap:14px;align-items:start}
+@media (max-width:820px){.split{grid-template-columns:minmax(0,1fr)}}
+.list,.detail{background:var(--panel);border:1px solid var(--line);border-radius:6px;min-width:0}
+.list{max-height:78vh;overflow:auto}
+.row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:2px 10px;padding:8px 12px;border-bottom:1px solid var(--line);cursor:pointer;align-items:baseline}
+.row:hover{background:var(--accent-soft)}
+.row[aria-current="true"]{background:var(--accent-soft);box-shadow:inset 3px 0 0 var(--accent)}
+.row .a{font:400 .78rem var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}
+.row .n{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row .n.unk{font-weight:400;color:var(--muted);font-family:var(--mono);font-size:.82rem}
+.row .c{font:400 .75rem var(--mono);color:var(--muted)}
+.row .d{grid-column:2/4;font-size:.82rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.detail{padding:16px 18px;display:flex;flex-direction:column;gap:14px}
+.detail h2{font-family:var(--display);font-stretch:85%;font-weight:700;font-size:1.45rem;margin:0;overflow-wrap:anywhere}
+.kv{display:flex;flex-wrap:wrap;gap:6px 18px;font:400 .8rem var(--mono);color:var(--muted)}
+.kv b{color:var(--ink);font-weight:600}
+.note{max-width:68ch;margin:0}
+.note.empty{color:var(--muted);font-style:italic}
+.label{font:600 .72rem var(--body);text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:0 0 6px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:400 .78rem var(--mono);border:1px solid var(--line);background:var(--bg);color:var(--ink);padding:3px 8px;border-radius:3px;cursor:pointer}
+.chip.named{border-color:var(--accent);color:var(--accent)}
+.rw{font:600 .68rem var(--mono);padding:1px 5px;border-radius:3px;border:1px solid currentColor}
+.rw.R{color:var(--read)} .rw.W{color:var(--write)} .rw.RW{color:var(--write)} .rw.ptr,.rw.base{color:var(--ptr)}
+.code{overflow:auto;max-height:72vh;border:1px solid var(--line);border-radius:4px;background:var(--bg)}
+.code table{border-collapse:collapse;font:400 .8rem var(--mono);width:100%}
+.code td{padding:1px 10px;white-space:pre;vertical-align:top}
+.code td.ad{color:var(--muted);user-select:none}
+.code td.cm{color:var(--ptr)}
+.code td.cm.pool{color:var(--muted);font-style:italic}
+.code td.cm.lab{color:var(--accent);font-weight:600}
+.code tr.hit td{background:var(--hit)}
+.code a{color:inherit;text-decoration:underline dotted;cursor:pointer}
+.xr{display:grid;grid-template-columns:auto auto minmax(0,1fr);gap:4px 12px;font:400 .82rem var(--mono);align-items:center}
+.xr a{color:var(--accent);cursor:pointer;text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.about{max-width:72ch;display:flex;flex-direction:column;gap:12px}
+.about h3{font-family:var(--display);font-stretch:85%;font-size:1.1rem;margin:6px 0 0}
+.about p,.about li{margin:0}
+.about ol,.about ul{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px}
+.cons{overflow-x:auto}
+.cons table{border-collapse:collapse;font-size:.88rem;min-width:520px}
+.cons th,.cons td{text-align:left;padding:6px 12px 6px 0;border-bottom:1px solid var(--line);vertical-align:top}
+.cons th{font:600 .72rem var(--body);text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.cons td:first-child{font-weight:600;white-space:nowrap}
+.status{color:var(--muted);padding:20px}
+.more{padding:10px 12px;color:var(--muted);font-size:.82rem}
+
+.glance{display:flex;flex-direction:column;gap:8px;border:1px solid var(--line);border-radius:6px;padding:12px 14px;background:var(--bg)}
+.gr{display:grid;grid-template-columns:68px minmax(0,1fr);gap:10px;align-items:baseline}
+.gk{font:700 .7rem var(--mono);letter-spacing:.06em;text-transform:uppercase}
+.gk.read,.st.read .tag{color:var(--read)} .gk.write,.st.write .tag{color:var(--write)} .gk.branch,.st.branch .tag{color:var(--accent)} .gk.call,.st.call .tag{color:var(--ptr)} .gk.text,.st.text .tag{color:var(--ink)}
+.chk{font:400 .8rem var(--body);background:var(--panel);border:1px solid var(--line);border-radius:3px;padding:2px 8px}
+.none{color:var(--muted);font-size:.82rem;font-style:italic}
+.codehead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.codehead .label{margin:0}
+.seg{display:flex;border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.segb{font:600 .76rem var(--body);border:0;background:var(--panel);color:var(--muted);padding:5px 10px;cursor:pointer}
+.segb[aria-pressed="true"]{background:var(--ink);color:var(--panel)}
+.segb:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.steps{display:flex;flex-direction:column;padding:6px 0}
+.st{display:grid;grid-template-columns:58px minmax(0,1fr) auto;gap:10px;padding:3px 12px;align-items:baseline}
+.st .tag{font:700 .66rem var(--mono);letter-spacing:.06em;color:var(--muted)}
+.st .tx{font-size:.9rem;overflow-wrap:anywhere}
+.st .raw{font:400 .72rem var(--mono);color:var(--muted);white-space:nowrap;opacity:.75}
+.st.flow .tx{color:var(--muted);font-style:italic}
+.st.write{background:color-mix(in srgb,var(--write) 9%,transparent)}
+.st.hit{background:var(--hit)}
+@media (max-width:620px){.st .raw{display:none}.st{grid-template-columns:50px minmax(0,1fr)}}
+.lbl{padding:8px 12px 2px;display:flex;align-items:center;gap:8px;font:700 .72rem var(--mono);color:var(--accent)}
+.lbl::after{content:"";flex:1;border-top:1px dashed var(--line)}
+.lbl.flash,.lblr.flash td{background:var(--hit)}
+.nm{color:var(--accent);font-weight:600;text-decoration:none;cursor:pointer}
+.nm.sub{font-weight:400;font-family:var(--mono);font-size:.85em}
+.code a.nm{text-decoration:none}
+.jl{color:var(--accent);font-family:var(--mono);font-size:.85em;cursor:pointer;text-decoration:underline dotted}
+.code td.pl{font-family:var(--body);color:var(--ink);white-space:normal}
+.code tr.k-quiet td.pl,.code tr.k-pool td.pl,.code tr.k-addr td.pl{color:var(--muted)}
+.code tr.lblr td{color:var(--accent);font-weight:700;padding-top:6px}
+
+.nav{display:flex;gap:4px}
+.page{display:flex;flex-direction:column;gap:14px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:16px 18px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.panel h2{font-family:var(--display);font-stretch:85%;font-size:1.35rem;margin:0}
+.panel h3{font-family:var(--display);font-stretch:85%;font-size:1.02rem;margin:8px 0 0}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.card{display:flex;flex-direction:column;gap:4px;text-align:left;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:6px;padding:12px 14px;cursor:pointer;font:inherit}
+.card:hover,.grow:hover{border-color:var(--accent)}
+.cg{font-weight:600}.cm{font-size:.82rem;color:var(--muted)}
+.warn{font-size:.82rem;color:var(--write)}
+.glist{display:flex;flex-direction:column;max-height:50vh;overflow:auto;border:1px solid var(--line);border-radius:4px}
+.grow{display:flex;justify-content:space-between;gap:12px;text-align:left;font:inherit;background:var(--panel);color:var(--ink);border:0;border-bottom:1px solid var(--line);padding:8px 12px;cursor:pointer;flex-wrap:wrap}
+#gfilter{font:400 .9rem var(--body);padding:6px 10px;border:1px solid var(--line);border-radius:4px;background:var(--panel);color:var(--ink);max-width:320px}
+.titlerow{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.btn{font:600 .82rem var(--body);border:1px solid var(--line);background:var(--panel);color:var(--ink);padding:6px 12px;border-radius:4px;cursor:pointer}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--panel)}
+.btn.danger{color:var(--write);border-color:var(--write)}
+.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.svals{display:grid;grid-template-columns:auto 1fr;gap:3px 14px;font:400 .84rem var(--mono)}
+.svals .sn{color:var(--muted)} .svals .en{color:var(--muted);font-family:var(--body)}
+.stbl{width:100%;border-collapse:collapse;font-size:.84rem}
+.stbl th{text-align:left;font:600 .7rem var(--body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:6px 8px;border-bottom:1px solid var(--line)}
+.stbl td{padding:5px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
+.stbl input[type=text],.stbl input:not([type]),.stbl select{font:inherit;padding:4px 6px;border:1px solid var(--line);border-radius:3px;background:var(--panel);color:var(--ink);min-width:0;width:100%}
+.stbl .num{font-family:var(--mono);text-align:right;white-space:nowrap}
+.stbl .mono{font-family:var(--mono)}
+.stbl a{cursor:pointer;color:var(--accent)}
+.stbl .small{font-size:.74rem;color:var(--muted)}
+.ssec{display:flex;flex-direction:column;gap:10px;margin-top:18px}
+.sline{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.sline input[type=text]{flex:1 1 280px;font:400 .84rem var(--mono);padding:6px 8px;border:1px solid var(--line);border-radius:4px;background:var(--panel);color:var(--ink)}
+.sres{max-height:60vh;overflow:auto;border:1px solid var(--line);border-radius:4px}
+.changed{color:var(--write);font-weight:600}
+.steps{display:flex;flex-direction:column;gap:12px}
+.step{display:grid;grid-template-columns:34px minmax(0,1fr);gap:4px 12px;border:1px solid var(--line);border-radius:6px;padding:14px 16px;background:var(--panel)}
+.step .num{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font:700 .85rem var(--mono);background:var(--bg);border:1px solid var(--line)}
+.step.done .num{background:var(--read);border-color:var(--read);color:var(--panel)}
+.step.todo .num{background:var(--accent);border-color:var(--accent);color:var(--panel)}
+.step h3{margin:0;font-size:1rem;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.step .body{grid-column:2;display:flex;flex-direction:column;gap:8px;min-width:0}
+.pill{font:600 .68rem var(--body);letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:10px;border:1px solid var(--line);color:var(--muted)}
+.pill.ok{color:var(--read);border-color:var(--read)} .pill.todo{color:var(--accent);border-color:var(--accent)} .pill.bad{color:var(--write);border-color:var(--write)}
+.chk{display:grid;grid-template-columns:auto minmax(0,1fr);gap:3px 10px;font-size:.86rem;align-items:baseline}
+.chk .y{color:var(--read);font-weight:700}.chk .n{color:var(--write);font-weight:700}.chk .m{color:var(--muted);font-weight:700}
+.progress{height:8px;border-radius:4px;background:var(--bg);border:1px solid var(--line);overflow:hidden}.progress>span{display:block;height:100%;background:var(--read)}
+.emus{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}
+.emu{border:1px solid var(--line);border-radius:6px;padding:12px;display:flex;flex-direction:column;gap:6px;background:var(--bg)}
+.emu h4{margin:0;font-size:.95rem}
+.banner{border:1px solid var(--accent);background:var(--accent-soft);border-radius:6px;padding:10px 14px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+ #explorer{position:relative}
+#explorer.busy::before{content:"";position:absolute;left:0;right:0;top:-6px;height:3px;border-radius:2px;background:linear-gradient(90deg,transparent,var(--navy),transparent);background-size:40% 100%;background-repeat:no-repeat;animation:slide 1s linear infinite,showlate 0s .12s both}
+#explorer.busy .list,#explorer.busy .detail{opacity:.55;transition:opacity .15s .12s}
+@keyframes slide{from{background-position:-40% 0}to{background-position:140% 0}}
+@keyframes showlate{from{visibility:hidden}to{visibility:visible}}
+@media (prefers-reduced-motion:reduce){#explorer.busy::before{animation:showlate 0s .12s both}}
+.btn[aria-busy="true"]{white-space:nowrap}
+.joblog{position:fixed;inset:0;background:rgba(43,44,56,.28);display:grid;place-items:center;z-index:50;padding:16px}
+.jcard{width:min(640px,100%);background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:10px;box-shadow:0 10px 30px rgba(43,44,56,.25)}
+.jcard h3{margin:0;font-size:1.05rem;color:var(--navy)}
+.plog{list-style:none;margin:0;padding:10px 12px;max-height:46vh;overflow:auto;background:#fffdf8;border:1px solid var(--line);border-radius:8px;font:400 .82rem/1.55 var(--mono);display:flex;flex-direction:column;gap:2px}
+.plog li{display:grid;grid-template-columns:3.6em minmax(0,1fr);gap:8px}
+.plog .t{color:var(--muted);text-align:right}
+.plog li.err{color:var(--write);font-weight:600}
+.pbar{height:8px;border-radius:999px;background:var(--raised);overflow:hidden}.pbar>span{display:block;height:100%;background:var(--navy);transition:width .2s}
+.jact{display:flex;justify-content:flex-end}
+.editor{display:flex;flex-direction:column;gap:10px;border:1px solid var(--accent);border-radius:6px;padding:12px 14px;background:var(--accent-soft)}
+.sform{display:flex;flex-direction:column;gap:12px;max-width:760px}
+.frow{display:flex;flex-direction:column;gap:4px;min-width:0}
+.frow label{font:600 .78rem var(--body);color:var(--ink)}
+.frow input,.frow textarea{font:400 .88rem var(--mono);padding:7px 10px;border:1px solid var(--line);border-radius:4px;background:var(--panel);color:var(--ink);width:100%;min-width:0}
+.frow textarea{resize:vertical}
+.inline{display:flex;gap:8px}
+.hint{font-size:.78rem;color:var(--muted)}
+.chkst{font-size:.78rem}
+.chkst.ok{color:var(--read)}.chkst.warn{color:var(--muted)}.chkst.error{color:var(--write);font-weight:600}
+.factions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.fmsg{font-size:.85rem;color:var(--muted)}
+.tick{display:flex;gap:6px;align-items:center;font-size:.85rem}
+code{font-family:var(--mono);font-size:.85em}
+.cview{margin:0;padding:12px 14px;font:400 .8rem/1.5 var(--mono);white-space:pre;overflow:auto;max-height:72vh;background:var(--bg);border:0}
+.glog{margin:0;padding:10px 12px;font:400 .74rem/1.45 var(--mono);white-space:pre-wrap;max-height:220px;overflow:auto;background:var(--bg);border:1px solid var(--line);border-radius:4px;color:var(--muted)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ---- Look: a Game Boy / PlayStation shell. Cream body, grey trim, navy lettering, berry buttons ---- */
+body{font-size:15.5px;line-height:1.5}
+header{align-items:center}
+.cart{display:flex;flex-direction:column;gap:2px;min-width:0;padding:4px 0}
+.cart h1{font-family:var(--display);font-style:italic;font-weight:700;font-size:1.9rem;letter-spacing:-.01em;line-height:1;color:var(--navy)}
+.cart .rom{font-family:var(--body);font-size:.88rem;color:var(--muted);display:flex;align-items:center;gap:10px}
+.cart .rom::before{content:"";flex:0 0 46px;height:7px;background:linear-gradient(180deg,var(--berry) 0 2px,transparent 2px 5px,var(--navy) 5px 7px)}
+.nav{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.tab{text-transform:none;letter-spacing:0;font:700 .86rem var(--body);border-radius:999px;padding:6px 14px;background:var(--panel);border:1px solid var(--line);color:var(--ink)}
+.tab:hover{border-color:var(--grey-2);background:var(--raised)}
+.tab[aria-selected="true"]{background:var(--navy);border-color:var(--navy);color:#f5f2ea}
+.tabs{background:var(--grey);border:1px solid var(--grey-2);border-radius:14px;padding:4px;gap:3px}
+.tabs .tab{border-color:transparent;background:transparent}
+.tabs .tab:hover{background:rgba(255,255,255,.35)}
+.tabs .tab[aria-selected="true"]{background:var(--panel);color:var(--navy);border-color:var(--panel);box-shadow:0 1px 0 rgba(0,0,0,.12)}
+.list,.detail,.panel{border-radius:10px;box-shadow:0 1px 0 rgba(255,255,255,.6) inset}
+.panel h2,.detail h2,.step h3{font-family:var(--body);font-weight:700;letter-spacing:0;color:var(--ink)}
+.panel h2{font-size:1.35rem}
+.label,.cons th,.stbl th,.pill{text-transform:none;letter-spacing:0;font-family:var(--body)}
+.label{font-size:.85rem;font-weight:700;color:var(--ink)}
+.stbl th{font-size:.8rem;font-weight:700}
+.btn{border-radius:999px;font:700 .86rem var(--body);padding:7px 15px;text-decoration:none;display:inline-block;background:var(--panel)}
+.btn.primary{background:var(--berry);border-color:var(--berry);color:var(--gold-ink);box-shadow:0 2px 0 #6e1d42}
+.btn.primary:active{transform:translateY(1px);box-shadow:0 1px 0 #6e1d42}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn[aria-busy="true"],.tab[aria-busy="true"]{opacity:.65;cursor:progress;pointer-events:none}
+.btn[aria-busy="true"]::after{content:"";display:inline-block;width:.8em;height:.8em;margin-left:.5em;vertical-align:-1px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.btn[aria-busy="true"]::after{animation:none}}
+.chip{border-radius:6px;background:var(--panel)}
+.chip.named{border-color:var(--navy);color:var(--navy);background:var(--accent-soft)}
+.row:hover{background:var(--raised)}
+.row[aria-current="true"]{background:var(--accent-soft);box-shadow:inset 3px 0 0 var(--navy)}
+.stats b{color:var(--ink)}
+.step{border-radius:10px;background:var(--panel)}
+.step .num{font-family:var(--body);font-size:.85rem}
+.step.done .num{background:var(--read);border-color:var(--read);color:#fff}
+.step.todo .num{background:var(--berry);border-color:var(--berry);color:#fff}
+.pill{font-size:.75rem;font-weight:700}
+.pill.todo{color:var(--berry);border-color:var(--berry)}
+.progress{height:10px;border-radius:999px;background:var(--raised)}.progress>span{background:var(--read)}
+.banner{border-color:var(--berry);background:#f3e6ea;border-radius:10px}
+.emu{border-radius:10px;background:var(--raised)}
+.card{border-radius:10px;background:var(--raised)}
+.card:hover{border-color:var(--navy)}
+input,textarea,select{border-radius:8px;background:#fffdf8}
+#q{background:#fffdf8}
+a{color:var(--navy)}
+@media (max-width:640px){.cart h1{font-size:1.5rem}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="cart">
+      <h1>ROM Explorer</h1>
+      <div class="rom" id="romname">Loading…</div>
+    </div>
+    <nav class="nav"><button class="tab" id="b-addr" hidden title="Switch between RetroAchievements addresses and the console's own addresses"></button><button class="tab" id="b-setup" data-v="setup">Setup</button><button class="tab" id="b-home" data-v="home">Games</button><button class="tab" id="b-settings" data-v="settings">Settings</button></nav>
+  </header>
+  <div class="stats" id="stats"></div>
+  <div id="page" class="page" hidden></div>
+  <div id="explorer">
+  <div class="bar">
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" id="t-known" data-v="known">Known addresses</button>
+      <button class="tab" role="tab" id="t-funcs" data-v="funcs">Functions</button>
+      <button class="tab" role="tab" id="t-ram" data-v="ram">All RAM refs</button>
+      <button class="tab" role="tab" id="t-text" data-v="text">Text</button>
+      <button class="tab" role="tab" id="t-states" data-v="states">Save states</button>
+      <button class="tab" role="tab" id="t-proj" data-v="proj">Project &amp; notes</button>
+      <button class="tab" role="tab" id="t-about" data-v="about">How it works</button>
+    </div>
+    <input id="q" type="search" placeholder="Search name, address (0x0274AA) or note" aria-label="Search">
+  </div>
+  <div class="split">
+    <div class="list" id="list" role="list"><div class="status">Loading the ROM analysis…</div></div>
+    <div class="detail" id="detail"></div>
+  </div>
+  </div>
+</div>
+
+<script>
+const $=s=>document.querySelector(s);
+const hex=(v,w=6)=>'0x'+v.toString(16).toUpperCase().padStart(w,'0');
+let RAMODE=true;
+try{RAMODE=localStorage.getItem('addrmode')!=='bus'}catch(e){}
+// RA address of a code/data address (null if it isn't in RAM RetroAchievements can see, like GBA ROM)
+const raOf=v=>{const R=D&&D.ra_ranges;if(!R)return null;const lo=v%2**32;for(const [a,b,r] of R)if(lo>=a&&lo<b)return r+lo-a;return null};
+const regionPre=v=>D&&D.pkey==='nds'&&v>=2**32?`${(D.regions&&D.regions[Math.floor(v/2**32)])||Math.floor(v/2**32)}:`:'';
+const fa=v=>{
+  if(RAMODE&&D&&D.pkey!=='gb'){const r=raOf(v);if(r!==null)return regionPre(v)+hex(r)}
+  return faBus(v)};
+// both forms, for the details line: "RA 0x804000 · PSP 0x08804000"
+const fa2=v=>{const r=D&&D.pkey!=='gb'?raOf(v):null;return r===null?`<b>${faBus(v)}</b>`:`RA <b>${regionPre(v)+hex(r)}</b> · ${esc(D.busname)} <b>${faBus(v)}</b>`};
+const faBus=v=>{
+  if(D&&D.pkey==='gb') return `${(v>>16).toString(16).toUpperCase().padStart(2,'0')}:${(v&0xFFFF).toString(16).toUpperCase().padStart(4,'0')}`;
+  if(D&&D.pkey==='nds'&&v>=2**32){const r=Math.floor(v/2**32),a=v%2**32;return `${(D.regions&&D.regions[r])||r}:${a.toString(16).toUpperCase().padStart(8,'0')}`}
+  return hex(v,8)};
+let D=null, view='known', sel=null, hitLine=null;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fnByAddr=new Map(), addrByRa=new Map();
+
+let ST=null, PID=null;
+try{PID=localStorage.getItem('project')}catch(e){}
+// While a button's action is running, that button is switched off, so a second click can't start it again.
+let LASTBTN=null;
+document.addEventListener('click',e=>{const b=e.target.closest('button,.btn');if(b)LASTBTN={el:b,t:Date.now()}},true);
+document.addEventListener('submit',e=>{if(e.submitter)LASTBTN={el:e.submitter,t:Date.now()};else{const b=e.target.querySelector('button[type=submit],button:not([type])');if(b)LASTBTN={el:b,t:Date.now()}}},true);
+async function api(path,body){
+  let btn=null;
+  if(body!==undefined&&LASTBTN&&Date.now()-LASTBTN.t<1500&&document.contains(LASTBTN.el)){btn=LASTBTN.el;LASTBTN=null;btn.disabled=true;btn.setAttribute('aria-busy','true')}
+  try{
+    const r=await fetch(path,body===undefined?{}:{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    const j=await r.json(); if(!r.ok) throw new Error(j.error||'Request failed'); return j;
+  }finally{if(btn){btn.disabled=false;btn.removeAttribute('aria-busy')}}
+}
+document.addEventListener('click',e=>{const b=e.target.closest('[aria-busy="true"]');if(b){e.preventDefault();e.stopImmediatePropagation()}},true);
+async function loadState(){ST=await api('/api/state');}
+// ---------- what's happening while a game opens ----------
+const newJob=()=>Math.random().toString(36).slice(2,10);
+function showJob(title,job){
+  let box=$('#joblog');
+  if(!box){box=document.createElement('div');box.id='joblog';box.className='joblog';box.setAttribute('role','status');document.body.appendChild(box)}
+  box.hidden=true; const showT=setTimeout(()=>{if(!stop||failed)box.hidden=false},400); let failed=false;   // quick jobs (a save) don't flash the panel
+  box.innerHTML=`<div class="jcard"><h3>${esc(title)}</h3><ol class="plog"></ol><div class="pbar" hidden><span></span></div><p class="pcount small"></p><div class="jact" hidden><button class="btn" id="job-close">Close</button></div></div>`;
+  let since=0, stop=false; const list=box.querySelector('.plog');
+  const tick=async()=>{
+    try{const r=await fetch(`/api/progress?job=${job}&since=${since}`).then(x=>x.json());
+      for(const [t,m] of r.lines){const li=document.createElement('li');li.innerHTML=`<span class="t">${t.toFixed(1)}s</span><span>${esc(m)}</span>`;list.appendChild(li)}
+      since+=r.lines.length; if(r.lines.length) list.scrollTop=list.scrollHeight;
+      const bar=box.querySelector('.pbar'), cnt=box.querySelector('.pcount');
+      if(r.n){bar.hidden=false;bar.firstChild.style.width=`${100*r.i/r.n}%`;cnt.textContent=`${r.i.toLocaleString()} of ${r.n.toLocaleString()} ${r.what}`}else{bar.hidden=true;cnt.textContent=''}
+    }catch(e){}
+    if(!stop) setTimeout(tick,250);
+  };
+  tick();
+  return {done(){stop=true;clearTimeout(showT);setTimeout(()=>{const b=$('#joblog');if(b)b.hidden=true},300)},
+          fail(msg){stop=true;failed=true;clearTimeout(showT);box.hidden=false;const li=document.createElement('li');li.className='err';li.innerHTML=`<span class="t">!</span><span>${esc(msg)}</span>`;list.appendChild(li);
+            box.querySelector('.jact').hidden=false;box.querySelector('#job-close').onclick=()=>box.hidden=true}};
+}
+async function loadProject(id,keepHash,job,title){
+  const own=!job; job=job||newJob();
+  const p=(ST&&ST.projects.find(x=>x.id===id));
+  const jl=own?showJob(title||(keepHash&&D&&PID===id?`Updating ${p?p.game:'the game'}`:`Opening ${p?p.game:'the game'}`),job):null;
+  $('#list').innerHTML='<div class="status">Opening the game…</div>';
+  try{D=await api('/api/data?id='+encodeURIComponent(id)+'&job='+job)}catch(e){if(jl)jl.fail(e.message);throw e}
+  if(jl) jl.done();
+  PID=id; addrButton(); try{localStorage.setItem('project',id)}catch(e){}
+  fnByAddr.clear(); addrByRa.clear(); NAMERX=null; TXIDX=null; STARTS=null; ADDRS=null; SL=null; SRES=null; loadStates().catch(()=>{});
+  D.funcs.forEach(f=>fnByAddr.set(f.a,f)); D.addrs.forEach(a=>addrByRa.set(a.ra,a));
+  $('#romname').textContent=`${D.rom} · ${D.platform} · ${D.cpu}`;
+  const named=D.funcs.filter(f=>!f.name.startsWith('sub_')).length;
+  $('#stats').innerHTML=`<span><b>${D.funcs.length}</b> functions</span><span><b>${named}</b> named</span><span><b>${D.addrs.length}</b> RAM addresses referenced</span><span><b>${D.labels.length}</b> labelled addresses</span><span><b>${D.text.length}</b> text strings</span>`;
+  if(!keepHash) location.hash='known'; else route();
+}
+(async()=>{
+  try{await loadState();
+    if(PID&&ST.projects.some(p=>p.id===PID)){await loadProject(PID,true)} else {if(!['#settings','#setup'].includes(location.hash))location.hash=ST.projects.length?'home':'setup';route()}
+  }catch(e){$('#romname').textContent='';showPage(`<h2>ROM Explorer isn't responding</h2><p class="note">${esc(e.message)}. Check the window where you started it is still open, then reload this page.</p>`)}
+})();
+function showPage(html){$('#page').innerHTML=html;$('#page').hidden=false;$('#explorer').hidden=true}
+function hidePage(){$('#page').hidden=true;$('#explorer').hidden=false}
+document.querySelectorAll('.tab[data-v]').forEach(b=>b.onclick=()=>{location.hash=b.dataset.v});
+$('#b-addr').onclick=()=>{RAMODE=!RAMODE;try{localStorage.setItem('addrmode',RAMODE?'ra':'bus')}catch(e){}addrButton();route()};
+function addrButton(){const b=$('#b-addr'),ok=!!(D&&D.ra_ranges&&D.ra_ranges.length&&D.pkey!=='gb');b.hidden=!ok;if(ok)b.textContent=RAMODE?'Addresses: RA':`Addresses: ${D.busname}`}
+$('#q').addEventListener('input',()=>renderList());
+window.addEventListener('hashchange',route);
+
+function route(){
+  const h=location.hash.slice(1); hitLine=null;
+  document.querySelectorAll('.nav .tab').forEach(b=>b.setAttribute('aria-selected',b.dataset.v===h));
+  if(h==='home'||(!D&&h!=='settings'&&h!=='setup')){$('#stats').hidden=true;return renderHome()}
+  if(h==='settings'){$('#stats').hidden=true;return renderSettings()}
+  if(h==='setup'){$('#stats').hidden=true;return renderSetup()}
+  $('#stats').hidden=false; hidePage(); $('#romname').textContent=`${D.rom} · ${D.platform} · ${D.cpu}`;
+  let m;
+  if((m=h.match(/^fn-([0-9A-Fa-f]{8,12})(?:-([0-9A-Fa-f]{8,12}))?$/))){view='funcs';sel={k:'fn',a:parseInt(m[1],16)};if(m[2])hitLine=parseInt(m[2],16)}
+  else if((m=h.match(/^ra-([0-9A-Fa-f]{6,8})$/))){const r=parseInt(m[1],16);view=D.labels.some(l=>l.ra===r)?'known':'ram';sel={k:'ra',a:r}}
+  else if((m=h.match(/^tx-([0-9A-Fa-f]{8})$/))){view='text';sel={k:'tx',a:parseInt(m[1],16)}}
+  else if(['known','funcs','ram','text','about','proj','states'].includes(h)){view=h;sel=null}
+  else {view='known';sel=null}
+  document.querySelectorAll('.tab').forEach(b=>b.setAttribute('aria-selected',b.dataset.v===view));
+  if(!sel){
+    if(view==='known'&&D.labels.length) sel={k:'ra',a:(D.labels.find(l=>!l.builtin)||D.labels[0]).ra};
+    if(view==='funcs'&&D.funcs.length){const f=D.funcs.find(f=>!f.name.startsWith('sub_'))||D.funcs[0];sel={k:'fn',a:f.a}}
+    if(view==='ram'&&D.addrs.length) sel={k:'ra',a:D.addrs[0].ra};
+  }
+  const ex=$('#explorer'); ex.classList.add('busy');
+  // let the browser paint the loading state before the (sometimes heavy) render
+  requestAnimationFrame(()=>setTimeout(()=>{try{renderList();renderDetail()}finally{ex.classList.remove('busy')}},0));
+}
+
+function match(q,...fields){return !q||fields.some(f=>f&&String(f).toLowerCase().includes(q))}
+function renderList(){
+  const q=$('#q').value.trim().toLowerCase(); const L=$('#list'); let rows=[];
+  if(view==='known'){
+    rows=[...D.labels].sort((x,y)=>(!!x.builtin-!!y.builtin)||x.ra-y.ra).filter(l=>match(q,l.name,l.note,hex(l.ra),hex(l.bus,8))).map(l=>{
+      const m0=l.match??l.ra; const n=refsIn(m0,m0+l.size);
+      return row(`ra-${hex(l.ra).slice(2)}`,hex(l.ra),l.name,false,n?`${n} refs`:'via base',l.note,sel&&sel.k==='ra'&&sel.a===l.ra)});
+  } else if(view==='funcs'){
+    const fs=D.funcs.filter(f=>match(q,f.name,f.note,hex(f.a,8),faBus(f.a),fa(f.a)));
+    fs.sort((a,b)=>(a.name.startsWith('sub_')-b.name.startsWith('sub_'))||a.a-b.a);
+    rows=fs.slice(0,400).map(f=>row(`fn-${hex(f.a,8).slice(2)}`,fa(f.a),f.name,f.name.startsWith('sub_'),`${f.callers.length+f.ptr.length} in`,f.note||(f.refs.length?f.refs.slice(0,3).map(r=>addrByRa.get(r)?.label||hex(r)).join(', '):''),sel&&sel.k==='fn'&&sel.a===f.a));
+    if(fs.length>400) rows.push(`<div class="more">Showing 400 of ${fs.length}. Search to narrow it down.</div>`);
+  } else if(view==='ram'){
+    const as=D.addrs.filter(a=>match(q,a.label,hex(a.ra),hex(a.bus,8)));
+    rows=as.slice(0,500).map(a=>row(`ra-${hex(a.ra).slice(2)}`,hex(a.ra),a.label||hex(a.bus,8),!a.label,`${a.n}`,'',sel&&sel.k==='ra'&&sel.a===a.ra));
+    if(as.length>500) rows.push(`<div class="more">Showing 500 of ${as.length}. Search to narrow it down.</div>`);
+  } else if(view==='text'){
+    const ts=D.text.filter(t=>match(q,t[1],hex(t[0],8),fa(t[0])));
+    if($('#onlyused')&&$('#onlyused').checked){}
+    rows=ts.slice(0,600).map(t=>{const u=textUse(t[0]);return `<div class="row" role="listitem" tabindex="0" data-h="tx-${hex(t[0],8).slice(2)}" aria-current="${!!(sel&&sel.k==='tx'&&sel.a===t[0])}"><span class="a">${fa(t[0])}</span><span class="n" style="font-weight:400;white-space:normal">${esc(t[1])}</span><span class="c">${u.exact.length?'used':''}</span></div>`});
+    if(ts.length>600) rows.push(`<div class="more">Showing 600 of ${ts.length}. Search to narrow it down.</div>`);
+  } else if(view==='known'&&!rows.length){rows=[]} else rows=view==='states'?statesList():[`<div class="status">${view==='proj'?'Project settings and RetroAchievements code notes are on the right.':'How the analysis works is on the right.'}</div>`];
+  L.innerHTML=rows.join('')||(view==='known'&&!D.labels.length?'<div class="status">No labelled addresses yet. Import your RetroAchievements code notes from <b>Project &amp; notes</b>, or open any address under <b>All RAM refs</b> and label it.</div>':'<div class="status">Nothing matches that search.</div>');
+  L.querySelectorAll('[data-h]').forEach(e=>{e.onclick=()=>location.hash=e.dataset.h;e.onkeydown=ev=>{if(ev.key==='Enter')location.hash=e.dataset.h}});
+}
+function row(h,a,n,unk,c,d,cur){return `<div class="row" role="listitem" tabindex="0" data-h="${h}" aria-current="${!!cur}"><span class="a">${a}</span><span class="n${unk?' unk':''}">${esc(n)}</span><span class="c">${esc(c)}</span>${d?`<span class="d">${esc(d)}</span>`:''}</div>`}
+
+
+
+
+// ---------- Games (home) ----------
+async function renderHome(){
+  await loadState().catch(()=>{});
+  const ps=ST.projects;
+  showPage(`<div id="su-banner"></div>
+  <section class="panel"><h2>Your projects</h2>
+    ${ps.length?`<div class="cards">${ps.map(p=>`<button class="card" data-open-project="${esc(p.id)}">
+      <span class="cg">${esc(p.game)}</span><span class="cm">${esc(p.platform)}${p.ra_game_id?` · RA game ${p.ra_game_id}`:''}</span>
+      <span class="cm">${p.named} named function${p.named===1?'':'s'} · ${p.labels} labelled address${p.labels===1?'':'es'}</span>
+      ${p.missing?`<span class="warn">Game file not found at ${esc(p.rom)}</span>`:''}</button>`).join('')}</div>`
+    :'<p class="note empty">No projects yet. Open a game below and a project is made for it.</p>'}
+  </section>
+  <section class="panel"><h2>Open a game</h2>
+    <form id="openpath" class="frow wide"><label for="o-path">Full path to a ROM or disc image</label>
+      <div class="inline"><input id="o-path" placeholder="C:\\Games\\GBA\\Robot Wars.gba" autocomplete="off"><button class="btn" type="button" id="o-browse">Browse…</button><button class="btn primary" type="submit">Open</button></div>
+      <span class="hint">Supported: ${ST.platforms.map(p=>`${esc(p.name)} (${p.exts.join(' ')})`).join(', ')}.</span>
+      <span class="fmsg" id="o-msg" role="status"></span></form>
+    <div id="gamelist"><p class="note empty">Loading your game folders…</p></div>
+  </section>`);
+  $('#romname').textContent='Your games';
+  api('/api/setup').then(su=>{const req=su.steps.filter(x=>x.ok!==null),done=req.filter(x=>x.ok).length,b=$('#su-banner');
+    if(b&&done<req.length)b.innerHTML=`<div class="banner"><b>Finish setting up</b><span>${done} of ${req.length} steps done.</span><a class="btn primary" href="#setup">Open the setup guide</a></div>`}).catch(()=>{});
+  document.querySelectorAll('[data-open-project]').forEach(b=>b.onclick=()=>loadProject(b.dataset.openProject));
+  $('#openpath').onsubmit=e=>{e.preventDefault();openGame($('#o-path').value,$('#o-msg'))};
+  $('#o-browse').onclick=async()=>{$('#o-msg').textContent='A file picker opened on your PC (it may be behind this window).';
+    try{const r=await api('/api/pick_file',{kind:'game'});$('#o-msg').textContent='';if(r.path){$('#o-path').value=r.path;openGame(r.path,$('#o-msg'))}}catch(e){$('#o-msg').textContent=e.message}};
+  drawGames(false);
+}
+async function drawGames(refresh){
+  if(refresh) $('#gamelist').innerHTML='<p class="note empty">Looking through your game folders…</p>';
+  const g=await api('/api/games'+(refresh?'?refresh=1':'')).catch(()=>[]);
+  if(!$('#gamelist')) return;
+  $('#gamelist').innerHTML=ST.settings.games_dirs.length?(g.length?`<div class="sline"><p class="label" style="margin:0">From your game folders (${g.length})</p><button class="btn" id="g-refresh" type="button">Look again</button></div><input id="gfilter" type="search" placeholder="Filter games" aria-label="Filter games">
+    <div class="glist">${g.map(x=>`<button class="grow" data-path="${esc(x.path)}"><span>${esc(x.name)}</span><span class="cm">${esc(x.folder)}</span></button>`).join('')}</div>`
+    :'<p class="note empty">No supported games found in your game folders. <button class="btn" id="g-refresh" type="button">Look again</button></p>')
+    :`<p class="note empty">Add your game folders in <a href="#settings">Settings</a> to pick games from a list.</p>`;
+  document.querySelectorAll('[data-path]').forEach(b=>b.onclick=()=>openGame(b.dataset.path,$('#o-msg')));
+  const gf=$('#gfilter'); if(gf) gf.oninput=()=>document.querySelectorAll('.grow').forEach(b=>b.hidden=!b.textContent.toLowerCase().includes(gf.value.toLowerCase()));
+  const gr=$('#g-refresh'); if(gr) gr.onclick=()=>drawGames(true);
+}
+async function openGame(path,msg){
+  if(!path.trim()){msg.textContent='Paste the full path to the game file first.';return}
+  msg.textContent='';
+  const job=newJob(), jl=showJob(`Opening ${path.split(/[\\/]/).pop()}`,job);
+  try{const r=await api('/api/open',{path,job});await loadState();await loadProject(r.id,false,job);jl.done()}
+  catch(e){jl.fail(e.message);msg.textContent=e.message}
+}
+// ---------- Settings ----------
+async function renderSettings(){
+  $('#romname').textContent='Settings';
+  await loadState();
+  const s=ST.settings, c=ST.checks;
+  const field=k=>{const [label,help]=ST.fields[k];const v=s[k];const list=Array.isArray(v);const st=c[k]||['ok',''];
+    return `<div class="frow wide"><label for="s-${k}">${esc(label)}</label>
+      ${list?`<textarea id="s-${k}" rows="3" spellcheck="false">${esc(v.join('\n'))}</textarea>`:`<input id="s-${k}" value="${esc(v)}" spellcheck="false" autocomplete="off">`}
+      <span class="hint">${esc(help)}</span><span class="chkst ${st[0]}">${st[0]==='ok'?'OK':st[0]==='warn'?'Note':'Problem'}: ${esc(st[1])}</span></div>`};
+  showPage(`<section class="panel"><h2>Settings</h2>
+    <p class="note">Paste full folder paths. Settings are saved to <code>${esc(ST.settings_file)}</code>.</p>
+    <form id="sform" class="sform">
+      <h3>Folders the tool uses</h3>${field('work_dir')}${field('projects_dir')}
+      <h3>Your games</h3>${field('games_dirs')}
+      <h3>RetroAchievements</h3>${field('emulator_dirs')}${field('states_dirs')}
+      <h3>Optional tools</h3>${field('ghidra_dir')}${field('live_keys')}
+      <div class="factions"><button class="btn primary" type="submit">Save settings</button><span class="fmsg" id="s-msg" role="status"></span></div>
+    </form></section>
+    <section class="panel" id="claude"><h2>Connect to Claude</h2><p class="note">Loading…</p></section>`);
+  api('/api/claude').then(drawClaude).catch(e=>$('#claude').innerHTML=`<h2>Connect to Claude</h2><p class="note">${esc(e.message)}</p>`);
+  $('#sform').onsubmit=async e=>{e.preventDefault();const b={};Object.keys(ST.fields).forEach(k=>b[k]=$('#s-'+k).value);
+    $('#s-msg').textContent='Saving…';try{ST=await api('/api/settings',b);renderSettings().then(()=>$('#s-msg').textContent='Saved.')}catch(err){$('#s-msg').textContent=err.message}};
+}
+function drawClaude(c){
+  $('#claude').innerHTML=`<h2>Connect to Claude</h2>
+  <p class="note">Lets Claude explore your games with you through ROM Explorer: search and read functions, look up addresses, compare your save states, and name functions and label addresses in your projects. It runs on your Claude plan, no API key. Your changes and Claude's go into the same project files.</p>
+  <div class="sline">${c.installed?'<span class="chkst ok">OK: ROM Explorer is in the Claude desktop app\'s settings. Quit and reopen the Claude app if it isn\'t showing yet.</span>'
+    :`<button class="btn primary" id="cl-add">${c.other?'Update':'Add to the Claude desktop app'}</button><span class="fmsg" id="cl-msg" role="status"></span>`}</div>
+  <p class="note small">${c.app_found?'Writes':'Would write'} to <code>${esc(c.config_file)}</code> (a backup of the old file is kept next to it). Then quit and reopen the Claude app; ROM Explorer shows under the tools button in a chat.${c.app_found?'':' The Claude desktop app\'s settings folder wasn\'t found: install the app and open it once, or paste the setting below into Claude > Settings > Developer > Edit Config.'}</p>
+  <details><summary class="small" style="cursor:pointer">Add it by hand, or to Claude Code</summary>
+  <p class="label">Claude desktop app config (claude_desktop_config.json)</p><pre class="glog">${esc(c.snippet)}</pre>
+  <p class="label">Claude Code</p><pre class="glog">${esc(c.claude_code)}</pre></details>`;
+  const b=$('#cl-add'); if(b) b.onclick=()=>{$('#cl-msg').textContent='Saving…';api('/api/claude/install',{}).then(drawClaude).catch(e=>$('#cl-msg').textContent=e.message)};
+}
+// ---------- Setup guide ----------
+let SU=null, EMU=null;
+const tick=(ok,t)=>`<span class="${ok===true?'y':ok===false?'n':'m'}">${ok===true?'✓':ok===false?'✗':'–'}</span><span>${t}</span>`;
+async function renderSetup(){
+  $('#romname').textContent='Setup guide';
+  try{SU=await api('/api/setup')}catch(e){showPage(`<section class="panel"><h2>Setup</h2><p class="note">${esc(e.message)}</p></section>`);return}
+  const st=Object.fromEntries(SU.steps.map(x=>[x.id,x]));
+  const req=SU.steps.filter(x=>x.ok!==null), done=req.filter(x=>x.ok).length;
+  const step=(n,x,body,opt)=>`<div class="step ${x.ok?'done':opt?'':'todo'}" id="st-${x.id}"><span class="num">${x.ok?'✓':n}</span>
+    <h3>${esc(x.title)} <span class="pill ${x.ok?'ok':opt?'':'todo'}">${x.ok?'Done':opt?'Optional':'To do'}</span></h3><div class="body">${body}</div></div>`;
+  const pk=st.packages;
+  const b1=`<div class="chk">${tick(true,`Python ${esc(pk.python)}`)}${pk.packages.map(p=>tick(p.ok?true:p.required?false:null,`<b>${esc(p.name)}</b> ${p.ok?esc(p.version):p.required?'missing':'not installed (optional)'} · <span class="small">${esc(p.why)}</span>`)).join('')}</div>
+    ${pk.ok?'':`<div class="sline"><button class="btn primary" id="su-install">Install the missing parts</button><span class="fmsg" id="su-imsg" role="status"></span></div>`}
+    <pre class="glog" id="su-ilog" ${SU.install.log?'':'hidden'}>${esc(SU.install.log||'')}</pre>`;
+  const f=st.folders;
+  const lastScan=(ST&&ST.settings.scan_dirs&&ST.settings.scan_dirs[0])||'';
+  const b2=`<p class="note">Point ROM Explorer at the folder where you keep your RetroAchievements stuff (games, emulators, Ghidra). It looks through it, and the usual install places, for games, emulators, their save state folders and your code notes.</p>
+    <div class="chk">${tick(f.dirs.length?f.check[0]==='ok':false,f.dirs.length?`${f.dirs.length} game folder${f.dirs.length>1?'s':''} set · ${f.games} game${f.games===1?'':'s'} found`:'No game folders set yet')}</div>
+    <div class="sline"><input type="text" id="su-folder" value="${esc(lastScan)}" placeholder="e.g. C:\\Users\\you\\Desktop\\RA Dev" spellcheck="false" aria-label="Folder to scan">
+      <button class="btn" id="su-browse">Browse…</button><button class="btn primary" id="su-scan">Scan</button></div>
+    <span class="fmsg" id="su-smsg" role="status"></span><div id="su-found"></div>
+    <p class="note small">Or set folders one by one in <a href="#settings">Settings</a>.</p>`;
+  const b3=st.project.ok?`<p class="note">You have ${st.project.projects} project${st.project.projects>1?'s':''}. Open them from <a href="#home">Games</a>.</p>`
+    :`<p class="note">Pick a game on the <a href="#home">Games</a> page (or paste its path there). ROM Explorer reads it and makes a project for your names and notes.</p><a class="btn primary" href="#home" style="align-self:flex-start">Go to Games</a>`;
+  const c=st.claude.claude;
+  const b4=`<p class="note">Lets you ask Claude to dig through your games: explain functions, find addresses from save states, name things, and work with a running emulator. It uses your normal Claude plan.</p>
+    <div class="chk">${tick(c.app_found,c.app_found?'Claude desktop app found':'Claude desktop app not found. Install it from claude.ai/download and open it once')}${tick(c.installed,c.installed?'ROM Explorer is added to the Claude app':'ROM Explorer isn\'t added to the Claude app yet')}</div>
+    <div class="sline">${c.installed?'':`<button class="btn primary" id="su-claude" ${c.app_found?'':'disabled'}>Add ROM Explorer to Claude</button>`}<button class="btn" id="su-ctest">Test it</button><span class="fmsg" id="su-cmsg" role="status"></span></div>
+    ${c.installed?`<p class="note small">Then: quit the Claude app completely (also from the tray icon), open it again, start a new chat and check <b>rom-explorer</b> is switched on under the tools button. Try asking: <i>"Using ROM Explorer, give me an overview of my ${esc((ST&&ST.projects[0]&&ST.projects[0].game)||'game')} project."</i></p>`:''}
+    <details><summary class="small" style="cursor:pointer">Add it by hand, or to Claude Code</summary><p class="label">Claude app: Settings > Developer > Edit Config, then paste</p><pre class="glog">${esc(c.snippet)}</pre><p class="label">Claude Code</p><pre class="glog">${esc(c.claude_code)}</pre></details>`;
+  const b5=`<p class="note">So Claude can read RAM live, watch addresses while you play, take screenshots and press buttons. Each emulator has a setting to turn its link on. Close an emulator before pressing <b>Turn it on for me</b>.</p>
+    <div class="sline"><button class="btn" id="su-etest">Test the links now</button><span class="fmsg" id="su-emsg" role="status"></span></div><div id="su-emus"><p class="note small">Looking for emulators…</p></div>
+    <p class="note small">For pressing buttons in emulators other than PPSSPP, add your key bindings in <a href="#settings">Settings > Emulator keys</a>.</p>`;
+  const g=st.ghidra;
+  const b6=`<p class="note">Adds a <b>Decompiled C</b> view. Install a JDK 21 (e.g. Adoptium Temurin) and Ghidra 11 from ghidra-sre.org, unzip it, and set its folder in <a href="#settings">Settings</a>. For PS2, also install the Emotion Engine extension in Ghidra.</p>
+    <div class="chk">${tick(g.ok,esc(g.check[1]))}</div>`;
+  showPage(`<section class="panel"><h2>Setup guide</h2>
+    <p class="note">Work down the list. Everything is checked for you; green ticks mean that part is ready.</p>
+    <div class="progress" aria-label="${done} of ${req.length} done"><span style="width:${req.length?100*done/req.length:0}%"></span></div><p class="small">${done} of ${req.length} steps done${done===req.length?' · All set!':''}</p>
+    <div class="steps">${step(1,pk,b1)}${step(2,f,b2)}${step(3,st.project,b3)}${step(4,st.claude,b4)}${step(5,st.emulators,b5,true)}${step(6,g,b6,true)}</div></section>`);
+  const poll=()=>api('/api/setup').then(r=>{const L=$('#su-ilog');if(!L)return;L.hidden=false;L.textContent=r.install.log;if(r.install.state==='running')setTimeout(poll,1500);else{$('#su-imsg').textContent=r.install.state==='done'?'Installed. Close ROM Explorer and start it again.':'Something went wrong; see the log.'}});
+  const bi=$('#su-install'); if(bi) bi.onclick=()=>{$('#su-imsg').textContent='Installing… this can take a minute.';api('/api/setup/install',{}).then(poll).catch(e=>$('#su-imsg').textContent=e.message)};
+  if(SU.install.state==='running') poll();
+  $('#su-browse').onclick=async()=>{$('#su-smsg').textContent='A folder picker opened on your PC (it may be behind this window).';
+    try{const r=await api('/api/setup/pick_folder',{});if(r.folder){$('#su-folder').value=r.folder;$('#su-scan').click()}else $('#su-smsg').textContent=''}catch(e){$('#su-smsg').textContent=e.message}};
+  $('#su-folder').onkeydown=e=>{if(e.key==='Enter')$('#su-scan').click()};
+  $('#su-scan').onclick=async()=>{$('#su-smsg').textContent='Looking through your folders…';
+    try{const r=await api('/api/setup/scan',{folder:$('#su-folder').value});await loadState();EMU=r.emulators;SCAN=r;drawFound();drawEmus();$('#su-smsg').textContent=''}catch(e){$('#su-smsg').textContent=e.message}};
+  const bc=$('#su-claude'); if(bc) bc.onclick=()=>{$('#su-cmsg').textContent='Adding…';api('/api/claude/install',{}).then(()=>renderSetup()).catch(e=>$('#su-cmsg').textContent=e.message)};
+  $('#su-ctest').onclick=()=>{$('#su-cmsg').textContent='Starting ROM Explorer the way Claude does…';api('/api/setup/claude_test',{}).then(r=>$('#su-cmsg').innerHTML=`<span class="chkst ${r.ok?'ok':'error'}">${esc(r.msg)}</span>`).catch(e=>$('#su-cmsg').textContent=e.message)};
+  $('#su-etest').onclick=async()=>{$('#su-emsg').textContent='Testing… (only emulators that are open will answer)';try{EMU=await api('/api/setup/emulators?test=1');drawEmus();$('#su-emsg').textContent=''}catch(e){$('#su-emsg').textContent=e.message}};
+  api('/api/setup/emulators').then(r=>{EMU=r;drawEmus()}).catch(()=>{});
+}
+let SCAN=null;
+function drawFound(){
+  const box=$('#su-found'); if(!box||!SCAN) return;
+  const F=SCAN.folder, P=SCAN.plan, E=(SCAN.emulators||[]).filter(e=>e.found);
+  const emuName=k=>{const e=(SCAN.emulators||[]).find(x=>x.key===k);return e?e.name:k};
+  const rows=[];
+  if(F){
+    rows.push(tick(F.games.length>0,`<b>${F.games.length}</b> game${F.games.length===1?'':'s'} in <span class="small">${esc(F.root)}</span>`));
+    F.emulators.forEach(e=>rows.push(tick(true,`<b>${esc(emuName(e.key))}</b> <span class="small">${esc(e.dir)}</span>`)));
+    if(F.ghidra) rows.push(tick(true,`<b>Ghidra</b> <span class="small">${esc(F.ghidra)}</span>`));
+  }
+  E.filter(e=>!F||!F.emulators.some(x=>x.dir===e.dir)).forEach(e=>rows.push(tick(true,`<b>${esc(e.name)}</b> <span class="small">${esc(e.dir)}</span>`)));
+  const adds=[...P.games_dirs.map(g=>['Game folder',g]),...P.states_dirs.map(g=>['Save states',g]),...P.emulator_dirs.map(g=>['Code notes',g]),...(P.ghidra_dir?[['Ghidra',P.ghidra_dir]]:[])];
+  box.innerHTML=`<p class="label">Found</p><div class="chk">${rows.join('')||tick(false,'Nothing found. Check the folder, or set folders in Settings.')}</div>
+    ${adds.length?`<p class="label">To add to your settings</p><table class="stbl">${adds.map(([k,v])=>`<tr><td style="width:9em">${k}</td><td class="mono small">${esc(v)}</td></tr>`).join('')}</table>
+      <button class="btn primary" id="su-use" style="align-self:flex-start">Use these</button>`:'<p class="note small">Your settings already have everything found.</p>'}`;
+  const u=$('#su-use'); if(u) u.onclick=()=>api('/api/setup/use_folders',{}).then(async()=>{await loadState();SCAN=null;renderSetup()}).catch(e=>$('#su-smsg').textContent=e.message);
+}
+function drawEmus(){
+  const box=$('#su-emus'); if(!box||!EMU) return;
+  const found=EMU.filter(e=>e.found&&e.key!=='ralibretro'), missing=EMU.filter(e=>!e.found&&e.key!=='ralibretro');
+  const card=e=>`<div class="emu"><h4>${esc(e.name)} <span class="small">· ${esc(e.consoles)}</span></h4>${e.found?`<span class="small mono">${esc(e.program_dir||e.dir)}</span>`:''}<div class="chk">
+    ${e.link_on===null?'':tick(e.link_on,e.link_on?'Link turned on in its settings':'Link is off in its settings')}
+    ${e.key==='retroarch'&&e.cheevos_on===false?tick(false,'RetroAchievements is off (turn it on so addresses match)'):''}
+    ${e.test?tick(e.test.ok,esc(e.test.msg)):''}
+    ${e.running?tick(true,'Running now'):''}</div>
+    <p class="note small">${esc(e.how)}</p>
+    ${e.can_fix&&!e.link_on?`<button class="btn primary su-fix" data-key="${e.key}" style="align-self:flex-start">Turn it on for me</button>`:''}</div>`;
+  box.innerHTML=(found.length?`<div class="emus">${found.map(card).join('')}</div>`:'<p class="note small">No emulators found in the usual places.</p>')
+    +(missing.length?`<details><summary class="small" style="cursor:pointer">Not found on this PC (${missing.map(e=>esc(e.name)).join(', ')})</summary><div class="emus">${missing.map(card).join('')}</div></details>`:'');
+  box.querySelectorAll('.su-fix').forEach(b=>b.onclick=()=>{$('#su-emsg').textContent='Changing its settings…';api('/api/setup/fix',{key:b.dataset.key}).then(r=>{EMU=r;drawEmus();$('#su-emsg').textContent='Done. A backup of its old settings file is next to it. Start the emulator again.'}).catch(e=>$('#su-emsg').textContent=e.message)});
+}
+// ---------- Project & RA notes ----------
+function projPanel(){
+  const p=ST.projects.find(x=>x.id===PID)||{};
+  return `<h2>Project &amp; notes</h2>
+  <form class="editor" id="pform"><div class="frow"><label for="p-game">Game name</label><input id="p-game" value="${esc(D.rom)}"></div>
+    <div class="frow"><label for="p-gid">RetroAchievements game ID</label><input id="p-gid" inputmode="numeric" value="${esc(D.ra_game_id||'')}" placeholder="e.g. 5285"><span class="hint">The number in the game's page address on retroachievements.org.</span></div>
+    <div class="factions"><button class="btn primary" type="submit">Save</button><span class="fmsg" id="p-msg" role="status"></span></div></form>
+  <div><p class="label">Code notes</p>
+    <p class="note">Import reads <code>&lt;game ID&gt;-Notes.json</code> from the RACache\\Data folder of your RetroAchievements emulators and adds each note as a labelled address. Notes you already have stay as they are unless you tick the box.</p>
+    <div class="factions"><button class="btn primary" id="n-import">Import code notes</button><label class="tick"><input type="checkbox" id="n-over"> Replace notes I already have</label></div>
+    <div class="frow"><label for="n-paste">Or paste notes from the website</label><textarea id="n-paste" rows="5" spellcheck="false" placeholder="Open the game's Code Notes page on retroachievements.org, select the whole table, copy, and paste it here."></textarea>
+      <span class="hint">Each note becomes a labelled address. Lines like <code>0x02 = Gold</code> become value names.</span></div>
+    <div class="factions"><button class="btn primary" id="n-pastego">Import pasted notes</button></div>
+    <div class="factions"><button class="btn" id="n-export">Export labels as a notes file</button><span class="hint">Written to your work folder for comparing or sharing. Nothing is uploaded.</span></div>
+    <p class="fmsg" id="n-msg" role="status"></p></div>
+  <div><p class="label">Send to RAIntegration</p>
+    <p class="note">Adds your labels to RAIntegration as <b>unpublished code notes</b>, in the game's <code>&lt;game ID&gt;-User.txt</code>. Next time you load the game in that emulator they show in the Code Notes window, ready to publish. Close the emulator first (it rewrites that file when it quits). Your published notes aren't touched.</p>
+    <div id="ra-out"><p class="note small">Looking for your RACache folders…</p></div></div>
+  <div><p class="label">Decompile with Ghidra</p>
+    ${D.ghidra_ok?`<p class="note">Runs Ghidra in the background on this game, starting from the functions found here, and adds a <b>Decompiled C</b> view to every function. It needs your Ghidra folder in Settings${D.pkey==='ps2'?'. For PS2, install the Emotion Engine extension in Ghidra first so it understands the PS2-only instructions':D.pkey==='psp'?'. For PSP, the Allegrex extension (kotcrab/ghidra-allegrex) is optional; it adds the VFPU instructions':''}. Big games can take a long time; you can keep using the tool meanwhile.</p>
+    <div class="factions"><button class="btn primary" id="g-run">${D.ghidra?'Run Ghidra again':'Decompile with Ghidra'}</button><span class="fmsg" id="g-msg" role="status">${D.ghidra?'Results are loaded. Open any function and pick Decompiled C.':''}</span></div>
+    <pre class="glog" id="g-log" hidden></pre>`:`<p class="note empty">Ghidra decompiling isn't set up for ${esc(D.platform)} games yet.</p>`}</div>
+  <div class="kv"><span>Project file <b>${esc(PID)}.romx.json</b></span><span>Game file <b>${esc(p.rom||'')}</b></span></div>`;
+}
+function drawRaNotes(info){
+  const box=$('#ra-out'); if(!box) return;
+  if(!info.game_id){box.innerHTML='<p class="note empty">Set the RetroAchievements game ID above first.</p>';return}
+  if(!info.dirs.length){box.innerHTML='<p class="note empty">No RACache folders found. Run Scan on the Setup page, or add your emulator folders in Settings.</p>';return}
+  const st={new:'Not on RA yet',changed:'Differs from RA',same:'Same as RA'};
+  const n=k=>info.rows.filter(r=>r.status===k).length;
+  box.innerHTML=`<div class="sline"><label>Emulator <select id="ra-dir">${info.dirs.map(d=>`<option value="${esc(d)}" ${d===info.dir?'selected':''}>${esc(d.replace(/[\\/]RACache[\\/]Data$/,''))}${info.used.includes(d)?' (has this game)':''}</option>`).join('')}</select></label></div>
+    <p class="note small"><b>${n('new')}</b> not on RA yet · <b>${n('changed')}</b> different from RA · <b>${n('same')}</b> already the same</p>
+    <details><summary class="small" style="cursor:pointer">See the notes</summary><table class="stbl">${info.rows.map(r=>`<tr><td class="mono">${hex(r.ra)}</td><td>${esc(r.name)}</td><td class="small">${st[r.status]}${r.local?' · already unpublished':''}</td><td class="small mono" style="white-space:pre-wrap">${esc(r.note)}</td></tr>`).join('')}</table></details>
+    <div class="factions"><button class="btn primary" id="ra-send" ${n('new')?'':'disabled'}>Add ${n('new')} new note${n('new')===1?'':'s'}</button>
+      <label class="tick"><input type="checkbox" id="ra-changed" ${n('changed')?'':'disabled'}> Also replace the ${n('changed')} that differ from RA</label></div>
+    <p class="fmsg" id="ra-msg" role="status"></p>`;
+  $('#ra-dir').onchange=()=>api(`/api/ranotes?id=${encodeURIComponent(PID)}&dir=${encodeURIComponent($('#ra-dir').value)}`).then(drawRaNotes);
+  const upd=()=>{const c=$('#ra-changed').checked,k=n('new')+(c?n('changed'):0),b=$('#ra-send');b.disabled=!k;b.textContent=`Add ${k} note${k===1?'':'s'}`};
+  $('#ra-changed').onchange=upd;
+  $('#ra-send').onclick=async()=>{const inc=['new'].concat($('#ra-changed').checked?['changed']:[]);
+    try{const r=await api('/api/ranotes/write',{id:PID,dir:$('#ra-dir').value,include:inc});drawRaNotes(r.info);$('#ra-msg').textContent=`Added ${r.written} unpublished note${r.written===1?'':'s'} to ${r.file}. A backup of the old file is next to it.`}catch(e){$('#ra-msg').textContent=e.message}};
+}
+function wireProj(){
+  api(`/api/ranotes?id=${encodeURIComponent(PID)}`).then(drawRaNotes).catch(e=>{const b=$('#ra-out');if(b)b.innerHTML=`<p class="note empty">${esc(e.message)}</p>`});
+  $('#pform').onsubmit=async e=>{e.preventDefault();$('#p-msg').textContent='Saving…';
+    try{await api('/api/edit',{id:PID,kind:'project',game:$('#p-game').value,ra_game_id:$('#p-gid').value});await loadState();await loadProject(PID,true);$('#p-msg').textContent='Saved.'}catch(err){$('#p-msg').textContent=err.message}};
+  $('#n-import').onclick=async()=>{$('#n-msg').textContent='Importing…';
+    try{const r=await api('/api/notes/import',{id:PID,ra_game_id:$('#p-gid').value,overwrite:$('#n-over').checked});await loadState();await loadProject(PID,true);
+      $('#n-msg').textContent=`Added ${r.added}, updated ${r.updated}, kept ${r.skipped} of your own. From ${r.file}`}catch(err){$('#n-msg').textContent=err.message}};
+  $('#n-pastego').onclick=async()=>{$('#n-msg').textContent='Importing…';
+    try{const r=await api('/api/notes/paste',{id:PID,text:$('#n-paste').value,overwrite:$('#n-over').checked});await loadState();await loadProject(PID,true);
+      $('#n-msg').textContent=`Found ${r.found} notes. Added ${r.added}, updated ${r.updated}, kept ${r.skipped} of your own.`}catch(err){$('#n-msg').textContent=err.message}};
+  const gr=$('#g-run');
+  const showG=st=>{const m=$('#g-msg'),lg=$('#g-log');if(!m)return;
+    m.textContent=(st.state==='running'?`Running for ${st.elapsed||0}s. `:'')+(st.msg||'')+(st.language?` (${st.language})`:'');
+    if(st.log){lg.hidden=false;lg.textContent=st.log}};
+  const poll=async()=>{try{const st=await api('/api/ghidra/status?id='+encodeURIComponent(PID));showG(st);
+    if(st.state==='running') setTimeout(poll,3000); else if(st.state==='done'&&!D.ghidra){await loadProject(PID,true)}}catch(e){}};
+  if(gr){gr.onclick=async()=>{$('#g-msg').textContent='Starting Ghidra…';try{showG(await api('/api/ghidra/run',{id:PID}));setTimeout(poll,3000)}catch(err){$('#g-msg').textContent=err.message}};
+    api('/api/ghidra/status?id='+encodeURIComponent(PID)).then(st=>{if(st.state!=='none'){showG(st);if(st.state==='running')setTimeout(poll,3000)}}).catch(()=>{})}
+  $('#n-export').onclick=async()=>{try{const r=await api('/api/notes/export',{id:PID});$('#n-msg').textContent=`Wrote ${r.count} notes to ${r.file}`}catch(err){$('#n-msg').textContent=err.message}};
+}
+// ---------- Editing names, labels and notes ----------
+function wireEditor(P){
+  const f=P.querySelector('#editor'), o=P.querySelector('#edit-open'); if(!f||!o) return;
+  o.onclick=()=>{f.hidden=false;o.hidden=true;f.querySelector('input').focus()};
+  P.querySelector('#edit-cancel').onclick=()=>{f.hidden=true;o.hidden=false};
+  const del=P.querySelector('#edit-del'); if(del) del.onclick=()=>save(true);
+  f.onsubmit=e=>{e.preventDefault();save(false)};
+  async function save(remove){
+    const m=f.querySelector('#e-msg'); m.textContent='Saving…';
+    const b=f.dataset.kind==='func'?{id:PID,kind:'func',addr:+f.dataset.addr,name:$('#e-name').value,note:$('#e-note').value}
+      :{id:PID,kind:'label',ra:+f.dataset.ra,name:remove?'':$('#e-name').value,size:+$('#e-size').value||1,note:$('#e-note').value,values:$('#e-vals').value};
+    try{await api('/api/edit',b);const y=window.scrollY;await loadProject(PID,true);window.scrollTo(0,y)}catch(err){m.textContent=err.message}
+  }
+}
+
+let TXIDX=null;
+function textUse(a){
+  if(!TXIDX){TXIDX=new Map();D.tables.forEach((t,ti)=>t.e.forEach((s,k)=>{if(!TXIDX.has(s))TXIDX.set(s,[]);TXIDX.get(s).push([ti,k])}))}
+  return {lists:TXIDX.get(a)||[], exact:(D.exact[a]||[])};
+}
+function textDetail(a){
+  const s=(D.text.find(t=>t[0]===a)||[0,''])[1]; const u=textUse(a);
+  const fchip=x=>{const g=fnByAddr.get(x);return `<button class="chip${g&&!g.name.startsWith('sub_')?' named':''}" data-h="fn-${hex(x,8).slice(2)}">${esc(g?g.name:fa(x))}</button>`};
+  const byT=new Map(); u.lists.forEach(([ti,k])=>{if(!byT.has(ti))byT.set(ti,[]);byT.get(ti).push(k)});
+  const lists=[...byT].map(([ti,ks])=>{const t=D.tables[ti];return `<div class="gr"><span class="gk">#${ks.join(', #')}</span><div><div>${esc(t.name)} <span class="rom">at ${fa(t.a)}</span></div>
+     <div class="chips" style="margin-top:6px">${t.fns.length?t.fns.map(fchip).join(''):'<span class="none">No function loads this list directly. It is probably reached through another table.</span>'}</div></div></div>`}).join('');
+  return `<h2>${esc(s)}</h2><div class="kv"><span>at ${fa2(a)}</span><span>in <b>${new Set(u.lists.map(x=>x[0])).size}</b> text list${new Set(u.lists.map(x=>x[0])).size===1?'':'s'}</span></div>
+  <div><p class="label">Code that picks out this exact string</p>${u.exact.length?`<div class="chips">${u.exact.map(fchip).join('')}</div>`:'<p class="note empty">None found. It is picked by number at run time.</p>'}</div>
+  <div><p class="label">Lists it's in (position, and functions that load the list)</p>${lists||'<p class="note empty">Not in any list.</p>'}</div>`;
+}
+let STARTS=null;
+function funcAt(a){   // the function an address is inside (the nearest start at or below it)
+  if(!STARTS) STARTS=D.funcs.map(f=>f.a).sort((x,y)=>x-y);
+  let lo=0,hi=STARTS.length-1,best=-1;
+  while(lo<=hi){const m=(lo+hi)>>1;if(STARTS[m]<=a){best=m;lo=m+1}else hi=m-1}
+  return best<0?null:fnByAddr.get(STARTS[best]);
+}
+let ADDRS=null;
+function refsIn(lo,hi){   // total references to RA addresses lo..hi-1
+  if(!ADDRS) ADDRS=[...D.addrs].sort((x,y)=>x.ra-y.ra);
+  let a=0,b=ADDRS.length;while(a<b){const m=(a+b)>>1;if(ADDRS[m].ra<lo)a=m+1;else b=m}
+  let n=0;for(let i=a;i<ADDRS.length&&ADDRS[i].ra<hi;i++)n+=ADDRS[i].n;return n;
+}
+let codeMode='steps'; try{codeMode=localStorage.getItem('codeMode')||'steps'}catch(e){}
+let NAMERX=null, NAMEMAP=null;
+function names(){
+  if(NAMERX) return;
+  NAMEMAP=new Map();
+  D.labels.forEach(l=>NAMEMAP.set(l.name,`ra-${hex(l.ra).slice(2)}`));
+  D.funcs.forEach(f=>{if(!f.name.startsWith('sub_'))NAMEMAP.set(f.name,`fn-${hex(f.a,8).slice(2)}`)});
+  // one pass over the words of a line, looking each up (fast even with thousands of names)
+  NAMERX=/\b([A-Za-z_][A-Za-z0-9_]*)(\+0x[0-9A-F]+)?\b/g;
+}
+function linkify(s){
+  names();
+  return esc(s).replace(NAMERX,(m,word,off)=>{
+    const name=NAMEMAP.has(word)?word:null, sub=!name&&/^(sub_[0-9A-F]{8}|sub_[0-9A-F]{2}_[0-9A-F]{4}|sub_(?:arm7|ov\d\d)_[0-9A-F]{8})$/.test(word)?word:null, lbl=!name&&!sub&&/^L\d+$/.test(word)?word:null;
+    if(!name&&!sub&&!lbl) return m;
+    if(name) return `<a class="nm" data-h="${NAMEMAP.get(name)}">${name}${off||''}</a>`;
+    if(sub){const mm=sub.match(/^sub_(arm7|ov(\d\d))_([0-9A-F]{8})$/);const id=mm?((D.regions||[]).indexOf(mm[1]).toString(16)+mm[3]):sub.length===12?sub.slice(4):sub.slice(4,6).padStart(4,'0')+sub.slice(7);return `<a class="nm sub" data-h="fn-${id}">${sub}</a>`}
+    return `<a class="jl" data-jump="${lbl}">${lbl}</a>${off||''}`;
+  });
+}
+const KIND={read:'READ',write:'WRITE',branch:'IF',call:'CALL',text:'TEXT',flow:''};
+function stepsView(f){
+  let out=[], hitDone=false;
+  for(const [ad,t,c,k,p] of f.lines){
+    if(k==='label'){out.push(`<div class="lbl" id="j-${p}"><span>${p}</span></div>`);continue}
+    if(!(k in KIND)||!p) continue;
+    let tag=KIND[k]; if(k==='branch'&&p.startsWith('Go to')) tag='JUMP';
+    if(k==='flow') tag=p.startsWith('Return')?'END':'START';
+    const hit=hitLine&&!hitDone&&ad>=hitLine; if(hit) hitDone=true;
+    out.push(`<div class="st ${k}${hit?' hit':''}"><span class="tag">${tag}</span><span class="tx">${linkify(p)}</span><span class="raw">${esc(t)}</span></div>`);
+  }
+  return `<div class="steps">${out.join('')}</div>`;
+}
+function fullView(f){
+  return '<table>'+f.lines.map(([ad,t,c,k,p])=>{
+    if(k==='label') return `<tr class="lblr" id="j-${p}"><td></td><td colspan="2">${p}:</td></tr>`;
+    return `<tr class="${ad===hitLine?'hit':''} k-${k}"><td class="ad">${fa(ad).replace(/0x/,'')}</td><td>${esc(t)}</td><td class="pl">${p?linkify(p):esc(c)}</td></tr>`}).join('')+'</table>';
+}
+function glance(f){
+  const reads=new Set(), writes=new Set(), checks=[], calls=new Set(), texts=new Set();
+  for(const [ad,t,c,k,p] of f.lines){
+    if(k==='read'){const m=p.match(/^(?:Read|Check bit \S+ of) (RAM 0x[0-9A-F]+(?:\+0x[0-9A-F]+)?|[A-Za-z0-9_+]+)/);if(m)reads.add(m[1])}
+    if(k==='text') texts.add(p.replace(/^Use /,'').replace(' (runs before the jump)',''));
+    if(k==='write'){const m=p.match(/^Set (?:bit \S+ in )?(RAM 0x[0-9A-F]+(?:\+0x[0-9A-F]+)?|[A-Za-z0-9_+]+)/);if(m)writes.add(m[1])}
+    if(k==='branch'&&p.startsWith('If ')&&!/arg\d|calculated|result of|r\d/.test(p)) checks.push(p.replace(/, go to L\d+$/,'').replace(/^If /,''));
+  }
+  f.callees.forEach(c=>calls.add(c));
+  const chip=n=>{names();const h=NAMEMAP.get(n.split('+')[0]);return h?`<button class="chip named" data-h="${h}">${esc(n)}</button>`:`<span class="chip">${esc(n)}</span>`};
+  const fchip=a=>{const g=fnByAddr.get(a);return `<button class="chip${g&&!g.name.startsWith('sub_')?' named':''}" data-h="fn-${hex(a,8).slice(2)}">${esc(g?g.name:fa(a))}</button>`};
+  const row=(lab,cls,items)=>`<div class="gr"><span class="gk ${cls}">${lab}</span><div class="chips">${items.length?items.join(''):'<span class="none">nothing</span>'}</div></div>`;
+  return row('Reads','read',[...reads].map(chip))+row('Writes','write',[...writes].map(chip))+
+    row('Checks','branch',[...new Set(checks)].slice(0,8).map(x=>`<span class="chk">${esc(x)}</span>`))+row('Calls','call',[...calls].map(fchip))+(texts.size?row('Text','text',[...texts].slice(0,10).map(x=>`<span class="chk">${esc(x)}</span>`)):'');
+}
+function linkifyC(c){
+  // names Ghidra uses for unnamed things: FUN_0801804c, DAT_0201f4aa -> link to our pages
+  return esc(c).replace(/\b(FUN|DAT|PTR|LAB)_([0-9a-f]{6,8})\b/g,(m,k,x)=>{const v=parseInt(x,16);
+    if(k==='FUN'||k==='LAB'){const f=fnByAddr.get(v);return f?`<a class="nm" data-h="fn-${hex(v,8).slice(2)}">${esc(f.name)}</a>`:m}
+    const l=D.labels.find(l=>l.bus===v||l.ra===v);return l?`<a class="nm" data-h="ra-${hex(l.ra).slice(2)}">${esc(l.name)}</a>`:m});
+}
+// ---------- Save states ----------
+let SL=null, CMP={size:1,only:false,use:{},steps:{}}, SRES=null;
+try{const c=JSON.parse(localStorage.getItem('cmp')||'null');if(c)CMP=Object.assign(CMP,c)}catch(e){}
+const saveCmp=()=>{try{localStorage.setItem('cmp',JSON.stringify(CMP))}catch(e){}};
+const fmtVal=(v,sz)=>v<10?String(v):`${v} <span class="small">0x${v.toString(16).toUpperCase().padStart(sz*2,'0')}</span>`;
+async function loadStates(){SL=await api('/api/states?id='+encodeURIComponent(PID));return SL}
+function statesList(){
+  if(!SL){loadStates().then(()=>{if(view==='states'){renderList();renderDetail()}}).catch(()=>{});return [`<div class="status">Loading save states…</div>`]}
+  if(!SL.states.length) return [`<div class="status">No save states yet for this game. Add some on the right.</div>`];
+  return SL.states.map((st,i)=>`<div class="row" role="listitem"><span class="a">#${i+1}</span><span class="n">${esc(st.name)}</span><span class="c"></span>${st.note?`<span class="d">${esc(st.note)}</span>`:''}</div>`);
+}
+function statesPanel(P){
+  if(!SL){P.innerHTML='<p class="note">Loading…</p>';return}
+  if(!SL.supported){P.innerHTML=`<h2>Save states</h2><p class="note">Save states aren't set up for ${esc(D.platform)} yet.</p>`;return}
+  const S=SL.states; S.forEach(st=>{if(CMP.use[st.sid]===undefined)CMP.use[st.sid]=true});
+  const used=S.filter(st=>CMP.use[st.sid]);
+  const stateRows=S.map((st,i)=>`<tr data-sid="${st.sid}"><td><input type="checkbox" class="s-use" ${CMP.use[st.sid]?'checked':''} aria-label="Use in compare"></td>
+    <td><input class="s-name" value="${esc(st.name)}" aria-label="Name"></td><td><input class="s-note" value="${esc(st.note||'')}" placeholder="e.g. 3 lives, round 2" aria-label="Note"></td>
+    <td class="small" title="${esc(st.source||'uploaded')}">${esc(st.how)}</td>
+    <td style="white-space:nowrap">${i?'<button class="btn s-up" title="Move up">↑</button> ':''}${st.source?'<button class="btn s-re" title="Read the file again, after saving over it in the emulator">Re-read</button> ':''}<button class="btn danger s-rm">Remove</button></td></tr>`).join('');
+  const sug=SL.suggest.filter(f=>!S.some(st=>st.source===f.path));
+  const rels=[['any','anything'],['eq','is the same'],['ne','changed'],['gt','went up'],['lt','went down'],['inc','went up by'],['dec','went down by']];
+  const stepRows=used.map((st,i)=>{const sp=CMP.steps[st.sid]||{};return `<tr data-sid="${st.sid}"><td><b>${esc(st.name)}</b>${st.note?`<div class="small">${esc(st.note)}</div>`:''}</td>
+    <td>${i?`<select class="c-rel" aria-label="Compared to the state before" style="width:auto">${rels.map(([k,t])=>`<option value="${k}" ${(sp.rel||'any')===k?'selected':''}>${t}</option>`).join('')}</select>`:'<span class="small">first state</span>'}</td>
+    <td>${i?`<input class="c-by" value="${esc(sp.by??'')}" placeholder="1" aria-label="By how much" style="width:5em" ${['inc','dec'].includes(sp.rel)?'':'hidden'}>`:''}</td>
+    <td><input class="c-val" value="${esc(sp.value??'')}" placeholder="any" aria-label="Value is" style="width:7em"></td></tr>`}).join('');
+  P.innerHTML=`<h2>Save states</h2>
+  <p class="note">Add save states of this game, then compare them to find addresses, like RetroAchievements' memory inspector, across as many states as you like. Results show which code uses each address. Example: save with 3 lives, lose one and save again, then look for a value that <b>went down by 1</b>.</p>
+  <div class="ssec"><p class="label">Your save states (${S.length})</p>
+  ${S.length?`<table class="stbl"><tr><th>Use</th><th>Name</th><th>Note</th><th>Read as</th><th></th></tr>${stateRows}</table>`:'<p class="note empty">None yet.</p>'}</div>
+  <div class="ssec"><p class="label">Add a save state</p>
+    <div class="sline"><input type="text" id="s-path" placeholder="Full path to a save state or RAM dump" spellcheck="false" aria-label="Save state path"><input type="text" id="s-newname" placeholder="Name (optional)" style="flex:0 1 180px" aria-label="Name"><button class="btn" id="s-browse">Browse…</button><button class="btn primary" id="s-add">Add</button>
+    <label class="btn" style="display:inline-flex;align-items:center">Upload…<input type="file" id="s-file" multiple hidden></label></div>
+    <span class="fmsg" id="s-msg" role="status"></span>
+    ${sug.length?`<details ${S.length?'':'open'}><summary class="small" style="cursor:pointer">Recent save states in your folders (${sug.length})</summary><table class="stbl">${sug.map(f=>`<tr><td class="mono">${f.match?'<b>':''}${esc(f.name)}${f.match?'</b>':''}<div class="small">${esc(f.folder)}</div></td><td class="small">${new Date(f.mtime*1000).toLocaleString()}</td><td><button class="btn s-sug" data-path="${esc(f.path)}">Add</button></td></tr>`).join('')}</table></details>`
+      :ST&&ST.settings.states_dirs&&ST.settings.states_dirs.length?`<p class="note small">No other save states in your save state folders.</p>`:`<p class="note small">Set your save state folders in <a href="#settings">Settings</a> to pick states from a list.</p>`}
+  </div>
+  ${used.length?`<div class="ssec"><p class="label">Compare</p>
+    <div class="sline"><label>Size <select id="c-size">${[1,2,4].map(z=>`<option value="${z}" ${CMP.size==z?'selected':''}>${z*8}-bit</option>`).join('')}</select></label>
+    <label><input type="checkbox" id="c-only" ${CMP.only?'checked':''}> Only addresses the code uses</label></div>
+    <table class="stbl"><tr><th>State</th><th>Compared to the one before</th><th></th><th>Value is</th></tr>${stepRows}</table>
+    <div class="sline"><button class="btn primary" id="c-run">Find addresses</button><span class="fmsg" id="c-msg" role="status"></span></div>
+    <div id="c-res"></div></div>`:''}`;
+  const msg=t=>$('#s-msg').textContent=t;
+  const refresh=async r=>{if(r&&r.states)SL.states=r.states;else await loadStates();renderList();renderDetail()};
+  P.querySelectorAll('tr[data-sid] .s-use').forEach(c=>c.onchange=()=>{CMP.use[c.closest('tr').dataset.sid]=c.checked;saveCmp();renderDetail()});
+  P.querySelectorAll('tr[data-sid] .s-name, tr[data-sid] .s-note').forEach(inp=>inp.onchange=async()=>{const tr=inp.closest('tr');
+    await api('/api/states/edit',{id:PID,sid:+tr.dataset.sid,name:tr.querySelector('.s-name').value,note:tr.querySelector('.s-note').value}).then(refresh).catch(e=>msg(e.message))});
+  P.querySelectorAll('.s-rm').forEach(b=>b.onclick=()=>api('/api/states/edit',{id:PID,sid:+b.closest('tr').dataset.sid,action:'remove'}).then(refresh).catch(e=>msg(e.message)));
+  P.querySelectorAll('.s-re').forEach(b=>b.onclick=()=>{msg('Reading…');api('/api/states/edit',{id:PID,sid:+b.closest('tr').dataset.sid,action:'reread'}).then(r=>{refresh(r);}).catch(e=>msg(e.message))});
+  P.querySelectorAll('.s-up').forEach(b=>b.onclick=()=>{const ids=S.map(x=>x.sid),sid=+b.closest('tr').dataset.sid,i=ids.indexOf(sid);[ids[i-1],ids[i]]=[ids[i],ids[i-1]];api('/api/states/edit',{id:PID,order:ids}).then(refresh)});
+  const add=async(path,name)=>{msg('Reading the save state…');try{await refresh(await api('/api/states/add',{id:PID,path,name}))}catch(e){msg(e.message)}};
+  $('#s-add').onclick=()=>{const p=$('#s-path').value.trim();if(p)add(p,$('#s-newname').value.trim())};
+  $('#s-browse').onclick=async()=>{msg('A file picker opened on your PC (it may be behind this window).');
+    try{const r=await api('/api/pick_file',{kind:'state'});msg('');if(r.path){$('#s-path').value=r.path;add(r.path,$('#s-newname').value.trim())}}catch(e){msg(e.message)}};
+  P.querySelectorAll('.s-sug').forEach(b=>b.onclick=()=>add(b.dataset.path,''));
+  $('#s-file').onchange=async e=>{const lb=e.target.closest('label');if(lb)lb.setAttribute('aria-busy','true');try{for(const f of e.target.files){msg(`Reading ${f.name}…`);
+    try{const r=await fetch(`/api/states/upload?id=${encodeURIComponent(PID)}&name=${encodeURIComponent(f.name)}`,{method:'POST',body:f});const j=await r.json();if(!r.ok)throw new Error(j.error);SL.states=j.states}catch(err){msg(`${f.name}: ${err.message}`);return}}}
+    finally{if(lb)lb.removeAttribute('aria-busy')}
+    refresh()};
+  if(!used.length) return;
+  const sync=()=>{CMP.size=+$('#c-size').value;CMP.only=$('#c-only').checked;
+    P.querySelectorAll('.stbl tr[data-sid]').forEach(tr=>{if(!tr.querySelector('.c-val'))return;const sid=tr.dataset.sid,rel=tr.querySelector('.c-rel'),by=tr.querySelector('.c-by');
+      CMP.steps[sid]={rel:rel?rel.value:'any',by:by?by.value:'',value:tr.querySelector('.c-val').value};if(by)by.hidden=!['inc','dec'].includes(rel.value)});saveCmp()};
+  P.querySelectorAll('#c-size,#c-only,.c-rel,.c-by,.c-val').forEach(x=>x.onchange=sync);
+  $('#c-run').onclick=async()=>{sync();const cm=$('#c-msg');cm.textContent='Comparing…';
+    const num=v=>{v=String(v??'').trim();if(!v)return null;const n=v.toLowerCase().startsWith('0x')?parseInt(v,16):parseInt(v,10);return isNaN(n)?null:n};
+    const steps=used.map(st=>{const sp=CMP.steps[st.sid]||{};return {rel:sp.rel||'any',by:num(sp.by),value:num(sp.value)}});
+    try{SRES=await api('/api/states/compare',{id:PID,sids:used.map(s=>s.sid),size:CMP.size,steps,only_code:CMP.only});SRES.names=used.map(s=>s.name);SRES.size=CMP.size;cm.textContent='';drawRes()}catch(e){cm.textContent=e.message}};
+  if(SRES) drawRes();
+}
+function drawRes(){
+  const box=$('#c-res'); if(!box||!SRES) return; const sz=SRES.size;
+  const rows=SRES.rows.slice(0,500).map(([ra,vs])=>{let lab=null;for(const l of D.labels){const m0=l.match??l.ra;if(ra>=m0&&ra<m0+l.size){lab=l;break}}
+    const a=addrByRa.get(ra);const x=[];for(let k=0;k<sz;k++){const b=addrByRa.get(ra+k);if(b)x.push(...b.x)}
+    const R=x.filter(t=>t[2]==='R').length,W=x.filter(t=>t[2]==='W').length,fns=[...new Set(x.map(t=>t[0]))];
+    return `<tr><td class="mono"><a data-h="ra-${hex(ra).slice(2)}">${hex(ra)}</a></td><td>${lab?esc(lab.name):''}</td>
+      ${vs.map((v,i)=>`<td class="num${i&&v!==vs[i-1]?' changed':''}">${fmtVal(v,sz)}</td>`).join('')}
+      <td class="small">${x.length?`${R?R+' read':''}${R&&W?', ':''}${W?W+' write':''}${fns.length?' in '+fns.slice(0,2).map(f=>fnLink(f)).join(', ')+(fns.length>2?` +${fns.length-2}`:''):''}`:''}</td></tr>`}).join('');
+  box.innerHTML=`<p class="note"><b>${SRES.count.toLocaleString()}</b> address${SRES.count===1?'':'es'} match${SRES.count>500?' (showing the first 500; add another state or a value to narrow it down)':''}.</p>
+  ${SRES.count?`<div class="sres"><table class="stbl"><tr><th>RA address</th><th>Label</th>${SRES.names.map(n=>`<th class="num">${esc(n)}</th>`).join('')}<th>Code</th></tr>${rows}</table></div>`:''}`;
+  box.querySelectorAll('[data-h]').forEach(e=>e.onclick=()=>location.hash=e.dataset.h);
+}
+function fnLink(a,line){const f=fnByAddr.get(a);return `<a data-h="fn-${hex(a,8).slice(2)}${line?'-'+hex(line,8).slice(2):''}">${esc(f?f.name:fa(a))}</a>`}
+function renderDetail(){
+  const P=$('#detail');
+  if(view==='about'){P.innerHTML=ABOUT;return}
+  if(view==='proj'){P.innerHTML=projPanel();wireProj();return}
+  if(view==='states'){statesPanel(P);return}
+  if(view==='text'&&(!sel||sel.k!=='tx')){P.innerHTML=`<h2>Text in the ROM</h2><p class="note">Every string the game can show, in all five languages. The code never points at text directly: it goes through lists of text pointers. Pick a string to see which list it's in and which functions use it. Strings marked <b>used</b> are picked out by exact position in the code.</p>`;return}
+  if(sel&&sel.k==='tx'){P.innerHTML=textDetail(sel.a);P.querySelectorAll('[data-h]').forEach(e=>e.onclick=()=>location.hash=e.dataset.h);return}
+  if(!sel){P.innerHTML='';return}
+  if(sel.k==='fn'){const f=fnByAddr.get(sel.a);
+    if(f&&!f.lines){   // a function's code is fetched the first time you open it
+      P.innerHTML=`<h2>${esc(f.name)}</h2><p class="note">Loading the code…</p>`;const want=sel.a,pid=PID;
+      fetch(`/api/func?id=${encodeURIComponent(PID)}&a=${f.a}`).then(r=>r.json()).then(r=>{if(r.lines&&PID===pid){f.lines=r.lines;if(sel&&sel.k==='fn'&&sel.a===want)renderDetail()}else if(r.error)P.innerHTML=`<p class="note">${esc(r.error)}</p>`}).catch(e=>P.innerHTML=`<p class="note">${esc(e.message)}</p>`);
+      return}}
+  if(sel.k==='ra') P.innerHTML=addrDetail(sel.a); else P.innerHTML=fnDetail(sel.a);
+  P.querySelectorAll('[data-h]').forEach(e=>e.onclick=()=>location.hash=e.dataset.h);
+  wireEditor(P);
+  const sv=P.querySelector('#svals');
+  if(sv){let sz=+sv.dataset.size;if(![1,2,4].includes(sz))sz=1;const ra=+sv.dataset.ra;
+    api(`/api/states/values?id=${encodeURIComponent(PID)}&ra=${ra}&size=${sz}`).then(vs=>{
+      const lab=D.labels.find(x=>x.ra===ra);const en=lab&&D.enums?D.enums[lab.name]:null;
+      sv.innerHTML=`<p class="label">In your save states (${sz*8}-bit)</p><div class="svals">${vs.map(v=>`<span class="sn">${esc(v.name)}</span><span class="sv">${v.value===null?'–':fmtVal(v.value,sz)}${en&&en[v.value]!==undefined?` <span class="en">${esc(en[v.value])}</span>`:''}</span>`).join('')}</div>`}).catch(e=>sv.innerHTML=`<p class="note empty">${esc(e.message)}</p>`)}
+  const cv=P.querySelector('#cview');
+  if(cv&&sel&&sel.k==='fn'){api(`/api/ghidra/func?id=${encodeURIComponent(PID)}&a=${sel.a}`).then(r=>{
+    cv.innerHTML=r.missing?'<span class="none">Ghidra has no function at this address.</span>':(r.entry!==sel.a?`<span class="none">Shown as part of Ghidra's ${esc(r.name)}.</span>\n\n`:'')+linkifyC(r.c);cv.querySelectorAll('[data-h]').forEach(e=>e.onclick=()=>location.hash=e.dataset.h)}).catch(e=>cv.textContent=e.message)}
+  P.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{codeMode=b.dataset.mode;try{localStorage.setItem('codeMode',codeMode)}catch(e){};renderDetail()});
+  P.querySelectorAll('[data-jump]').forEach(a=>a.onclick=()=>{const box=P.querySelector('#codebox');const t=box.querySelector('#j-'+a.dataset.jump);if(t){box.scrollTop=t.offsetTop-8;t.classList.add('flash');setTimeout(()=>t.classList.remove('flash'),900)}});
+  const hit=P.querySelector('.hit'); if(hit){const box=hit.closest('.code');box.scrollTop=hit.offsetTop-box.clientHeight/2}
+}
+function addrDetail(r){
+  const l=D.labels.find(x=>x.ra===r); const a=addrByRa.get(r);
+  const busA=l?l.bus:(a?a.bus:r);
+  let inside=[];
+  if(l){const m0=l.match??l.ra; inside=D.addrs.filter(x=>x.ra>=m0&&x.ra<m0+l.size)}
+  else if(a) inside=[a];
+  const xs=inside.flatMap(x=>x.x.map(t=>[x,t]));
+  const name=l?l.name:(a&&a.label)||'Unlabelled address';
+  const vals=l&&D.enums&&D.enums[l.name]?Object.entries(D.enums[l.name]).map(([k,v])=>`${k} = ${v}`).join('\n'):'';
+  return `<div class="titlerow"><h2>${esc(name)}</h2><button class="btn" id="edit-open">${l?'Edit label':'Label this address'}</button></div>
+  <div class="kv"><span>RA <b>${hex(r)}</b></span><span>${D.busname} <b>${hex(busA,8)}</b></span>${l?`<span>size <b>${l.size} byte${l.size>1?'s':''}</b></span><span>${esc(l.region||'')}</span>`:''}</div>
+  <form class="editor" id="editor" hidden data-kind="label" data-ra="${r}">
+    <div class="frow"><label for="e-name">Name</label><input id="e-name" value="${esc(l?l.name:'')}" placeholder="e.g. CurrentMode" autocomplete="off"></div>
+    <div class="frow"><label for="e-size">Size (bytes)</label><input id="e-size" type="number" min="1" value="${l?l.size:1}"></div>
+    <div class="frow"><label for="e-note">Note</label><textarea id="e-note" rows="3" placeholder="What it holds, and its values">${esc(l?l.note:'')}</textarea></div>
+    <div class="frow"><label for="e-vals">Value names</label><textarea id="e-vals" rows="3" placeholder="0 = Bronze&#10;1 = Silver&#10;2 = Gold">${esc(vals)}</textarea><span class="hint">One per line. Comparisons in the code then read "If Difficulty is 2 (Gold)".</span></div>
+    <div class="factions"><button class="btn primary" type="submit">Save label</button><button class="btn" type="button" id="edit-cancel">Cancel</button>${l?'<button class="btn danger" type="button" id="edit-del">Remove label</button>':''}<span class="fmsg" id="e-msg" role="status"></span></div>
+  </form>
+  <p class="note${l?'':' empty'}">${l?esc(l.note):'No label yet. Name it and every reference in the code will use the name.'}</p>
+  ${SL&&SL.states.length?`<div id="svals" data-ra="${r}" data-size="${l?Math.min(4,l.size===3?4:l.size):1}"><p class="label">In your save states</p><p class="note empty">Reading…</p></div>`:''}
+  <div><p class="label">Code that touches it (${xs.length})</p>
+  ${xs.length?`<div class="xr">${xs.slice(0,300).map(([x,t])=>`<span class="rw ${t[2].split('+')[0]}">${t[2]==='base+off'?'BASE':t[2]}</span><span>${x.label&&x.ra!==r?esc(x.label):hex(x.ra)}</span>${fnLink(t[0],t[1])}`).join('')}</div>`
+  :`<p class="note empty">No direct references. The game reaches this through a pointer to a bigger block, so look at the block's own entry.</p>`}</div>
+  <p class="note" style="font-size:.82rem;color:var(--muted)">R = read, W = write, PTR = address loaded into a register (struct or array base), BASE = base pointer plus an offset.</p>`;
+}
+function fnDetail(a){
+  const f=fnByAddr.get(a); if(!f) return '<p class="note empty">Function not found.</p>';
+  const chipsF=list=>list.length?`<div class="chips">${list.map(c=>{const g=fnByAddr.get(c);return `<button class="chip${g&&!g.name.startsWith('sub_')?' named':''}" data-h="fn-${hex(c,8).slice(2)}">${esc(g?g.name:fa(c))}</button>`}).join('')}</div>`:'<p class="note empty">None found.</p>';
+  const callerFns=[...new Set(f.callers.map(c=>{const g=funcAt(c);return g&&g.a}).filter(Boolean))];
+  const refs=f.refs.length?`<div class="chips">${f.refs.map(r=>{const x=addrByRa.get(r);return `<button class="chip${x&&x.label?' named':''}" data-h="ra-${hex(r).slice(2)}">${esc(x&&x.label?x.label:hex(r))}</button>`}).join('')}</div>`:'<p class="note empty">No RAM references.</p>';
+  if(codeMode==='c'&&!D.ghidra) codeMode='steps';
+  const body=codeMode==='steps'?stepsView(f):codeMode==='c'?'<pre class="cview" id="cview">Loading the decompiled C…</pre>':fullView(f);
+  const g=glance(f);
+  const named=!f.name.startsWith('sub_');
+  return `<div class="titlerow"><h2>${esc(f.name)}</h2><button class="btn" id="edit-open">${named?'Rename or edit note':'Name this function'}</button></div>
+  <div class="kv"><span>at ${fa2(f.a)}</span><span><b>${f.nl??f.lines.length}</b> instructions</span><span>${esc(D.cpu)}</span></div>
+  <form class="editor" id="editor" hidden data-kind="func" data-addr="${f.a}">
+    <div class="frow"><label for="e-name">Name</label><input id="e-name" value="${esc(named?f.name:'')}" placeholder="e.g. AwardPrize" autocomplete="off"><span class="hint">Letters, numbers and underscores. Leave empty to go back to ${esc('sub_'+hex(f.a,8).slice(2))}.</span></div>
+    <div class="frow"><label for="e-note">Note</label><textarea id="e-note" rows="3" placeholder="What it does, in your words">${esc(f.note||'')}</textarea></div>
+    <div class="factions"><button class="btn primary" type="submit">Save</button><button class="btn" type="button" id="edit-cancel">Cancel</button><span class="fmsg" id="e-msg" role="status"></span></div>
+  </form>
+  <p class="note${f.note?'':' empty'}">${f.note?esc(f.note):'Not looked at yet. The summary below is worked out from the code.'}</p>
+  <div class="glance">${g}</div>
+  <div><p class="label">Called from (${callerFns.length})${f.ptr.length?` · in ${f.ptr.length} pointer table${f.ptr.length>1?'s':''}`:''}</p>${chipsF(callerFns)}</div>
+  <div class="codehead"><p class="label">What the code does</p>
+    <div class="seg" role="group" aria-label="Code view">
+      <button id="m-steps" class="segb" aria-pressed="${codeMode==='steps'}" data-mode="steps">Key steps</button>
+      <button id="m-full" class="segb" aria-pressed="${codeMode==='full'}" data-mode="full">Every instruction</button>
+      ${D.ghidra?`<button id="m-c" class="segb" aria-pressed="${codeMode==='c'}" data-mode="c">Decompiled C</button>`:''}
+    </div></div>
+  <div class="code" id="codebox">${body}</div>`;
+}
+const ABOUT=`<div class="about">
+<h2>How it works</h2>
+<p>When you open a game, the tool reads the file, finds its code and works out which RAM each function reads and writes. Your names, labels and notes live in a project file per game, so re-running the analysis never loses them.</p>
+<h3>The steps</h3>
+<ol>
+<li><b>Load the code.</b> GBA and GB/GBC: the ROM itself. DS: the ARM9 and ARM7 programs and the overlays, unpacked if compressed. PS1 and PS2: the boot program named in SYSTEM.CNF on the disc (BOOT on PS1, BOOT2 on PS2). PS2 symbol tables give real names when the game still has them. GameCube/Wii: main.dol, found from the disc header (Wii discs as Dolphin RVZ). PSP: PSP_GAME/SYSDIR/EBOOT.BIN (decrypted with PPSSPP if needed), placed at 0x08804000 with its relocations applied; system calls are named from its import table.</li>
+<li><b>Find functions.</b> Every call (Thumb <code>BL</code> on GBA, MIPS <code>JAL</code> on PS1/PS2/PSP, PowerPC <code>bl</code> on GameCube/Wii, <code>CALL</code> and <code>RST</code> on Game Boy) and every pointer in a function table marks a function start. On Game Boy the tool also follows ROM bank switches and far-call helpers, so a call to 0x4243 is known to mean bank 2. Game Boy addresses are shown as bank:address, like 02:4243.</li>
+<li><b>Find RAM references.</b> GBA code loads addresses from literal pools next to the code. PS1 code builds them in two halves (<code>lui</code> then <code>addiu</code> or a load/store), or reaches globals through the <code>gp</code> register. Each is converted to a RetroAchievements address.</li>
+<li><b>Translate.</b> Each instruction is turned into a plain sentence by following what each register holds. On PS1 the instruction after a jump runs first (the delay slot), and is explained first.</li>
+<li><b>Link the text.</b> Strings are matched to the code that points at them, directly or through lists of text pointers.</li>
+<li><b>Save states (optional).</b> RAM is pulled out of each state you add and laid out by RetroAchievements address. On GBA and Game Boy the tool knows the emulator's layout; on the disc consoles and DS it finds RAM by looking for the game's own code inside the state.</li>
+<li><b>Apply your project.</b> Function names, labels, notes and value names come from the project file. Edit them here, or import your RetroAchievements code notes.</li>
+</ol>
+<h3>Not done yet</h3>
+<ul><li>Decompiled C needs Ghidra: set its folder in Settings, then run it from Project &amp; notes.</li>
+<li>Values carried in registers across calls aren't followed, so some struct fields show no references.</li>
+<li>On Game Boy, code reached through a bank number held in a variable can't be followed, so some banks show few functions.</li>
+<li>PSP VFPU (vector maths) and PS2 vector-unit instructions show raw.</li></ul>
+</div>`;
+</script>

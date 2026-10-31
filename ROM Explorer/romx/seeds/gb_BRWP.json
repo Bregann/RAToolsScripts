@@ -1,0 +1,289 @@
+{
+ "game": "Robot Wars: Metal Mayhem (GBC, EU)",
+ "ra_game_id": 3635,
+ "labels": [
+  {
+   "ra": 49754,
+   "size": 1,
+   "name": "CurrentMainMenuOption",
+   "note": "[8-Bit] Current Main Menu Option\n0x00 = Workshop\n0x01 = Trials\n0x02 = Grudge Match\n0x03 = War Zone\n0x04 = Restore Game\n0x05 = Options"
+  },
+  {
+   "ra": 49758,
+   "size": 1,
+   "name": "WarzoneRound",
+   "note": "[8-Bit] Warzone round"
+  },
+  {
+   "ra": 49759,
+   "size": 1,
+   "name": "FightRound",
+   "note": "[8-Bit] Fight Round"
+  },
+  {
+   "ra": 49760,
+   "size": 1,
+   "name": "FightWins",
+   "note": "[8-Bit] Fight Wins"
+  },
+  {
+   "ra": 49761,
+   "size": 1,
+   "name": "FightLoses",
+   "note": "[8-Bit] Fight Loses"
+  },
+  {
+   "ra": 49776,
+   "size": 1,
+   "name": "CurrentPlayerRobot",
+   "note": "[8-Bit] Current Player Robot\n0x00=Sir Chromalot\n0x01=Milly-Ann-Bug\n0x02=Big Cheese\n0x03=Purple Predator\n0x04=Panic Attack\n0x05=X-Terminator\n0x06=Chaos 2\n0x07=Behemoth\n0x08=Pussycat\n0x09=Dundee\n0x0a=Thermidor II\n0x0b=Scutter's Revenge\n0x0c=Terminal Ferocity\n0x0d=Crasha Gnasha\n0x0e=Fire Storm\n0x0f=Diotoir\n0x10=Custom Robot 1\n0x11=Custom Robot 2\n0x12=Custom Robot 3\n0x13=Custom Robot 4\n0x14=Custom Robot 5\n0x15=Custom Robot 6\n0x16=Custom Robot 6\n0x17=Custom Robot 6"
+  },
+  {
+   "ra": 49777,
+   "size": 1,
+   "name": "EnemyRobot",
+   "note": "[8-Bit] Enemy Robot\n0x00=Sir Chromalot\n0x01=Milly-Ann-Bug\n0x02=Big Cheese\n0x03=Purple Predator\n0x04=Panic Attack\n0x05=X-Terminator\n0x06=Chaos 2\n0x07=Behemoth\n0x08=Pussycat\n0x09=Dundee\n0x0a=Thermidor II\n0x0b=Scutter's Revenge\n0x0c=Terminal Ferocity\n0x0d=Crasha Gnasha\n0x0e=Fire Storm\n0x0f=Diotoir"
+  },
+  {
+   "ra": 49790,
+   "size": 1,
+   "name": "CurrentScreen",
+   "note": "[8-Bit] Current Screen\n0x40 = loading screen\n0x41 = bbc/rw icon\n0x46 = robot cutscene\n0x45 = menu\n0x55 = trials\n\n0x47 = robot selection/fight summary screen\n0x4c = enemy robot selection\n0x62 = countdown\n0x63 = grudge/warzone arena\n0x50 = win screen\n\n0x58 = custom build - shell\n0x59 = custom build - motor\n0x5a = custom build - gear\n0x5b = custom build - weapon\n0x40 = enter name\n0x45 = custom build preview\n\n0x60 = slalom/skittles info\n0x61 = gauntlet/sumo info\n\n0x7e = skittles\n0x7b = sumo\n0x7c = slalom\n0x7d = gauntlet\n\n0x57 = skittles/slalom results\n0x58 = sumo results\n0x5f = gauntlet results\n\n0x44 = loading between naming and custom build"
+  },
+  {
+   "ra": 49817,
+   "size": 1,
+   "name": "PlayerRobotDirectionFacing",
+   "note": "[8-Bit] Player Robot Direction Facing\n0x00 = North\n0x01 = North-East\n0x02 = East\n0x03 = South-East\n0x04 = South\n0x05 = South-West\n0x06 = West\n0x07 = North-West"
+  },
+  {
+   "ra": 49821,
+   "size": 1,
+   "name": "PlayerHealth",
+   "note": "[8-Bit] Player Health\n0x70 = max"
+  },
+  {
+   "ra": 49862,
+   "size": 1,
+   "name": "EnemyHealth",
+   "note": "[8-Bit] Enemy Health\n0x70 = max"
+  },
+  {
+   "ra": 50835,
+   "size": 1,
+   "name": "GamePaused",
+   "note": "[8-Bit] Game Paused\n0x00=not in game\n0x01=no\n0x02=yes"
+  },
+  {
+   "ra": 50839,
+   "size": 1,
+   "name": "OptionsSFX",
+   "note": "[8-Bit] Options - SFX\n0x01 = Off\n0x00 = On"
+  },
+  {
+   "ra": 50840,
+   "size": 1,
+   "name": "OptionsMusic",
+   "note": "[8-Bit] Options - Music\n0x01 = Off\n0x00 = On"
+  },
+  {
+   "ra": 50942,
+   "size": 1,
+   "name": "SumoWonOrLost",
+   "note": "[8-Bit] Sumo won or lost\n0x00 = lose\n0x01 = win"
+  },
+  {
+   "ra": 50945,
+   "size": 1,
+   "name": "WeaponActive",
+   "note": "[8-Bit] Weapon active\n0x00 = no\n0x01 = yes"
+  },
+  {
+   "ra": 50946,
+   "size": 1,
+   "name": "EnemyWeaponActive",
+   "note": "[8-Bit] Enemy weapon active\n0x00 = no\n0x01 = yes"
+  },
+  {
+   "ra": 50947,
+   "size": 1,
+   "name": "CurrentMode",
+   "note": "[8-Bit] Current mode\n0x00 = main menu\n0x01 = Skittles\n0x02 = Sumo\n0x03 = Slalom\n0x04 = Gauntlet"
+  },
+  {
+   "ra": 50950,
+   "size": 1,
+   "name": "TrialTimerMinutes",
+   "note": "[8-Bit] Trial timer minutes"
+  },
+  {
+   "ra": 50951,
+   "size": 1,
+   "name": "TrialTimerSeconds",
+   "note": "[8-Bit] Trial timer seconds"
+  },
+  {
+   "ra": 50958,
+   "size": 1,
+   "name": "SlalomFlagsLeftToCollect",
+   "note": "[8-Bit] Slalom flags left to collect"
+  },
+  {
+   "ra": 50959,
+   "size": 1,
+   "name": "SkittlesAmountKnockedDown",
+   "note": "[8-Bit] Skittles amount knocked down"
+  },
+  {
+   "ra": 64355,
+   "size": 1,
+   "name": "Mode",
+   "note": "[8-Bit] Mode\n0x03 = War Zone\n0x04 = Grudge"
+  },
+  {
+   "ra": 64362,
+   "size": 1,
+   "name": "CurrentGrudgeRoundGauntletWin",
+   "note": "[8-Bit] Current Grudge Round/Gauntlet win screen\n0x31 = 1\n0x32 = 2\n0x33 = 3\n\n0x65=gauntlet fail\n0x74=gauntlet win"
+  }
+ ],
+ "funcs": {},
+ "enums": {
+  "CurrentMainMenuOption": {
+   "0": "Workshop",
+   "1": "Trials",
+   "2": "Grudge Match",
+   "3": "War Zone",
+   "4": "Restore Game",
+   "5": "Options"
+  },
+  "CurrentPlayerRobot": {
+   "0": "Sir Chromalot",
+   "1": "Milly-Ann-Bug",
+   "2": "Big Cheese",
+   "3": "Purple Predator",
+   "4": "Panic Attack",
+   "5": "X-Terminator",
+   "6": "Chaos 2",
+   "7": "Behemoth",
+   "8": "Pussycat",
+   "9": "Dundee",
+   "10": "Thermidor II",
+   "11": "Scutter's Revenge",
+   "12": "Terminal Ferocity",
+   "13": "Crasha Gnasha",
+   "14": "Fire Storm",
+   "15": "Diotoir",
+   "16": "Custom Robot 1",
+   "17": "Custom Robot 2",
+   "18": "Custom Robot 3",
+   "19": "Custom Robot 4",
+   "20": "Custom Robot 5",
+   "21": "Custom Robot 6",
+   "22": "Custom Robot 6",
+   "23": "Custom Robot 6"
+  },
+  "EnemyRobot": {
+   "0": "Sir Chromalot",
+   "1": "Milly-Ann-Bug",
+   "2": "Big Cheese",
+   "3": "Purple Predator",
+   "4": "Panic Attack",
+   "5": "X-Terminator",
+   "6": "Chaos 2",
+   "7": "Behemoth",
+   "8": "Pussycat",
+   "9": "Dundee",
+   "10": "Thermidor II",
+   "11": "Scutter's Revenge",
+   "12": "Terminal Ferocity",
+   "13": "Crasha Gnasha",
+   "14": "Fire Storm",
+   "15": "Diotoir"
+  },
+  "CurrentScreen": {
+   "64": "loading screen / enter name",
+   "65": "bbc/rw icon",
+   "70": "robot cutscene",
+   "69": "menu / custom build preview",
+   "85": "trials",
+   "71": "robot selection/fight summary screen",
+   "76": "enemy robot selection",
+   "98": "countdown",
+   "99": "grudge/warzone arena",
+   "80": "win screen",
+   "88": "custom build - shell / sumo results",
+   "89": "custom build - motor",
+   "90": "custom build - gear",
+   "91": "custom build - weapon",
+   "96": "slalom/skittles info",
+   "97": "gauntlet/sumo info",
+   "126": "skittles",
+   "123": "sumo",
+   "124": "slalom",
+   "125": "gauntlet",
+   "87": "skittles/slalom results",
+   "95": "gauntlet results",
+   "68": "loading between naming and custom build"
+  },
+  "PlayerRobotDirectionFacing": {
+   "0": "North",
+   "1": "North-East",
+   "2": "East",
+   "3": "South-East",
+   "4": "South",
+   "5": "South-West",
+   "6": "West",
+   "7": "North-West"
+  },
+  "PlayerHealth": {
+   "112": "max"
+  },
+  "EnemyHealth": {
+   "112": "max"
+  },
+  "GamePaused": {
+   "0": "not in game",
+   "1": "no",
+   "2": "yes"
+  },
+  "OptionsSFX": {
+   "1": "Off",
+   "0": "On"
+  },
+  "OptionsMusic": {
+   "1": "Off",
+   "0": "On"
+  },
+  "SumoWonOrLost": {
+   "0": "lose",
+   "1": "win"
+  },
+  "WeaponActive": {
+   "0": "no",
+   "1": "yes"
+  },
+  "EnemyWeaponActive": {
+   "0": "no",
+   "1": "yes"
+  },
+  "CurrentMode": {
+   "0": "main menu",
+   "1": "Skittles",
+   "2": "Sumo",
+   "3": "Slalom",
+   "4": "Gauntlet"
+  },
+  "Mode": {
+   "3": "War Zone",
+   "4": "Grudge"
+  },
+  "CurrentGrudgeRoundGauntletWin": {
+   "49": "1",
+   "50": "2",
+   "51": "3",
+   "101": "gauntlet fail",
+   "116": "gauntlet win"
+  }
+ }
+}

@@ -1,0 +1,376 @@
+{
+ "id": "robot-wars-e-arsp-202f24",
+ "game": "Robot Wars: Extreme Destruction (GBA, EU)",
+ "platform": "gba",
+ "rom": "I:\\Game Boy Advance\\Robot Wars - Extreme Destruction (Europe) (En,Fr,De,Es,It,Nl).gba",
+ "ra_game_id": 5285,
+ "labels": [
+  {
+   "ra": 32812,
+   "size": 2,
+   "name": "KeysPressed",
+   "note": "Buttons pressed this frame (GBA key bits: 1 A, 2 B, 4 Select, 8 Start, 0x10 Right, 0x20 Left, 0x40 Up, 0x80 Down, 0x100 R, 0x200 L). FightLoop checks Start to pause."
+  },
+  {
+   "ra": 52320,
+   "size": 2,
+   "name": "TimeUp",
+   "note": "1 when the fight clock reaches 0:00. Cleared by ResetFightState."
+  },
+  {
+   "ra": 52324,
+   "size": 1,
+   "name": "ClockFrames",
+   "note": "Frames left in the current second of the fight clock: counts 60 down to 0, then ClockSeconds changes (seen live in a Gauntlet Slalom, where the clock counts down). ResetFightState sets it to 60."
+  },
+  {
+   "ra": 52332,
+   "size": 2,
+   "name": "WinFlag",
+   "note": "1 = fight won (set on the frame you win)"
+  },
+  {
+   "ra": 52344,
+   "size": 1,
+   "name": "ClockSeconds",
+   "note": "Fight clock, seconds"
+  },
+  {
+   "ra": 52348,
+   "size": 2,
+   "name": "VBlankCounter",
+   "note": "Frames counted by the VBlank interrupt; FightLoop sets it to 0 and waits on it to keep the fight at a steady frame rate."
+  },
+  {
+   "ra": 52392,
+   "size": 2,
+   "name": "HalfTimeFlag",
+   "note": "Set by AwardPrize when a Bash 'n' Dash prize lands at 1:30"
+  },
+  {
+   "ra": 52420,
+   "size": 1,
+   "name": "ClockMinutes",
+   "note": "Fight clock, minutes"
+  },
+  {
+   "ra": 52432,
+   "size": 2,
+   "name": "FightOver",
+   "note": "Non-zero ends FightLoop (fight finished or quit). Cleared by ResetFightState."
+  },
+  {
+   "ra": 52436,
+   "size": 2,
+   "name": "LoseFlag",
+   "note": "Set when you fail / lose (e.g. the Gauntlet clock runs out). WinFlag + LoseFlag both 0 = still going; the clock stops when either is set."
+  },
+  {
+   "ra": 52444,
+   "size": 2,
+   "name": "InFight",
+   "note": "1 in fight, 2 fight over (stays set after quitting)"
+  },
+  {
+   "ra": 53264,
+   "size": 13504,
+   "name": "RobotSlots",
+   "note": "Robot slots, 0x698 bytes each. Slot 0 = you. Flags dword at +0 (bit31 active, bit24 house robot, bit21 eliminated, bit17 in pit), X/Y/Z at +8/+C/+10, health +0x658, max health +0x660"
+  },
+  {
+   "ra": 132456,
+   "size": 4,
+   "name": "DamageMeter",
+   "note": "Damage meter bars (10 = full)"
+  },
+  {
+   "ra": 138416,
+   "size": 144,
+   "name": "SpoilsTable",
+   "note": "Spoils of War table (multiplayer), 12-byte entries, prize id at +4, 81 = none"
+  },
+  {
+   "ra": 158572,
+   "size": 2,
+   "name": "CurrentArena",
+   "note": "0 Studio, 1 Melting Pot, 2 Acid Bath, 3 Deep Freeze, 4 Desert Storm, 5 Red Planet Rumble"
+  },
+  {
+   "ra": 158932,
+   "size": 2,
+   "name": "Difficulty",
+   "note": "0 Bronze, 1 Silver, 2 Gold"
+  },
+  {
+   "ra": 159008,
+   "size": 2,
+   "name": "CurrentMode",
+   "note": "0 Tournament, 1 Bash 'n' Dash, 2 Mayhem, 3 Gauntlet, 4 Multiplayer/Spoils, 5 Quickstart"
+  },
+  {
+   "ra": 159504,
+   "size": 2,
+   "name": "DifficultyCursor",
+   "note": "Difficulty select cursor"
+  },
+  {
+   "ra": 160168,
+   "size": 2,
+   "name": "PlayerCount",
+   "note": "Players; > 1 = multiplayer"
+  },
+  {
+   "ra": 160344,
+   "size": 2,
+   "name": "GauntletChallenge",
+   "note": "0 Slalom, 1 Skittles, 2 Long Jump, 3 Sumo Basho, 4 Dump, 5 Drop Zone"
+  },
+  {
+   "ra": 160938,
+   "size": 1,
+   "name": "GameState",
+   "note": "0 loading/results, 1 in game, 2 menus (also while paused)"
+  },
+  {
+   "ra": 161360,
+   "size": 2,
+   "name": "InvincibilityCheat",
+   "note": "Non-zero = invincibility cheat on"
+  },
+  {
+   "ra": 161488,
+   "size": 2,
+   "name": "MenuState",
+   "note": "Current screen id, run by ScreenManager (each screen returns the next id). Seen live: 3 language select, 4 after language, 14 single player menu, 40 Gauntlet challenge select, 22 difficulty select, 25 robot select, 11 in game, 41 pause, 42 pause options, 10 quit/restart confirm."
+  },
+  {
+   "ra": 161520,
+   "size": 11,
+   "name": "SessionPrizeCheats",
+   "note": "Prizes unlocked by cheat for this session only, 1 bit per prize"
+  },
+  {
+   "ra": 161536,
+   "size": 256,
+   "name": "SaveBlock",
+   "note": "Save data block; prizes at +0x1C, trophies at +0x0F"
+  },
+  {
+   "ra": 161551,
+   "size": 3,
+   "name": "Trophies",
+   "note": "Bronze / Silver / Gold Tournament trophies"
+  },
+  {
+   "ra": 161564,
+   "size": 11,
+   "name": "PrizeBits",
+   "note": "81 prizes, 1 bit each. 75-80 = Gold parts (multiplayer only)"
+  },
+  {
+   "ra": 161575,
+   "size": 6,
+   "name": "MayhemProgress",
+   "note": "Best medal per arena (3 = Gold)"
+  },
+  {
+   "ra": 161581,
+   "size": 6,
+   "name": "BashProgress",
+   "note": "Best medal per arena (3 = Gold)"
+  },
+  {
+   "ra": 161587,
+   "size": 6,
+   "name": "GauntletProgress",
+   "note": "Best medal per challenge (3 = Gold)"
+  },
+  {
+   "ra": 161716,
+   "size": 160,
+   "name": "CustomRobots",
+   "note": "5 custom robot slots, 0x20 bytes: +0 in use, +2 name, +0x18 parts"
+  },
+  {
+   "ra": 161877,
+   "size": 1,
+   "name": "TournamentRound",
+   "note": "0 Heats, 1 QF, 2 SF, 3 Final"
+  },
+  {
+   "ra": 161880,
+   "size": 1,
+   "name": "TournamentRobot",
+   "note": "Your robot in the Tournament (0-16 roster, 17-21 custom)"
+  },
+  {
+   "ra": 161881,
+   "size": 4,
+   "name": "TournamentOpponents",
+   "note": "Opponent per round"
+  },
+  {
+   "ra": 162048,
+   "size": 1,
+   "name": "QuickstartOpponent",
+   "note": "Quickstart opponent robot"
+  },
+  {
+   "ra": 162772,
+   "size": 1,
+   "name": "QuickstartRobot",
+   "note": "Quickstart: your robot"
+  },
+  {
+   "ra": 162876,
+   "size": 1,
+   "name": "SelectedRobot",
+   "note": "Robot select cursor"
+  },
+  {
+   "ra": 162992,
+   "size": 4,
+   "name": "SpoilsIndex",
+   "note": "Index into SpoilsTable"
+  }
+ ],
+ "funcs": {
+  "0x080064B8": {
+   "name": "ResetFightState",
+   "note": "Clears everything for a new fight: InFight, WinFlag, HalfTimeFlag, the fight clock (ClockMinutes/ClockSeconds = 0, ticks = 60) and ~20 other fight variables. Then per mode: Tournament sets ClockMinutes = 5; Gauntlet Sumo Basho sets 0x01EA54 = 10. Called before a fight starts."
+  },
+  "0x08006904": {
+   "name": "FightLoop",
+   "note": "The in-fight main loop, once per frame until 0x00CCD0 (fight over) is set. Start (bit 3 of 0x00802C) while InFight = 1 opens the pause menu (MenuState 41); choosing quit (MenuState 8) clears WinFlag and leaves. Each frame runs robots/arena/hazards, the Gauntlet logic (sub_080171C0) in mode 3, and the Bash 'n' Dash 1:30 prize check (sub_08016688), then waits for the frame counter at 0x00CC7C and swaps buffers."
+  },
+  "0x08006C70": {
+   "name": "UpdateFightClock",
+   "note": "Runs the fight clock each game frame (the fight runs at 20 frames a second): ClockFrames goes down 3 per frame in the Gauntlet (real seconds), 7 per frame in other modes (a faster TV-style clock). Stops once WinFlag or 0x00CCD4 is set. At 0:00 sets 0x00CC60 (time up); in single-player Gauntlet that also sets 0x00CCD4 (challenge failed) and starts the result sequence. Also draws the clock (and Drop Zone's counter)."
+  },
+  "0x08016688": {
+   "name": "BashHalfTimePrize",
+   "note": "Called by FightLoop in single-player Bash 'n' Dash when the clock reads 1:30 (the half-time prize)."
+  },
+  "0x080168B4": {
+   "name": "AwardPrize",
+   "note": "Awards prize id (0-80) unless already owned: sets its bit in PrizeBits (SaveBlock+0x1C) and plays the unlock sound. Also sets HalfTimeFlag if you are in Bash 'n' Dash at 1:30 and not in multiplayer."
+  },
+  "0x0801693C": {
+   "name": "IsPrizeEarned",
+   "note": "Returns 1 if prize id's bit is set in PrizeBits."
+  },
+  "0x0801696C": {
+   "name": "ClearSessionCheats",
+   "note": "Zeroes all 11 bytes of SessionPrizeCheats."
+  },
+  "0x08016990": {
+   "name": "CheatUnlockPrize",
+   "note": "Session-only unlock: sets the prize bit in SessionPrizeCheats instead of the save."
+  },
+  "0x080169D0": {
+   "name": "IsPrizeCheatUnlocked",
+   "note": "Returns 1 if prize id's bit is set in SessionPrizeCheats."
+  },
+  "0x08017038": {
+   "name": "SetupGauntletChallenge",
+   "note": "Sets up a Gauntlet challenge. Time limit = byte at 0x083E045F + GauntletChallenge*3 + Difficulty (seconds), split into ClockMinutes/ClockSeconds. Table (Bronze/Silver/Gold): Slalom 15/15/15, Skittles 20/20/20, Long Jump 10/10/10, Sumo Basho 90/60/30, Dump 90/90/90, Drop Zone 90/90/90. Also places your robot for Long Jump and Sumo Basho, and sets 0x021564 from the byte at 0x083E045C + Difficulty (used by Drop Zone's on-screen counter)."
+  },
+  "0x080171C0": {
+   "name": "GauntletFrame",
+   "note": "Called every frame by FightLoop when CurrentMode = 3 (Gauntlet). Reads WinFlag in 6 places: the per-challenge win/fail logic."
+  },
+  "0x08017674": {
+   "name": "PlaySound",
+   "note": "Plays sound effect id (arg1) through the sound driver (sub_0810DBE4), using the byte at 0x027871 (probably the sound effects volume setting). AwardPrize calls it for the unlock jingle."
+  },
+  "0x08023714": {
+   "name": "UnlockAllSecrets",
+   "note": "With argument 1, loops AwardPrize over every prize 0-80 (the Unlock All Secrets option)."
+  },
+  "0x08023C74": {
+   "name": "OnDifficultyChosen",
+   "note": "Menu callback (reached through a function pointer): stores the chosen difficulty in Difficulty (and 0x0271B4). In Mayhem / Bash 'n' Dash on Gold, checks the arena's best medal in MayhemProgress / BashProgress. Sets 0x027A6C = 1 and returns screen 0x19."
+  },
+  "0x0802539C": {
+   "name": "AwardSpoilAfterWin",
+   "note": "If WinFlag is 1, awards the prize stored in the current SpoilsTable entry (multiplayer spoils)."
+  },
+  "0x08025F48": {
+   "name": "IsPrizeAvailable",
+   "note": "Returns 1 if prize id (0-80) is owned: earned in the save (IsPrizeEarned) or unlocked by a cheat this session (IsPrizeCheatUnlocked). Used ~50 places to decide which parts/robots/arenas you can pick."
+  },
+  "0x08027E54": {
+   "name": "ScreenManager",
+   "note": "The game's screen state machine (confirmed live in mGBA: it changed MenuState 3 -> 4 when leaving the language screen). Loops forever: MenuState = sub_08027A1C(MenuState, screen table 0x083E2768, ...), so each screen's code returns the id of the next screen. Also handles the end of a multiplayer fight: awards the spoil you won from SpoilsTable unless it is 81 (none), then goes to screen 15, 54 or 55. Called at boot (sub_08004D24) and by FightLoop for the pause menu."
+  },
+  "0x08028504": {
+   "name": "PlayMenuSound",
+   "note": "Shortcut for PlaySound(id) with default settings. Called from the menu screens (cursor moves, confirm/back)."
+  },
+  "0x0802E8A0": {
+   "name": "AwardQueuedPrizes",
+   "note": "Walks the queue of prizes earned by the reward rules and calls AwardPrize on each."
+  }
+ },
+ "enums": {
+  "CurrentMode": {
+   "0": "Tournament",
+   "1": "Bash 'n' Dash",
+   "2": "Mayhem",
+   "3": "Gauntlet",
+   "4": "Multiplayer",
+   "5": "Quickstart"
+  },
+  "Difficulty": {
+   "0": "Bronze",
+   "1": "Silver",
+   "2": "Gold"
+  },
+  "CurrentArena": {
+   "0": "Studio",
+   "1": "Melting Pot",
+   "2": "Acid Bath",
+   "3": "Deep Freeze",
+   "4": "Desert Storm",
+   "5": "Red Planet Rumble"
+  },
+  "GauntletChallenge": {
+   "0": "Slalom",
+   "1": "Skittles",
+   "2": "Long Jump",
+   "3": "Sumo Basho",
+   "4": "Dump",
+   "5": "Drop Zone"
+  },
+  "GameState": {
+   "0": "loading/results",
+   "1": "in game",
+   "2": "menus"
+  },
+  "MenuState": {
+   "3": "language select",
+   "10": "quit/restart confirm",
+   "11": "in game",
+   "14": "single player menu",
+   "22": "difficulty select",
+   "25": "robot select",
+   "40": "Gauntlet challenge select",
+   "41": "pause menu",
+   "42": "pause options"
+  },
+  "TournamentRound": {
+   "0": "Heats",
+   "1": "Quarter Finals",
+   "2": "Semi Finals",
+   "3": "Final"
+  },
+  "WinFlag": {
+   "0": "not won",
+   "1": "won"
+  },
+  "InFight": {
+   "1": "fighting",
+   "2": "fight over"
+  }
+ }
+}

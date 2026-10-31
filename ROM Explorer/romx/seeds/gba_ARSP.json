@@ -1,0 +1,292 @@
+{
+ "game": "Robot Wars: Extreme Destruction (GBA, EU)",
+ "ra_game_id": 5285,
+ "labels": [
+  {
+   "ra": 52332,
+   "size": 2,
+   "name": "WinFlag",
+   "note": "1 = fight won (set on the frame you win)"
+  },
+  {
+   "ra": 52344,
+   "size": 1,
+   "name": "ClockSeconds",
+   "note": "Fight clock, seconds"
+  },
+  {
+   "ra": 52392,
+   "size": 2,
+   "name": "HalfTimeFlag",
+   "note": "Set by AwardPrize when a Bash 'n' Dash prize lands at 1:30"
+  },
+  {
+   "ra": 52420,
+   "size": 1,
+   "name": "ClockMinutes",
+   "note": "Fight clock, minutes"
+  },
+  {
+   "ra": 52444,
+   "size": 2,
+   "name": "InFight",
+   "note": "1 in fight, 2 fight over (stays set after quitting)"
+  },
+  {
+   "ra": 53264,
+   "size": 13504,
+   "name": "RobotSlots",
+   "note": "Robot slots, 0x698 bytes each. Slot 0 = you. Flags dword at +0 (bit31 active, bit24 house robot, bit21 eliminated, bit17 in pit), X/Y/Z at +8/+C/+10, health +0x658, max health +0x660"
+  },
+  {
+   "ra": 132456,
+   "size": 4,
+   "name": "DamageMeter",
+   "note": "Damage meter bars (10 = full)"
+  },
+  {
+   "ra": 138416,
+   "size": 144,
+   "name": "SpoilsTable",
+   "note": "Spoils of War table (multiplayer), 12-byte entries, prize id at +4, 81 = none"
+  },
+  {
+   "ra": 158572,
+   "size": 2,
+   "name": "CurrentArena",
+   "note": "0 Studio, 1 Melting Pot, 2 Acid Bath, 3 Deep Freeze, 4 Desert Storm, 5 Red Planet Rumble"
+  },
+  {
+   "ra": 158932,
+   "size": 2,
+   "name": "Difficulty",
+   "note": "0 Bronze, 1 Silver, 2 Gold"
+  },
+  {
+   "ra": 159008,
+   "size": 2,
+   "name": "CurrentMode",
+   "note": "0 Tournament, 1 Bash 'n' Dash, 2 Mayhem, 3 Gauntlet, 4 Multiplayer/Spoils, 5 Quickstart"
+  },
+  {
+   "ra": 159504,
+   "size": 2,
+   "name": "DifficultyCursor",
+   "note": "Difficulty select cursor"
+  },
+  {
+   "ra": 160344,
+   "size": 2,
+   "name": "GauntletChallenge",
+   "note": "0 Slalom, 1 Skittles, 2 Long Jump, 3 Sumo Basho, 4 Dump, 5 Drop Zone"
+  },
+  {
+   "ra": 160168,
+   "size": 2,
+   "name": "PlayerCount",
+   "note": "Players; > 1 = multiplayer"
+  },
+  {
+   "ra": 160938,
+   "size": 1,
+   "name": "GameState",
+   "note": "0 loading/results, 1 in game, 2 menus (also while paused)"
+  },
+  {
+   "ra": 161360,
+   "size": 2,
+   "name": "InvincibilityCheat",
+   "note": "Non-zero = invincibility cheat on"
+  },
+  {
+   "ra": 161488,
+   "size": 2,
+   "name": "MenuState",
+   "note": "Screen id: 10 quit/restart confirm, 41 pause, 42 pause options, 11 in game"
+  },
+  {
+   "ra": 161520,
+   "size": 11,
+   "name": "SessionPrizeCheats",
+   "note": "Prizes unlocked by cheat for this session only, 1 bit per prize"
+  },
+  {
+   "ra": 161536,
+   "size": 256,
+   "name": "SaveBlock",
+   "note": "Save data block; prizes at +0x1C, trophies at +0x0F"
+  },
+  {
+   "ra": 161551,
+   "size": 3,
+   "name": "Trophies",
+   "note": "Bronze / Silver / Gold Tournament trophies"
+  },
+  {
+   "ra": 161564,
+   "size": 11,
+   "name": "PrizeBits",
+   "note": "81 prizes, 1 bit each. 75-80 = Gold parts (multiplayer only)"
+  },
+  {
+   "ra": 161575,
+   "size": 6,
+   "name": "MayhemProgress",
+   "note": "Best medal per arena (3 = Gold)"
+  },
+  {
+   "ra": 161581,
+   "size": 6,
+   "name": "BashProgress",
+   "note": "Best medal per arena (3 = Gold)"
+  },
+  {
+   "ra": 161587,
+   "size": 6,
+   "name": "GauntletProgress",
+   "note": "Best medal per challenge (3 = Gold)"
+  },
+  {
+   "ra": 161716,
+   "size": 160,
+   "name": "CustomRobots",
+   "note": "5 custom robot slots, 0x20 bytes: +0 in use, +2 name, +0x18 parts"
+  },
+  {
+   "ra": 161877,
+   "size": 1,
+   "name": "TournamentRound",
+   "note": "0 Heats, 1 QF, 2 SF, 3 Final"
+  },
+  {
+   "ra": 161880,
+   "size": 1,
+   "name": "TournamentRobot",
+   "note": "Your robot in the Tournament (0-16 roster, 17-21 custom)"
+  },
+  {
+   "ra": 161881,
+   "size": 4,
+   "name": "TournamentOpponents",
+   "note": "Opponent per round"
+  },
+  {
+   "ra": 162048,
+   "size": 1,
+   "name": "QuickstartOpponent",
+   "note": "Quickstart opponent robot"
+  },
+  {
+   "ra": 162772,
+   "size": 1,
+   "name": "QuickstartRobot",
+   "note": "Quickstart: your robot"
+  },
+  {
+   "ra": 162876,
+   "size": 1,
+   "name": "SelectedRobot",
+   "note": "Robot select cursor"
+  },
+  {
+   "ra": 162992,
+   "size": 4,
+   "name": "SpoilsIndex",
+   "note": "Index into SpoilsTable"
+  }
+ ],
+ "funcs": {
+  "0x080168B4": {
+   "name": "AwardPrize",
+   "note": "Awards prize id (0-80) unless already owned: sets its bit in PrizeBits (SaveBlock+0x1C) and plays the unlock sound. Also sets HalfTimeFlag if you are in Bash 'n' Dash at 1:30 and not in multiplayer."
+  },
+  "0x0801693C": {
+   "name": "IsPrizeEarned",
+   "note": "Returns 1 if prize id's bit is set in PrizeBits."
+  },
+  "0x08016990": {
+   "name": "CheatUnlockPrize",
+   "note": "Session-only unlock: sets the prize bit in SessionPrizeCheats instead of the save."
+  },
+  "0x080169D0": {
+   "name": "IsPrizeCheatUnlocked",
+   "note": "Returns 1 if prize id's bit is set in SessionPrizeCheats."
+  },
+  "0x0801696C": {
+   "name": "ClearSessionCheats",
+   "note": "Zeroes all 11 bytes of SessionPrizeCheats."
+  },
+  "0x08023714": {
+   "name": "UnlockAllSecrets",
+   "note": "With argument 1, loops AwardPrize over every prize 0-80 (the Unlock All Secrets option)."
+  },
+  "0x0802539C": {
+   "name": "AwardSpoilAfterWin",
+   "note": "If WinFlag is 1, awards the prize stored in the current SpoilsTable entry (multiplayer spoils)."
+  },
+  "0x08027E54": {
+   "name": "PostFightHandler",
+   "note": "Runs after a fight. In mode 4 (multiplayer) awards the spoil you won from SpoilsTable unless it is 81 (none), then picks the next screen via MenuState."
+  },
+  "0x0802E8A0": {
+   "name": "AwardQueuedPrizes",
+   "note": "Walks the queue of prizes earned by the reward rules and calls AwardPrize on each."
+  }
+ },
+ "enums": {
+  "CurrentMode": {
+   "0": "Tournament",
+   "1": "Bash 'n' Dash",
+   "2": "Mayhem",
+   "3": "Gauntlet",
+   "4": "Multiplayer",
+   "5": "Quickstart"
+  },
+  "Difficulty": {
+   "0": "Bronze",
+   "1": "Silver",
+   "2": "Gold"
+  },
+  "CurrentArena": {
+   "0": "Studio",
+   "1": "Melting Pot",
+   "2": "Acid Bath",
+   "3": "Deep Freeze",
+   "4": "Desert Storm",
+   "5": "Red Planet Rumble"
+  },
+  "GauntletChallenge": {
+   "0": "Slalom",
+   "1": "Skittles",
+   "2": "Long Jump",
+   "3": "Sumo Basho",
+   "4": "Dump",
+   "5": "Drop Zone"
+  },
+  "GameState": {
+   "0": "loading/results",
+   "1": "in game",
+   "2": "menus"
+  },
+  "MenuState": {
+   "10": "quit/restart confirm",
+   "11": "in game",
+   "41": "pause menu",
+   "42": "pause options"
+  },
+  "TournamentRound": {
+   "0": "Heats",
+   "1": "Quarter Finals",
+   "2": "Semi Finals",
+   "3": "Final"
+  },
+  "WinFlag": {
+   "0": "not won",
+   "1": "won"
+  },
+  "InFight": {
+   "1": "fighting",
+   "2": "fight over"
+  }
+ }
+}
