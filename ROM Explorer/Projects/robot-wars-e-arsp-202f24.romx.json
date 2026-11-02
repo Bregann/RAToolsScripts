@@ -92,11 +92,16 @@
    "from": "ra-notes"
   },
   {
+   "ra": 54020,
+   "size": 4,
+   "name": "P1StatsPtr",
+   "note": "[32-bit pointer] RobotSlots[0]+0x2F4 -> robot stats record in ROM. +0x1C weight kg, +0x20 push priority, +0x24/+0x30/+0x34 armour parts (HP = 200 x sum), +0x28 top speed, +0x2C motor power (100 for all preset robots), +0x38 = +0x34/5"
+  },
+  {
    "ra": 54888,
    "size": 4,
-   "name": "PlayerHealth",
-   "note": "[32-bit] Player health",
-   "from": "ra-notes"
+   "name": "P1Health",
+   "note": "[32-bit] RobotSlots[0]+0x658 player robot health. Starts at 200 x (stats +0x24 + +0x30 + +0x34); max at +0x660"
   },
   {
    "ra": 54896,
@@ -104,6 +109,12 @@
    "name": "MaxPlayerHealth",
    "note": "[32-bit] Max player health",
    "from": "ra-notes"
+  },
+  {
+   "ra": 54948,
+   "size": 4,
+   "name": "P1PushPriority",
+   "note": "[32-bit] RobotSlots[0]+0x694, copied from stats +0x20. When two robots collide the higher one wins the shove (ties are random), checked at 0800D004"
   },
   {
    "ra": 54954,
@@ -531,9 +542,9 @@
   },
   {
    "ra": 162876,
-   "size": 1,
+   "size": 2,
    "name": "SelectedRobot",
-   "note": "[8-bit] Current robot"
+   "note": "[16-bit] Player's chosen robot. Model index = byte at ROM 0x083E6B78 + id*16; stats record = ROM 0x083DDFD4 + model*0x38, +0x20"
   },
   {
    "ra": 162992,
@@ -792,6 +803,25 @@
    "1": "Silver",
    "2": "Gold",
    "3": "Gold cleared"
+  },
+  "SelectedRobot": {
+   "0": "Rosie the Riveter II",
+   "1": "Tricerabot 3.0",
+   "2": "Dominator 2",
+   "3": "Pussycat",
+   "4": "Firestorm III",
+   "5": "Bigger Brother",
+   "6": "Hypno-Disc",
+   "7": "Propeller-Head",
+   "8": "Thermidor II",
+   "9": "Wheely Big Cheese",
+   "10": "Tornado",
+   "11": "Stinger",
+   "12": "101",
+   "13": "Chaos II",
+   "14": "Razer",
+   "15": "Destructive Criticism",
+   "16": "Panzer Mk4"
   }
  }
 }

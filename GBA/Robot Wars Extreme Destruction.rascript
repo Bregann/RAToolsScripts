@@ -10,7 +10,7 @@ function TournamentRound() => byte(0x027855)
 function WinFlag() => byte(0x00cc6c)
 function InFight() => byte(0x00ccdc) == 1
 function GameState() => byte(0x0274aa)  // 0 loading / results, 1 in game, 2 menus
-function DamageMeter() => dword(0x020568)
+function DamageMeter() => byte(0x020568)
 function MenuState() => byte(0x0276d0)
 // Pausing sets GameState to the menu value, so count the pause screens as in game too
 function Paused() => MenuState() == 41 || MenuState() == 42 || MenuState() == 10  // pause menu, pause options, quit / restart confirm
@@ -19,6 +19,16 @@ function ClockMinutes() => byte(0x00ccc4)
 function ClockSeconds() => byte(0x00cc78)
 function PlayerHealth() => dword(0x00d668)
 function PlayerMaxHealth() => dword(0x00d670)
+function ClockTotal() => ClockMinutes() * 60 + ClockSeconds()   // seconds left on the fight clock
+
+// Robots in the current fight: slot 0 is you, then opponents and house robots, 0x698 bytes each.
+// Flags dword at the start of each slot: bit 31 active, bit 24 house robot, bit 21 eliminated,
+// bit 17 fallen into the pit (Melting Pot and Acid Bath have a pit in the middle).
+function RobotSlot(slot) => 0x00d010 + slot * 0x698
+function RobotActive(slot) => bit(7, RobotSlot(slot) + 3) == 1
+function IsHouseRobot(slot) => bit(0, RobotSlot(slot) + 3) == 1
+function InPit(slot) => bit(1, RobotSlot(slot) + 2)
+OpponentSlots = [1, 2, 3, 4, 5, 6, 7]
 
 // ---- Robots (all roster indexes: 0-16 roster, 17-21 custom slots 1-5) ----
 // Robot select screen cursor. Set on the Tournament, Bash 'n' Dash, Mayhem and Gauntlet
@@ -82,12 +92,32 @@ Arenas = [
   "the Red Planet Rumble"
 ]
 
-function ArenaWin(modeId, arenaId, minDifficulty, maxDifficulty) => NoCheats() && CurrentMode() == modeId &&
-    Difficulty() >= minDifficulty && Difficulty() <= maxDifficulty && CurrentArena() == arenaId && WonFight()
-function GauntletWin(challengeId, minDifficulty, maxDifficulty) => NoCheats() && CurrentMode() == 3 &&
-    Difficulty() >= minDifficulty && Difficulty() <= maxDifficulty && GauntletChallenge() == challengeId && WonFight()
-function TournamentWin(minDifficulty, maxDifficulty) => NoCheats() && CurrentMode() == 0 &&
-    Difficulty() >= minDifficulty && Difficulty() <= maxDifficulty && TournamentRound() == 3 && WonFight()
+function ArenaWin(modeId, arenaId, minDifficulty, maxDifficulty) => (
+    NoCheats() &&
+    CurrentMode() == modeId &&
+    Difficulty() >= minDifficulty &&
+    Difficulty() <= maxDifficulty &&
+    CurrentArena() == arenaId &&
+    WonFight()
+)
+
+function GauntletWin(challengeId, minDifficulty, maxDifficulty) => (
+    NoCheats() &&
+    CurrentMode() == 3 &&
+    Difficulty() >= minDifficulty &&
+    Difficulty() <= maxDifficulty &&
+    GauntletChallenge() == challengeId &&
+    WonFight()
+)
+
+function TournamentWin(minDifficulty, maxDifficulty) => (
+    NoCheats() &&
+    CurrentMode() == 0 &&
+    Difficulty() >= minDifficulty &&
+    Difficulty() <= maxDifficulty &&
+    TournamentRound() == 3 &&
+    WonFight()
+)
 
 // Gauntlet challenge on Bronze (progression)
 function GauntletBronze(achTitle, challengeId) {
@@ -96,7 +126,9 @@ function GauntletBronze(achTitle, challengeId) {
     description = "Complete " + Challenges[challengeId] + " in Gauntlet mode on Bronze difficulty",
     points = 5,
     type = "progression",
-    trigger = GauntletWin(challengeId, 0, 0)
+    trigger = (
+      GauntletWin(challengeId, 0, 0)
+    )
   )
 }
 
@@ -106,7 +138,9 @@ function GauntletGold(achTitle, challengeId) {
     title = achTitle,
     description = "Complete " + Challenges[challengeId] + " in Gauntlet mode on Gold difficulty",
     points = 10,
-    trigger = GauntletWin(challengeId, 2, 2)
+    trigger = (
+      GauntletWin(challengeId, 2, 2)
+    )
   )
 }
 
@@ -116,16 +150,20 @@ function ArenaGold(achTitle, modeName, modeId, arenaId) {
     title = achTitle,
     description = "Win " + modeName + " mode on Gold difficulty in " + Arenas[arenaId] + " arena",
     points = 10,
-    trigger = ArenaWin(modeId, arenaId, 2, 2)
+    trigger = (
+      ArenaWin(modeId, arenaId, 2, 2)
+    )
   )
 }
 
 achievement(
     title = "Bronze Champion",
     description = "Win Tournament mode on Bronze difficulty",
-    points = 10,
+    points = 5,
     type = "progression",
-    trigger = TournamentWin(0, 0)
+    trigger = (
+      TournamentWin(0, 0)
+    )
 )
 
 achievement(
@@ -133,7 +171,9 @@ achievement(
   description = "Win Bash 'n' Dash mode on Bronze difficulty in the Studio arena",
   points = 5,
   type = "progression",
-  trigger = ArenaWin(1, 0, 0, 0)
+  trigger = (
+    ArenaWin(1, 0, 0, 0)
+  )
 )
 
 achievement(
@@ -141,7 +181,9 @@ achievement(
   description = "Win Mayhem mode on Bronze difficulty in the Studio arena",
   points = 5,
   type = "progression",
-  trigger = ArenaWin(2, 0, 0, 0)
+  trigger = (
+    ArenaWin(2, 0, 0, 0)
+  )
 )
 
 GauntletBronze("Weaving Through", 0)       // Slalom
@@ -156,14 +198,18 @@ achievement(
   title = "Silver Champion",
   description = "Win Tournament mode on Silver difficulty",
   points = 10,
-  trigger = TournamentWin(1, 1)
+  trigger = (
+    TournamentWin(1, 1)
+  )
 )
 
 achievement(
   title = "Grand Champion",
   description = "Win Tournament mode on Gold difficulty",
-  points = 25,
-  trigger = TournamentWin(2, 2)
+  points = 10,
+  trigger = (
+    TournamentWin(2, 2)
+  )
 )
 
 // Bash 'n' Dash on Gold, every arena
@@ -176,7 +222,7 @@ ArenaGold("Red Planet Robot Destroyer", "Bash 'n' Dash", 1, 5)
 
 // Mayhem on Gold, every arena
 ArenaGold("Master of Mayhem", "Mayhem", 2, 0)
-ArenaGold("Hotting up in Here", "Mayhem", 2, 1)
+ArenaGold("Hotting Up in Here", "Mayhem", 2, 1)
 ArenaGold("Acidic Winner", "Mayhem", 2, 2)
 ArenaGold("Deep Freeze Domination", "Mayhem", 2, 3)
 ArenaGold("Too Hot to Handle", "Mayhem", 2, 4)
@@ -189,6 +235,120 @@ GauntletGold("Long Jump Legend", 2)
 GauntletGold("Sumo Grand Champion", 3)
 GauntletGold("Dump Master", 4)
 GauntletGold("Drop Zone Daredevil", 5)
+
+// ==================== Challenges ====================
+// Gauntlet speedruns on Gold. Time limits on Gold: Slalom 0:15, Skittles 0:20, Long Jump 0:10,
+// Sumo Basho 0:30, Dump 1:30, Drop Zone 1:30. The targets below are PLACEHOLDERS: set them
+// from real runs. Hitting a cone in Slalom is an instant loss, so there's no penalty to track.
+function GauntletSpeedrun(achTitle, challengeId, secondsLeft, timeText) {
+  achievement(
+    title = achTitle,
+    description = "Complete " + Challenges[challengeId] + " in Gauntlet mode on Gold difficulty with at least " + timeText + " remaining",
+    points = 5,
+    trigger = (
+      GauntletWin(challengeId, 2, 2) &&
+      ClockTotal() >= secondsLeft
+    )
+  )
+}
+
+// Slalom on Gold with 101, the slowest robot in the game (top speed stat 2 of 8), beaten with 0:01 or more left.
+// The Gold limit is 0:15, so this is about finishing as fast as 101 can manage.
+achievement(
+  title = "One Second to Spare!",
+  description = "Complete Slalom in Gauntlet mode on Gold difficulty using 101 with at least 1 second remaining",
+  points = 5,
+  trigger = (
+    GauntletWin(0, 2, 2) &&
+    SelectedRobot() == 12 &&
+    ClockTotal() >= 1
+  )
+)
+GauntletSpeedrun("Skittles Speedrun", 1, 6, "0:06")
+
+// DamageMeter is the health bar on the HUD: 10 bars when full, one lost per 10% of health.
+// Still on 10 bars at the moment of the win = never lost a bar during the bout.
+// The challenge icon shows while you're in a Sumo bout on full bars and goes away when a bar is lost.
+// WinFlag is set inside FightLoop, so InGame() is still true on the frame of the win.
+achievement(
+  title = "Shunted out of the Ring",
+  description = "Win Sumo Basho in Gauntlet mode without losing a single bar of health",
+  points = 5,
+  trigger = (
+    NoCheats() &&
+    CurrentMode() == 3 &&
+    GauntletChallenge() == 3 &&
+    InGame() &&
+    DamageMeter() == 10 &&
+    trigger_when(
+      WonFight()
+    )
+  )
+)
+
+GauntletSpeedrun("Dump Dasher", 4, 40, "0:40")
+
+// Tournament fights start at 5:00, so 4:30 or more left = won inside 30 seconds
+achievement(
+  title = "Quick KO",
+  description = "Win a fight in Tournament mode within the first 30 seconds",
+  points = 5,
+  trigger = (
+    NoCheats() &&
+    CurrentMode() == 0 &&
+    ClockTotal() >= 270 &&
+    trigger_when(WonFight())
+  )
+)
+
+achievement(
+  title = "Pit of Oblivion",
+  description = "Send an opponent into the pit without falling in yourself",
+  points = 5,
+  trigger = (
+    NoCheats() &&
+    CurrentMode() != 3 &&
+    GameState() == 1 &&
+    InPit(0) == 0 &&
+    any_of(OpponentSlots, slot => 
+      RobotActive(slot) && 
+      !IsHouseRobot(slot) && 
+      prev(InPit(slot)) == 0 && 
+      InPit(slot) == 1
+    )
+  )
+)
+
+achievement(
+  title = "The Crown That Never Came",
+  description = "Win Tournament mode on Gold difficulty using Hypno-Disc",
+  points = 5,
+  trigger = (
+    TournamentWin(2, 2) &&
+    TournamentRobot() == 6
+  )
+)
+
+achievement(
+  title = "Back-to-Back",
+  description = "Win Tournament mode on Gold difficulty using Chaos II",
+  points = 5,
+  trigger = (
+    TournamentWin(2, 2) &&
+    TournamentRobot() == 13
+  )
+)
+
+achievement(
+  title = "Homebrew Champion",
+  description = "Win Tournament mode on Gold difficulty using a custom robot",
+  points = 5,
+  trigger = (
+    TournamentWin(2, 2) &&
+    TournamentRobot() >= 17 &&
+    TournamentRobot() <= 21
+  )
+)
 
 // ==================== Rich Presence ====================
 ModeLookup = { 
@@ -277,4 +437,7 @@ rich_presence_conditional_display(InGame() && CurrentMode() == 3,
 rich_presence_conditional_display(InGame(),
     "Battling in {0} mode {1} in level {2} · {3} · {4} left · health {5}%", Mode, Level, ArenaName, Robot, Clock, Health)
 
-rich_presence_display("In the menus · {0}/75 spoils of war unlocked", Prizes)
+rich_presence_conditional_display(GameState() == 2,
+    "In the menus · {0}/75 spoils of war unlocked", Prizes)
+
+rich_presence_display("Playing Robot Wars: Extreme Destruction")
