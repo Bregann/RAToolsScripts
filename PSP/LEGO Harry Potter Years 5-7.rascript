@@ -74,6 +74,24 @@ bit3(0xaebee7) + bit4(0xaebee7) + bit5(0xaebee7)
 
 HogwartsStaffDuelsWon = bit6(0xaebee7)+ bit7(0xaebee7) + bitcount(0xaebee8)
 
+OrderOfThePhoenixDuelsWon =
+bitcount(0xaebeea) + bit0(0xaebeeb) + bit1(0xaebeeb) + bit2(0xaebeeb) +
+bit3(0xaebeeb) + bit4(0xaebeeb)
+
+MinistryOfMagicDuelsWon =
+bit2(0xaebeec) + bit3(0xaebeec) + bit4(0xaebeec) + bit5(0xaebeec) +
+bit6(0xaebeec) + bit7(0xaebeec) + bit0(0xaebeed)
+
+DeathEaterDuelsWon =
+bit4(0xaebeee) + bit5(0xaebeee) + bit6(0xaebeee) + bit7(0xaebeee) +
+bit0(0xaebeef) + bit1(0xaebeef) + bit2(0xaebeef) + bit3(0xaebeef) +
+bit4(0xaebeef) + bit5(0xaebeef) + bit6(0xaebeef)
+
+BonusCategoryDuelsWon =
+bit6(0xaebef0) + bit7(0xaebef0) +
+bit0(0xaebef1) + bit1(0xaebef1) + bit2(0xaebef1) + bit3(0xaebef1) +
+bit4(0xaebef1) + bit5(0xaebef1) + bit6(0xaebef1)
+
 //Shop purchases
 //hints
 HintsPurchased = bitcount(0xaebe1d) + bit0(0xaebe1e) + bit1(0xaebe1e)
@@ -158,12 +176,13 @@ function IsLevelCompleted(addr, bitNum)
     }
 }
 
-function LevelCompleteAchievement(achName, levelName, levelAddr, bitNum)
+function LevelCompleteAchievement(achName, levelName, levelAddr, bitNum, achType = "PROGRESSION")
 {
     achievement (
         title = achName,
-        description = "Complete " + levelName + " in story mode",
+        description = "Complete " + levelName + " in Story mode",
         points = 4,
+        type = achType,
         trigger = (
             LevelID != 0x00 &&
             IsLevelCompleted(levelAddr, bitNum)
@@ -184,7 +203,7 @@ LevelCompleteAchievement("Malfoy Manor", "year 7 part 1 chapter 2", 0xaebe9a, 7)
 LevelCompleteAchievement("Gringotts Break-in", "year 7 part 2 chapter 1", 0xaebe9e, 5)
 LevelCompleteAchievement("The Chamber of Secrets", "year 7 part 2 chapter 2", 0xaebea2, 3)
 LevelCompleteAchievement("Hogwarts Battle", "year 7 part 2 chapter 3", 0xaebea6, 1)
-LevelCompleteAchievement("Harry vs Voldemort", "year 7 part 2 chapter 4", 0xaebea9, 7)
+LevelCompleteAchievement("Harry vs Voldemort", "year 7 part 2 chapter 4", 0xaebea9, 7, "WIN_CONDITION")
 
 // ================================
 // Level Bonus stuff (wizard cards, true wizard, redbricks)
@@ -217,13 +236,13 @@ function AllCharacters(achName, achDesc, points, collectible, collectibleAmount,
     )
 }
 
-LevelCollectibles("Accio Studs", "Reach true wizard in half of the levels", 10, TrueWizardInLevels, 0x07, 0x06)
-LevelCollectibles("Richest Wizard Around", "Reach true wizard in all of the levels", 10, TrueWizardInLevels, 0x0e, 0x0d)
-LevelCollectibles("The Hat Collector", "Collect half of the wizard hats in the game", 10, WizardHatsCollected, 0x25, 0x24)
-LevelCollectibles("A Hat-tastic Collection", "Collect all of the wizard hats in the game", 25, WizardHatsCollected, 0x49, 0x48)
-LevelCollectibles("Fantastic Finds", "Unlock half of the characters available in the game in levels", 10, CharactersUnlocked, 0x55, 0x54)
-AllCharacters("Ultimate Witch and Wizard Collector", "Unlock all of the characters available in the game in levels", 25, CharactersUnlocked, 0xa9, 0xa8)
-LevelCollectibles("Secrets Unveiled", "Collect all of the red bricks in the game", 25, RedBricksFound, 0x0e, 0x0d)
+LevelCollectibles("Accio Studs", "Reach True Wizard in half of the levels", 10, TrueWizardInLevels, 0x07, 0x06)
+LevelCollectibles("Richest Wizard Around", "Reach True Wizard in all of the levels", 10, TrueWizardInLevels, 0x0e, 0x0d)
+LevelCollectibles("The Hat Collector", "Collect half of the Wizard Hats", 10, WizardHatsCollected, 0x25, 0x24)
+LevelCollectibles("A Hat-tastic Collection", "Collect all of the Wizard Hats", 25, WizardHatsCollected, 0x49, 0x48)
+LevelCollectibles("Fantastic Finds", "Unlock half of the characters found in levels", 10, CharactersUnlocked, 0x55, 0x54)
+AllCharacters("Ultimate Witch and Wizard Collector", "Unlock all of the characters found in levels", 25, CharactersUnlocked, 0xa9, 0xa8)
+LevelCollectibles("Secrets Unveiled", "Collect all of the Red Bricks", 25, RedBricksFound, 0x0e, 0x0d)
 
 // ================================
 // Shop Purchases
@@ -243,10 +262,10 @@ function ShopPurchases(achName, achDesc, points, purchaseItem, purchaseAmount, p
     )
 }
 
-ShopPurchases("Wizarding Insights", "Purchase every hint in the game", 5, HintsPurchased, 0x0e, 0x0d)
-ShopPurchases("Wizarding Upgrades", "Purchase every red brick in the game", 10, RedBricksPurchased, 0x0e, 0x0d)
-ShopPurchases("Magical Shopper", "Purchase half of the characters in the game", 10, CharactersPurchased, 0x55, 0x54)
-ShopPurchases("Mystical Recruits", "Purchase all of the characters in the game", 10, CharactersPurchased, 0xa9, 0xa8)
+ShopPurchases("Wizarding Insights", "Purchase all of the hints", 5, HintsPurchased, 0x0e, 0x0d)
+ShopPurchases("Wizarding Upgrades", "Purchase all of the Red Bricks", 10, RedBricksPurchased, 0x0e, 0x0d)
+ShopPurchases("Magical Shopper", "Purchase half of the characters", 10, CharactersPurchased, 0x55, 0x54)
+ShopPurchases("Mystical Recruits", "Purchase all of the characters", 10, CharactersPurchased, 0xa9, 0xa8)
 
 // ================================
 // Duels Complete
@@ -266,7 +285,11 @@ function DuelsComplete(achName, achDesc, points, duelType, duel, duelAmountCompl
     )
 }
 
-DuelsComplete("The Student Dueller", "Win all the duels in the 'students' category", 5, 0x00, StudentDuelsWon, 0x09, 0x08)
-DuelsComplete("Wand Wielder", "Win all the duels in the 'open category' category", 5, 0x01, OpenCategoryDuelsWon, 0x06, 0x05)
-DuelsComplete("Beating The Army", "Win all the duels in the 'Dumbledore's army' category", 10, 0x02, DumbledoresArmyDuelsWon, 0x12, 0x11)
-DuelsComplete("Hope I Don't Get Expelled!", "Win all the duels in the 'Hogwarts staff' category", 5, 0x03, HogwartsStaffDuelsWon, 0x09, 0x08)
+DuelsComplete("The Student Dueller", "Win all of the duels in the \"Students\" category", 5, 0x00, StudentDuelsWon, 0x09, 0x08)
+DuelsComplete("Wand Wielder", "Win all of the duels in the \"Open\" category", 5, 0x01, OpenCategoryDuelsWon, 0x06, 0x05)
+DuelsComplete("Beating The Army", "Win all of the duels in the \"Dumbledore's Army\" category", 10, 0x02, DumbledoresArmyDuelsWon, 0x12, 0x11)
+DuelsComplete("Hope I Don't Get Expelled!", "Win all of the duels in the \"Hogwarts Staff\" category", 5, 0x03, HogwartsStaffDuelsWon, 0x09, 0x08)
+DuelsComplete("Out of Order", "Win all of the duels in the \"Order of the Phoenix\" category", 10, 0x04, OrderOfThePhoenixDuelsWon, 0x0d, 0x0c)
+DuelsComplete("Taking out the Ministry", "Win all of the duels in the \"Ministry of Magic\" category", 5, 0x05, MinistryOfMagicDuelsWon, 0x07, 0x06)
+DuelsComplete("Death to the Death Eaters", "Win all of the duels in the \"Death Eater\" category", 10, 0x06, DeathEaterDuelsWon, 0x0b, 0x0a)
+DuelsComplete("Bonus Duellist Champion", "Win all of the duels in the \"Bonus\" category", 5, 0x07, BonusCategoryDuelsWon, 0x09, 0x08)
