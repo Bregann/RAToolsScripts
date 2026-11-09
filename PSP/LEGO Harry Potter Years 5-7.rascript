@@ -287,9 +287,9 @@ function DuelsComplete(achName, achDesc, points, duelType, duel, duelAmountCompl
 
 DuelsComplete("The Student Dueller", "Win all of the duels in the \"Students\" category", 5, 0x00, StudentDuelsWon, 0x09, 0x08)
 DuelsComplete("Wand Wielder", "Win all of the duels in the \"Open\" category", 5, 0x01, OpenCategoryDuelsWon, 0x06, 0x05)
-DuelsComplete("Beating The Army", "Win all of the duels in the \"Dumbledore's Army\" category", 10, 0x02, DumbledoresArmyDuelsWon, 0x12, 0x11)
+DuelsComplete("Beating the Army", "Win all of the duels in the \"Dumbledore's Army\" category", 10, 0x02, DumbledoresArmyDuelsWon, 0x12, 0x11)
 DuelsComplete("Hope I Don't Get Expelled!", "Win all of the duels in the \"Hogwarts Staff\" category", 5, 0x03, HogwartsStaffDuelsWon, 0x09, 0x08)
 DuelsComplete("Out of Order", "Win all of the duels in the \"Order of the Phoenix\" category", 10, 0x04, OrderOfThePhoenixDuelsWon, 0x0d, 0x0c)
-DuelsComplete("Taking out the Ministry", "Win all of the duels in the \"Ministry of Magic\" category", 5, 0x05, MinistryOfMagicDuelsWon, 0x07, 0x06)
+DuelsComplete("Taking Out the Ministry", "Win all of the duels in the \"Ministry of Magic\" category", 5, 0x05, MinistryOfMagicDuelsWon, 0x07, 0x06)
 DuelsComplete("Death to the Death Eaters", "Win all of the duels in the \"Death Eater\" category", 10, 0x06, DeathEaterDuelsWon, 0x0b, 0x0a)
 DuelsComplete("Bonus Duellist Champion", "Win all of the duels in the \"Bonus\" category", 5, 0x07, BonusCategoryDuelsWon, 0x09, 0x08)

@@ -148,7 +148,7 @@ function GauntletGold(achTitle, challengeId) {
 function ArenaGold(achTitle, modeName, modeId, arenaId) {
   achievement(
     title = achTitle,
-    description = "Win " + modeName + " mode on Gold difficulty in " + Arenas[arenaId] + " arena",
+    description = "Win " + modeName + " mode in the" + Arenas[arenaId] + " arena on Gold difficulty",
     points = 10,
     trigger = (
       ArenaWin(modeId, arenaId, 2, 2)
@@ -168,7 +168,7 @@ achievement(
 
 achievement(
   title = "Studio Survivor",
-  description = "Win Bash 'n' Dash mode on Bronze difficulty in the Studio arena",
+  description = "Win Bash 'n Dash mode in the Studio arena on Bronze difficulty",
   points = 5,
   type = "progression",
   trigger = (
@@ -178,7 +178,7 @@ achievement(
 
 achievement(
   title = "Mayhem in the Studio",
-  description = "Win Mayhem mode on Bronze difficulty in the Studio arena",
+  description = "Win Mayhem mode in the Studio arena on Bronze difficulty",
   points = 5,
   type = "progression",
   trigger = (
@@ -213,16 +213,16 @@ achievement(
 )
 
 // Bash 'n' Dash on Gold, every arena
-ArenaGold("Studio Survivor Champion", "Bash 'n' Dash", 1, 0)
-ArenaGold("Master of the Lava", "Bash 'n' Dash", 1, 1)
-ArenaGold("Toxic Champion", "Bash 'n' Dash", 1, 2)
-ArenaGold("Cold Survivor", "Bash 'n' Dash", 1, 3)
-ArenaGold("Weathered the Storm", "Bash 'n' Dash", 1, 4)
-ArenaGold("Red Planet Robot Destroyer", "Bash 'n' Dash", 1, 5)
+ArenaGold("Studio Survivor Champion", "Bash 'n Dash", 1, 0)
+ArenaGold("Master of the Lava", "Bash 'n Dash", 1, 1)
+ArenaGold("Toxic Champion", "Bash 'n Dash", 1, 2)
+ArenaGold("Cold Survivor", "Bash 'n Dash", 1, 3)
+ArenaGold("Weathered the Storm", "Bash 'n Dash", 1, 4)
+ArenaGold("Red Planet Robot Destroyer", "Bash 'n Dash", 1, 5)
 
 // Mayhem on Gold, every arena
 ArenaGold("Master of Mayhem", "Mayhem", 2, 0)
-ArenaGold("Hotting Up in Here", "Mayhem", 2, 1)
+ArenaGold("It's Getting Hot in Here!", "Mayhem", 2, 1)
 ArenaGold("Acidic Winner", "Mayhem", 2, 2)
 ArenaGold("Deep Freeze Domination", "Mayhem", 2, 3)
 ArenaGold("Too Hot to Handle", "Mayhem", 2, 4)
@@ -243,7 +243,7 @@ GauntletGold("Drop Zone Daredevil", 5)
 function GauntletSpeedrun(achTitle, challengeId, secondsLeft, timeText) {
   achievement(
     title = achTitle,
-    description = "Complete " + Challenges[challengeId] + " in Gauntlet mode on Gold difficulty with at least " + timeText + " remaining",
+    description = "Complete " + Challenges[challengeId] + " in Gauntlet mode with at least " + timeText + " remaining on Gold difficulty ",
     points = 5,
     trigger = (
       GauntletWin(challengeId, 2, 2) &&
@@ -256,7 +256,7 @@ function GauntletSpeedrun(achTitle, challengeId, secondsLeft, timeText) {
 // The Gold limit is 0:15, so this is about finishing as fast as 101 can manage.
 achievement(
   title = "One Second to Spare!",
-  description = "Complete Slalom in Gauntlet mode on Gold difficulty using 101 with at least 1 second remaining",
+  description = "Complete Slalom in Gauntlet mode with at least 1 second remaining while using Robot 101 on Gold difficulty",
   points = 5,
   trigger = (
     GauntletWin(0, 2, 2) &&
@@ -264,7 +264,7 @@ achievement(
     ClockTotal() >= 1
   )
 )
-GauntletSpeedrun("Skittles Speedrun", 1, 6, "0:06")
+GauntletSpeedrun("Skittles Speedrun", 1, 6, "6 seconds")
 
 // DamageMeter is the health bar on the HUD: 10 bars when full, one lost per 10% of health.
 // Still on 10 bars at the moment of the win = never lost a bar during the bout.
@@ -272,7 +272,7 @@ GauntletSpeedrun("Skittles Speedrun", 1, 6, "0:06")
 // WinFlag is set inside FightLoop, so InGame() is still true on the frame of the win.
 achievement(
   title = "Shunted out of the Ring",
-  description = "Win Sumo Basho in Gauntlet mode without losing a single bar of health",
+  description = "Complete Sumo Basho in Gauntlet mode without losing a single bar of health",
   points = 5,
   trigger = (
     NoCheats() &&
@@ -321,7 +321,7 @@ achievement(
 
 achievement(
   title = "The Crown That Never Came",
-  description = "Win Tournament mode on Gold difficulty using Hypno-Disc",
+  description = "Win Tournament mode using Hypno-Disc on Gold difficulty",
   points = 5,
   trigger = (
     TournamentWin(2, 2) &&
@@ -331,7 +331,7 @@ achievement(
 
 achievement(
   title = "Back-to-Back",
-  description = "Win Tournament mode on Gold difficulty using Chaos II",
+  description = "Win Tournament mode using Chaos II on Gold difficulty",
   points = 5,
   trigger = (
     TournamentWin(2, 2) &&
@@ -341,7 +341,7 @@ achievement(
 
 achievement(
   title = "Homebrew Champion",
-  description = "Win Tournament mode on Gold difficulty using a custom robot",
+  description = "Win Tournament mode using a custom robot on Gold difficulty",
   points = 5,
   trigger = (
     TournamentWin(2, 2) &&
