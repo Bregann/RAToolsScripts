@@ -17,10 +17,17 @@ Supported now: **Game Boy / Game Boy Color** (.gb, .gbc), **Game Boy Advance** (
 
 From a terminal instead: `pip install -r requirements.txt` then `python -m romx` (options: `--port 9000`, `--no-browser`).
 
+## Run it (Linux)
+1. Have Python 3.10 or newer. On Ubuntu/Debian also install the venv module: `sudo apt install python3 python3-venv`.
+2. In a terminal, in the ROM Explorer folder, run `./start-rom-explorer.sh` (options like `--port 9000` and `--no-browser` are passed on). The first start makes a private Python environment in `.venv` there and installs the parts into it, then opens the app in your browser.
+3. The **Setup** page finds emulators installed from your distro, as Flatpaks (`~/.var/app/...`) and as AppImages or portable folders inside a folder you scan.
+
+Optional extras on Linux: `zenity` (or `kdialog` on KDE) for the Browse buttons, and `xdotool` plus `imagemagick` for screenshots and key presses in emulators without their own (X11 or XWayland windows; pure Wayland windows can't be reached). RALibretro and RAIntegration are Windows programs; point the emulator folders setting at their folder if you run them through Wine.
+
 The app only listens on your own computer (127.0.0.1). Close the window to stop it.
 
 ## Where things are kept
-- **Settings**: `%APPDATA%\ROM Explorer\settings.json`
+- **Settings**: `%APPDATA%\ROM Explorer\settings.json` on Windows, `~/.romx/settings.json` on Linux
 - **Projects folder**: one `<game>.romx.json` per game with your function names, labels, notes and value names. Back this up.
 - **Work folder**: the analysis cache (safe to delete; it is rebuilt) and exported notes files.
 
@@ -79,9 +86,11 @@ With ROM Explorer connected to Claude, Claude can also connect to the emulator t
 | PPSSPP | Settings > Tools > Developer tools > Allow remote debugger | shown there | RAM, pause/step, registers, breakpoints, memory watchpoints, buttons, screenshots, states |
 | mGBA | Tools > Start GDB server | 2345 | RAM, pause/step, registers, breakpoints, watchpoints |
 | melonDS | Enable the GDB stub (Emu settings, DevTools tab, in recent versions) | 3333 | as mGBA |
-| Dolphin | its GDB stub if your build has one (give the port); otherwise nothing to turn on | | GDB: as mGBA. Without: RAM only, read from Dolphin's process (Windows) |
+| Dolphin | its GDB stub if your build has one (give the port); otherwise nothing to turn on | | GDB: as mGBA. Without: RAM only, read from Dolphin's process (Windows, Linux) |
 
-Screenshots and button presses for emulators without their own (everything but PPSSPP) work on Windows by capturing the emulator's window and typing keys into it. For buttons, tell ROM Explorer your key bindings in **Settings > Emulator keys**, one emulator per line, for example `pcsx2: Cross = X, Circle = C, Start = Enter, Up = Up, savestate = F1, loadstate = F3`.
+On Linux, PCSX2's PINE link is a socket file rather than a port; ROM Explorer finds it, including the Flatpak's. Reading Dolphin's RAM from its process needs permission to read another program's memory, which most distros only give debuggers. Allow it until the next reboot with `sudo sysctl kernel.yama.ptrace_scope=0`, or give Python that permission for good: `sudo setcap cap_sys_ptrace=eip "$(readlink -f .venv/bin/python)"` (the venv's Python is your system Python, so every Python program gets it).
+
+Screenshots and button presses for emulators without their own (everything but PPSSPP) work on Windows by capturing the emulator's window and typing keys into it, and on Linux the same way with `xdotool` and ImageMagick. For buttons, tell ROM Explorer your key bindings in **Settings > Emulator keys**, one emulator per line, for example `pcsx2: Cross = X, Circle = C, Start = Enter, Up = Up, savestate = F1, loadstate = F3`.
 
 Not tested on the real emulators yet: the GDB link was tested against QEMU's GDB server, and the others against stand-ins that follow each emulator's protocol.
 

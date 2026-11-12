@@ -2,3 +2,4 @@
 Work/
 Projects/*.states/
 __pycache__/
+.venv/

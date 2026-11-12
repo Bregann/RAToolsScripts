@@ -6,9 +6,9 @@ Addresses going in and out are RetroAchievements addresses; code addresses (PC, 
   pcsx2       PCSX2's PINE server: RAM and states (and its GDB server too if your build has one: give gdb_port).
   ppsspp      PPSSPP's remote debugger: RAM, pause/step, registers, breakpoints, memory watchpoints, buttons, screenshots, states.
   mgba        mGBA's GDB server (GBA).   melonds  melonDS's GDB server (DS, ARM9).
-  dolphin     Dolphin's GDB server if you give a port, otherwise its RAM read straight from the process (Windows).
+  dolphin     Dolphin's GDB server if you give a port, otherwise its RAM read straight from the process (Windows, Linux).
   gdb         any other GDB server (give the port).
-On Windows, screenshots and key presses fall back to capturing / typing into the emulator's window."""
+On Windows and Linux (X11, with xdotool), screenshots and key presses fall back to capturing / typing into the emulator's window."""
 import base64, time
 from .gdb import GDB, GDBError, parse_stop
 from .links import PINE, PPSSPP, RetroArch, DolphinMemory, MGBAScript, LinkError
