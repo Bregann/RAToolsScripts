@@ -1,0 +1,1440 @@
+{
+ "id": "slus-21648-ps2-7ec2e2",
+ "game": "FIFA Soccer 08 (USA)",
+ "platform": "ps2",
+ "rom": "C:\\Users\\brega\\Desktop\\RA Dev\\FIFA Soccer 08 (USA) (En,Es).iso",
+ "ra_game_id": 26291,
+ "labels": [
+  {
+   "ra": 8011756,
+   "size": 4,
+   "name": "In_3D_match",
+   "note": "[32-bit] In 3D match\n0x00 = No (menus / simulated match)\n0x01 = Yes"
+  },
+  {
+   "ra": 8011780,
+   "size": 4,
+   "name": "Career_club",
+   "note": "[32-bit] Manager Mode - current club (team ID)\n0xffffffff = No club\n0x00000001 = Arsenal\n0x00000005 = Chelsea\n0x000000f1 = FC Barcelona\n0x0001b1de = Chivas USA\n(full team ID list in clubs.csv)"
+  },
+  {
+   "ra": 8013544,
+   "size": 4,
+   "name": "Game_mode",
+   "note": "[32-bit] Game mode\n0x00 = Kick Off / other\n0x01 = Tournament\n0x02 = Manager Mode"
+  },
+  {
+   "ra": 8518060,
+   "size": 4,
+   "name": "Match_setup_home_team",
+   "note": "[32-bit] Match setup - home team ID"
+  },
+  {
+   "ra": 8518084,
+   "size": 4,
+   "name": "Match_setup_away_team",
+   "note": "[32-bit] Match setup - away team ID"
+  },
+  {
+   "ra": 8518372,
+   "size": 4,
+   "name": "Half_length",
+   "note": "[32-bit] Half length (minutes)"
+  },
+  {
+   "ra": 8518776,
+   "size": 4,
+   "name": "Difficulty",
+   "note": "[32-bit] Difficulty\n0x00 = Amateur?\n0x01 = Semi-Pro?\n0x02 = Professional?\n0x03 = World Class?\n0x04 = Legendary? (unlocked by Total Footballer Challenge)"
+  },
+  {
+   "ra": 8561992,
+   "size": 4,
+   "name": "Stadium",
+   "note": "[32-bit] Stadium (current / next match)\n0xffffffff = None\n0x01 = Old Trafford\n0x04 = Stade Gerland\n0x05 = San Siro\n0x06 = Camp Nou\n0x07 = Highbury\n0x08 = Stadio Delle Alpi\n0x09 = Signal Iduna\n0x0a = Mestalla\n0x0c = BayArena\n0x0d = Anfield\n0x0e = Parc des Princes\n0x0f = Amsterdam ArenA\n0x10 = Bollaert\n0x11 = Constant Vanden Stock\n0x18 = Generic Olympic\n0x19 = Generic Square Closed\n0x1a = Generic Square Open\n0x1b = Generic Square Oval\n0x1c = Stamford Bridge\n0x1d = Stade Velodrome\n0x1e = Veltins-Arena\n0x20 = Division One UK\n0x21 = Division One Euro\n0x22 = Division Two UK\n0x23 = Division Two Euro\n0x24 = Division Three UK\n0x25 = Division Three Euro\n0x26 = Urban Training\n0x27 = Rural Training\n0x29 = HSH Nordbank Arena\n0x2a = Estadio Vicente Calderon\n0x64 = St James' Park\n0x66 = Jose Alvalade\n0x67 = Millennium Stadium\n0x68 = Estadio Azteca\n0x69 = Generic Modern\n0x6b = Estadio Da Luz\n0x6c = Seoul Sang Am Stadium\n0x6e = Daegu Sport Complex\n0x6f = Dragao Stadium\n0x74 = White Hart Lane\n0x75 = Generic Modern South America\n0x76 = Generic Modern Mediterranean\n0x7b = Estadio Do Bessa\n0x85 = Gottlieb Daimler Stadion\n0x86 = AWD Arena\n0x87 = Olympiastadion\n0x89 = Allianz Arena\n0x8a = Commerzbank Arena\n0x9b = Wembley Stadium\n0x9c = Emirates Stadium\n0x9d = Stadio Olimpico\n0xa1 = Home Depot Stadium\n0xa3 = Jalisco"
+  },
+  {
+   "ra": 8989800,
+   "size": 4,
+   "name": "Match_clock",
+   "note": "[32-bit] Match clock (seconds)\n2700 = 45:00, 5400 = 90:00\nStops at 45:00 / 90:00 during added time"
+  },
+  {
+   "ra": 9342288,
+   "size": 4,
+   "name": "Visual_Sim_running",
+   "note": "[32-bit] Visual Sim running\n0x00 = No\nNon-zero = Visual Sim in progress"
+  },
+  {
+   "ra": 9391072,
+   "size": 4,
+   "name": "Home_team_ID",
+   "note": "[32-bit] Current match - home team ID"
+  },
+  {
+   "ra": 9420660,
+   "size": 4,
+   "name": "Home_team_is_player",
+   "note": "[32-bit] Current match - home team controlled by player\n0x00 = No\n0x01 = Yes"
+  },
+  {
+   "ra": 9420680,
+   "size": 4,
+   "name": "Home_goals",
+   "note": "[32-bit] Current match - home goals"
+  },
+  {
+   "ra": 9421080,
+   "size": 4,
+   "name": "Away_team_ID",
+   "note": "[32-bit] Current match - away team ID"
+  },
+  {
+   "ra": 9450668,
+   "size": 4,
+   "name": "Away_team_is_player",
+   "note": "[32-bit] Current match - away team controlled by player\n0x00 = No\n0x01 = Yes"
+  },
+  {
+   "ra": 9450688,
+   "size": 4,
+   "name": "Away_goals",
+   "note": "[32-bit] Current match - away goals"
+  },
+  {
+   "ra": 9451396,
+   "size": 4,
+   "name": "Sim_clock",
+   "note": "[32-bit] Simulated match clock (seconds)\n5400 = 90:00"
+  },
+  {
+   "ra": 9451412,
+   "size": 4,
+   "name": "Match_type",
+   "note": "[32-bit] Match type\n0x00 = Played\n0x01 = Simulated CPU vs CPU match\n0x02 = Simulated by player (Visual Sim / Quick Sim)"
+  },
+  {
+   "ra": 9460356,
+   "size": 4,
+   "name": "Home_shootout_goals",
+   "note": "[32-bit] Penalty shootout - home goals?"
+  },
+  {
+   "ra": 9460360,
+   "size": 4,
+   "name": "Away_shootout_goals",
+   "note": "[32-bit] Penalty shootout - away goals?"
+  },
+  {
+   "ra": 9531680,
+   "size": 4,
+   "name": "Match_state",
+   "note": "[32-bit] Match state\n0x00 = Not started\n0x03 = Kick off / restart\n0x09 = Playing\n0x0f = Match over"
+  },
+  {
+   "ra": 9532520,
+   "size": 4,
+   "name": "Match_end_state",
+   "note": "[32-bit] Match end state\n0x00 = In progress\n0x01 = Full time\n0x02 = Quit\n0x04 = Penalty shootout"
+  },
+  {
+   "ra": 9532524,
+   "size": 4,
+   "name": "Half",
+   "note": "[32-bit] Half\n0x00 = 1st half\n0x01 = 2nd half\n0x02 = Extra time 1st half\n0x03 = Extra time 2nd half\n0x04 = Penalties?"
+  },
+  {
+   "ra": 17534848,
+   "size": 4,
+   "name": "Trophies_won",
+   "note": "[32-bit] Manager Mode - trophies won (count)\nTrophy list starts at 0x10b8f88, 8 bytes per trophy"
+  },
+  {
+   "ra": 17534856,
+   "size": 4,
+   "name": "Trophy_1_competition",
+   "note": "[32-bit] Trophy 1 - competition\nNext trophy every +0x08\n0x01 = Danish Superligaen\n0x04 = Belgian League\n0x07 = Brazilian League\n0x0a = Dutch Eredivisie\n0x0d = Barclays Premier League\n0x0e = Coca-Cola Championship\n0x10 = French Ligue 1\n0x11 = French Ligue 2\n0x13 = German Bundesliga\n0x14 = German 2. Bundesliga\n0x1f = Italian Serie A\n0x20 = Italian Serie B\n0x27 = Major League Soccer\n0x29 = Norwegian Tippeligaen\n0x32 = Scottish Premier League\n0x35 = Spanish Primera\n0x36 = Spanish Segunda\n0x38 = Swedish Allsvenskan\n0x3c = Coca-Cola League 1\n0x3d = Coca-Cola League 2\n0x41 = FAI Eircom League\n0x42 = Polish Ekstraklasa\n0x44 = Turkish Super Lig\n0x50 = Austrian Bundesliga\n0x53 = K-League\n0x54 = Mexican Apertura\n0x55 = Mexican Clausura\n0xbd = Swiss Super League\n0xc9 = F.A. Cup\n0xca = League Cup\n0xcb = Johnstone's Paint Trophy\n0xcc = Coupe Gauloise\n0xcd = Coupe de la Ligue\n0xce = Deutscher Pokal\n0xcf = PREMIERE-Ligapokal\n0xd0 = Copa del Rey\n0xd2 = Coppa Nazionale\n0xd3 = Supercoppa Nazionale\n0xd4 = Austrian Cup\n0xd5 = Belgian Cup\n0xd7 = Danish Cup\n0xd9 = Norwegian Cup\n0xda = Portuguese Cup\n0xdb = Scottish Cup\n0xdc = Swedish Cup\n0xdd = Swiss Cup\n0xdf = European Champions Cup\n0xe0 = European Cup (EFA)\n0xe1 = Supercopa\n0xe4 = F.A. Community Shield\n0xe5 = Brazilian Cup\n0xe8 = European Super Cup\n0xe9 = Trophee des Champions\n0xea = U.S. Open Cup\n0x10c = Turkish Cup\n0x134 = Portuguese League\n0x13a = Dutch Cup\n0x13f = Czech League\n0x15f = Australian A-League\n0x16e = Puchar Polski"
+  },
+  {
+   "ra": 17534860,
+   "size": 4,
+   "name": "Trophy_1_season",
+   "note": "[32-bit] Trophy 1 - season it was won (0 = first season)"
+  },
+  {
+   "ra": 17537164,
+   "size": 4,
+   "name": "Manager_points",
+   "note": "[Float] Manager Mode - manager points"
+  },
+  {
+   "ra": 17537168,
+   "size": 4,
+   "name": "Budget",
+   "note": "[Float] Manager Mode - budget\nShown in $ as value x 1.23"
+  },
+  {
+   "ra": 17537172,
+   "size": 4,
+   "name": "Job_security",
+   "note": "[Float] Manager Mode - job security (0-100)"
+  },
+  {
+   "ra": 17537184,
+   "size": 4,
+   "name": "Fan_happiness",
+   "note": "[Float] Manager Mode - fan happiness (0-100)"
+  },
+  {
+   "ra": 17537228,
+   "size": 4,
+   "name": "Last_fixture",
+   "note": "[32-bit] Manager Mode - last fixture processed (game number)"
+  },
+  {
+   "ra": 17537244,
+   "size": 1,
+   "name": "Season_number",
+   "note": "[8-bit] Manager Mode - season number\nUpper 6 bits: season = value / 4 (0 = first season)"
+  },
+  {
+   "ra": 17537258,
+   "size": 2,
+   "name": "Manager_prestige",
+   "note": "[16-bit BE] Manager Mode - manager prestige (0-10)\nPrestige = (value / 128) & 0x0f"
+  },
+  {
+   "ra": 17704704,
+   "size": 4,
+   "name": "Clubs_managed",
+   "note": "[32-bit] Manager Mode - clubs managed (count)"
+  },
+  {
+   "ra": 17711876,
+   "size": 4,
+   "name": "Memory_card",
+   "note": "[32-bit] Memory card activity\n0xffffffff = Idle\n0x02 = Saving"
+  },
+  {
+   "ra": 22109440,
+   "size": 4,
+   "name": "Challenge_0_done",
+   "note": "[32-bit] Challenge - Fair Play Challenge 2\nWin a match without any bookings in World Class difficulty\n0x01 = Done"
+  },
+  {
+   "ra": 22109532,
+   "size": 4,
+   "name": "ChallengeOffsideChallenge",
+   "note": "[32-bit] Challenge - Offside Challenge\nWin without getting off sides in World Class difficulty\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22109624,
+   "size": 4,
+   "name": "ChallengeGoalieChallenge",
+   "note": "[32-bit] Challenge - Goalie Challenge\nScore with a goalie in Professional difficulty\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22109716,
+   "size": 4,
+   "name": "ChallengeScenarioChallenge10",
+   "note": "[32-bit] Challenge - Scenario Challenge 10\nUse Scenario settings to give your opponent a 5-0 lead in the 10th minute in Professional difficulty and win\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22109808,
+   "size": 4,
+   "name": "Challenge15MinuteChallenge",
+   "note": "[32-bit] Challenge - 15 Minute Challenge\nScore within 15 minutes in World Class difficulty\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22109900,
+   "size": 4,
+   "name": "ChallengeHatTrickChallenge2",
+   "note": "[32-bit] Challenge - Hat Trick Challenge 2\nScore a Hat Trick in World Class difficulty\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22109992,
+   "size": 4,
+   "name": "ChallengeCleanSheetChallenge2",
+   "note": "[32-bit] Challenge - Clean Sheet Challenge 2\nWin a match with a clean sheet on World Class difficulty\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22110084,
+   "size": 4,
+   "name": "Challenge5GoalsChallenge1",
+   "note": "[32-bit] Challenge - 5 Goals Challenge 1\nScore 5 goals with 5 different players in Professional difficulty\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22110176,
+   "size": 4,
+   "name": "ChallengeEFATournament",
+   "note": "[32-bit] Challenge - EFA Tournament\nWin the EFA tournament in Manager Mode\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22110268,
+   "size": 4,
+   "name": "ChallengeECCTournament",
+   "note": "[32-bit] Challenge - ECC Tournament\nWin the ECC tournament in Manager Mode\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22110360,
+   "size": 4,
+   "name": "ChallengeManagerModeChallenge",
+   "note": "[32-bit] Challenge - Manager Mode Challenge\nAchieve an undefeated season in Manager Mode\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22110452,
+   "size": 4,
+   "name": "Challenge5GameStreak",
+   "note": "[32-bit] Challenge - 5 Game Streak\nAchieve a 5 game winning streak in any difficulty level\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22110544,
+   "size": 4,
+   "name": "Challenge10GameStreak",
+   "note": "[32-bit] Challenge - 10 Game Streak\nAchieve a 10 game winning streak in any difficulty level\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22110636,
+   "size": 4,
+   "name": "Challenge20GameStreak",
+   "note": "[32-bit] Challenge - 20 Game Streak\nAchieve a 20 game winning streak in any difficulty level\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22110728,
+   "size": 4,
+   "name": "ChallengeScore10Goals",
+   "note": "[32-bit] Challenge - Score 10 goals\nScore 10 goals in any difficulty level\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22110820,
+   "size": 4,
+   "name": "ChallengeScore50Goals",
+   "note": "[32-bit] Challenge - Score 50 goals\nScore a total of 50 goals in any difficulty level\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22110912,
+   "size": 4,
+   "name": "ChallengeScore100Goals",
+   "note": "[32-bit] Challenge - Score 100 goals\nScore a total of 100 goals in any difficulty level\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22111004,
+   "size": 4,
+   "name": "ChallengeWin10Games",
+   "note": "[32-bit] Challenge - Win 10 games\nWin a total of 10 games in any difficulty level\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22111096,
+   "size": 4,
+   "name": "ChallengeWin25Games",
+   "note": "[32-bit] Challenge - Win 25 games\nWin a total of 25 games in any difficulty level\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22111188,
+   "size": 4,
+   "name": "ChallengeWin50Games",
+   "note": "[32-bit] Challenge - Win 50 games\nWin a total of 50 games in any difficulty level\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22111280,
+   "size": 4,
+   "name": "ChallengeWin100Games",
+   "note": "[32-bit] Challenge - Win 100 games\nWin a total of 100 games in any difficulty level\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22111372,
+   "size": 4,
+   "name": "ChallengeLateGoalChallenge2",
+   "note": "[32-bit] Challenge - Late Goal Challenge 2\nScore with a player subbed in after 75+ minutes in Professional difficulty\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22111464,
+   "size": 4,
+   "name": "ChallengeSubstitutionChallenge",
+   "note": "[32-bit] Challenge - Substitution Challenge\nNever substitute and win in Professional difficulty against a Rest of World club\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22111556,
+   "size": 4,
+   "name": "Challenge3GoalsChallenge",
+   "note": "[32-bit] Challenge - 3 Goals Challenge\nScore 3 goals with 3 different players in Semi-Pro difficulty against a Rest of World club\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22111648,
+   "size": 4,
+   "name": "ChallengeInternationalClubChamp",
+   "note": "[32-bit] Challenge - International Club Champ.\nWin The International Club Champ\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22111740,
+   "size": 4,
+   "name": "ChallengeKLeague",
+   "note": "[32-bit] Challenge - K-League\nWin The K-League\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22111832,
+   "size": 4,
+   "name": "ChallengeTurkishCup",
+   "note": "[32-bit] Challenge - Turkish Cup\nWin the Turkish Cup\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22111924,
+   "size": 4,
+   "name": "ChallengeTurkcellSPerLig",
+   "note": "[32-bit] Challenge - Turkcell Süper Lig\nWin the Turkcell Süper Lig\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22112016,
+   "size": 4,
+   "name": "ChallengePucharPolski",
+   "note": "[32-bit] Challenge - Puchar Polski\nWin the Puchar Polski\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22112108,
+   "size": 4,
+   "name": "ChallengePolishEkstraklasa",
+   "note": "[32-bit] Challenge - Polish Ekstraklasa\nWin the Polish Ekstraklasa\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22112200,
+   "size": 4,
+   "name": "ChallengeAustralianHyundaiALeague",
+   "note": "[32-bit] Challenge - Australian Hyundai A-League\nWin The Austrlian Football League\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22112292,
+   "size": 4,
+   "name": "ChallengeCzechLeague",
+   "note": "[32-bit] Challenge - Czech League\nWin the Czech League\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22112384,
+   "size": 4,
+   "name": "ChallengeIrelandFAIEircomLeague",
+   "note": "[32-bit] Challenge - Ireland FAI Eircom League\nWin the Rep. Ireland FAI Eircom League\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22112476,
+   "size": 4,
+   "name": "ChallengeCleanSheetChallenge1",
+   "note": "[32-bit] Challenge - Clean Sheet Challenge 1\nWin a match with a clean sheet against a club from Scandinavia in Semi-Pro difficulty\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22112568,
+   "size": 4,
+   "name": "ChallengeScenarioChallenge9",
+   "note": "[32-bit] Challenge - Scenario Challenge 9\nUse Scenario settings to assign your opponent a 3-0 lead. Win the match\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22112660,
+   "size": 4,
+   "name": "ChallengePassingChallenge2",
+   "note": "[32-bit] Challenge - Passing Challenge 2\nAchieve 85% + in Passing in Amateur difficulty against a Scandinavian club\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22112752,
+   "size": 4,
+   "name": "ChallengeScenarioChallenge8",
+   "note": "[32-bit] Challenge - Scenario Challenge 8\nUse Scenario settings to give your club 1 red card. Win against a club from Scandinavia\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22112844,
+   "size": 4,
+   "name": "ChallengeFairPlayChallenge1",
+   "note": "[32-bit] Challenge - Fair Play Challenge 1\nWin a match without bookings in Professional difficulty against a Scandinavian club\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22112936,
+   "size": 4,
+   "name": "ChallengeAccuracyChallenge",
+   "note": "[32-bit] Challenge - Accuracy Challenge\nAchieve 90% Shots on Target in Semi-Pro difficulty against a Scandinavian club\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22113028,
+   "size": 4,
+   "name": "ChallengeSwedishCup",
+   "note": "[32-bit] Challenge - Swedish Cup\nWin The Swedish Cup\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22113120,
+   "size": 4,
+   "name": "ChallengeSwedishAllsvenskan",
+   "note": "[32-bit] Challenge - Swedish Allsvenskan\nWin The Swedish Allsvenskan\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22113212,
+   "size": 4,
+   "name": "ChallengeNorwegianFACup",
+   "note": "[32-bit] Challenge - Norwegian FA Cup\nWin The Norwegian FA Cup\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22113304,
+   "size": 4,
+   "name": "ChallengeNorwegianTippeligaen",
+   "note": "[32-bit] Challenge - Norwegian Tippeligaen\nWin The Norwegian Tippeligaen\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22113396,
+   "size": 4,
+   "name": "ChallengeDBUSLandspokal",
+   "note": "[32-bit] Challenge - DBU's Landspokal\nWin The DBU's Landspokal\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22113488,
+   "size": 4,
+   "name": "ChallengeDanishSuperligaen",
+   "note": "[32-bit] Challenge - Danish Superligaen\nWin The Danish Superligaen\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22113580,
+   "size": 4,
+   "name": "ChallengeScenarioChallenge7",
+   "note": "[32-bit] Challenge - Scenario Challenge 7\nUse Scenario settings to start a match in the 2nd half of extra time, score tied and win\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22113672,
+   "size": 4,
+   "name": "ChallengeStayAheadChallenge",
+   "note": "[32-bit] Challenge - Stay Ahead Challenge\nScore and maintain a 2 goal lead in Semi-Pro difficulty against a club from the Americas\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22113764,
+   "size": 4,
+   "name": "ChallengeScenarioChallenge6",
+   "note": "[32-bit] Challenge - Scenario Challenge 6\nUse Scenario settings to assign your opponent a 1-0 lead. Win the match\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22113856,
+   "size": 4,
+   "name": "ChallengePassingChallenge1",
+   "note": "[32-bit] Challenge - Passing Challenge 1\nAchieve 75% + Passing in Professional difficulty against a club from the Americas and win\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22113948,
+   "size": 4,
+   "name": "ChallengeUSOpenCup",
+   "note": "[32-bit] Challenge - U.S. Open Cup\nWin The U.S. Open Cup\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22114040,
+   "size": 4,
+   "name": "ChallengeMLSCup",
+   "note": "[32-bit] Challenge - MLS Cup\nWin The MLS Cup\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22114132,
+   "size": 4,
+   "name": "ChallengeMexicanApertura",
+   "note": "[32-bit] Challenge - Mexican Apertura\nWin The Mexican Apertura\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22114224,
+   "size": 4,
+   "name": "ChallengeMexicanClausura",
+   "note": "[32-bit] Challenge - Mexican Clausura\nWin The Mexican Clausura\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22114316,
+   "size": 4,
+   "name": "ChallengeBrazilianCup",
+   "note": "[32-bit] Challenge - Brazilian Cup\nWin The Brazilian Cup\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22114408,
+   "size": 4,
+   "name": "ChallengeBrazilianLeague",
+   "note": "[32-bit] Challenge - Brazilian League\nWin The Brazilian League\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22114500,
+   "size": 4,
+   "name": "ChallengeAmericasClubChamp",
+   "note": "[32-bit] Challenge - Americas Club Champ.\nWin The Americas Club Champ\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22114592,
+   "size": 4,
+   "name": "ChallengeScenarioChallenge5",
+   "note": "[32-bit] Challenge - Scenario Challenge 5\nUse Scenario settings to start a match in the 1st half of extra time down 1-2 and win\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22114684,
+   "size": 4,
+   "name": "ChallengeScenarioChallenge4",
+   "note": "[32-bit] Challenge - Scenario Challenge 4\nUse Scenario settings to start a 0-0 match in the 85th minute. You must win\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22114776,
+   "size": 4,
+   "name": "ChallengeShootOutChallenge2",
+   "note": "[32-bit] Challenge - Shoot-Out Challenge 2\nWin a penalty kick shootout in World Class difficulty against a club from Central Europe\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22114868,
+   "size": 4,
+   "name": "Challenge5MinuteChallenge2",
+   "note": "[32-bit] Challenge - 5 Minute Challenge 2\nScore in under 5 min. against a club from Central Europe in Professional difficulty\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22114960,
+   "size": 4,
+   "name": "ChallengeSwissCup",
+   "note": "[32-bit] Challenge - Swiss Cup\nWin The Swiss Cup\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22115052,
+   "size": 4,
+   "name": "ChallengeSwissAxpoSuperLeague",
+   "note": "[32-bit] Challenge - Swiss Axpo Super League\nWin The Swiss Axpo Super League\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22115144,
+   "size": 4,
+   "name": "ChallengeAustrianFBStieglCup",
+   "note": "[32-bit] Challenge - Austrian ÖFB Stiegl-Cup\nWin The Austrian ÖFB Stiegl-Cup\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22115236,
+   "size": 4,
+   "name": "ChallengeAustrianBundesliga",
+   "note": "[32-bit] Challenge - Austrian Bundesliga\nWin The Austrian Bundesliga\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22115328,
+   "size": 4,
+   "name": "ChallengePREMIERELigapokal",
+   "note": "[32-bit] Challenge - PREMIERE-Ligapokal\nWin The PREMIERE-Ligapokal\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22115420,
+   "size": 4,
+   "name": "ChallengeDeutscherPokal",
+   "note": "[32-bit] Challenge - Deutscher Pokal\nWin The Deutscher Pokal\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22115512,
+   "size": 4,
+   "name": "ChallengeGerman2Bundesliga",
+   "note": "[32-bit] Challenge - German 2. Bundesliga\nWin The German 2. Bundesliga\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22115604,
+   "size": 4,
+   "name": "ChallengeGermanBundesliga",
+   "note": "[32-bit] Challenge - German Bundesliga\nWin The German Bundesliga\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22115696,
+   "size": 4,
+   "name": "ChallengeScenarioChallenge3",
+   "note": "[32-bit] Challenge - Scenario Challenge 3\nUse Scenario settings to start a 0-0 match in the 2nd half and win by 3 goals\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22115788,
+   "size": 4,
+   "name": "ChallengeShootOutChallenge1",
+   "note": "[32-bit] Challenge - Shoot-Out Challenge 1\nWin a penalty kick shootout in Semi-Pro difficulty against a club from Southern Europe\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22115880,
+   "size": 4,
+   "name": "ChallengePossessionChallenge2",
+   "note": "[32-bit] Challenge - Possession Challenge 2\nAchieve over 75% Possession in Amateur difficulty against a club from Southern Europe\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22115972,
+   "size": 4,
+   "name": "Challenge5GoalsChallenge2",
+   "note": "[32-bit] Challenge - 5 Goals Challenge 2\nWin by 5 goals in Amateur difficulty against a club from Southern Europe\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22116064,
+   "size": 4,
+   "name": "ChallengeCopaDelRey",
+   "note": "[32-bit] Challenge - Copa del Rey\nWin The Copa del Rey\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22116156,
+   "size": 4,
+   "name": "ChallengeSpanishLigaBBVA",
+   "note": "[32-bit] Challenge - Spanish Liga BBVA\nWin The Spanish Liga BBVA\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22116248,
+   "size": 4,
+   "name": "ChallengeSpanishPrimera",
+   "note": "[32-bit] Challenge - Spanish Primera\nWin The Spanish Primera\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22116340,
+   "size": 4,
+   "name": "ChallengeCoppaNazionale",
+   "note": "[32-bit] Challenge - Coppa Nazionale\nWin The Coppa Nazionale\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22116432,
+   "size": 4,
+   "name": "ChallengeItalianSerieB",
+   "note": "[32-bit] Challenge - Italian Serie B\nWin The Italian Serie B\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22116524,
+   "size": 4,
+   "name": "ChallengeItalianSerieA",
+   "note": "[32-bit] Challenge - Italian Serie A\nWin The Italian Serie A\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22116616,
+   "size": 4,
+   "name": "ChallengePortugueseCup",
+   "note": "[32-bit] Challenge - Portuguese Cup\nWin The Portuguese Cup\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22116708,
+   "size": 4,
+   "name": "ChallengePortugueseLeague",
+   "note": "[32-bit] Challenge - Portuguese League\nWin The Portuguese League\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22116800,
+   "size": 4,
+   "name": "ChallengeScenarioChallenge2",
+   "note": "[32-bit] Challenge - Scenario Challenge 2\nUse Scenario settings to assign your club 0 subs and 2 injuries. Win the match\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22116892,
+   "size": 4,
+   "name": "ChallengePossessionChallenge1",
+   "note": "[32-bit] Challenge - Possession Challenge 1\nAchieve 75% + Possession in Professional difficulty against a club from Western Europe\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22116984,
+   "size": 4,
+   "name": "ChallengeLateGoalChallenge1",
+   "note": "[32-bit] Challenge - Late Goal Challenge 1\nScore with a player subbed in after 85+ minutes in Semi-Pro difficulty\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22117076,
+   "size": 4,
+   "name": "Challenge5MinuteChallenge1",
+   "note": "[32-bit] Challenge - 5 Minute Challenge 1\nScore in under 5 minutes against a club from Western Europe in Semi-Pro difficulty\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22117168,
+   "size": 4,
+   "name": "ChallengeCoupeDeLaLigue",
+   "note": "[32-bit] Challenge - Coupe de la Ligue\nWin The Coupe de la Ligue\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22117260,
+   "size": 4,
+   "name": "ChallengeCoupeGauloise",
+   "note": "[32-bit] Challenge - Coupe Gauloise\nWin The Coupe Gauloise\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22117352,
+   "size": 4,
+   "name": "ChallengeFrenchLigue2Orange",
+   "note": "[32-bit] Challenge - French Ligue 2 Orange\nWin The French Ligue 2 Orange\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22117444,
+   "size": 4,
+   "name": "ChallengeFrenchLigue1Orange",
+   "note": "[32-bit] Challenge - French Ligue 1 Orange\nWin The French Ligue 1 Orange\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22117536,
+   "size": 4,
+   "name": "ChallengeDutchCup",
+   "note": "[32-bit] Challenge - Dutch Cup\nWin The Dutch Cup\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22117628,
+   "size": 4,
+   "name": "ChallengeDutchEredivisie",
+   "note": "[32-bit] Challenge - Dutch Eredivisie\nWin The Dutch Eredivisie\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22117720,
+   "size": 4,
+   "name": "ChallengeBelgianFACup",
+   "note": "[32-bit] Challenge - Belgian FA Cup\nWin The Belgian FA Cup\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22117812,
+   "size": 4,
+   "name": "ChallengeBelgianLeague",
+   "note": "[32-bit] Challenge - Belgian League\nWin The Belgian League\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22117904,
+   "size": 4,
+   "name": "ChallengeScenarioChallenge1",
+   "note": "[32-bit] Challenge - Scenario Challenge 1\nUse Scenario settings to assign your club 0 subs available. Win the match\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22117996,
+   "size": 4,
+   "name": "ChallengeHatTrickChallenge1",
+   "note": "[32-bit] Challenge - Hat Trick Challenge 1\nScore a Hat Trick against any club from the United Kingdom in Professional difficulty\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22118088,
+   "size": 4,
+   "name": "ChallengeUnderdogChallenge1",
+   "note": "[32-bit] Challenge - Underdog Challenge 1\nDefeat a 4+ star club from the United Kingdom with any 2 star club in Semi-Pro difficulty\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22118180,
+   "size": 4,
+   "name": "ChallengeScottishCup",
+   "note": "[32-bit] Challenge - Scottish Cup\nWin The Scottish Cup\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22118272,
+   "size": 4,
+   "name": "ChallengeSPL",
+   "note": "[32-bit] Challenge - SPL\nWin The SPL\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22118364,
+   "size": 4,
+   "name": "ChallengeLeagueCup",
+   "note": "[32-bit] Challenge - League Cup\nWin The English League Cup\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22118456,
+   "size": 4,
+   "name": "ChallengeFACup",
+   "note": "[32-bit] Challenge - F.A. Cup\nWin The FA Cup\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22118548,
+   "size": 4,
+   "name": "ChallengeJohnstoneSPaintTrophy",
+   "note": "[32-bit] Challenge - Johnstone's Paint Trophy\nWin The Johnstone's Paint Trophy\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22118640,
+   "size": 4,
+   "name": "ChallengeCocaColaLeague2",
+   "note": "[32-bit] Challenge - Coca-Cola League 2\nWin The Coca-Cola League 2\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22118732,
+   "size": 4,
+   "name": "ChallengeCocaColaLeague1",
+   "note": "[32-bit] Challenge - Coca-Cola League 1\nWin The Coca-Cola League 1\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22118824,
+   "size": 4,
+   "name": "ChallengeCocaColaChampionship",
+   "note": "[32-bit] Challenge - Coca-Cola Championship\nWin The Coca-Cola Championship\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22118916,
+   "size": 4,
+   "name": "ChallengeBarclaysPremierLeague",
+   "note": "[32-bit] Challenge - Barclays Premier League\nWin The Barclays Premier League\n0x01 = Done",
+   "from": "ra-notes"
+  },
+  {
+   "ra": 22119008,
+   "size": 4,
+   "name": "ChallengeTotalFootballerChallenge",
+   "note": "[32-bit] Challenge - Total Footballer Challenge\nComplete all challenges from any 2 zones to unlock the 5th difficulty level\n0x01 = Done",
+   "from": "ra-notes"
+  }
+ ],
+ "funcs": {},
+ "enums": {
+  "GameModeType": {
+   "0": "None / Exhibition / other",
+   "1": "Tournament",
+   "2": "Career (Manager Mode)"
+  },
+  "Match_Half": {
+   "0": "1st half (45)",
+   "1": "2nd half (90)",
+   "2": "Extra time 1st (105)",
+   "3": "Extra time 2nd (120)",
+   "4": "Penalties"
+  },
+  "CareerTeamId": {
+   "111070": "Club Deportivo Chivas USA",
+   "4294967295": "No club / no career"
+  },
+  "Match3DSceneLoaded": {
+   "0": "No 3D match (FE / sim)",
+   "1": "3D match scene loaded"
+  },
+  "MemcardTaskId": {
+   "2": "Saving (manual or autosave)",
+   "4294967295": "Idle"
+  },
+  "Match_PhaseEnd": {
+   "0": "In play",
+   "1": "Completed (full time)",
+   "2": "Quit / abandoned",
+   "4": "Penalty shootout"
+  },
+  "Match_StateMachine": {
+   "0": "Not started",
+   "3": "Kickoff / restart",
+   "9": "Playing",
+   "15": "Match over / exited"
+  },
+  "Match_SimType": {
+   "0": "Played (3D)",
+   "2": "Simulated (Visual or Quick)"
+  },
+  "Match_StadiumId": {
+   "1": "Old Trafford",
+   "4": "Stade Gerland",
+   "5": "San Siro",
+   "6": "Camp Nou",
+   "7": "Highbury",
+   "8": "Stadio Delle Alpi",
+   "9": "Signal Iduna",
+   "10": "Mestalla",
+   "12": "BayArena",
+   "13": "Anfield",
+   "14": "Parc des Princes",
+   "15": "Amsterdam ArenA",
+   "16": "Bollaert",
+   "17": "Constant Vanden Stock",
+   "24": "Generic Olympic",
+   "25": "Generic Square Closed",
+   "26": "Generic Square Open",
+   "27": "Generic Square Oval",
+   "28": "Stamford Bridge",
+   "29": "Stade Velodrome",
+   "30": "Veltins-Arena",
+   "32": "Division One UK",
+   "33": "Division One Euro",
+   "34": "Division Two UK",
+   "35": "Division Two Euro",
+   "36": "Division Three UK",
+   "37": "Division Three Euro",
+   "38": "Urban Training",
+   "39": "Rural Training",
+   "41": "HSH Nordbank Arena",
+   "42": "Estadio Vicente Calderon",
+   "100": "St James' Park",
+   "102": "Jose Alvalade",
+   "103": "Millennium Stadium",
+   "104": "Estadio Azteca",
+   "105": "Generic Modern",
+   "107": "Estadio Da Luz",
+   "108": "Seoul Sang Am Stadium",
+   "110": "Daegu Sport Complex",
+   "111": "Dragao Stadium",
+   "116": "White Hart Lane",
+   "117": "Generic Modern South America",
+   "118": "Generic Modern Mediterranean",
+   "123": "Estadio Do Bessa",
+   "133": "Gottlieb Daimler Stadion",
+   "134": "AWD Arena",
+   "135": "Olympiastadion",
+   "137": "Allianz Arena",
+   "138": "Commerzbank Arena",
+   "155": "Wembley Stadium",
+   "156": "Emirates Stadium",
+   "157": "Stadio Olimpico",
+   "161": "Home Depot stadium",
+   "163": "Jalisco",
+   "4294967295": "None"
+  },
+  "Career_CupHistory_Row0_CupId": {
+   "1": "Danish Superligaen",
+   "4": "Belgian League",
+   "7": "Brazilian League",
+   "10": "Dutch Eredivisie",
+   "13": "Barclays Premier League",
+   "14": "Coca-Cola Championship",
+   "16": "French Ligue 1 Orange",
+   "17": "French Ligue 2 Orange",
+   "19": "German Bundesliga",
+   "20": "German 2. Bundesliga",
+   "31": "Italian Serie A",
+   "32": "Italian Serie B",
+   "39": "MLS Cup",
+   "41": "Norwegian Tippeligaen",
+   "50": "SPL",
+   "53": "Spanish Primera",
+   "54": "Spanish Liga BBVA",
+   "56": "Swedish Allsvenskan",
+   "60": "Coca-Cola League 1",
+   "61": "Coca-Cola League 2",
+   "65": "Rep. Ireland FAI Eircom League",
+   "66": "Polish Ekstraklasa",
+   "68": "Turkcell Super Lig",
+   "80": "Austrian Bundesliga",
+   "83": "K-League",
+   "84": "Mexican Apertura",
+   "85": "Mexican Clausura",
+   "189": "Swiss Axpo Super League",
+   "200": "International Club Champ.",
+   "201": "F.A. Cup",
+   "202": "League Cup",
+   "203": "Johnstone's Paint Trophy",
+   "204": "Coupe Gauloise",
+   "205": "Coupe de la Ligue",
+   "206": "Deutscher Pokal",
+   "207": "PREMIERE-Ligapokal",
+   "208": "Copa del Rey",
+   "210": "Coppa Nazionale",
+   "211": "Supercoppa Nazionale",
+   "212": "Austrian OFB Stiegl-Cup",
+   "213": "Belgian FA Cup",
+   "215": "DBU's Landspokal",
+   "217": "Norwegian FA Cup",
+   "218": "Portuguese Cup",
+   "219": "Scottish Cup",
+   "220": "Swedish Cup",
+   "221": "Swiss Cup",
+   "223": "ECC (European Champions Cup)",
+   "224": "EFA (European cup 2)",
+   "225": "Supercopa",
+   "226": "Americas Club Champ.",
+   "228": "F.A. Community Shield",
+   "229": "Brazilian Cup",
+   "232": "European Super Cup",
+   "233": "Trophee Champions",
+   "234": "U.S. Open Cup",
+   "268": "Turkish Cup",
+   "308": "Portuguese League",
+   "314": "Dutch Cup",
+   "319": "Pohar CMFS (Czech)",
+   "339": "MLS Playoffs",
+   "351": "Australian Hyundai A-League",
+   "360": "League One Playoffs",
+   "361": "League Two Playoffs",
+   "366": "Puchar Polski",
+   "384": "Apertura Playoffs",
+   "385": "Clausura Playoffs",
+   "414": "League Champ Playoffs",
+   "451": "Hyundai A-League Trophy",
+   "483": "K-League Playoffs"
+  },
+  "ChallengeOffsideChallenge": {
+   "1": "Done"
+  },
+  "ChallengeGoalieChallenge": {
+   "1": "Done"
+  },
+  "Challenge_0_done": {
+   "1": "Done"
+  },
+  "ChallengeScenarioChallenge10": {
+   "1": "Done"
+  },
+  "Challenge15MinuteChallenge": {
+   "1": "Done"
+  },
+  "ChallengeHatTrickChallenge2": {
+   "1": "Done"
+  },
+  "ChallengeCleanSheetChallenge2": {
+   "1": "Done"
+  },
+  "Challenge5GoalsChallenge1": {
+   "1": "Done"
+  },
+  "ChallengeEFATournament": {
+   "1": "Done"
+  },
+  "ChallengeECCTournament": {
+   "1": "Done"
+  },
+  "ChallengeManagerModeChallenge": {
+   "1": "Done"
+  },
+  "Challenge5GameStreak": {
+   "1": "Done"
+  },
+  "Challenge10GameStreak": {
+   "1": "Done"
+  },
+  "Challenge20GameStreak": {
+   "1": "Done"
+  },
+  "ChallengeScore10Goals": {
+   "1": "Done"
+  },
+  "ChallengeScore50Goals": {
+   "1": "Done"
+  },
+  "ChallengeScore100Goals": {
+   "1": "Done"
+  },
+  "ChallengeWin10Games": {
+   "1": "Done"
+  },
+  "ChallengeWin25Games": {
+   "1": "Done"
+  },
+  "ChallengeWin50Games": {
+   "1": "Done"
+  },
+  "ChallengeWin100Games": {
+   "1": "Done"
+  },
+  "ChallengeLateGoalChallenge2": {
+   "1": "Done"
+  },
+  "ChallengeSubstitutionChallenge": {
+   "1": "Done"
+  },
+  "Challenge3GoalsChallenge": {
+   "1": "Done"
+  },
+  "ChallengeInternationalClubChamp": {
+   "1": "Done"
+  },
+  "ChallengeKLeague": {
+   "1": "Done"
+  },
+  "ChallengeTurkishCup": {
+   "1": "Done"
+  },
+  "ChallengeTurkcellSPerLig": {
+   "1": "Done"
+  },
+  "ChallengePucharPolski": {
+   "1": "Done"
+  },
+  "ChallengePolishEkstraklasa": {
+   "1": "Done"
+  },
+  "ChallengeAustralianHyundaiALeague": {
+   "1": "Done"
+  },
+  "ChallengeCzechLeague": {
+   "1": "Done"
+  },
+  "ChallengeIrelandFAIEircomLeague": {
+   "1": "Done"
+  },
+  "ChallengeCleanSheetChallenge1": {
+   "1": "Done"
+  },
+  "ChallengeScenarioChallenge9": {
+   "1": "Done"
+  },
+  "ChallengePassingChallenge2": {
+   "1": "Done"
+  },
+  "ChallengeScenarioChallenge8": {
+   "1": "Done"
+  },
+  "ChallengeFairPlayChallenge1": {
+   "1": "Done"
+  },
+  "ChallengeAccuracyChallenge": {
+   "1": "Done"
+  },
+  "ChallengeSwedishCup": {
+   "1": "Done"
+  },
+  "ChallengeSwedishAllsvenskan": {
+   "1": "Done"
+  },
+  "ChallengeNorwegianFACup": {
+   "1": "Done"
+  },
+  "ChallengeNorwegianTippeligaen": {
+   "1": "Done"
+  },
+  "ChallengeDBUSLandspokal": {
+   "1": "Done"
+  },
+  "ChallengeDanishSuperligaen": {
+   "1": "Done"
+  },
+  "ChallengeScenarioChallenge7": {
+   "1": "Done"
+  },
+  "ChallengeStayAheadChallenge": {
+   "1": "Done"
+  },
+  "ChallengeScenarioChallenge6": {
+   "1": "Done"
+  },
+  "ChallengePassingChallenge1": {
+   "1": "Done"
+  },
+  "ChallengeUSOpenCup": {
+   "1": "Done"
+  },
+  "ChallengeMLSCup": {
+   "1": "Done"
+  },
+  "ChallengeMexicanApertura": {
+   "1": "Done"
+  },
+  "ChallengeMexicanClausura": {
+   "1": "Done"
+  },
+  "ChallengeBrazilianCup": {
+   "1": "Done"
+  },
+  "ChallengeBrazilianLeague": {
+   "1": "Done"
+  },
+  "ChallengeAmericasClubChamp": {
+   "1": "Done"
+  },
+  "ChallengeScenarioChallenge5": {
+   "1": "Done"
+  },
+  "ChallengeScenarioChallenge4": {
+   "1": "Done"
+  },
+  "ChallengeShootOutChallenge2": {
+   "1": "Done"
+  },
+  "Challenge5MinuteChallenge2": {
+   "1": "Done"
+  },
+  "ChallengeSwissCup": {
+   "1": "Done"
+  },
+  "ChallengeSwissAxpoSuperLeague": {
+   "1": "Done"
+  },
+  "ChallengeAustrianFBStieglCup": {
+   "1": "Done"
+  },
+  "ChallengeAustrianBundesliga": {
+   "1": "Done"
+  },
+  "ChallengePREMIERELigapokal": {
+   "1": "Done"
+  },
+  "ChallengeDeutscherPokal": {
+   "1": "Done"
+  },
+  "ChallengeGerman2Bundesliga": {
+   "1": "Done"
+  },
+  "ChallengeGermanBundesliga": {
+   "1": "Done"
+  },
+  "ChallengeScenarioChallenge3": {
+   "1": "Done"
+  },
+  "ChallengeShootOutChallenge1": {
+   "1": "Done"
+  },
+  "ChallengePossessionChallenge2": {
+   "1": "Done"
+  },
+  "Challenge5GoalsChallenge2": {
+   "1": "Done"
+  },
+  "ChallengeCopaDelRey": {
+   "1": "Done"
+  },
+  "ChallengeSpanishLigaBBVA": {
+   "1": "Done"
+  },
+  "ChallengeSpanishPrimera": {
+   "1": "Done"
+  },
+  "ChallengeCoppaNazionale": {
+   "1": "Done"
+  },
+  "ChallengeItalianSerieB": {
+   "1": "Done"
+  },
+  "ChallengeItalianSerieA": {
+   "1": "Done"
+  },
+  "ChallengePortugueseCup": {
+   "1": "Done"
+  },
+  "ChallengePortugueseLeague": {
+   "1": "Done"
+  },
+  "ChallengeScenarioChallenge2": {
+   "1": "Done"
+  },
+  "ChallengePossessionChallenge1": {
+   "1": "Done"
+  },
+  "ChallengeLateGoalChallenge1": {
+   "1": "Done"
+  },
+  "Challenge5MinuteChallenge1": {
+   "1": "Done"
+  },
+  "ChallengeCoupeDeLaLigue": {
+   "1": "Done"
+  },
+  "ChallengeCoupeGauloise": {
+   "1": "Done"
+  },
+  "ChallengeFrenchLigue2Orange": {
+   "1": "Done"
+  },
+  "ChallengeFrenchLigue1Orange": {
+   "1": "Done"
+  },
+  "ChallengeDutchCup": {
+   "1": "Done"
+  },
+  "ChallengeDutchEredivisie": {
+   "1": "Done"
+  },
+  "ChallengeBelgianFACup": {
+   "1": "Done"
+  },
+  "ChallengeBelgianLeague": {
+   "1": "Done"
+  },
+  "ChallengeScenarioChallenge1": {
+   "1": "Done"
+  },
+  "ChallengeHatTrickChallenge1": {
+   "1": "Done"
+  },
+  "ChallengeUnderdogChallenge1": {
+   "1": "Done"
+  },
+  "ChallengeScottishCup": {
+   "1": "Done"
+  },
+  "ChallengeSPL": {
+   "1": "Done"
+  },
+  "ChallengeLeagueCup": {
+   "1": "Done"
+  },
+  "ChallengeFACup": {
+   "1": "Done"
+  },
+  "ChallengeJohnstoneSPaintTrophy": {
+   "1": "Done"
+  },
+  "ChallengeCocaColaLeague2": {
+   "1": "Done"
+  },
+  "ChallengeCocaColaLeague1": {
+   "1": "Done"
+  },
+  "ChallengeCocaColaChampionship": {
+   "1": "Done"
+  },
+  "ChallengeBarclaysPremierLeague": {
+   "1": "Done"
+  },
+  "ChallengeTotalFootballerChallenge": {
+   "1": "Done"
+  }
+ }
+}
