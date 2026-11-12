@@ -3,7 +3,7 @@ can start ROM Explorer. Also "fix it for me" actions where that's safe (installi
 turning an emulator's link on in its settings file while the emulator is closed, with a backup)."""
 import importlib.util, json, os, re, socket, subprocess, sys, threading, time
 from pathlib import Path
-from . import settings as S
+from . import settings as S, procs as P_
 
 ROOT = Path(__file__).resolve().parent.parent
 IS_WIN = sys.platform == 'win32'
@@ -42,48 +42,63 @@ HOME = Path.home(); DOCS = HOME / 'Documents'
 APPDATA = Path(_env('APPDATA', str(HOME / 'AppData' / 'Roaming'))); LOCAL = Path(_env('LOCALAPPDATA', str(HOME / 'AppData' / 'Local')))
 PF = [Path(_env('ProgramFiles', r'C:\Program Files')), Path(_env('ProgramFiles(x86)', r'C:\Program Files (x86)'))]
 STEAM = [p / 'Steam' / 'steamapps' / 'common' for p in PF]
+FLATPAK = HOME / '.var' / 'app'   # Flatpak installs keep their settings here
+
+# Program names: Windows, then Linux (distro packages, AppImages' inner programs and Flatpaks)
+PROCS = {
+    'retroarch': ('retroarch.exe', 'retroarch'),
+    'ralibretro': ('ralibretro.exe',),
+    'duckstation': ('duckstation-qt-x64-releaseltcg.exe', 'duckstation-qt.exe', 'duckstation.exe', 'duckstation-qt', 'duckstation-qt-x64-releaseltcg', 'duckstation'),
+    'pcsx2': ('pcsx2-qt.exe', 'pcsx2.exe', 'pcsx2-qtx64.exe', 'pcsx2-qtx64-avx2.exe', 'pcsx2-qt', 'pcsx2'),
+    'ppsspp': ('ppssppwindows64.exe', 'ppssppwindows.exe', 'ppssppsdl', 'ppssppqt', 'ppsspp'),
+    'dolphin': ('dolphin.exe', 'dolphin-emu', 'dolphin-emu-qt2', 'dolphin-emu-nogui'),
+    'mgba': ('mgba.exe', 'mgba-qt', 'mgba'),
+    'melonds': ('melonds.exe', 'melonds'),
+}
+# AppImages are single files named after the emulator, e.g. DuckStation-x64.AppImage
+APPIMAGE = {'retroarch': 'retroarch', 'duckstation': 'duckstation', 'pcsx2': 'pcsx2', 'ppsspp': 'ppsspp', 'dolphin': 'dolphin', 'mgba': 'mgba', 'melonds': 'melonds'}
 
 EMUS = {
-    'retroarch': {'name': 'RetroArch', 'consoles': 'GB/GBC, GBA, DS, PS1, PSP and more (with cores)', 'procs': ('retroarch.exe',),
-                  'dirs': [APPDATA / 'RetroArch', Path(r'C:\RetroArch-Win64'), Path(r'C:\RetroArch'), *[p / 'RetroArch' for p in PF], *[s / 'RetroArch' for s in STEAM], HOME / '.config' / 'retroarch'],
+    'retroarch': {'name': 'RetroArch', 'consoles': 'GB/GBC, GBA, DS, PS1, PSP and more (with cores)', 'procs': PROCS['retroarch'],
+                  'dirs': [APPDATA / 'RetroArch', Path(r'C:\RetroArch-Win64'), Path(r'C:\RetroArch'), *[p / 'RetroArch' for p in PF], *[s / 'RetroArch' for s in STEAM], HOME / '.config' / 'retroarch', FLATPAK / 'org.libretro.RetroArch' / 'config' / 'retroarch'],
                   'config': 'retroarch.cfg', 'states': 'states', 'port': 55355,
                   'how': 'Settings > Network > Network Commands: On (port 55355). Also have RetroAchievements turned on, so addresses match.'},
-    'ralibretro': {'name': 'RALibretro', 'consoles': 'RetroAchievements\' dev emulator (code notes live here)', 'procs': ('ralibretro.exe',),
+    'ralibretro': {'name': 'RALibretro', 'consoles': 'RetroAchievements\' dev emulator (code notes live here)', 'procs': PROCS['ralibretro'],
                    'dirs': [Path(r'C:\RALibretro'), HOME / 'RALibretro', DOCS / 'RALibretro', HOME / 'Desktop' / 'RALibretro', *[p / 'RALibretro' for p in PF]],
                    'config': None, 'states': 'States', 'port': None, 'how': 'No link needed. ROM Explorer reads your code notes from its RACache folder.'},
-    'duckstation': {'name': 'DuckStation', 'consoles': 'PS1', 'procs': ('duckstation-qt-x64-releaseltcg.exe', 'duckstation-qt.exe', 'duckstation.exe'),
-                    'dirs': [DOCS / 'DuckStation', LOCAL / 'DuckStation', HOME / '.local' / 'share' / 'duckstation'],
+    'duckstation': {'name': 'DuckStation', 'consoles': 'PS1', 'procs': PROCS['duckstation'],
+                    'dirs': [DOCS / 'DuckStation', LOCAL / 'DuckStation', HOME / '.local' / 'share' / 'duckstation', FLATPAK / 'org.duckstation.DuckStation' / 'data' / 'duckstation'],
                     'config': 'settings.ini', 'states': 'savestates', 'port': 2345,
                     'how': 'Settings > Advanced > Enable GDB Server (port 2345). If you can\'t see it, turn on the advanced/debug options there first.'},
-    'pcsx2': {'name': 'PCSX2', 'consoles': 'PS2', 'procs': ('pcsx2-qt.exe', 'pcsx2.exe', 'pcsx2-qtx64.exe', 'pcsx2-qtx64-avx2.exe'),
-              'dirs': [DOCS / 'PCSX2', APPDATA / 'PCSX2', HOME / '.config' / 'PCSX2'],
+    'pcsx2': {'name': 'PCSX2', 'consoles': 'PS2', 'procs': PROCS['pcsx2'],
+              'dirs': [DOCS / 'PCSX2', APPDATA / 'PCSX2', HOME / '.config' / 'PCSX2', FLATPAK / 'net.pcsx2.PCSX2' / 'config' / 'PCSX2'],
               'config': 'inis/PCSX2.ini', 'states': 'sstates', 'port': 28011,
               'how': 'Settings > Advanced > Enable PINE (slot 28011).'},
-    'ppsspp': {'name': 'PPSSPP', 'consoles': 'PSP', 'procs': ('ppssppwindows64.exe', 'ppssppwindows.exe'),
-               'dirs': [DOCS / 'PPSSPP', *[p / 'PPSSPP' / 'memstick' for p in PF], HOME / '.config' / 'ppsspp'],
+    'ppsspp': {'name': 'PPSSPP', 'consoles': 'PSP', 'procs': PROCS['ppsspp'],
+               'dirs': [DOCS / 'PPSSPP', *[p / 'PPSSPP' / 'memstick' for p in PF], HOME / '.config' / 'ppsspp', FLATPAK / 'org.ppsspp.PPSSPP' / 'config' / 'ppsspp'],
                'config': 'PSP/SYSTEM/ppsspp.ini', 'states': 'PSP/PPSSPP_STATE', 'port': None,
                'how': 'Settings > Tools > Developer tools > Allow remote debugger. ROM Explorer finds the port by itself.'},
-    'dolphin': {'name': 'Dolphin', 'consoles': 'GameCube / Wii', 'procs': ('dolphin.exe',),
-                'dirs': [DOCS / 'Dolphin Emulator', APPDATA / 'Dolphin Emulator', HOME / '.local' / 'share' / 'dolphin-emu'],
+    'dolphin': {'name': 'Dolphin', 'consoles': 'GameCube / Wii', 'procs': PROCS['dolphin'],
+                'dirs': [DOCS / 'Dolphin Emulator', APPDATA / 'Dolphin Emulator', HOME / '.dolphin-emu', HOME / '.local' / 'share' / 'dolphin-emu', FLATPAK / 'org.DolphinEmu.dolphin-emu' / 'data' / 'dolphin-emu'],
                 'config': 'Config/Dolphin.ini', 'states': None, 'port': None,
-                'how': 'Nothing to turn on: ROM Explorer reads the game\'s RAM straight from Dolphin while it runs (Windows). Dolphin\'s own save states can\'t be read; use Claude\'s live snapshot instead.'},
-    'mgba': {'name': 'mGBA', 'consoles': 'GBA', 'procs': ('mgba.exe',), 'dirs': [APPDATA / 'mGBA', LOCAL / 'mGBA', HOME / '.config' / 'mgba'],
+                'how': 'Nothing to turn on: ROM Explorer reads the game\'s RAM straight from Dolphin while it runs (on Linux this needs permission to read another program\'s memory: see the README). Dolphin\'s own save states can\'t be read; use Claude\'s live snapshot instead.'},
+    'mgba': {'name': 'mGBA', 'consoles': 'GBA', 'procs': PROCS['mgba'], 'dirs': [APPDATA / 'mGBA', LOCAL / 'mGBA', HOME / '.config' / 'mgba', FLATPAK / 'io.mgba.mGBA' / 'config' / 'mgba'],
              'config': None, 'states': None, 'port': 61234, 'how': 'Each time: Tools > Scripting… > File > Load script… and pick romx\\live\\romx_mgba.lua in your ROM Explorer folder (no slowdown; buttons and screenshots work). Only for finding the exact instruction that writes an address: Tools > Start GDB server (slows the game while it\'s on).'},
-    'melonds': {'name': 'melonDS', 'consoles': 'DS', 'procs': ('melonds.exe',), 'dirs': [APPDATA / 'melonDS', LOCAL / 'melonDS', HOME / '.config' / 'melonDS'],
+    'melonds': {'name': 'melonDS', 'consoles': 'DS', 'procs': PROCS['melonds'], 'dirs': [APPDATA / 'melonDS', LOCAL / 'melonDS', HOME / '.config' / 'melonDS', FLATPAK / 'net.kuribo64.melonDS' / 'config' / 'melonDS'],
                 'config': None, 'states': None, 'port': 3333, 'how': 'Config > Emu settings > DevTools: enable the GDB stub (ARM9 port 3333).'},
 }
 
 # Emulators kept in their own folder (portable installs, RetroAchievements dev builds): how to recognise them
 # from the program file, and where their settings and save states sit inside that folder.
 PORTABLE = {
-    'retroarch': {'exe': ('retroarch.exe',), 'config': 'retroarch.cfg', 'states': 'states'},
-    'ralibretro': {'exe': ('ralibretro.exe',), 'config': None, 'states': 'Saves'},
-    'duckstation': {'exe': ('duckstation-qt-x64-releaseltcg.exe', 'duckstation-qt.exe', 'duckstation.exe'), 'config': 'settings.ini', 'states': 'savestates'},
-    'pcsx2': {'exe': ('pcsx2-qt.exe', 'pcsx2.exe', 'pcsx2-qtx64.exe', 'pcsx2-qtx64-avx2.exe'), 'config': 'inis/PCSX2.ini', 'states': 'sstates'},
-    'ppsspp': {'exe': ('ppssppwindows64.exe', 'ppssppwindows.exe'), 'config': 'memstick/PSP/SYSTEM/ppsspp.ini', 'states': 'memstick/PSP/PPSSPP_STATE'},
-    'dolphin': {'exe': ('dolphin.exe',), 'config': 'User/Config/Dolphin.ini', 'states': None},
-    'mgba': {'exe': ('mgba.exe',), 'config': None, 'states': None},
-    'melonds': {'exe': ('melonds.exe',), 'config': None, 'states': None},
+    'retroarch': {'exe': PROCS['retroarch'], 'config': 'retroarch.cfg', 'states': 'states'},
+    'ralibretro': {'exe': PROCS['ralibretro'], 'config': None, 'states': 'Saves'},
+    'duckstation': {'exe': PROCS['duckstation'], 'config': 'settings.ini', 'states': 'savestates'},
+    'pcsx2': {'exe': PROCS['pcsx2'], 'config': 'inis/PCSX2.ini', 'states': 'sstates'},
+    'ppsspp': {'exe': PROCS['ppsspp'], 'config': 'memstick/PSP/SYSTEM/ppsspp.ini', 'states': 'memstick/PSP/PPSSPP_STATE'},
+    'dolphin': {'exe': PROCS['dolphin'], 'config': 'User/Config/Dolphin.ini', 'states': None},
+    'mgba': {'exe': PROCS['mgba'], 'config': None, 'states': None},
+    'melonds': {'exe': PROCS['melonds'], 'config': None, 'states': None},
 }
 EXE_TO_EMU = {x: k for k, v in PORTABLE.items() for x in v['exe']}
 JUNK_DIRS = {'bios', 'system', 'sys', 'cores', 'assets', 'qtplugins', 'languages', 'resources', 'shaders', 'textures', 'overlay', 'plugins', '__pycache__', '.git', 'racache'}
@@ -100,7 +115,8 @@ def scan_folder(root, max_depth=5, limit=60000):
         try: entries = list(os.scandir(d))
         except OSError: return
         names = {e.name.lower(): e for e in entries}
-        here_emu = next((EXE_TO_EMU[n] for n in names if n in EXE_TO_EMU), None)
+        files = [n for n, e in names.items() if not e.is_dir()]   # a folder called "pcsx2" isn't the program
+        here_emu = next((EXE_TO_EMU[n] for n in files if n in EXE_TO_EMU), None) or next((k for n in files if n.endswith('.appimage') for k, pre in APPIMAGE.items() if n.startswith(pre)), None)
         if here_emu:
             emus.append({'key': here_emu, 'dir': str(d)}); skip.add(str(d))
             if 'racache' in names and Path(d, 'RACache', 'Data').is_dir(): notes.append(str(d))
@@ -193,11 +209,12 @@ def write_cfg(path, changes):
     p.write_bytes(('\ufeff' if bom else '').encode('utf-8') + (nl.join(lines) + nl).encode('utf-8'))
 
 def running(procs):
-    if not IS_WIN: return False
-    try:
-        out = subprocess.run(['tasklist', '/fo', 'csv', '/nh'], capture_output=True, text=True, timeout=10).stdout.lower()
-        return any(f'"{p}"' in out for p in procs)
-    except Exception: return False
+    if IS_WIN:
+        try:
+            out = subprocess.run(['tasklist', '/fo', 'csv', '/nh'], capture_output=True, text=True, timeout=10).stdout.lower()
+            return any(f'"{p}"' in out for p in procs)
+        except Exception: return False
+    return bool(P_.find_pid(procs))
 
 def listening(port):
     """True/False from the system's list of listening ports, or None if that can't be read."""
@@ -281,7 +298,7 @@ def emulators(test=False):
 def probe(key, timeout=1.5):
     """Is the emulator's link answering right now? Never sends anything that pauses or changes the game."""
     e = EMUS[key]
-    if IS_WIN and not running(e['procs']): return {'ok': None, 'msg': 'Not open right now. Start a game in it, then test again.'}
+    if P_.can_tell() and not running(e['procs']): return {'ok': None, 'msg': 'Not open right now. Start a game in it, then test again.'}
     try:
         if key == 'retroarch':
             u = socket.socket(socket.AF_INET, socket.SOCK_DGRAM); u.settimeout(timeout); u.sendto(b'GET_STATUS', ('127.0.0.1', 55355))
@@ -294,7 +311,6 @@ def probe(key, timeout=1.5):
             try: L = PPSSPP(); L.close(); return {'ok': True, 'msg': f'Answering on port {L.port}.'}
             except Exception as ex: return {'ok': False, 'msg': str(ex)}
         if key == 'dolphin':
-            if not IS_WIN: return {'ok': None, 'msg': 'Only works on Windows.'}
             if not running(e['procs']): return {'ok': False, 'msg': 'Dolphin isn\'t running.'}
             from .live.links import DolphinMemory
             try: DolphinMemory(); return {'ok': True, 'msg': 'Found the running game\'s RAM.'}
@@ -330,6 +346,7 @@ def scan(folder=''):
     """Scan the usual places, plus a folder you choose (remembered for next time). Returns what would be added."""
     s = S.load(); found = None
     if folder:
+        folder = os.path.expanduser(folder)
         found = scan_folder(folder)
         dirs = list(dict.fromkeys([folder] + s.get('scan_dirs', [])))[:6]
         emu = dict(s.get('emu_dirs') or {})
@@ -369,13 +386,31 @@ def use_found_folders():
     if add['ghidra_dir']: new['ghidra_dir'] = add['ghidra_dir']
     S.save(new); return {k: v for k, v in add.items() if v}
 
+def _linux_dialog(title, folder=False, start='', types=()):
+    """zenity (GNOME and most desktops) or kdialog (KDE). None if neither is installed; '' if cancelled."""
+    import shutil
+    start = start if start and Path(start).is_dir() else str(HOME)
+    if shutil.which('zenity'):
+        cmd = ['zenity', '--file-selection', f'--title={title}', f'--filename={start.rstrip("/")}/']
+        if folder: cmd.append('--directory')
+        cmd += [f'--file-filter={name} | {pats}' for name, pats in types if pats != '*.*'] + (['--file-filter=All files | *'] if types else [])
+    elif shutil.which('kdialog'):
+        cmd = ['kdialog', '--title', title] + (['--getexistingdirectory', start] if folder else
+              ['--getopenfilename', start, '\n'.join(f'{pats}|{name}' for name, pats in types if pats != '*.*')])
+    else: return None
+    r = subprocess.run(cmd, capture_output=True, text=True)
+    return r.stdout.strip() if r.returncode == 0 else ''
+
 def pick_folder():
     """Open the system's folder picker on this PC (ROM Explorer runs locally)."""
+    if sys.platform.startswith('linux'):
+        d = _linux_dialog('Pick the folder with your games and emulators', folder=True)
+        if d is not None: return {'folder': os.path.normpath(d) if d else ''}
     try:
         import tkinter as tk
         from tkinter import filedialog
     except ImportError:
-        raise ValueError('The folder picker isn\'t available. Paste the folder path instead.')
+        raise ValueError('The folder picker isn\'t available. Paste the folder path instead' + (' (or install zenity).' if sys.platform.startswith('linux') else '.'))
     root = tk.Tk(); root.withdraw(); root.attributes('-topmost', True)
     try: d = filedialog.askdirectory(title='Pick the folder with your games and emulators', mustexist=True)
     finally: root.destroy()
@@ -383,11 +418,6 @@ def pick_folder():
 
 def pick_file(kind='game'):
     """Open the system's file picker on this PC, for a game or a save state."""
-    try:
-        import tkinter as tk
-        from tkinter import filedialog
-    except ImportError:
-        raise ValueError('The file picker isn\'t available. Paste the file path instead.')
     s = S.load(); start = ''
     if kind == 'game':
         from .platforms import EXTS
@@ -398,6 +428,14 @@ def pick_file(kind='game'):
         types = [('Save states and RAM dumps', '*.state* *.ss* *.p2s *.ppst *.sav *.sgm *.dsv *.mst *.raw *.bin *.dmp *.st*'), ('All files', '*.*')]
         start = (s.get('states_dirs') or [''])[0]
         title = 'Pick a save state'
+    if sys.platform.startswith('linux'):
+        f = _linux_dialog(title, start=start, types=types)
+        if f is not None: return {'path': os.path.normpath(f) if f else ''}
+    try:
+        import tkinter as tk
+        from tkinter import filedialog
+    except ImportError:
+        raise ValueError('The file picker isn\'t available. Paste the file path instead' + (' (or install zenity).' if sys.platform.startswith('linux') else '.'))
     root = tk.Tk(); root.withdraw(); root.attributes('-topmost', True)
     try: f = filedialog.askopenfilename(title=title, filetypes=types, initialdir=start if start and Path(start).is_dir() else None)
     finally: root.destroy()

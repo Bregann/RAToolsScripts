@@ -80,6 +80,8 @@ def save(new):
             if isinstance(DEFAULTS[k], dict) and not isinstance(v, dict): continue
             if isinstance(DEFAULTS[k], list) and isinstance(v, str):
                 v = [x.strip() for x in v.splitlines() if x.strip()]
+            if k.endswith('_dir') and isinstance(v, str) and v.startswith('~'): v = os.path.expanduser(v)   # ~/Games
+            elif k.endswith('_dirs') and isinstance(v, list): v = [os.path.expanduser(x) if isinstance(x, str) and x.startswith('~') else x for x in v]
             s[k] = v
     config_dir().mkdir(parents=True, exist_ok=True)
     path().write_text(json.dumps(s, indent=2), encoding='utf-8')

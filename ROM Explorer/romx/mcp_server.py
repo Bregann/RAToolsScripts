@@ -513,7 +513,7 @@ E_ = {'type': 'string', 'enum': ['retroarch', 'duckstation', 'pcsx2', 'ppsspp', 
 LIVE_TOOLS = [
     (tool('live_connect', 'Connect to the emulator running this game, to read and change RAM live, pause and step, set breakpoints and watchpoints, take screenshots and press buttons. '
           'retroarch: Network Commands on (port 55355). duckstation/mgba/melonds/dolphin: their GDB server on (DuckStation default 2345, mGBA 2345, melonDS 3333). '
-          'pcsx2: PINE on (28011); add gdb_port if the build has a GDB server. ppsspp: Allow remote debugger on; give the port it shows. dolphin without a port reads its RAM directly (Windows).',
+          'pcsx2: PINE on (28011); add gdb_port if the build has a GDB server. ppsspp: Allow remote debugger on; give the port it shows. dolphin without a port reads its RAM directly (Windows, Linux).',
           {'emulator': E_, 'port': {'type': 'integer'}, 'host': S_('Default 127.0.0.1'), 'gdb_port': {'type': 'integer'}}, ['emulator']), t_live_connect),
     (tool('live_disconnect', 'Disconnect from the emulator.'), t_live_disconnect),
     (tool('live_read', 'Read RAM from the running game by RA address: one value (with its label and value name) or a hex dump with length.',
@@ -530,7 +530,7 @@ LIVE_TOOLS = [
     (tool('live_state', 'Save or load an emulator save state slot.', {'action': {'type': 'string', 'enum': ['save', 'load']}, 'slot': {'type': 'integer'}}), t_live_state),
     (tool('live_snapshot', 'Copy the game\'s RAM right now into the project as a save state, ready for compare_save_states.', {'name': S_('Short name'), 'note': S_('What is going on, e.g. 2 lives')}), t_live_snapshot),
     (tool('live_screenshot', 'Screenshot of the game.'), t_live_screenshot),
-    (tool('live_press', 'Press buttons in the game, e.g. "Start" or "Up+Cross", held for some frames. PPSSPP natively; others by typing the keys set in ROM Explorer Settings > Emulator keys (Windows).',
+    (tool('live_press', 'Press buttons in the game, e.g. "Start" or "Up+Cross", held for some frames. PPSSPP natively; others by typing the keys set in ROM Explorer Settings > Emulator keys (Windows; Linux with xdotool).',
           {'buttons': S_('Button names joined with +'), 'frames': {'type': 'integer'}, 'wait_frames': {'type': 'integer', 'description': 'Frames to wait afterwards'}}, ['buttons']), t_live_press),
     (tool('live_sample', 'Record how RA addresses change over a few seconds while the user plays. On GDB links (mGBA, DuckStation, melonDS) each read briefly pauses the game, so it reads at most 4 times a second there; keep the address list short.', {'addresses': {'type': 'array', 'items': {'type': 'string'}}, 'seconds': {'type': 'number'}, 'every_ms': {'type': 'integer'}, 'bits': {'type': 'integer'}}, ['addresses']), t_live_sample),
 ]

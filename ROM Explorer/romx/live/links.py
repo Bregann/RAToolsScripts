@@ -11,9 +11,11 @@ class PINE:
         try:
             if sys.platform == 'win32' or host not in ('127.0.0.1', 'localhost') or os.environ.get('ROMX_PINE_TCP'):
                 self.s = socket.create_connection((host, port), timeout=5)
-            else:   # Linux/macOS: a Unix socket named by the slot number
-                base = os.environ.get('XDG_RUNTIME_DIR') or os.environ.get('TMPDIR') or '/tmp'
-                path = os.path.join(base, 'pcsx2.sock' if port == 28011 else f'pcsx2.sock.{port}')
+            else:   # Linux/macOS: a Unix socket named by the slot number (the Flatpak keeps it in its own folder)
+                name = 'pcsx2.sock' if port == 28011 else f'pcsx2.sock.{port}'
+                bases = [os.environ.get('XDG_RUNTIME_DIR'), os.environ.get('TMPDIR'), '/tmp']
+                paths = [os.path.join(b, x, name) for b in bases if b for x in ('', os.path.join('app', 'net.pcsx2.PCSX2'))]
+                path = next((x for x in paths if os.path.exists(x)), paths[0])
                 self.s = socket.socket(socket.AF_UNIX); self.s.settimeout(5); self.s.connect(path)
         except OSError as e:
             raise LinkError(f'Couldn\'t reach PCSX2\'s PINE server on port {port} ({e}). Turn it on in PCSX2: Settings > Advanced > Enable PINE, then start the game.')
@@ -199,16 +201,74 @@ class PPSSPP:
         try: self.s.close()
         except OSError: pass
 
-# ---------------- Dolphin: RAM straight from its process (Windows) ----------------
+# ---------------- Dolphin: RAM straight from its process (Windows, Linux) ----------------
+DOLPHIN_PROCS = ('dolphin.exe', 'dolphinqt2.exe', 'dolphin-emu.exe', 'dolphin-emu', 'dolphin-emu-qt2', 'dolphin-emu-nogui')
+
 class DolphinMemory:
+    """DolphinMemory(game_id) gives the reader for this system."""
+    def __new__(cls, *a, **k):
+        if cls is DolphinMemory:
+            if sys.platform == 'win32': cls = DolphinMemoryWin
+            elif sys.platform.startswith('linux'): cls = DolphinMemoryLinux
+            else: raise LinkError('Reading Dolphin\'s RAM directly only works on Windows and Linux.')
+        return object.__new__(cls)
+    def _where(self, bus):
+        if 0x80000000 <= bus < 0x81800000: return self.mem1 + bus - 0x80000000
+        if 0x90000000 <= bus < 0x94000000 and self.mem2: return self.mem2 + bus - 0x90000000
+        raise LinkError(f'0x{bus:08X} isn\'t in MEM1' + (' or MEM2' if self.mem2 else '') + '.')
+
+class DolphinMemoryLinux(DolphinMemory):
+    """Dolphin's emulated RAM is a shared memory block it maps into itself; find that mapping in /proc/<pid>/maps
+    and read it through /proc/<pid>/mem. Needs permission to read another program's memory (see the README)."""
+    def __init__(self, game_id=''):
+        pid = _find_pid(DOLPHIN_PROCS)
+        if not pid: raise LinkError('Dolphin isn\'t running.')
+        self.mem1 = self.mem2 = None; self.f = None
+        try: self.f = open(f'/proc/{pid}/mem', 'r+b', buffering=0)
+        except OSError:
+            try: self.f = open(f'/proc/{pid}/mem', 'rb', buffering=0)
+            except OSError as e: raise LinkError(_ptrace_help(e))
+        try:
+            with open(f'/proc/{pid}/maps') as m: maps = m.read().splitlines()
+        except OSError as e: raise LinkError(f'Couldn\'t read Dolphin\'s memory map ({e}).')
+        shared = []   # (start, size, inode): shared, readable mappings
+        for line in maps:
+            parts = line.split(None, 5)
+            if len(parts) < 5 or 's' not in parts[1] or 'r' not in parts[1]: continue
+            lo, hi = (int(x, 16) for x in parts[0].split('-')); shared.append((lo, hi - lo, parts[4]))
+        inode = None
+        for lo, size, ino in shared:
+            if size != 0x2000000: continue
+            try: head = self._rp(lo, 6)
+            except LinkError: continue
+            if head.strip(b'\0') and (not game_id or head.decode('latin1', 'replace') == game_id[:6]): self.mem1, inode = lo, ino; break
+        # Wii MEM2 is another view of the same memory block as MEM1
+        self.mem2 = next((lo for lo, size, ino in shared if size == 0x4000000 and ino == inode), None) if self.mem1 is not None else None
+        if self.mem1 is None: raise LinkError('Found Dolphin, but not the game\'s RAM in it. Is the game running' + (f' (looking for {game_id})?' if game_id else '?'))
+    def _rp(self, addr, n):
+        try: self.f.seek(addr); return self.f.read(n)
+        except OSError as e: raise LinkError(_ptrace_help(e))
+    def read(self, addr, n): return self._rp(self._where(addr), n)
+    def write(self, addr, data):
+        try: self.f.seek(self._where(addr)); self.f.write(data)
+        except OSError as e: raise LinkError('Writing Dolphin\'s memory failed: ' + _ptrace_help(e))
+    def close(self):
+        try: self.f.close()
+        except Exception: pass
+
+def _ptrace_help(e):
+    return (f'Linux didn\'t let ROM Explorer read Dolphin\'s memory ({e.strerror or e}). Most distros only allow that for debuggers. '
+            'Allow it until the next reboot with:  sudo sysctl kernel.yama.ptrace_scope=0   '
+            '(or give Python the permission: sudo setcap cap_sys_ptrace=eip "$(readlink -f "$(which python3)")").')
+
+class DolphinMemoryWin(DolphinMemory):
     """Like Dolphin Memory Engine: finds the emulated MEM1 (and Wii MEM2) inside Dolphin's process and reads it.
     Works with any Dolphin build; no pausing, breakpoints or input."""
     def __init__(self, game_id=''):
-        if sys.platform != 'win32': raise LinkError('Reading Dolphin\'s RAM directly only works on Windows.')
         import ctypes
         from ctypes import wintypes as W
         self.k = ctypes.WinDLL('kernel32', use_last_error=True); self.ct = ctypes; self.W = W
-        pid = _find_pid(('dolphin.exe', 'dolphinqt2.exe', 'dolphin-emu.exe'))
+        pid = _find_pid(DOLPHIN_PROCS)
         if not pid: raise LinkError('Dolphin isn\'t running.')
         self.h = self.k.OpenProcess(0x0010 | 0x0020 | 0x0008 | 0x0400, False, pid)
         if not self.h: raise LinkError('Couldn\'t open Dolphin\'s process (try running ROM Explorer\'s Claude link as the same user as Dolphin).')
@@ -231,10 +291,6 @@ class DolphinMemory:
         buf = self.ct.create_string_buffer(n); got = self.ct.c_size_t()
         ok = self.k.ReadProcessMemory(self.h, self.ct.c_void_p(addr), buf, n, self.ct.byref(got))
         return buf.raw[:got.value] if ok else None
-    def _where(self, bus):
-        if 0x80000000 <= bus < 0x81800000: return self.mem1 + bus - 0x80000000
-        if 0x90000000 <= bus < 0x94000000 and self.mem2: return self.mem2 + bus - 0x90000000
-        raise LinkError(f'0x{bus:08X} isn\'t in MEM1' + (' or MEM2' if self.mem2 else '') + '.')
     def read(self, addr, n):
         d = self._rp(self._where(addr), n)
         if d is None: raise LinkError('Reading Dolphin\'s memory failed.')
@@ -247,19 +303,8 @@ class DolphinMemory:
         except Exception: pass
 
 def _find_pid(names):
-    if sys.platform != 'win32': return None
-    import ctypes
-    from ctypes import wintypes as W
-    class PE(ctypes.Structure):
-        _fields_ = [('dwSize', W.DWORD), ('cntUsage', W.DWORD), ('th32ProcessID', W.DWORD), ('th32DefaultHeapID', ctypes.c_void_p),
-                    ('th32ModuleID', W.DWORD), ('cntThreads', W.DWORD), ('th32ParentProcessID', W.DWORD), ('pcPriClassBase', ctypes.c_long),
-                    ('dwFlags', W.DWORD), ('szExeFile', ctypes.c_wchar * 260)]
-    k = ctypes.WinDLL('kernel32'); snap = k.CreateToolhelp32Snapshot(2, 0); pe = PE(); pe.dwSize = ctypes.sizeof(PE)
-    ok = k.Process32FirstW(snap, ctypes.byref(pe)); pid = None
-    while ok:
-        if pe.szExeFile.lower() in names: pid = pe.th32ProcessID; break
-        ok = k.Process32NextW(snap, ctypes.byref(pe))
-    k.CloseHandle(snap); return pid
+    from ..procs import find_pid
+    return find_pid(names)
 
 # ---------------- mGBA via its scripting (romx_mgba.lua) ----------------
 class MGBAScript:

@@ -524,7 +524,7 @@ async function renderSetup(){
   const lastScan=(ST&&ST.settings.scan_dirs&&ST.settings.scan_dirs[0])||'';
   const b2=`<p class="note">Point ROM Explorer at the folder where you keep your RetroAchievements stuff (games, emulators, Ghidra). It looks through it, and the usual install places, for games, emulators, their save state folders and your code notes.</p>
     <div class="chk">${tick(f.dirs.length?f.check[0]==='ok':false,f.dirs.length?`${f.dirs.length} game folder${f.dirs.length>1?'s':''} set · ${f.games} game${f.games===1?'':'s'} found`:'No game folders set yet')}</div>
-    <div class="sline"><input type="text" id="su-folder" value="${esc(lastScan)}" placeholder="e.g. C:\\Users\\you\\Desktop\\RA Dev" spellcheck="false" aria-label="Folder to scan">
+    <div class="sline"><input type="text" id="su-folder" value="${esc(lastScan)}" placeholder="${SU.windows?'e.g. C:\\Users\\you\\Desktop\\RA Dev':'e.g. ~/RA Dev'}" spellcheck="false" aria-label="Folder to scan">
       <button class="btn" id="su-browse">Browse…</button><button class="btn primary" id="su-scan">Scan</button></div>
     <span class="fmsg" id="su-smsg" role="status"></span><div id="su-found"></div>
     <p class="note small">Or set folders one by one in <a href="#settings">Settings</a>.</p>`;

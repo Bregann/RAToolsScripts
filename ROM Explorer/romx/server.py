@@ -120,7 +120,7 @@ def headless():
     g = S.load().get('ghidra_dir', '')
     if not g: raise ValueError('Set your Ghidra folder in Settings first.')
     sup = Path(g) / 'support'
-    for n in ('analyzeHeadless.bat', 'analyzeHeadless'):
+    for n in (('analyzeHeadless.bat',) if sys.platform == 'win32' else ('analyzeHeadless',)):
         if (sup / n).exists(): return sup / n
     raise FileNotFoundError(f'No analyzeHeadless in {sup}. Check the Ghidra folder in Settings.')
 
@@ -144,7 +144,7 @@ def ghidra_run(b):
     cmd = [str(exe), str(work / 'projects'), pid, '-import', imp['file'], *imp['args'], '-overwrite',
            '-scriptPath', str(SCRIPTS), '-preScript', 'RomxExport.java', 'pre', str(starts), {'per-start': '2', True: '1'}.get(imp.get('thumb'), '0'),
            '-postScript', 'RomxExport.java', 'post', str(tmp), '-deleteProject']
-    if sys.platform == 'win32': cmd = ['cmd', '/c'] + cmd
+    cmd = (['cmd', '/c'] if sys.platform == 'win32' else ['bash']) + cmd   # bash: works even if unzipping lost the run permission
     (work / 'projects').mkdir(exist_ok=True)
     GH[pid] = {'state': 'running', 'started': time.time(), 'msg': 'Ghidra is analysing the game. Big games can take a long time.'}
     def go():
